@@ -1,0 +1,61 @@
+
+.layout_container {
+  margin: auto;
+  position: relative;
+  max-width: 65rem;
+  background-color: var(--light1);
+
+  /* display: grid;
+  grid-template-areas: "left right";
+  grid-template-columns: auto 1fr; */
+}
+
+/* .left {
+  position: absolute;
+} */
+
+
+@media only screen and (min-width: 55rem) {
+
+  .layout_container {
+    display: grid;
+    grid-template-areas: "left right";
+    grid-template-columns: var(--sidebar-menu-width) 1fr;
+  }
+
+  .left {
+    grid-area: left;
+  }
+
+  .right {
+    grid-area: right;
+  }
+
+}
+
+
+/* yukarıda da main var ama bu üst seviye olduğundan buradaki main hali, yukarıdaki child hali */
+.right {
+  /* grid-area: 1 / 1 / span 1 / span 1; */
+  display: grid;
+  min-height: 100svh;
+  grid-template-areas: "navbar" "page" "footer";
+  grid-template-rows: min-content 1fr 5rem;
+}
+
+.right .navbar {
+  grid-area: navbar;
+  /* background-color: rgb(200, 208, 230); */
+}
+
+.right .page {
+  grid-area: page;
+  border-top: 0.1rem solid black;
+}
+
+
+.right .footer {
+  grid-area: footer;
+  border-top: 0.1rem solid black;
+  text-align: center;
+}

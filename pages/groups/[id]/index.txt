@@ -1,0 +1,70 @@
+import { useRouter } from 'next/router'
+import styles from '../../../styles/P_Groups_ID.module.css'
+import GroupDetail from '../../../components/GroupDetail'
+
+
+
+const GroupDetail_P = ({ group }) => {
+
+  // const router = useRouter()
+  // const { param } = router.query
+
+
+  return (
+    <>
+      <div className={styles.P_Groups_ID}>
+
+        <div className={styles.headerA}>
+          <div>{group.name}</div>
+        </div>
+
+        <div className={styles.headerB}>
+          <div className={styles.headerB_item}>Vakalar</div>
+          <div className={styles.headerB_item}>Kararlar</div>
+          <div className={styles.headerB_item}>Duyuru</div>
+          <div className={styles.headerB_item}>Üyeler</div>
+        </div>
+
+        <div className={styles.listheader_grid}>
+          <div className={styles.col1}>Vaka Adi</div>
+          <div className={styles.col2}>Oluşturma</div>
+          <div className={styles.col3}>Tamamlama</div>
+          <div className={styles.col4}>Kalan Süre</div>
+        </div>
+
+        <GroupDetail group={group} />
+
+      </div>
+      
+      {/* <div className={styles.container}>
+        <p>{post}</p>
+        <p>{id}</p>
+      </div> */}
+    </>
+  );
+}
+
+
+export async function getServerSideProps(context) {
+
+  const param = context.params.id // Get ID from slug `/book/1
+
+  const group = {
+    id: param,
+    name: "T360 Madenler Grubu"
+  }
+
+  //   // Get ID from slug `/book/1
+  //   // const id = "333"
+
+  return {
+    props: {
+      group,
+    },
+  }
+
+
+}
+
+
+export default GroupDetail_P;

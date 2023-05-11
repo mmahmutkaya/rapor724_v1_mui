@@ -1,0 +1,83 @@
+.card_grid {
+
+  background-color: antiquewhite;
+  box-shadow: 0 0.25rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 0, 25rem;
+  cursor: pointer;
+  /* padding: 0.5rem; */
+
+
+  display: grid;
+  grid-auto-flow: column;
+
+  justify-items: center;
+
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Add some padding inside the card container */
+/* .card_grid {
+
+  display: grid;
+  grid-auto-flow: column;
+
+  padding: 0.1rem;
+
+  justify-items: center;
+
+} */
+
+
+.col1{
+  text-align: center;
+  margin: auto;
+}
+
+.col2,
+.col3,
+.col4 {
+  display: none;
+  margin: auto;
+  text-align: center;
+}
+
+
+@media only screen and (min-width: 24rem) {
+
+  .card_grid {
+    grid-template-columns: 3fr 1fr;
+  }
+
+  .col2 {
+    display: block;
+  }
+}
+
+
+@media only screen and (min-width: 36rem) {
+
+  .card_grid {
+    grid-template-columns: 3fr 1fr 1fr;
+  }
+
+  .col3 {
+    display: block;
+  }
+}
+
+
+@media only screen and (min-width: 48rem) {
+
+  .card_grid {
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+  }
+
+  .col4 {
+    display: block;
+  }
+}

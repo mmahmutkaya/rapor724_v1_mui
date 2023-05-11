@@ -1,0 +1,28 @@
+
+
+
+.form_container {
+  max-width: 30rem;
+  margin:  auto;
+}
+
+.form {
+  display: grid;
+}
+
+
+.button1 {
+  background-color: rgba(43, 40, 206, 0.2);
+  margin-bottom: 1rem;
+}
+
+.button2 {
+  background-color: rgba(240, 71, 71, 0.2);
+}
+
+
+.input {
+  margin-bottom: 1rem;
+}
+
+

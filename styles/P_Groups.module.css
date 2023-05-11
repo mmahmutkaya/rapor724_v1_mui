@@ -1,0 +1,119 @@
+.Page {
+
+  /* height: 100%;
+  width: 100%; */
+  padding: 0rem 0.5rem;
+  /* background-color: lightblue; */
+
+  display: grid;
+  gap: 0.5rem;
+
+  /* grid-template-rows: auto; */
+
+  /* justify-content: space-between; */
+
+  /* justify-items: center;
+  align-items: center; */
+
+  /* height: 100%; */
+}
+
+
+
+.Header {
+  display: grid;
+}
+
+
+
+
+.HeaderA {
+
+  font-weight: 500;
+
+  border-bottom: 0.1rem solid #805507;
+  margin-bottom: 0.1rem;
+
+  padding: 0.5rem;
+
+  border-radius: 0.2rem;
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  /* justify-items: start; */
+
+}
+
+
+.HeaderA_left {
+
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+  align-items: center;
+  gap: 1rem;
+  font-weight: bold;
+
+  /* justify-items: start; */
+
+}
+
+
+.HeaderA_right {
+
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+  align-items: center;
+  gap: 1rem;
+
+  /* justify-items: start; */
+
+}
+
+
+
+
+
+.logo_right_div {
+  cursor: pointer;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+
+.GroupList {
+  /* background-color: #805507; */
+
+  /* border-bottom: 0.1rem solid #805507;
+  margin-bottom: 0.2rem; */
+  
+  display: grid;
+  gap: 0.15rem;
+
+}
+
+
+
+/* .card {
+  background-color: azure;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+} */
+
+/* On mouse-over, add a deeper shadow */
+/* .card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+} */
+
+/* Add some padding inside the card container */
+/* .container {
+  padding: 2px 16px;
+} */

@@ -1,0 +1,97 @@
+.Page {
+
+  /* padding: 0rem 0.5rem; */
+
+  display: grid;
+  gap: 0.5rem;
+
+
+  /* grid-template-columns: auto auto; */
+
+  /* justify-content: space-between; */
+
+  /* justify-items: center;
+  align-items: center; */
+
+  /* height: 100%; */
+}
+
+
+.duyurulist_container {
+  background-color: #5f3f04;
+
+  /* border-bottom: 0.1rem solid #805507;
+  margin-bottom: 0.2rem; */
+
+  display: grid;
+  gap: 0.1rem;
+}
+
+
+
+.col2,
+.col3,
+.col4 {
+  display: none;
+}
+
+
+@media only screen and (min-width: 24rem) {
+
+  .col2 {
+    display: block;
+  }
+
+  .listheader_grid {
+    grid-template-columns: 3fr 1fr;
+  }
+}
+
+
+@media only screen and (min-width: 36rem) {
+  .col3 {
+    display: block;
+  }
+
+  .listheader_grid {
+    grid-template-columns: 3fr 1fr 1fr;
+  }
+}
+
+
+
+@media only screen and (min-width: 48rem) {
+  .col4 {
+    display: block;
+    text-align: center;
+  }
+
+  .listheader_grid {
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+  }
+}
+
+
+
+
+
+
+
+
+
+/* .card {
+  background-color: azure;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+} */
+
+/* On mouse-over, add a deeper shadow */
+/* .card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+} */
+
+/* Add some padding inside the card container */
+/* .container {
+  padding: 2px 16px;
+} */
