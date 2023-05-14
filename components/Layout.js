@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useApp } from "../components/useApp.js";
 import styles from '../styles/Layout.module.css'
 import Sidebar from './Sidebar'
-import SignIn from './Signin'
+import SignIn from './SignIn'
 
 
 export default function Layout({ children }) {
