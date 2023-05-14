@@ -13,7 +13,6 @@ const Navbar = ({ setIsSidebar }) => {
   }
 
   const clickSumButton = async () => {
-
     const result = await RealmApp.currentUser.callFunction("returnBack");
     console.log(result)
   }

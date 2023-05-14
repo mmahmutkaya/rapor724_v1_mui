@@ -1,4 +1,4 @@
-import Navbar from './Navbar'
+import AppBar from './AppBar'
 import Footer from './Footer'
 import FormLogin from './FormLogin'
 import FormSignUp from './FormSignUp'
@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useApp } from "../components/useApp.js";
 import styles from '../styles/Layout.module.css'
 import Sidebar from './Sidebar'
+import SignIn from './Signin'
 
 
 export default function Layout({ children }) {
@@ -31,7 +32,8 @@ export default function Layout({ children }) {
   if (!RealmApp?.currentUser) {
     return (
       <>
-        {loginFormMode === "login" && <FormLogin setLoginFormMode={setLoginFormMode} />}
+        {/* {loginFormMode === "login" && <FormLogin setLoginFormMode={setLoginFormMode} />} */}
+        {loginFormMode === "login" && <SignIn setLoginFormMode={setLoginFormMode} />}
         {loginFormMode === "newUser" && <FormSignUp setLoginFormMode={setLoginFormMode} />}
       </>
     )
@@ -63,12 +65,15 @@ export default function Layout({ children }) {
   if (RealmApp?.currentUser) {
     return (
       <div className={`${styles["layout_container"]}`}>
+
         <div className={styles.right}>
-          <div className={styles.navbar}> {<Navbar setIsSidebar={setIsSidebar} />} </div>
+          <div className={styles.navbar}> {<AppBar setIsSidebar={setIsSidebar} />} </div>
           <div className={styles.page}>{children}</div>
           <div className={styles.footer}> {<Footer />} </div>
         </div>
+
         <div className={styles.left}><Sidebar setIsSidebar={setIsSidebar} isSidebar={isSidebar} /> </div>
+
       </div>
     )
   }

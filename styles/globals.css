@@ -1,5 +1,4 @@
 * {
-  color: var(--dark1);
   box-sizing: border-box;
   font-display: Roboto;
   font-size: 0.95rem;
@@ -15,11 +14,11 @@ body {
 
 :root {
   --sidebar-menu-width: 17rem;
-  --light1:#f2e9e4;
+  /* --light1:#f2e9e4;
   --light2:#e9d5ca;
   --dark1:#4a4e69;
   --dark2:#9a8c98;
-
+ */
 }
 
 

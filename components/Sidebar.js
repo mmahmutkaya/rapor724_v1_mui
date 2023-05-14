@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styles from "../styles/Sidebar.module.css"
 import Link from 'next/link'
+import Sidebar_B from './Sidebar_B'
 
 const Sidebar = ({ isSidebar, setIsSidebar }) => {
 
@@ -28,14 +29,16 @@ const Sidebar = ({ isSidebar, setIsSidebar }) => {
 
       <div className={!isSidebar ? styles.sidebar__menu : styles.sidebar__menu + " " + styles.sidebar__menu__active} onClick={clickSidebarMenu}>
         
-        <ul>
+        <Sidebar_B/>
+
+        {/* <ul>
           <li>
             <Link href="/">Home</Link>
           </li>
           <li>
             <Link href="/groups">Gruplar</Link>
           </li>
-        </ul>
+        </ul> */}
 
       </div>
 

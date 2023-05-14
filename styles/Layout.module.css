@@ -2,7 +2,7 @@
 .layout_container {
   margin: auto;
   position: relative;
-  max-width: 65rem;
+  /* max-width: 100rem; */
   background-color: var(--light1);
 
   /* display: grid;
