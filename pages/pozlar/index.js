@@ -9,8 +9,8 @@ export default function P_Pozlar() {
   return (
     <Grid container sx={{ width: '100%' }}>
 
-      <Grid item container sx={{ padding: "1rem", width: '100%', position: "relative" }}>
-        <Grid>
+      <Grid container sx={{ padding: "1rem", width: '100%', position: "relative" }}>
+        <Grid container justifyContent="space-between" >
           <Typography
             // sx={{
             //   position: "absolute",
@@ -28,7 +28,7 @@ export default function P_Pozlar() {
         </Grid>
       </Grid>
 
-      <Grid item sx={{ width: '100%' }}>
+      <Grid sx={{ width: '100%' }}>
         <TabloPozlar />
       </Grid>
 
