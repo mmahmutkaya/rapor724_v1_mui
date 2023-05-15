@@ -7,28 +7,41 @@ import Button from '@mui/material/Button';
 
 export default function P_Pozlar() {
   return (
-    <Grid container sx={{ width: '100%' }}>
 
-      <Grid container sx={{ padding: "1rem", width: '100%', position: "relative" }}>
-        <Grid container justifyContent="space-between" >
-          <Typography
-            // sx={{
-            //   position: "absolute",
-            //   top: "50%",
-            //   transform: "translate(0, -50%)",
-            // }}
-            variant="h5"
-            fontWeight="bold"
-            id="tableTitle"
-            component="div"
-          >
-            Pozlar
-          </Typography>
-          <Button variant="contained">Contained</Button>
-        </Grid>
+    //sayfa
+    <Grid >
+
+      {/* başlık */}
+      <Grid
+        container
+        justifyContent="space-between"
+        sx={{ padding: "1rem" }}>
+
+        {/* başlık sol */}
+        <Typography
+          // parent içinde position: "relative" gerekli
+          // sx={{
+          //   position: "absolute",
+          //   top: "50%",
+          //   transform: "translate(0, -50%)",
+          // }}
+          variant="h5"
+          fontWeight="bold"
+        >
+          Pozlar
+        </Typography>
+
+        <Box>
+          <Grid container spacing={1}>
+            <Grid item>
+              <Button variant="contained" color="success">Poz Ekle</Button>
+            </Grid>
+          </Grid>
+        </Box>
+
       </Grid>
 
-      <Grid sx={{ width: '100%' }}>
+      <Grid >
         <TabloPozlar />
       </Grid>
 
