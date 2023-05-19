@@ -49,6 +49,13 @@ export default function NestedList() {
         <ListItemText primary="Sözleşmeler" />
       </ListItemButton>
 
+      <ListItemButton onClick={() => router.push('/wbs')}>
+        <ListItemIcon>
+          <SendIcon />
+        </ListItemIcon>
+        <ListItemText primary="İş Alanları / WBS" />
+      </ListItemButton>
+
       <Divider />
 
       <ListItemButton>
