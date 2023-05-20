@@ -14,25 +14,43 @@ const level_5 = 5
 const renk_1 = "red"
 const renk_2 = "yellow"
 
-// const Item = ({ index }) => (
-//   <Box sx={{ backgroundColor: "red" }}>{index}</Box>
-// );
+const Item = ({ index }) => (
+  <Box sx={{ backgroundColor: bgColor(index) }}>{index}</Box>
+);
 
-// const Items = ({ count }) => (
-//   Array.from({ length: count }).map((_item, index) => <Item index={"index"} />)
-// )
+const Items = ({ count }) => (
+  Array.from({ length: count }).map((_item, index) => <Item key={index} index={index} />)
+)
 
-export default function Wbs() {
+export default function WbsMain() {
+
   return (
 
     <Box display="grid" p={1}>
+
       {
-        data.map((item) =>
-          <div key={item.id.toString()}>
-            <Item level={item.level} metin={item.metin} />
-          </div>
-        )
+        data.map(({ id, level, name }) => {
+
+          return (
+            <Box key={id} display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
+              <Items count={level} />
+              <Box sx={{ backgroundColor: bgColor(level) }}>{name}</Box>
+            </Box>
+          )
+
+          // return (
+          //   <div key={id.toString()}>
+          //     <Box display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
+          //       {/* <Levels count={level} /> */}
+          //       <Box sx={{ backgroundColor: bgColor(level) }}>{metin}</Box>
+          //     </Box>
+          //   </div>
+          // )
+
+        })
+
       }
+
     </Box>
 
   )
@@ -44,20 +62,25 @@ export default function Wbs() {
   <Box sx={{ backgroundColor: renk_2 }}>xs=8</Box>
 </Box> */}
 
-const Level = ({ index }) => (
-  <Box sx={{ backgroundColor: bgColor(index) }} />
-);
+// const Level = ({ index }) => (
+//   <Box sx={{ backgroundColor: bgColor(index) }} />
+// );
 
-const Levels = ({ count }) => (
-  Array.from({ length: count }).map((_item, index) => <Level index={index} />)
-)
+// const Levels = ({ count }) => (
+//   Array.from({ length: count }).map((_item, index) => <Level index={index} />)
+// )
 
-const Item = ({ level, metin }) => (
-  <Box display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
-    <Levels count={level} />
-    <Box sx={{ backgroundColor: bgColor(level) }}>{metin}</Box>
-  </Box>
-)
+
+
+
+// const Item = ({ level, metin }) => {
+//   return (
+//     <Box display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
+//       <Levels count={level} />
+//       <Box sx={{ backgroundColor: bgColor(level) }}>{metin}</Box>
+//     </Box>
+//   )
+// }
 
 
 function bgColor(index) {
@@ -84,27 +107,27 @@ function bgColor(index) {
 const data = [
   {
     id: 1,
-    level: 0,
+    level: 2,
     name: "Alçı Sıva Yapılması"
   },
   {
     id: 2,
-    level: 1,
+    level: 3,
     name: "Kara Sıva Yapılması"
   },
   {
     id: 3,
-    level: 1,
+    level: 4,
     name: "Laminant Parke Döşenmesi"
   },
   {
     id: 4,
-    level: 2,
+    level: 5,
     name: "Şap Dökülmesi"
   },
   {
     id: 5,
-    level: 1,
+    level: 7,
     name: "İzolasyon Yapılması"
   },
 ]
