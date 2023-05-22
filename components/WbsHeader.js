@@ -3,9 +3,11 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-
-export default function WbsHeader() {
+export default function WbsHeader({handleRight}) {
   return (
     <Paper>
 
@@ -35,7 +37,9 @@ export default function WbsHeader() {
         <Grid>
           <Grid container spacing={2}>
             <Grid item>
-              <Button variant="contained" color="success">Poz Ekle</Button>
+              <IconButton onClick={() => handleRight("mahmut")} aria-label="delete">
+                <KeyboardArrowRightIcon />
+              </IconButton>
             </Grid>
             <Grid item>
               <Button variant="contained" color="success">Poz Ekle</Button>

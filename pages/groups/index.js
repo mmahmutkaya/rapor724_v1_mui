@@ -34,13 +34,6 @@ const P_GroupList = () => {
 
   if (error) return "An error has occurred: " + error.message;
 
-  // // array teke düşürmek için --- aktif yapmak için yukarıdaki group yazanı groups2 ile değiştirceğiz ve tam tersi
-  // if (groups2) {
-  //   var groups = groups2.filter(x => x.groupName.includes("Taksim 360") || x.groupName.includes("Taksim 360"))
-  // }
-
-  // if (groups) console.log(groups)
-
 
   return (
     <>
