@@ -50,6 +50,7 @@ export default function P_Wbs() {
 
   const [show, setShow] = useState("WbsMain")
   const [selected, setSelected] = useState(null)
+  console.log("selected", selected)
 
   const { isLoading, isError, data: wbs, error, refetch: refetch_wbs } = useQuery({
     queryKey: ['wbs'],
