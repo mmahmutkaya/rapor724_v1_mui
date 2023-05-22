@@ -1,4 +1,5 @@
-import React from 'react'
+import { useState } from 'react'
+
 
 //mui
 import Box from '@mui/material/Grid';
@@ -11,41 +12,63 @@ const level_3 = 3
 const level_4 = 4
 const level_5 = 5
 
-const renk_1 = "red"
-const renk_2 = "yellow"
 
 const Item = ({ index }) => (
-  <Box sx={{ backgroundColor: bgColor(index) }}>{index}</Box>
+  <Box sx={{ backgroundColor: bgColor(index).bg }}></Box>
 );
 
 const Items = ({ count }) => (
-  Array.from({ length: count }).map((_item, index) => <Item key={index} index={index} />)
+  Array.from({ length: count }).map((_item, index) => <Item key={index + 1} index={index} />)
 )
 
-export default function WbsMain() {
+export default function WbsMain({ data2, handleCollapse }) {
+
+  let modeOn = {
+    height: "1.5rem",
+    color: "black"
+  }
+
+  let modeOff = {
+    height: "0rem",
+    color: "white"
+  }
+
+
 
   return (
 
     <Box display="grid" p={1}>
 
       {
-        data.map(({ id, level, name }) => {
+        data2.map(({ wbs, name }) => {
+
+          let level = wbs.split(".").length;
 
           return (
-            <Box key={id} display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
+            <Box
+              key={id}
+              display="grid"
+              onClick={() => handleCollapse(id)}
+              sx={{
+                color: !hidden ? modeOn.color : modeOff.color,
+                height: !hidden ? modeOn.height : modeOff.height,
+                transition: "0.5s",
+                gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr"
+              }}>
+
               <Items count={level} />
-              <Box sx={{ backgroundColor: bgColor(level) }}>{name}</Box>
+
+              <Box sx={{
+                "&:hover": {
+                  backgroundColor: 'rgb(7, 177, 77, 0.42)'
+                }
+              }}>
+                {wbs + " " + name}
+              </Box>
+
+              {/* <Box sx={{ backgroundColor: bgColor(level).bg, color: bgColor(level).co }}>{name}</Box> */}
             </Box>
           )
-
-          // return (
-          //   <div key={id.toString()}>
-          //     <Box display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
-          //       {/* <Levels count={level} /> */}
-          //       <Box sx={{ backgroundColor: bgColor(level) }}>{metin}</Box>
-          //     </Box>
-          //   </div>
-          // )
 
         })
 
@@ -57,79 +80,130 @@ export default function WbsMain() {
 }
 
 
-{/* <Box display="grid" sx={{ gridTemplateColumns: "2rem 1fr" }}>
-  <Box sx={{ backgroundColor: renk_1 }}>xs=8</Box>
-  <Box sx={{ backgroundColor: renk_2 }}>xs=8</Box>
-</Box> */}
-
-// const Level = ({ index }) => (
-//   <Box sx={{ backgroundColor: bgColor(index) }} />
-// );
-
-// const Levels = ({ count }) => (
-//   Array.from({ length: count }).map((_item, index) => <Level index={index} />)
-// )
-
-
-
-
-// const Item = ({ level, metin }) => {
-//   return (
-//     <Box display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
-//       <Levels count={level} />
-//       <Box sx={{ backgroundColor: bgColor(level) }}>{metin}</Box>
-//     </Box>
-//   )
-// }
-
 
 function bgColor(index) {
-  switch (index) {
-    case 0:
-      return "red";
-    case 1:
-      return "blue";
-    case 2:
-      return "yellow";
-    case 3:
-      return "aqua";
-    case 4:
-      return "red";
-    case 5:
-      return "red";
-    case 6:
-      return "red";
-  }
+  return { bg: "white", co: "black" }
 }
 
 
+// function bgColor(index) {
+//   switch (index) {
+//     case 0:
+//       return {bg:"#202020", co:"white"}
+//     case 1:
+//       return {bg:"#660033", co:"white"}
+//     case 2:
+//       return {bg:"#330066", co:"white"}
+//     case 3:
+//       return {bg:"#006666", co:"white"}
+//     case 4:
+//       return {bg:"#303030", co:"white"}
+//     case 5:
+//       return {bg:"#550033", co:"white"}
+//     case 6:
+//       return {bg:"#330055", co:"white"}
+//     case 7:
+//       return {bg:"#005555", co:"white"}
+//   }
+// }
 
-const data = [
-  {
-    id: 1,
-    level: 2,
-    name: "Alçı Sıva Yapılması"
-  },
-  {
-    id: 2,
-    level: 3,
-    name: "Kara Sıva Yapılması"
-  },
-  {
-    id: 3,
-    level: 4,
-    name: "Laminant Parke Döşenmesi"
-  },
-  {
-    id: 4,
-    level: 5,
-    name: "Şap Dökülmesi"
-  },
-  {
-    id: 5,
-    level: 7,
-    name: "İzolasyon Yapılması"
-  },
-]
+
+
+
+// function bgColor(index) {
+//   switch (index) {
+//     case 0:
+//       return "#a6e7ff";
+//     case 1:
+//       return "#efc5b5";
+//     case 2:
+//       return "#aaffaa";
+//     case 3:
+//       return "#eeaaff";
+//     case 4:
+//       return "#f1f33f";
+//     case 5:
+//       return "#a6e7ff";
+//     case 6:
+//       return "#f2dea4";
+//     case 7:
+//       return "#aefd6c";
+//   }
+// }
+
+
+
+// const data = [
+//   {
+//     id: 1,
+//     level: 0,
+//     name: "Alçı Sıva Yapılması"
+//   },
+//   {
+//     id: 2,
+//     level: 1,
+//     name: "Kara Sıva Yapılması"
+//   },
+//   {
+//     id: 3,
+//     level: 1,
+//     name: "Laminant Parke Döşenmesi"
+//   },
+//   {
+//     id: 4,
+//     level: 2,
+//     name: "Şap Dökülmesi"
+//   },
+//   {
+//     id: 5,
+//     level: 1,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 6,
+//     level: 2,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 7,
+//     level: 3,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 8,
+//     level: 4,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 9,
+//     level: 4,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 10,
+//     level: 5,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 11,
+//     level: 6,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 12,
+//     level: 7,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 13,
+//     level: 6,
+//     name: "İzolasyon Yapılması"
+//   },
+//   {
+//     id: 14,
+//     level: 7,
+//     name: "İzolasyon Yapılması"
+//   },
+// ]
 
 
