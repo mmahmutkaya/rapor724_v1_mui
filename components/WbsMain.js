@@ -21,7 +21,8 @@ const Items = ({ count }) => (
   Array.from({ length: count }).map((_item, index) => <Item key={index + 1} index={index} />)
 )
 
-export default function WbsMain({ data2, handleCollapse }) {
+
+export default function WbsMain({ data2, setSelected }) {
 
   let modeOn = {
     height: "1.5rem",
@@ -33,22 +34,25 @@ export default function WbsMain({ data2, handleCollapse }) {
     color: "white"
   }
 
-
-
   return (
 
     <Box display="grid" p={1}>
 
       {
-        data2.map(({ wbs, name }) => {
+        data2.map((index, { wbs = 1, name = "alcipan" }) => {
 
-          let level = wbs.split(".").length;
+          // let level = wbs.split(".").length;
+
+          let hidden = false;
+          let level = 1;
+
+          console.log(index)
 
           return (
             <Box
-              key={id}
+              key={index}
               display="grid"
-              onClick={() => handleCollapse(id)}
+              onClick={() => setSelected(id)}
               sx={{
                 color: !hidden ? modeOn.color : modeOff.color,
                 height: !hidden ? modeOn.height : modeOff.height,

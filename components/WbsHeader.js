@@ -5,9 +5,13 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-export default function WbsHeader({handleRight}) {
+export default function WbsHeader({ setShow }) {
   return (
     <Paper>
 
@@ -35,14 +39,36 @@ export default function WbsHeader({handleRight}) {
 
         {/* başlık sağ */}
         <Grid>
-          <Grid container spacing={2}>
+          <Grid container spacing={1}>
             <Grid item>
-              <IconButton onClick={() => handleRight("mahmut")} aria-label="delete">
+              <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+                <KeyboardArrowUpIcon />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+                <KeyboardArrowDownIcon />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+                <KeyboardArrowLeftIcon />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => setShow("FormWbs")} aria-label="moveRight">
                 <KeyboardArrowRightIcon />
               </IconButton>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="success">Poz Ekle</Button>
+              <IconButton  onClick={() => setShow("FormWbs")} aria-label="addWbs">
+                <DeleteIcon  variant="contained" color="error" />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => setShow("FormWbs")} aria-label="addWbs">
+                <AddCircleOutlineIcon variant="contained" color="success" />
+              </IconButton>
             </Grid>
           </Grid>
         </Grid>

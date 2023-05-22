@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react'
 
 import WbsMain from '../../components/WbsMain'
@@ -7,6 +6,7 @@ import Grid from '@mui/material/Grid';
 
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
+import FormWbs from '../../components/FormWbs'
 
 
 
@@ -44,14 +44,12 @@ const handleCollapse = (id) => {
 
 
 
-
-
-
 export default function P_Wbs() {
 
   const RealmApp = useApp();
 
-  // const [data2, setData2] = useState(data)
+  const [show, setShow] = useState("WbsMain")
+  const [selected, setSelected] = useState(null)
 
   const { isLoading, isError, data: wbs, error, refetch: refetch_wbs } = useQuery({
     queryKey: ['wbs'],
@@ -68,25 +66,24 @@ export default function P_Wbs() {
 
   if (!wbs) return "henüz bir wbs oluşturmamışsınız"
 
-  console.log(wbs)
-
-
-
-  const handleRight = (e) => {
-
-  }
-
+  return console.log(wbs)
 
   return (
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <WbsHeader handleRight={handleRight} />
+        <WbsHeader setShow={setShow} setSelected={setSelected} />
       </Grid>
 
-      <Grid item>
-        <WbsMain data2={wbs} handleCollapse={handleCollapse} />
-      </Grid>
+      {show == "FormWbs" &&
+        <FormWbs setShow={setShow} />
+      }
+
+      {show == "WbsMain" &&
+        <Grid item>
+          <WbsMain data2={wbs} handleCollapse={handleCollapse} setSelected={setSelected} />
+        </Grid>
+      }
 
     </Grid>
 

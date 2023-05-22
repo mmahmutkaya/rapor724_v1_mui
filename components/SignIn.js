@@ -59,6 +59,8 @@ export default function SignIn({ setLoginFormMode }) {
 
     } catch (err) {
 
+      // return console.log(err)
+
       const hataMesaj = err.error
 
       if (hataMesaj.includes("expected a string 'password' parameter")) {
