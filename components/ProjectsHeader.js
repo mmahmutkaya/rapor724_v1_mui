@@ -45,7 +45,7 @@ export default function ProjectHeader({ setShow }) {
             </Grid>
 
             <Grid item>
-              <IconButton onClick={() => setShow("FormProjectCreate")} aria-label="addWbs">
+              <IconButton onClick={() => setShow("FormProjectCreate")} aria-label="addProject">
                 <AddCircleOutlineIcon variant="contained" color="success" />
               </IconButton>
             </Grid>

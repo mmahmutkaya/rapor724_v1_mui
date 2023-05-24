@@ -1,29 +1,17 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-// import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-
-import { useApp } from "./useApp.js";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
-const theme = createTheme();
+export default function DialogForm({ show, setShow }) {
 
-export default function SignIn({ setShow }) {
 
-  const RealmApp = useApp();
 
   async function handleSubmit(event) {
 
@@ -35,16 +23,33 @@ export default function SignIn({ setShow }) {
       const projectName = data.get('projectName')
 
       console.log(projectName)
+      // console.log(password)
 
-      const result = await RealmApp.currentUser.callFunction("createProject", { name:projectName });
-
-      console.log(result)
-      refetch_projects()
-      return setShow("Projects")
+      // const credentials = Realm.Credentials.emailPassword(email, password);
+      // const user = await RealmApp.logIn(credentials);
+      // if (user) {
+      //   window.location.reload(false);
+      //   return console.log("Giriş işlemi başarılı")
+      // }
+      // return console.log("Giriş işlemi başarısız, iletişime geçiniz.")
 
     } catch (err) {
 
-      const hataMesaj = err?.error ? err.error : err
+      // return console.log(err)
+
+      const hataMesaj = err.error ? err.error : err
+
+      if (hataMesaj.includes("expected a string 'password' parameter")) {
+        return console.log("Şifre girmelisiniz")
+      }
+
+      if (hataMesaj === "invalid username") {
+        return console.log("Email girmelisiniz")
+      }
+
+      if (hataMesaj === "invalid username/password") {
+        return console.log("Email ve şifre uyuşmuyor")
+      }
 
       console.log(hataMesaj)
       return console.log("Giriş esnasında hata oluştu, lütfen iletişime geçiniz..")
@@ -54,54 +59,37 @@ export default function SignIn({ setShow }) {
   }
 
 
+
   return (
-    <ThemeProvider theme={theme}>
+    <div>
 
-      <Paper >
-
-        <Box component="form" onSubmit={handleSubmit} noValidate >
-
-          <Grid
-            container
-            direction="column"
-            sx={{ padding: "1rem 2rem" }}
-          >
-
-            <Grid item>
-              <TextField
-                autoFocus
-                margin="normal"
-                required
-                fullWidth
-                name="projectName"
-                label="Proje Adı"
-                type="projectName"
-                id="projectName"
-                autoComplete="projectName"
-              />
-            </Grid>
-
-            <Grid item sx={{ alignSelf: "flex-end" }}>
-              <Button
-                onClick={() => setShow("ProjectMain")}
-                type="cancel"
-                variant="text"
-              >
-                <Typography sx={{fontWeight: 'bold'}}>İptal</Typography>
-              </Button>
-
-              <Button
-                onClick={() => handleSubmit}
-                type="submit"
-                variant="text"
-              >
-                <Typography sx={{fontWeight: 'bold'}}>Tamam</Typography>
-              </Button>
-            </Grid>
-
-          </Grid>
+      <Dialog
+        PaperProps={{ sx: { position: "fixed", top: "10rem", m: 0 } }}
+        open={true}
+        onClose={() => setShow("ProjectMain")} >
+        {/* <DialogTitle>Subscribe</DialogTitle> */}
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <DialogContent>
+            {/* <DialogContentText>
+              Proje ismini giriniz.
+            </DialogContentText> */}
+            <TextField
+              name="projectName"
+              autoFocus
+              margin="dense"
+              id="projectName"
+              label="Proje Adı"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShow("ProjectMain")}>İptal</Button>
+            <Button type="submit">Oluştur</Button>
+          </DialogActions>
         </Box>
-      </Paper>
-    </ThemeProvider>
+      </Dialog>
+    </div >
   );
 }

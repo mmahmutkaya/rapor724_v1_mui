@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import FormProjectCreate from '../../components/DialogForm'
+import FormProjectCreate from '../../components/FormProjectCreate'
 import ProjectsHeader from '../../components/ProjectsHeader'
 import ProjectsMain from '../../components/ProjectsMain'
 import Grid from '@mui/material/Grid';
@@ -63,9 +63,6 @@ export default function P_Wbs() {
 
   const [show, setShow] = useState("ProjectMain")
 
-  console.log("projectNames")
-  console.log(projectNames)
-
   if (isLoading) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
@@ -80,7 +77,7 @@ export default function P_Wbs() {
 
       {show == "FormProjectCreate" &&
         <Grid item >
-          <FormProjectCreate setShow={setShow} />
+          <FormProjectCreate show={show} setShow={setShow} />
         </Grid>
       }
 
