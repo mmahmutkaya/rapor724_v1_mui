@@ -60,7 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({setIsSidebar}) {
 
   const RealmApp = useApp();
 
@@ -90,6 +90,11 @@ export default function PrimarySearchAppBar() {
   const clickLogOut = async () => {
     await RealmApp.currentUser.logOut()
     window.location.reload(false);
+  }
+
+  const handleSidebar = () => {
+    console.log("merhaba")
+    setIsSidebar(prev => !prev)
   }
 
 
@@ -173,6 +178,7 @@ export default function PrimarySearchAppBar() {
       <AppBar position="static">
         <Toolbar>
           <IconButton
+            onClick={handleSidebar}
             size="large"
             edge="start"
             color="inherit"

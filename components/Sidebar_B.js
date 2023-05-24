@@ -16,7 +16,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
 import Divider from '@mui/material/Divider';
-
+import Drawer from '@mui/material/Drawer';
 
 
 export default function Sidebar_B() {
@@ -30,11 +30,11 @@ export default function Sidebar_B() {
   };
 
   return (
-    <Grid container >
+    <Grid container sx={{ bgcolor: 'background.paper', maxWidth: 360  }}>
 
       <Grid item>
         <List
-          sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+          sx={{ width: '100%'}}
           component="nav"
           aria-labelledby="nested-list-subheader"
         // subheader={

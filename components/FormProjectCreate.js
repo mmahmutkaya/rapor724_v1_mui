@@ -33,34 +33,18 @@ export default function SignIn({ setShow }) {
 
       const data = new FormData(event.currentTarget);
       const projectName = data.get('projectName')
-      // const password = data.get('password')
 
       console.log(projectName)
-      // console.log(password)
 
-      // const credentials = Realm.Credentials.emailPassword(email, password);
-      // const user = await RealmApp.logIn(credentials);
-      // if (user) {
-      //   window.location.reload(false);
-      //   return console.log("Giriş işlemi başarılı")
-      // }
-      // return console.log("Giriş işlemi başarısız, iletişime geçiniz.")
+      const result = await RealmApp.currentUser.callFunction("createProject", { name:projectName });
+
+      console.log(result)
+      refetch_projects()
+      return setShow("Projects")
 
     } catch (err) {
 
       const hataMesaj = err?.error ? err.error : err
-
-      if (hataMesaj.includes("expected a string 'password' parameter")) {
-        return console.log("Şifre girmelisiniz")
-      }
-
-      if (hataMesaj === "invalid username") {
-        return console.log("Email girmelisiniz")
-      }
-
-      if (hataMesaj === "invalid username/password") {
-        return console.log("Email ve şifre uyuşmuyor")
-      }
 
       console.log(hataMesaj)
       return console.log("Giriş esnasında hata oluştu, lütfen iletişime geçiniz..")

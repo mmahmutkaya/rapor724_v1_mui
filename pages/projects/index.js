@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import FormProjectCreate from '../../components/FormProjectCreate'
+import FormProjectCreate from '../../components/DialogForm'
 import ProjectsHeader from '../../components/ProjectsHeader'
 import ProjectsMain from '../../components/ProjectsMain'
 import Grid from '@mui/material/Grid';
