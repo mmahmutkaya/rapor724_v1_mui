@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { StoreContext } from '../components/store'
 import { useRouter } from 'next/router';
 
 //material
@@ -8,7 +9,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
+import Typography from '@mui/material/Typography';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import SendIcon from '@mui/icons-material/Send';
@@ -19,22 +20,32 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 
 
-export default function Sidebar_B() {
+export default function Sidebar_B({ setMobileOpen, RealmApp }) {
+
+  const { isProject } = useContext(StoreContext)
 
   const router = useRouter();
   const [open, setOpen] = useState(true);
-  const [project, setProject] = useState(false);
 
-  const handleClick = () => {
-    setOpen(prev => !prev);
+
+  const handleProject = () => {
+    setMobileOpen(false)
+    router.push('/projects')
   };
 
+
   return (
-    <Grid container sx={{ bgcolor: 'background.paper', maxWidth: 360  }}>
+    <Grid container >
+
+      <Grid item sx={{ backgroundColor: "aquamarine" }}>
+        <Typography >
+          {RealmApp?.currentUser?.profile.email}
+        </Typography>
+      </Grid>
+
 
       <Grid item>
         <List
-          sx={{ width: '100%'}}
           component="nav"
           aria-labelledby="nested-list-subheader"
         // subheader={
@@ -44,7 +55,7 @@ export default function Sidebar_B() {
         // }
         >
 
-          <ListItemButton onClick={() => router.push('/projects')}>
+          <ListItemButton onClick={handleProject}>
             <ListItemIcon>
               <SendIcon />
             </ListItemIcon>
@@ -55,7 +66,7 @@ export default function Sidebar_B() {
       </Grid>
 
 
-      {project &&
+      {isProject &&
         <Grid item>
           <List>
 

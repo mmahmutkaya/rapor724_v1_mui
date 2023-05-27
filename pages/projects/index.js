@@ -1,57 +1,30 @@
-import { useState } from 'react'
 
-import FormProjectCreate from '../../components/FormProjectCreate'
-import ProjectsHeader from '../../components/ProjectsHeader'
-import ProjectsMain from '../../components/ProjectsMain'
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
-
+import { useState, useEffect, useContext } from 'react';
+import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
+import FormProjectCreate from '../../components/FormProjectCreate'
+import ProjectsHeader from '../../components/ProjectsHeader'
+
+
+
+import Grid from '@mui/material/Grid';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
+import List from '@mui/material/List';
+
+import FolderIcon from '@mui/icons-material/Folder';
 
 
 
-const handleCollapse = (id) => {
-  // console.log(id)
-  let isHidden = data2.find(item => item.wbs.includes(id + "."))
 
-  if (!isHidden?.hidden) {
-    let data3 = JSON.parse(JSON.stringify(data2))
-    data3 = data3.map(item => {
-      if (item.wbs.includes(id + ".")) {
-        item.hidden = true
-      }
-      return item
-    })
-    return (
-      setData2(data3)
-    )
-  }
+export default function P_Projects() {
 
-  if (isHidden?.hidden) {
-    let data3 = JSON.parse(JSON.stringify(data2))
-    data3 = data3.map(item => {
-      if (item.wbs.includes(id + ".")) {
-        item.hidden = false
-      }
-      return item
-    })
-    return (
-      setData2(data3)
-    )
-  }
-
-}
-
-
-
-export default function P_Wbs() {
+  const { setIsProject } = useContext(StoreContext)
 
   const RealmApp = useApp();
-  const { isLoading, isError, data: projectNames, error, refetch: refetch_wbs } = useQuery({
+  const { isLoading, isError, data: projectNames, error, refetch: refetch_projects } = useQuery({
     queryKey: ['projects'],
     // queryFn: deneme,
     queryFn: async () => await RealmApp.currentUser.callFunction("getProjectNames"),
@@ -67,7 +40,12 @@ export default function P_Wbs() {
 
   if (error) return "An error has occurred: " + error.message;
 
-  // if (typeof projects == "object") {
+  const handleProjectClick = (projectName) => {
+    console.log(projectName)
+    setIsProject(true)
+  }
+
+
   return (
     <Grid container direction="column" spacing={1}>
 
@@ -77,11 +55,11 @@ export default function P_Wbs() {
 
       {show == "FormProjectCreate" &&
         <Grid item >
-          <FormProjectCreate show={show} setShow={setShow} />
+          <FormProjectCreate setShow={setShow} refetch_projects={refetch_projects} />
         </Grid>
       }
 
-      {show == "ProjectMain" && projectNames.empty && show == "ProjectMain" &&
+      {show == "ProjectMain" && projectNames.empty &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Dahil olduğunuz herhangi bir proje bulunamadı, menüler yardımı ile yeni bir proje oluşturabilirsiniz.
@@ -89,19 +67,36 @@ export default function P_Wbs() {
         </Stack>
       }
 
-      {show == "ProjectMain" && !projectNames.empty && show == "ProjectMain" &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
-          <ProjectsMain />
+      {show == "ProjectMain" && !projectNames.empty &&
+        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
+
+          {
+            projectNames.map(project => (
+
+              <Grid key={project._id} container spacing={2} onClick={() => handleProjectClick(project.name)} sx={{ padding: "0.2rem 1rem", cursor: "pointer" }}>
+
+                <Grid item>
+                  <FolderIcon sx={{ color: "#757575" }} />
+                </Grid>
+
+                <Grid item>
+                  <Typography sx={{ fontWeight: "600" }}>
+                    {project.name}
+                  </Typography>
+                </Grid>
+
+              </Grid>
+
+            ))
+          }
+
+
         </Stack>
       }
 
     </Grid>
 
   )
-
-  // }
-
-
 
 }
 

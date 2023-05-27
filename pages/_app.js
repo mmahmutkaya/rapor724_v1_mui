@@ -6,6 +6,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 // import { useApp } from "../components/useApp.js";
 import CssBaseline from '@mui/material/CssBaseline';
 
+import StoreProvider from '../components/store'
+
 
 const queryClient = new QueryClient()
 
@@ -20,16 +22,17 @@ function MyApp({ Component, pageProps }) {
 
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <div className={inter.className}> */}
+    <StoreProvider>
+      <QueryClientProvider client={queryClient}>
+        {/* <div className={inter.className}> */}
         <CssBaseline />
         <Layout >
           <Component {...pageProps} />
         </Layout>
-      {/* </div> */}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-
+        {/* </div> */}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </StoreProvider>
   )
 }
 

@@ -9,8 +9,9 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
 export default function ProjectHeader({ setShow }) {
+
   return (
-    <Paper>
+    <Paper >
 
       <Grid
         container
@@ -39,13 +40,16 @@ export default function ProjectHeader({ setShow }) {
           <Grid container spacing={1}>
 
             <Grid item>
-              <IconButton  onClick={() => console.log("deleted clicked")} aria-label="addWbs">
-                <DeleteIcon  variant="contained" color="error" />
+              <IconButton onClick={() => console.log("deleted clicked")} aria-label="addWbs">
+                <DeleteIcon
+                  // sx={{display: isProject_display}}
+                  variant="contained" color="error"
+                />
               </IconButton>
             </Grid>
 
             <Grid item>
-              <IconButton onClick={() => setShow("FormProjectCreate")} aria-label="addProject">
+              <IconButton onClick={() => setShow("FormProjectCreate")} aria-label="addWbs">
                 <AddCircleOutlineIcon variant="contained" color="success" />
               </IconButton>
             </Grid>
