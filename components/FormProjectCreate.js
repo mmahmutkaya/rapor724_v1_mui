@@ -132,9 +132,9 @@ export default function P_FormProjectCreate({ setShow, refetch_projects }) {
               />
             </Box>
 
-
           </DialogContent>
-          <DialogActions>
+
+          <DialogActions sx={{padding:"1.5rem"}}>
             <Button onClick={() => setShow("ProjectMain")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>

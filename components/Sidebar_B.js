@@ -1,6 +1,7 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { StoreContext } from '../components/store'
 import { useRouter } from 'next/router';
+import { useApp } from "../components/useApp";
 
 //material
 import Grid from '@mui/material/Grid';
@@ -20,12 +21,11 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 
 
-export default function Sidebar_B({ setMobileOpen, RealmApp }) {
+export default function Sidebar_B({ setMobileOpen }) {
 
-  const { isProject } = useContext(StoreContext)
 
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const { isProject } = useContext(StoreContext)
 
 
   const handleProject = () => {
@@ -35,40 +35,47 @@ export default function Sidebar_B({ setMobileOpen, RealmApp }) {
 
 
   return (
-    <Grid container >
+    <Grid container direction="column">
 
-      <Grid item sx={{ backgroundColor: "aquamarine" }}>
+      {/* <Grid item sx={{ backgroundColor: "aquamarine" }}>
         <Typography >
-          {RealmApp?.currentUser?.profile.email}
+          {header}
         </Typography>
-      </Grid>
+      </Grid> */}
 
+      {!isProject &&
+        <Grid item>
+          <List
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+          // subheader={
+          //   <ListSubheader component="div" id="nested-list-subheader">
+          //     Başlık
+          //   </ListSubheader>
+          // }
+          >
 
-      <Grid item>
-        <List
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-        // subheader={
-        //   <ListSubheader component="div" id="nested-list-subheader">
-        //     Başlık
-        //   </ListSubheader>
-        // }
-        >
+            <ListItemButton onClick={handleProject}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Projeler" />
+            </ListItemButton>
 
-          <ListItemButton onClick={handleProject}>
-            <ListItemIcon>
-              <SendIcon />
-            </ListItemIcon>
-            <ListItemText primary="Projeler" />
-          </ListItemButton>
-
-        </List>
-      </Grid>
-
+          </List>
+        </Grid>
+      }
 
       {isProject &&
         <Grid item>
           <List>
+
+            <ListItemButton onClick={() => router.push('/reports')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Rapor" />
+            </ListItemButton>
 
             <ListItemButton onClick={() => router.push('/wbs')}>
               <ListItemIcon>

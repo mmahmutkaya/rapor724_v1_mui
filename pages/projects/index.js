@@ -1,11 +1,11 @@
 
 import { useState, useEffect, useContext } from 'react';
+import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
 import FormProjectCreate from '../../components/FormProjectCreate'
 import ProjectsHeader from '../../components/ProjectsHeader'
-
 
 
 import Grid from '@mui/material/Grid';
@@ -21,7 +21,8 @@ import FolderIcon from '@mui/icons-material/Folder';
 
 export default function P_Projects() {
 
-  const { setIsProject } = useContext(StoreContext)
+  const { isProject, setIsProject } = useContext(StoreContext)
+  const router = useRouter();
 
   const RealmApp = useApp();
   const { isLoading, isError, data: projectNames, error, refetch: refetch_projects } = useQuery({
@@ -40,9 +41,11 @@ export default function P_Projects() {
 
   if (error) return "An error has occurred: " + error.message;
 
-  const handleProjectClick = (projectName) => {
-    console.log(projectName)
-    setIsProject(true)
+
+  const handleProjectClick = (project) => {
+    setIsProject(project)
+    router.push('/reports')
+    console.log("--setproject-- is worked")
   }
 
 
@@ -73,14 +76,31 @@ export default function P_Projects() {
           {
             projectNames.map(project => (
 
-              <Grid key={project._id} container spacing={2} onClick={() => handleProjectClick(project.name)} sx={{ padding: "0.2rem 1rem", cursor: "pointer" }}>
+              <Grid
+                key={project._id}
+                container spacing={2}
+                onClick={() => handleProjectClick(project)}
+                sx={{
+                  "&:hover": {
+                    color: "red",
+                  },
+                  padding: "0.2rem 1rem",
+                  cursor: "pointer"
+                }}
+              >
 
                 <Grid item>
-                  <FolderIcon sx={{ color: "#757575" }} />
+                  <FolderIcon
+                    sx={{
+                      "&:hover": {
+                        color: "red",
+                      },
+                      color: "#757575"
+                    }} />
                 </Grid>
 
                 <Grid item>
-                  <Typography sx={{ fontWeight: "600" }}>
+                  <Typography sx={{ fontWeight: "normal" }}>
                     {project.name}
                   </Typography>
                 </Grid>

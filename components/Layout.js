@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { StoreContext } from '../components/store'
 import PropTypes from 'prop-types';
 import { useApp } from "../components/useApp.js";
 import { useRouter } from 'next/router';
@@ -25,6 +26,8 @@ import Typography from '@mui/material/Typography';
 import Sidebar_B from './Sidebar_B';
 import SearchIcon from '@mui/icons-material/Search'
 import InputBase from '@mui/material/InputBase';
+import UndoIcon from '@mui/icons-material/Undo';
+
 
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
@@ -36,9 +39,15 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import SignIn from "./SignIn.js"
 
 
+
+
 const drawerWidth = 240;
 
 export default function Layout({ window, children }) {
+
+  const { isProject, setIsProject } = useContext(StoreContext)
+  let header = "Rapor 7/24"
+  isProject?.name ? header = isProject?.name : null
 
   const [began, setBegan] = useState(false)
 
@@ -54,8 +63,6 @@ export default function Layout({ window, children }) {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-
 
 
   if (!RealmApp) {
@@ -250,6 +257,11 @@ export default function Layout({ window, children }) {
   );
 
 
+  const handleToProject = () => {
+    setIsProject(null)
+    router.push("/projects")
+  };
+
 
   return (
 
@@ -279,14 +291,24 @@ export default function Layout({ window, children }) {
               <MenuIcon />
             </IconButton>
 
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleToProject}
+              sx={{ mr: 2, display: !isProject ? "none" : null}}
+            >
+              <UndoIcon />
+            </IconButton>
+
             <Typography
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/projects')}
               variant="h6"
               noWrap
               component="div"
               sx={{ cursor: "pointer", display: { xs: 'none', md: 'block' } }}
             >
-              Rapor 7/24
+              {header}
             </Typography>
 
             <Search>

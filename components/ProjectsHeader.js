@@ -1,14 +1,42 @@
 import React from 'react'
+
+import { useContext } from 'react';
+import { StoreContext } from '../components/store'
+
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { styled } from '@mui/material/styles';
+
 
 
 
 export default function ProjectHeader({ setShow }) {
+
+
+  const handleTry = () => {
+    console.log(isProject)
+    // return isProject ? setIsProject(isProject.name) : null
+  }
+
+  let header = "Projeler"
+  // isProject?.name ? header = isProject?.name : null
+
+
+
+  // const Item = styled(Paper)(({ theme }) => ({
+  //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  //   ...theme.typography.body2,
+  //   padding: theme.spacing(1),
+  //   textAlign: 'center',
+  //   color: theme.palette.text.secondary,
+  // }));
+
+
 
   return (
     <Paper >
@@ -16,27 +44,27 @@ export default function ProjectHeader({ setShow }) {
       <Grid
         container
         justifyContent="space-between"
-        sx={{ padding: "1rem" }}>
+        alignItems="center"
+        sx={{ padding: "0.5rem 1rem", maxHeight:"5rem" }}
+      >
 
-        {/* başlık sol */}
-        <Grid item>
+        
+
+        {/* sol kısım (başlık) */}
+        <Grid item xs>
           <Typography
-            // parent içinde position: "relative" gerekli
-            // sx={{
-            //   position: "absolute",
-            //   top: "50%",
-            //   transform: "translate(0, -50%)",
-            // }}
-            variant="h5"
+            onClick={() => handleTry()}
+            // nowrap={true}
+            variant="h6"
             fontWeight="bold"
           >
-            Projeler
+            {header}
           </Typography>
         </Grid>
 
 
-        {/* başlık sağ */}
-        <Grid item>
+        {/* sağ kısım - (tuşlar)*/}
+        <Grid item xs="auto">
           <Grid container spacing={1}>
 
             <Grid item>
@@ -58,6 +86,19 @@ export default function ProjectHeader({ setShow }) {
         </Grid>
 
       </Grid>
+
+
+      {/* <Grid container spacing={3}>
+        <Grid item xs="auto">
+          <Item>variable width content</Item>
+        </Grid>
+        <Grid item xs={6}>
+          <Item>xs=6</Item>
+        </Grid>
+        <Grid item xs>
+          <Item>xs</Item>
+        </Grid>
+      </Grid> */}
 
     </Paper>
   )

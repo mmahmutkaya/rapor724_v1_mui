@@ -8,7 +8,7 @@ export default ({ children }) => {
   const [sharing, setSharing] = useState([])
   const [help, setHelp] = useState([])
   const [pairing, setPairing] = useState(teamMembersNames)
-  const [isProject, setIsProject] = useState(false)
+  const [isProject, setIsProject] = useState(null)
 
   const store = {
     sharing, setSharing,
