@@ -1,132 +1,123 @@
-import { useState } from 'react'
 
-import WbsMain from '../../components/WbsMain'
-import WbsHeader from '../../components/WbsHeader'
-import Grid from '@mui/material/Grid';
-
+import { useState, useEffect, useContext } from 'react';
+import { useRouter } from 'next/router';
+import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
-import FormWbs from '../../components/FormWbs'
+import FormProjectCreate from '../../components/FormProjectCreate'
+import ProjectsHeader from '../../components/ProjectsHeader'
+
+
+import Grid from '@mui/material/Grid';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import { Typography } from '@mui/material';
+import List from '@mui/material/List';
+
+import FolderIcon from '@mui/icons-material/Folder';
 
 
 
-const handleCollapse = (id) => {
-  // console.log(id)
-  let isHidden = data2.find(item => item.wbs.includes(id + "."))
 
-  if (!isHidden?.hidden) {
-    let data3 = JSON.parse(JSON.stringify(data2))
-    data3 = data3.map(item => {
-      if (item.wbs.includes(id + ".")) {
-        item.hidden = true
-      }
-      return item
-    })
-    return (
-      setData2(data3)
-    )
-  }
+export default function P_Projects() {
 
-  if (isHidden?.hidden) {
-    let data3 = JSON.parse(JSON.stringify(data2))
-    data3 = data3.map(item => {
-      if (item.wbs.includes(id + ".")) {
-        item.hidden = false
-      }
-      return item
-    })
-    return (
-      setData2(data3)
-    )
-  }
-
-}
-
-
-
-export default function P_Wbs() {
+  const { isProject, setIsProject } = useContext(StoreContext)
+  const router = useRouter();
 
   const RealmApp = useApp();
-
-  const [show, setShow] = useState("WbsMain")
-  const [selected, setSelected] = useState(null)
-  console.log("selected", selected)
-
-  const { isLoading, isError, data: wbs, error, refetch: refetch_wbs } = useQuery({
-    queryKey: ['wbs'],
+  const { isLoading, isError, data: projectNames, error, refetch: refetch_projects } = useQuery({
+    queryKey: ['projects'],
     // queryFn: deneme,
-    queryFn: async () => await RealmApp.currentUser.callFunction("getWbs", { projectName: "Taksim 360" }),
+    queryFn: async () => await RealmApp.currentUser.callFunction("getProjectNames"),
     refetchOnWindowFocus: false,
     enabled: !!RealmApp?.currentUser,
     // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
   })
 
+
+  const [show, setShow] = useState("ProjectMain")
+
   if (isLoading) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
 
-  if (!wbs) return "henüz bir wbs oluşturmamışsınız"
 
-  return console.log(wbs)
+  const handleProjectClick = (project) => {
+    setIsProject(project)
+    router.push('/reports')
+    console.log("--setproject-- is worked")
+  }
+
 
   return (
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <WbsHeader setShow={setShow} setSelected={setSelected} />
+        <ProjectsHeader setShow={setShow} />
       </Grid>
 
-      {show == "FormWbs" &&
-        <FormWbs setShow={setShow} />
+      {show == "FormProjectCreate" &&
+        <Grid item >
+          <FormProjectCreate setShow={setShow} refetch_projects={refetch_projects} />
+        </Grid>
       }
 
-      {show == "WbsMain" &&
-        <Grid item>
-          <WbsMain data2={wbs} handleCollapse={handleCollapse} setSelected={setSelected} />
-        </Grid>
+      {show == "ProjectMain" && projectNames.empty &&
+        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
+          <Alert severity="info">
+            Dahil olduğunuz herhangi bir proje bulunamadı, menüler yardımı ile yeni bir proje oluşturabilirsiniz.
+          </Alert>
+        </Stack>
+      }
+
+      {show == "ProjectMain" && !projectNames.empty &&
+        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
+
+          {
+            projectNames.map(project => (
+
+              <Grid
+                key={project._id}
+                container spacing={2}
+                onClick={() => handleProjectClick(project)}
+                sx={{
+                  "&:hover": {
+                    color: "red",
+                  },
+                  padding: "0.2rem 1rem",
+                  cursor: "pointer"
+                }}
+              >
+
+                <Grid item>
+                  <FolderIcon
+                    sx={{
+                      // "&:hover": {
+                      //   color: "red",
+                      // },
+                      color: "#757575"
+                    }} />
+                </Grid>
+
+                <Grid item>
+                  <Typography sx={{ fontWeight: "normal" }}>
+                    {project.name}
+                  </Typography>
+                </Grid>
+
+              </Grid>
+
+            ))
+          }
+
+
+        </Stack>
       }
 
     </Grid>
 
   )
+
 }
 
-
-
-const data = [
-  {
-    id: 1,
-    wbs: "1",
-    level: 0,
-    // hidden: false,
-    name: "Alçı Sıva Yapılması"
-  },
-  {
-    id: 2,
-    wbs: "1.1",
-    level: 1,
-    // hidden: false,
-    name: "Kara Sıva Yapılması"
-  },
-  {
-    id: 3,
-    wbs: "1.2",
-    level: 1,
-    // hidden: false,
-    name: "Laminant Parke Döşenmesi"
-  },
-  {
-    id: 4,
-    wbs: "2",
-    level: 0,
-    // hidden: false,
-    name: "Laminant Parke Döşenmesi"
-  },
-]
-
-
-
-// sx={{ backgroundColor:"red" }}
-// sx={{ backgroundColor:"red" }}
-// sx={{ backgroundColor:"red" }}
 

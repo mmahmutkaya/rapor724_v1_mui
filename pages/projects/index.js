@@ -92,9 +92,9 @@ export default function P_Projects() {
                 <Grid item>
                   <FolderIcon
                     sx={{
-                      "&:hover": {
-                        color: "red",
-                      },
+                      // "&:hover": {
+                      //   color: "red",
+                      // },
                       color: "#757575"
                     }} />
                 </Grid>
