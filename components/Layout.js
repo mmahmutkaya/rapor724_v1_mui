@@ -296,13 +296,13 @@ export default function Layout({ window, children }) {
               aria-label="open drawer"
               edge="start"
               onClick={handleToProject}
-              sx={{ mr: 2, display: !isProject ? "none" : null}}
+              sx={{ mr: 2, display: !isProject ? "none" : null }}
             >
               <UndoIcon />
             </IconButton>
 
             <Typography
-              onClick={() => router.push('/projects')}
+              onClick={() => isProject ? null : router.push('/')}
               variant="h6"
               noWrap
               component="div"
