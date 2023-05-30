@@ -22,18 +22,19 @@ import FolderIcon from '@mui/icons-material/Folder';
 
 export default function P_Projects() {
 
-  const { isProject, setIsProject } = useContext(StoreContext)
+  const { isProject } = useContext(StoreContext)
+
   // const router = useRouter();
 
   const RealmApp = useApp();
 
 
 
-  async function handleGetWbs(project) {
+  async function handleGetWbs() {
 
     try {
 
-      console.log(project._id)
+      console.log(isProject._id)
 
       // const credentials = Realm.Credentials.emailPassword(email, password);
       // const user = await RealmApp.logIn(credentials);
@@ -118,6 +119,10 @@ export default function P_Projects() {
       } */}
 
       <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
+
+        <Typography>
+          {isProject?.name}
+        </Typography>
 
         {/* {
             projectNames.map(project => (
