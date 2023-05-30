@@ -1,3 +1,6 @@
+import { useState } from 'react';
+
+
 import React from 'react'
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -11,7 +14,46 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-export default function WbsHeader({ setShow }) {
+export default function WbsHeader({ RealmApp, isProject, selectedWbs }) {
+
+  const [hataMesaj, setHataMesaj] = useState()
+
+
+  async function handleWbsCreate(event) {
+
+    // event.preventDefault();
+
+    try {
+
+      // const data = new FormData(event.currentTarget);
+      // const projectName = data.get('projectName')
+
+
+      const result = await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: "1.1" });
+
+      console.log("result")
+      console.log(result)
+
+      // refetch_projects()
+      // setShowDialogInfo(true)
+      // console.log("merhaba22")
+
+    } catch (err) {
+      console.log(err)
+
+      // let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+
+      // if (hataMesaj_.includes("must be a single string of 12 bytes or a string of 24 hex characters")) {
+      //   hataMesaj_ = ""
+      // }
+
+      let hataMesaj_ = "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+      setHataMesaj(hataMesaj_)
+      // setShowDialogError(true)
+
+    }
+  }
+
   return (
     <Paper>
 
@@ -32,7 +74,7 @@ export default function WbsHeader({ setShow }) {
             variant="h5"
             fontWeight="bold"
           >
-            İş Alanları WBS
+            İş Alanları WBS - {selectedWbs}
           </Typography>
         </Grid>
 
@@ -61,12 +103,13 @@ export default function WbsHeader({ setShow }) {
               </IconButton>
             </Grid>
             <Grid item>
-              <IconButton  onClick={() => setShow("FormWbs")} aria-label="addWbs">
-                <DeleteIcon  variant="contained" color="error" />
+              <IconButton onClick={() => setShow("FormWbs")} aria-label="addWbs">
+                <DeleteIcon variant="contained" color="error" />
               </IconButton>
             </Grid>
             <Grid item>
-              <IconButton onClick={() => setShow("FormWbs")} aria-label="addWbs">
+              {/* <IconButton onClick={() => setShow("FormWbs")} aria-label="addWbs"> */}
+              <IconButton onClick={() => handleWbsCreate()} aria-label="addWbs">
                 <AddCircleOutlineIcon variant="contained" color="success" />
               </IconButton>
             </Grid>

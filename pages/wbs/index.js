@@ -23,6 +23,8 @@ import FolderIcon from '@mui/icons-material/Folder';
 export default function P_Projects() {
 
   const { isProject } = useContext(StoreContext)
+  const [selectedWbs, setSelectedWbs] = useState()
+  const [hataMesaj, setHataMesaj] = useState()
 
   // const router = useRouter();
 
@@ -30,11 +32,19 @@ export default function P_Projects() {
 
 
 
-  async function handleGetWbs() {
+  async function handleSelectWbs(wbs) {
 
     try {
 
       console.log(isProject._id)
+      console.log(wbs)
+
+      // await RealmApp.currentUser.callFunction("createWbs", { name: projectName });
+
+      // refetch_projects()
+      // setShowDialogInfo(true)
+      // console.log("merhaba22")
+
 
       // const credentials = Realm.Credentials.emailPassword(email, password);
       // const user = await RealmApp.logIn(credentials);
@@ -46,24 +56,22 @@ export default function P_Projects() {
 
     } catch (err) {
 
-      // return console.log(err)
+      console.log(err)
+      // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
+      let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
-      const hataMesaj = err.error
-
-      if (hataMesaj.includes("expected a string 'password' parameter")) {
-        return console.log("Şifre girmelisiniz")
+      if (hataMesaj_.includes("duplicate key error")) {
+        hataMesaj_ = "Sistemde kayıtlı"
       }
 
-      if (hataMesaj === "invalid username") {
-        return console.log("Email girmelisiniz")
+      if (hataMesaj_.includes("çok kısa")) {
+        hataMesaj_ = "Çok kısa"
       }
 
-      if (hataMesaj === "invalid username/password") {
-        return console.log("Email ve şifre uyuşmuyor")
-      }
+      setHataMesaj(hataMesaj_)
+      // setShowDialogError(true)
 
-      console.log(hataMesaj)
-      return console.log("Giriş esnasında hata oluştu, lütfen iletişime geçiniz..")
+      return console.log(hataMesaj)
 
     }
 
@@ -86,10 +94,8 @@ export default function P_Projects() {
   // if (error) return "An error has occurred: " + error.message;
 
 
-  const handleProjectClick = (project) => {
-    setIsProject(project)
-    router.push('/reports')
-    console.log("--setproject-- is worked")
+  const handleWbsClick = (wbs) => {
+    setSelectedWbs(wbs)
   }
 
 
@@ -97,7 +103,7 @@ export default function P_Projects() {
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <WbsHeader />
+        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} isProject={isProject} />
       </Grid>
 
       {/* <Grid item >
@@ -110,19 +116,23 @@ export default function P_Projects() {
         </Grid>
       } */}
 
-      {/* {show == "ProjectMain" && projectNames.empty &&
+      {!isProject?.wbs &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
-            Dahil olduğunuz herhangi bir proje bulunamadı, menüler yardımı ile yeni bir proje oluşturabilirsiniz.
+            "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
           </Alert>
         </Stack>
-      } */}
+      }
 
       <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
-        <Typography>
-          {isProject?.name}
-        </Typography>
+        {
+          [1, 6, 5.5, 3.2, 2, 2.1, 2.2, 2.3, 2.4, 3, 4, 5].map((wbs, index) => (
+            <Typography key={index} onClick={() => handleWbsClick(wbs)}>
+              {wbs}
+            </Typography>
+          ))
+        }
 
         {/* {
             projectNames.map(project => (
