@@ -29,7 +29,7 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs }) {
       // const projectName = data.get('projectName')
 
 
-      const result = await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: "1.1" });
+      const result = await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: "3.1.2.3", name:"Taksim 360" });
 
       console.log("result")
       console.log(result)
