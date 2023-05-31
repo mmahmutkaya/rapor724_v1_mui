@@ -14,7 +14,8 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-export default function WbsHeader({ RealmApp, isProject, selectedWbs }) {
+
+export default function WbsHeader({ RealmApp, isProject, selectedWbs, refetch_projectWbs }) {
 
   const [hataMesaj, setHataMesaj] = useState()
 
@@ -29,12 +30,11 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs }) {
       // const projectName = data.get('projectName')
 
 
-      const result = await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: "3.1.2.3", name:"Taksim 360" });
+      const result = await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: "2" });
 
-      console.log("result")
       console.log(result)
 
-      // refetch_projects()
+      refetch_projectWbs()
       // setShowDialogInfo(true)
       // console.log("merhaba22")
 

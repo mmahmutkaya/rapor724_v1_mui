@@ -26,7 +26,7 @@ export default function P_Projects() {
 
   const RealmApp = useApp();
   const { isLoading, isError, data: projectNames, error, refetch: refetch_projects } = useQuery({
-    queryKey: ['projects'],
+    queryKey: ['projectNames'],
     // queryFn: deneme,
     queryFn: async () => await RealmApp.currentUser.callFunction("getProjectNames"),
     refetchOnWindowFocus: false,
