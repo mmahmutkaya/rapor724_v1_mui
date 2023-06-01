@@ -113,13 +113,10 @@ export default function P_Projects() {
 
 
   const handleSelectWbs = (wbs) => {
-    // console.log(projectWbs)
-    console.log(wbs._id)
-    setSelectedWbs(wbs.code)
+    setSelectedWbs(wbs)
   }
 
   let level
-  let wbs
 
   return (
     <Grid container direction="column" spacing={1}>
@@ -167,7 +164,7 @@ export default function P_Projects() {
                     <Box
                       onClick={() => handleSelectWbs(wbs)}
                       sx={{
-                        backgroundColor: bgColor(level).bg,
+                        backgroundColor: selectedWbs?.code == wbs.code ? "red" : bgColor(level).bg,
                         color: bgColor(level).co,
                         "&:hover": {
                           backgroundColor: 'rgb(7, 177, 77, 0.42)'
@@ -205,6 +202,7 @@ const Item = ({ index }) => (
 const Items = ({ count }) => (
   Array.from({ length: count }).map((_item, index) => <Item key={index + 1} index={index} />)
 )
+
 
 
 function bgColor(index) {

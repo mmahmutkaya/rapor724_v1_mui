@@ -20,37 +20,40 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs, refetch_pr
   const [hataMesaj, setHataMesaj] = useState()
 
 
-  async function handleWbsCreate(event) {
-
-    // event.preventDefault();
-
+  async function handleWbsCreate() {
     try {
-
-      // const data = new FormData(event.currentTarget);
-      // const projectName = data.get('projectName')
-
-
-      const result = await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: "2" });
-
-      console.log(result)
-
+      await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: selectedWbs?.code ? selectedWbs?.code : 0 });
       refetch_projectWbs()
       // setShowDialogInfo(true)
-      // console.log("merhaba22")
-
     } catch (err) {
-      console.log(err)
-
-      // let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
-
-      // if (hataMesaj_.includes("must be a single string of 12 bytes or a string of 24 hex characters")) {
-      //   hataMesaj_ = ""
-      // }
-
       let hataMesaj_ = "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
       setHataMesaj(hataMesaj_)
       // setShowDialogError(true)
+    }
+  }
 
+  async function handleWbsDelete() {
+    try {
+      const result = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
+      console.log(result)
+      refetch_projectWbs()
+      // setShowDialogInfo(true)
+    } catch (err) {
+
+      console.log(err)
+      // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
+      let hataMesaj_ = err.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+
+      if (hataMesaj_.includes("duplicate key error")) {
+        hataMesaj_ = "Sistemde kayıtlı"
+      }
+
+      if (hataMesaj_.includes("çok kısa")) {
+        hataMesaj_ = "Çok kısa"
+      }
+
+      // setHataMesaj(hataMesaj_)
+      // setShowDialogError(true)
     }
   }
 
@@ -63,7 +66,7 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs, refetch_pr
         sx={{ padding: "1rem" }}>
 
         {/* başlık sol */}
-        <Grid>
+        <Grid item>
           <Typography
             // parent içinde position: "relative" gerekli
             // sx={{
@@ -74,41 +77,40 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs, refetch_pr
             variant="h5"
             fontWeight="bold"
           >
-            İş Alanları WBS - {selectedWbs}
+            İş Alanları WBS {selectedWbs.code}
           </Typography>
         </Grid>
 
 
         {/* başlık sağ */}
-        <Grid>
+        <Grid item>
           <Grid container spacing={1}>
-            <Grid item>
+            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
               <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
                 <KeyboardArrowUpIcon />
               </IconButton>
             </Grid>
-            <Grid item>
+            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
               <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
                 <KeyboardArrowDownIcon />
               </IconButton>
             </Grid>
-            <Grid item>
+            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
               <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
                 <KeyboardArrowLeftIcon />
               </IconButton>
             </Grid>
-            <Grid item>
+            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
               <IconButton onClick={() => setShow("FormWbs")} aria-label="moveRight">
                 <KeyboardArrowRightIcon />
               </IconButton>
             </Grid>
-            <Grid item>
-              <IconButton onClick={() => setShow("FormWbs")} aria-label="addWbs">
+            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <IconButton onClick={() => handleWbsDelete()} aria-label="delete">
                 <DeleteIcon variant="contained" color="error" />
               </IconButton>
             </Grid>
             <Grid item>
-              {/* <IconButton onClick={() => setShow("FormWbs")} aria-label="addWbs"> */}
               <IconButton onClick={() => handleWbsCreate()} aria-label="addWbs">
                 <AddCircleOutlineIcon variant="contained" color="success" />
               </IconButton>
