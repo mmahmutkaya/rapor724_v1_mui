@@ -147,45 +147,47 @@ export default function P_Projects() {
         </Stack>
       }
 
-      <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
+      {projectWbs &&
+        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
-        <Box display="grid">
+          <Box display="grid">
 
-          {
-            projectWbs.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((wbs) => {
+            {
+              projectWbs.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((wbs) => {
 
-              // wbs = { _id, code, name }
+                // wbs = { _id, code, name }
 
-              level = wbs.code.split(".").length - 1
+                level = wbs.code.split(".").length - 1
 
-              return (
-                <Box key={wbs._id} display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
+                return (
+                  <Box key={wbs._id} display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
 
-                  <Items count={level} />
+                    <Items count={level} />
 
-                  <Box
-                    onClick={() => handleSelectWbs(wbs)}
-                    sx={{
-                      backgroundColor: bgColor(level).bg,
-                      color: bgColor(level).co,
-                      "&:hover": {
-                        backgroundColor: 'rgb(7, 177, 77, 0.42)'
-                      }
-                    }}
-                  >
-                    {wbs.code + " " + wbs.name}
+                    <Box
+                      onClick={() => handleSelectWbs(wbs)}
+                      sx={{
+                        backgroundColor: bgColor(level).bg,
+                        color: bgColor(level).co,
+                        "&:hover": {
+                          backgroundColor: 'rgb(7, 177, 77, 0.42)'
+                        }
+                      }}
+                    >
+                      {wbs.code + " " + wbs.name}
+                    </Box>
+
                   </Box>
+                )
 
-                </Box>
-              )
+              })
 
-            })
+            }
 
-          }
+          </Box>
 
-        </Box>
-
-      </Stack>
+        </Stack>
+      }
 
     </Grid>
 
