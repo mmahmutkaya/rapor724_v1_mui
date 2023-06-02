@@ -19,9 +19,11 @@ import FolderIcon from '@mui/icons-material/Folder';
 
 
 
-export default function P_Projects() {
+export default function P_Pozlar() {
 
   const { isProject, setIsProject } = useContext(StoreContext)
+  const [show, setShow] = useState("ProjectMain")
+  console.log(isProject)
   const router = useRouter();
 
   const RealmApp = useApp();
@@ -35,17 +37,17 @@ export default function P_Projects() {
   })
 
 
-  const [show, setShow] = useState("ProjectMain")
 
   if (isLoading) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
 
 
-  const handleProjectClick = (project) => {
+  const handleProjectClick = async (project) => {
+    // const project = await RealmApp.currentUser.callFunction("getProject")
     setIsProject(project)
-    router.push('/reports')
-    console.log("--setproject-- is worked")
+    console.log(project)
+    router.push('/dashboard')
   }
 
 

@@ -70,11 +70,11 @@ export default function Sidebar_B({ setMobileOpen }) {
         <Grid item>
           <List>
 
-            <ListItemButton onClick={() => router.push('/reports')}>
+            <ListItemButton onClick={() => router.push('/dashboard')}>
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
-              <ListItemText primary="Rapor" />
+              <ListItemText primary="Dashboard" />
             </ListItemButton>
 
             <ListItemButton onClick={() => router.push('/wbs')}>
@@ -82,6 +82,13 @@ export default function Sidebar_B({ setMobileOpen }) {
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="İş Alanları / WBS" />
+            </ListItemButton>
+
+            <ListItemButton onClick={() => router.push('/pozlar')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Pozlar" />
             </ListItemButton>
 
             <ListItemButton>
