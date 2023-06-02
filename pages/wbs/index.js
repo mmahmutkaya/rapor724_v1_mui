@@ -122,7 +122,7 @@ export default function P_Projects() {
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} isProject={isProject} refetch_projectWbs={refetch_projectWbs} />
+        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} refetch_projectWbs={refetch_projectWbs} />
       </Grid>
 
       {/* <Grid item >

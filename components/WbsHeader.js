@@ -15,7 +15,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
-export default function WbsHeader({ RealmApp, isProject, selectedWbs, refetch_projectWbs }) {
+export default function WbsHeader({ RealmApp, isProject, selectedWbs, setSelectedWbs, refetch_projectWbs }) {
 
   const [hataMesaj, setHataMesaj] = useState()
 
@@ -37,6 +37,7 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs, refetch_pr
       const result = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
       console.log(result)
       refetch_projectWbs()
+      setSelectedWbs(null)
       // setShowDialogInfo(true)
     } catch (err) {
 
