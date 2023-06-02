@@ -23,7 +23,7 @@ export default function ItemsHeader({ setShow }) {
     // return isProject ? setIsProject(isProject.name) : null
   }
 
-  let header = "Projeler"
+  let header = "Pozlar"
   // isProject?.name ? header = isProject?.name : null
 
 
