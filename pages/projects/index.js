@@ -43,8 +43,16 @@ export default function P_Pozlar() {
   if (error) return "An error has occurred: " + error.message;
 
 
-  const handleProjectClick = async (project) => {
-    // const project = await RealmApp.currentUser.callFunction("getProject")
+  // const handleProjectClick = async (project) => {
+  //   // const project = await RealmApp.currentUser.callFunction("getProject")
+  //   setIsProject(project)
+  //   console.log(project)
+  //   router.push('/dashboard')
+  // }
+
+  const handleProjectClick = async (prj) => {
+    console.log(prj)
+    const project = await RealmApp.currentUser.callFunction("getProject",{projectId:prj._id})
     setIsProject(project)
     console.log(project)
     router.push('/dashboard')
