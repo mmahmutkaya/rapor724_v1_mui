@@ -21,9 +21,13 @@ import FolderIcon from '@mui/icons-material/Folder';
 
 
 
-export default function P_Projects() {
+export default function P_Wbs() {
 
-  const { isProject } = useContext(StoreContext)
+  const { isProject, setIsProject } = useContext(StoreContext)
+  const router = useRouter();
+  !isProject ? router.push('/projects') : console.log("isProt",isProject)
+
+
   const [selectedWbs, setSelectedWbs] = useState()
   const [hataMesaj, setHataMesaj] = useState()
   const [show, setShow] = useState()
@@ -32,29 +36,26 @@ export default function P_Projects() {
 
   const RealmApp = useApp();
 
-  const { isLoading, isError, data: projectWbs, error, refetch: refetch_projectWbs } = useQuery({
-    queryKey: ['projectWbs'],
-    // queryFn: deneme,
-    queryFn: async () => await RealmApp.currentUser.callFunction("getProjectWbs", { projectId: isProject._id }),
-    refetchOnWindowFocus: false,
-    enabled: !!RealmApp?.currentUser,
-    // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
-  })
+  // const { isLoading, isError, data: projectWbs, error, refetch: refetch_projectWbs } = useQuery({
+  //   queryKey: ['projectWbs'],
+  //   // queryFn: deneme,
+  //   queryFn: async () => await RealmApp.currentUser.callFunction("getProjectWbs", { projectId: isProject._id }),
+  //   refetchOnWindowFocus: false,
+  //   enabled: !!RealmApp?.currentUser,
+  //   // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
+  // })
 
+  // if (isLoading) return "Loading...";
 
-  if (isLoading) return "Loading...";
-
-  if (error) return "An error has occurred: " + error.message;
-
-
+  // if (error) return "An error has occurred: " + error.message;
 
 
   async function handleSelectWbs2(wbs) {
 
     try {
 
-      console.log(isProject._id)
-      console.log(wbs)
+      // console.log(isProject._id)
+      // console.log(wbs)
 
 
       // await RealmApp.currentUser.callFunction("createWbs", { name: projectName });
@@ -122,7 +123,7 @@ export default function P_Projects() {
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} refetch_projectWbs={refetch_projectWbs} />
+        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} />
       </Grid>
 
       {/* <Grid item >
@@ -136,7 +137,7 @@ export default function P_Projects() {
       } */}
 
 
-      {!projectWbs &&
+      {!isProject?.wbs &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
@@ -144,13 +145,13 @@ export default function P_Projects() {
         </Stack>
       }
 
-      {projectWbs &&
+      {isProject &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           <Box display="grid">
 
             {
-              projectWbs.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((wbs) => {
+              isProject?.wbs.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((wbs) => {
 
                 // wbs = { _id, code, name }
 
