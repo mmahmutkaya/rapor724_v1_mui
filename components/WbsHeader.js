@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+// import useApp from "./../components/useApp"
 
 import React from 'react'
 import Typography from '@mui/material/Typography';
@@ -15,17 +15,21 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
-export default function WbsHeader({ RealmApp, isProject, selectedWbs, setSelectedWbs, refetch_projectWbs }) {
+export default function WbsHeader({ RealmApp, isProject, setIsProject, selectedWbs, setSelectedWbs }) {
+
+  // const RealmApp = useApp();
 
   const [hataMesaj, setHataMesaj] = useState()
 
 
   async function handleWbsCreate() {
     try {
-      await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: selectedWbs?.code ? selectedWbs?.code : 0 });
-      refetch_projectWbs()
+      const project = await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: selectedWbs?.code ? selectedWbs?.code : 0 });
+      console.log(project)
+      setIsProject(project)
       // setShowDialogInfo(true)
     } catch (err) {
+      console.log(err)
       let hataMesaj_ = "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
       setHataMesaj(hataMesaj_)
       // setShowDialogError(true)
@@ -34,9 +38,9 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs, setSelecte
 
   async function handleWbsDelete() {
     try {
-      const result = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
-      console.log(result)
-      refetch_projectWbs()
+      const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
+      console.log(project)
+      setIsProject(project)
       setSelectedWbs(null)
       // setShowDialogInfo(true)
     } catch (err) {

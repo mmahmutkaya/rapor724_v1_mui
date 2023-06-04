@@ -11,6 +11,8 @@ export default function P_Dashboard() {
   const router = useRouter();
   !isProject ? router.push('/projects') : null
 
+  console.log(isProject)
+
   return (
     <Typography p={2}>
       {isProject?.reports}

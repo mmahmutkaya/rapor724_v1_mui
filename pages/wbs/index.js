@@ -3,6 +3,8 @@ import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
+import { compare } from 'compare-versions';
+
 import { useQuery } from '@tanstack/react-query'
 import FormProjectCreate from '../../components/FormProjectCreate'
 import WbsHeader from '../../components/WbsHeader'
@@ -23,9 +25,10 @@ import FolderIcon from '@mui/icons-material/Folder';
 
 export default function P_Wbs() {
 
+  const RealmApp = useApp();
   const { isProject, setIsProject } = useContext(StoreContext)
   const router = useRouter();
-  !isProject ? router.push('/projects') : console.log("isProt",isProject)
+  !isProject ? router.push('/projects') : null
 
 
   const [selectedWbs, setSelectedWbs] = useState()
@@ -34,7 +37,6 @@ export default function P_Wbs() {
 
   // const router = useRouter();
 
-  const RealmApp = useApp();
 
   // const { isLoading, isError, data: projectWbs, error, refetch: refetch_projectWbs } = useQuery({
   //   queryKey: ['projectWbs'],
@@ -119,11 +121,13 @@ export default function P_Wbs() {
 
   let level
 
+  console.log(isProject?.wbs)
+
   return (
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} />
+        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} setIsProject={setIsProject} />
       </Grid>
 
       {/* <Grid item >
@@ -137,7 +141,7 @@ export default function P_Wbs() {
       } */}
 
 
-      {!isProject?.wbs &&
+      {!isProject?.wbs?.length &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
@@ -145,13 +149,13 @@ export default function P_Wbs() {
         </Stack>
       }
 
-      {isProject &&
+      {isProject?.wbs?.length &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           <Box display="grid">
 
             {
-              isProject?.wbs.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((wbs) => {
+              isProject.wbs.sort((a, b) => a.code.toLowerCase() >= b.code.toLowerCase() ? 1 : -1).map((wbs) => {
 
                 // wbs = { _id, code, name }
 
@@ -166,10 +170,12 @@ export default function P_Wbs() {
                       onClick={() => handleSelectWbs(wbs)}
                       sx={{
                         backgroundColor: selectedWbs?.code == wbs.code ? "red" : bgColor(level).bg,
-                        color: selectedWbs?.code == wbs.code ? "red" : bgColor(level).co,
+                        // backgroundColor: bgColor(level).bg,
+                        color: selectedWbs?.code == wbs.code ? "yellow" : bgColor(level).co,
                         // color: bgColor(level).co,
                         "&:hover": {
-                          backgroundColor: 'rgb(7, 177, 77, 0.42)'
+                          backgroundColor: "blue",
+                          color:"white"
                         }
                       }}
                     >
