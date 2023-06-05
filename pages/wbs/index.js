@@ -3,7 +3,6 @@ import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
-import { compare } from 'compare-versions';
 
 import { useQuery } from '@tanstack/react-query'
 import FormWbsCreate from '../../components/FormWbsCreate'
@@ -135,7 +134,7 @@ export default function P_Wbs() {
 
       {show == "FormWbsCreate" &&
         <Grid item >
-          <FormWbsCreate setShow={setShow} />
+          <FormWbsCreate setShow={setShow} isProject={isProject} setIsProject={setIsProject} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} />
         </Grid>
       }
 
@@ -178,7 +177,7 @@ export default function P_Wbs() {
                         }
                       }}
                     >
-                      {wbs.code + " " + wbs.name}
+                      {wbs.code + " - " + wbs.name}
                     </Box>
 
                   </Box>

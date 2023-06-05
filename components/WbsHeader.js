@@ -24,8 +24,6 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
 
   async function handleWbsCreate() {
 
-    
-
     try {
       // const project = await RealmApp.currentUser.callFunction("createWbs", {
       //   projectId: isProject._id,

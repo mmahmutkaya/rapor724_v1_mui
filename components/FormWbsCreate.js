@@ -17,7 +17,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { Typography } from '@mui/material';
 
 
-export default function P_FormWbsCreate({ setShow }) {
+export default function P_FormWbsCreate({ setShow, isProject, setIsProject, selectedWbs, setSelectedWbs }) {
 
   const [showDialogInfo, setShowDialogInfo] = useState(false)
   const [showDialogError, setShowDialogError] = useState(false)
@@ -34,10 +34,25 @@ export default function P_FormWbsCreate({ setShow }) {
       const data = new FormData(event.currentTarget);
       const wbsName = data.get('wbsName')
 
-      await RealmApp.currentUser.callFunction("createProject", { name: wbsName });
+      // console.log({ projectId: isProject._id })
+      // console.log({ upWbs: selectedWbs?.code ? selectedWbs?.code : null })
+      // console.log({ upWbs: selectedWbs?.name ? selectedWbs?.name : "En üst seviyeye" })
+      // console.log(wbsName)
+
+      const project = await RealmApp.currentUser.callFunction("createWbs", {
+        projectId: isProject._id,
+        upWbs: selectedWbs?.code ? selectedWbs?.code : "0",
+        newWbsName:wbsName
+      });
+      setSelectedWbs(null)
+      setIsProject(project)
+      setShowDialogInfo(true)
+
+
+      // await RealmApp.currentUser.callFunction("createProject", { name: wbsName });
 
       // refetch_projects()
-      setShowDialogInfo(true)
+      // setShowDialogInfo(true)
 
     } catch (err) {
 
@@ -81,7 +96,7 @@ export default function P_FormWbsCreate({ setShow }) {
 
                 <Grid item>
                   <DialogContentText>
-                    Projeniz başarı ile oluşturuldu
+                    Wbs kaydı başarı ile gerçekleşti
                   </DialogContentText>
                 </Grid>
               </Grid>
@@ -112,6 +127,24 @@ export default function P_FormWbsCreate({ setShow }) {
               {/* </Typography> */}
             </DialogContentText>
 
+            {selectedWbs &&
+              <>
+                <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
+                  {selectedWbs.code} {selectedWbs.name}
+                </DialogContentText>
+                <Typography >
+                  başlığı altına yeni bir Wbs eklemek üzeresiniz.
+                </Typography>
+              </>
+            }
+
+            {!selectedWbs &&
+              <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
+                {/* <Typography > */}
+                En üst düzeye yeni bir Wbs eklemek üzeresiniz.
+                {/* </Typography> */}
+              </DialogContentText>
+            }
 
             <Box onClick={() => setShowDialogError(false)}>
               <TextField
@@ -133,7 +166,7 @@ export default function P_FormWbsCreate({ setShow }) {
 
           </DialogContent>
 
-          <DialogActions sx={{padding:"1.5rem"}}>
+          <DialogActions sx={{ padding: "1.5rem" }}>
             <Button onClick={() => setShow("ProjectWbsMain")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>
