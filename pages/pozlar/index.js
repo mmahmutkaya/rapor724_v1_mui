@@ -22,7 +22,6 @@ import FolderIcon from '@mui/icons-material/Folder';
 export default function P_Pozlar() {
 
   const { isProject, setIsProject } = useContext(StoreContext)
-  console.log(isProject)
   const router = useRouter();
 
   const RealmApp = useApp();
@@ -46,7 +45,6 @@ export default function P_Pozlar() {
   const handleProjectClick = (project) => {
     setIsProject(project)
     router.push('/reports')
-    console.log("--setproject-- is worked")
   }
 
 

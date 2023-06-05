@@ -6,7 +6,7 @@ import { useApp } from "../../components/useApp";
 import { compare } from 'compare-versions';
 
 import { useQuery } from '@tanstack/react-query'
-import FormProjectCreate from '../../components/FormProjectCreate'
+import FormWbsCreate from '../../components/FormWbsCreate'
 import WbsHeader from '../../components/WbsHeader'
 import WbsMain from '../../components/WbsMain'
 
@@ -33,7 +33,7 @@ export default function P_Wbs() {
 
   const [selectedWbs, setSelectedWbs] = useState()
   const [hataMesaj, setHataMesaj] = useState()
-  const [show, setShow] = useState()
+  const [show, setShow] = useState("WbsMain")
 
   // const router = useRouter();
 
@@ -121,24 +121,23 @@ export default function P_Wbs() {
 
   let level
 
-  console.log(isProject?.wbs)
 
   return (
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} setIsProject={setIsProject} />
+        <WbsHeader RealmApp={RealmApp} setShow={setShow} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} setIsProject={setIsProject} />
       </Grid>
 
       {/* <Grid item >
         <WbsMain />
       </Grid> */}
 
-      {/* {show == "FormProjectCreate" &&
+      {show == "FormWbsCreate" &&
         <Grid item >
-          <FormProjectCreate refetch_projects={refetch_projects} />
+          <FormWbsCreate setShow={setShow} />
         </Grid>
-      } */}
+      }
 
 
       {!isProject?.wbs?.length &&

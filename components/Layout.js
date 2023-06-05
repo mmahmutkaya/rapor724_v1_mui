@@ -115,7 +115,6 @@ export default function Layout({ window, children }) {
 
 
   const handleProfileMenuOpen = (event) => {
-    console.log(event.currentTarget)
     setAnchorEl(event.currentTarget);
   };
 

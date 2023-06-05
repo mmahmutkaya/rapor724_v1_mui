@@ -46,7 +46,6 @@ export default function WbsMain({ data2, setSelected }) {
           let hidden = false;
           let level = 1;
 
-          console.log(index)
 
           return (
             <Box

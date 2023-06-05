@@ -19,7 +19,6 @@ export default function ProjectHeader({ setShow }) {
 
 
   const handleTry = () => {
-    console.log(isProject)
     // return isProject ? setIsProject(isProject.name) : null
   }
 

@@ -15,7 +15,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
-export default function WbsHeader({ RealmApp, isProject, setIsProject, selectedWbs, setSelectedWbs }) {
+export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedWbs, isProject, setIsProject }) {
 
   // const RealmApp = useApp();
 
@@ -23,10 +23,15 @@ export default function WbsHeader({ RealmApp, isProject, setIsProject, selectedW
 
 
   async function handleWbsCreate() {
+
+    
+
     try {
-      const project = await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: selectedWbs?.code ? selectedWbs?.code : 0 });
-      console.log(project)
-      setIsProject(project)
+      // const project = await RealmApp.currentUser.callFunction("createWbs", {
+      //   projectId: isProject._id,
+      //   upWbs: selectedWbs?.code ? selectedWbs?.code : 0,
+      // });
+      // setIsProject(project)
       // setShowDialogInfo(true)
     } catch (err) {
       console.log(err)
@@ -39,7 +44,6 @@ export default function WbsHeader({ RealmApp, isProject, setIsProject, selectedW
   async function handleWbsDelete() {
     try {
       const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
-      console.log(project)
       setIsProject(project)
       setSelectedWbs(null)
       // setShowDialogInfo(true)
@@ -116,7 +120,7 @@ export default function WbsHeader({ RealmApp, isProject, setIsProject, selectedW
               </IconButton>
             </Grid>
             <Grid item>
-              <IconButton onClick={() => handleWbsCreate()} aria-label="addWbs">
+              <IconButton onClick={() => setShow("FormWbsCreate")} aria-label="addWbs">
                 <AddCircleOutlineIcon variant="contained" color="success" />
               </IconButton>
             </Grid>

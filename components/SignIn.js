@@ -46,9 +46,6 @@ export default function SignIn({ setLoginFormMode }) {
       const email = data.get('email')
       const password = data.get('password')
 
-      console.log(email)
-      console.log(password)
-
       const credentials = Realm.Credentials.emailPassword(email, password);
       const user = await RealmApp.logIn(credentials);
       if (user) {
