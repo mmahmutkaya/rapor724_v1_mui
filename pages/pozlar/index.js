@@ -63,15 +63,15 @@ export default function P_Pozlar() {
         </Grid>
       }
 
-      {show == "ProjectMain" && projectNames.empty &&
+      {show == "ProjectMain" && !isProject.wbs &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
-            Dahil olduğunuz herhangi bir proje bulunamadı, menüler yardımı ile yeni bir proje oluşturabilirsiniz.
+            Poz ekleyebilmek için öncelikle poz eklenebilcek Wbs leri belirlemeniz gerekmektedir.
           </Alert>
         </Stack>
       }
 
-      {show == "ProjectMain" && !projectNames.empty &&
+      {show == "ProjectMain" && isProject.wbs &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           {
