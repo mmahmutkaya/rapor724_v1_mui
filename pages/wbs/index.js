@@ -26,11 +26,12 @@ export default function P_Wbs() {
 
   const RealmApp = useApp();
   const { isProject, setIsProject } = useContext(StoreContext)
+  const [isSelectedWbs, setIsSelectedWbs] = useState()
+  const [selectedWbs, setSelectedWbs] = useState()
   const router = useRouter();
   !isProject ? router.push('/projects') : null
+  
 
-
-  const [selectedWbs, setSelectedWbs] = useState()
   const [hataMesaj, setHataMesaj] = useState()
   const [show, setShow] = useState("WbsMain")
 
