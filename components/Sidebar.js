@@ -12,12 +12,10 @@ const Sidebar = ({ isSidebar, setIsSidebar }) => {
   }
 
   function clickOverlay() {
-    console.log("kliked overlay")
     setIsSidebar((prev) => !prev)
   }
 
   function clickSidebarMenu() {
-    console.log("kliked sidebar menu")
     setIsSidebar((prev) => !prev)
   }
 

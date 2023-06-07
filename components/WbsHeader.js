@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+// import useApp from "./../components/useApp"
 
 import React from 'react'
 import Typography from '@mui/material/Typography';
@@ -15,17 +15,24 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
-export default function WbsHeader({ RealmApp, isProject, selectedWbs, setSelectedWbs, refetch_projectWbs }) {
+export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedWbs, isProject, setIsProject }) {
+
+  // const RealmApp = useApp();
 
   const [hataMesaj, setHataMesaj] = useState()
 
 
   async function handleWbsCreate() {
+
     try {
-      await RealmApp.currentUser.callFunction("createWbs", { projectId: isProject._id, upWbs: selectedWbs?.code ? selectedWbs?.code : 0 });
-      refetch_projectWbs()
+      // const project = await RealmApp.currentUser.callFunction("createWbs", {
+      //   projectId: isProject._id,
+      //   upWbs: selectedWbs?.code ? selectedWbs?.code : 0,
+      // });
+      // setIsProject(project)
       // setShowDialogInfo(true)
     } catch (err) {
+      console.log(err)
       let hataMesaj_ = "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
       setHataMesaj(hataMesaj_)
       // setShowDialogError(true)
@@ -34,9 +41,8 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs, setSelecte
 
   async function handleWbsDelete() {
     try {
-      const result = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
-      console.log(result)
-      refetch_projectWbs()
+      const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
+      setIsProject(project)
       setSelectedWbs(null)
       // setShowDialogInfo(true)
     } catch (err) {
@@ -78,7 +84,8 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs, setSelecte
             variant="h5"
             fontWeight="bold"
           >
-            İş Alanları WBS {selectedWbs?.code}
+            {/* İş Alanları WBS {selectedWbs?.code} */}
+            İş Alanları WBS
           </Typography>
         </Grid>
 
@@ -112,7 +119,7 @@ export default function WbsHeader({ RealmApp, isProject, selectedWbs, setSelecte
               </IconButton>
             </Grid>
             <Grid item>
-              <IconButton onClick={() => handleWbsCreate()} aria-label="addWbs">
+              <IconButton onClick={() => setShow("FormWbsCreate")} aria-label="addWbs">
                 <AddCircleOutlineIcon variant="contained" color="success" />
               </IconButton>
             </Grid>

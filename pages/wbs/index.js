@@ -3,8 +3,9 @@ import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
+
 import { useQuery } from '@tanstack/react-query'
-import FormProjectCreate from '../../components/FormProjectCreate'
+import FormWbsCreate from '../../components/FormWbsCreate'
 import WbsHeader from '../../components/WbsHeader'
 import WbsMain from '../../components/WbsMain'
 
@@ -21,40 +22,42 @@ import FolderIcon from '@mui/icons-material/Folder';
 
 
 
-export default function P_Projects() {
+export default function P_Wbs() {
 
-  const { isProject } = useContext(StoreContext)
-  const [selectedWbs, setSelectedWbs] = useState()
+  const RealmApp = useApp();
+  const { isProject, setIsProject } = useContext(StoreContext)
+  const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
+  // const [selectedWbs, setSelectedWbs] = useState()
+  const router = useRouter();
+  !isProject ? router.push('/projects') : null
+  
+
   const [hataMesaj, setHataMesaj] = useState()
-  const [show, setShow] = useState()
+  const [show, setShow] = useState("WbsMain")
 
   // const router = useRouter();
 
-  const RealmApp = useApp();
 
-  const { isLoading, isError, data: projectWbs, error, refetch: refetch_projectWbs } = useQuery({
-    queryKey: ['projectWbs'],
-    // queryFn: deneme,
-    queryFn: async () => await RealmApp.currentUser.callFunction("getProjectWbs", { projectId: isProject._id }),
-    refetchOnWindowFocus: false,
-    enabled: !!RealmApp?.currentUser,
-    // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
-  })
+  // const { isLoading, isError, data: projectWbs, error, refetch: refetch_projectWbs } = useQuery({
+  //   queryKey: ['projectWbs'],
+  //   // queryFn: deneme,
+  //   queryFn: async () => await RealmApp.currentUser.callFunction("getProjectWbs", { projectId: isProject._id }),
+  //   refetchOnWindowFocus: false,
+  //   enabled: !!RealmApp?.currentUser,
+  //   // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
+  // })
 
+  // if (isLoading) return "Loading...";
 
-  if (isLoading) return "Loading...";
-
-  if (error) return "An error has occurred: " + error.message;
-
-
+  // if (error) return "An error has occurred: " + error.message;
 
 
   async function handleSelectWbs2(wbs) {
 
     try {
 
-      console.log(isProject._id)
-      console.log(wbs)
+      // console.log(isProject._id)
+      // console.log(wbs)
 
 
       // await RealmApp.currentUser.callFunction("createWbs", { name: projectName });
@@ -118,25 +121,26 @@ export default function P_Projects() {
 
   let level
 
+
   return (
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <WbsHeader RealmApp={RealmApp} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} refetch_projectWbs={refetch_projectWbs} />
+        <WbsHeader RealmApp={RealmApp} setShow={setShow} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} setIsProject={setIsProject} />
       </Grid>
 
       {/* <Grid item >
         <WbsMain />
       </Grid> */}
 
-      {/* {show == "FormProjectCreate" &&
+      {show == "FormWbsCreate" &&
         <Grid item >
-          <FormProjectCreate refetch_projects={refetch_projects} />
+          <FormWbsCreate setShow={setShow} isProject={isProject} setIsProject={setIsProject} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} />
         </Grid>
-      } */}
+      }
 
 
-      {!projectWbs &&
+      {!isProject?.wbs?.length &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
@@ -144,13 +148,13 @@ export default function P_Projects() {
         </Stack>
       }
 
-      {projectWbs &&
+      {isProject?.wbs?.length &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           <Box display="grid">
 
             {
-              projectWbs.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0)).map((wbs) => {
+              isProject.wbs.sort((a, b) => a.code.toLowerCase() >= b.code.toLowerCase() ? 1 : -1).map((wbs) => {
 
                 // wbs = { _id, code, name }
 
@@ -165,14 +169,16 @@ export default function P_Projects() {
                       onClick={() => handleSelectWbs(wbs)}
                       sx={{
                         backgroundColor: selectedWbs?.code == wbs.code ? "red" : bgColor(level).bg,
-                        color: selectedWbs?.code == wbs.code ? "red" : bgColor(level).co,
+                        // backgroundColor: bgColor(level).bg,
+                        color: selectedWbs?.code == wbs.code ? "yellow" : bgColor(level).co,
                         // color: bgColor(level).co,
                         "&:hover": {
-                          backgroundColor: 'rgb(7, 177, 77, 0.42)'
+                          backgroundColor: "blue",
+                          color:"white"
                         }
                       }}
                     >
-                      {wbs.code + " " + wbs.name}
+                      {wbs.code + " - " + wbs.name}
                     </Box>
 
                   </Box>

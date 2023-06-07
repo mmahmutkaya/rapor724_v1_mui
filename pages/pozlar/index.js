@@ -4,17 +4,19 @@ import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
-import FormProjectCreate from '../../components/FormProjectCreate'
-import ItemsHeader from '../../components/ItemsHeader'
+import FormPozCreate from '../../components/FormPozCreate'
+import PozHeader from '../../components/PozHeader'
 
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
-import List from '@mui/material/List';
+import Box from '@mui/material/Box';
+import { DataGrid } from '@mui/x-data-grid';
 
-import FolderIcon from '@mui/icons-material/Folder';
+
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
 
 
@@ -22,65 +24,57 @@ import FolderIcon from '@mui/icons-material/Folder';
 export default function P_Pozlar() {
 
   const { isProject, setIsProject } = useContext(StoreContext)
-  console.log(isProject)
+  const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
+
+  const [show, setShow] = useState("PozMain")
+
+  console.log("isProject", isProject)
+
+
   const router = useRouter();
+  !isProject ? router.push('/projects') : null
 
-  const RealmApp = useApp();
-  const { isLoading, isError, data: projectNames, error, refetch: refetch_projects } = useQuery({
-    queryKey: ['projectNames'],
-    // queryFn: deneme,
-    queryFn: async () => await RealmApp.currentUser.callFunction("getProjectNames"),
-    refetchOnWindowFocus: false,
-    enabled: !!RealmApp?.currentUser,
-    // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
-  })
+  // const RealmApp = useApp();
 
 
-  const [show, setShow] = useState("ProjectMain")
-
-  if (isLoading) return "Loading...";
-
-  if (error) return "An error has occurred: " + error.message;
-
-
-  const handleProjectClick = (project) => {
-    setIsProject(project)
-    router.push('/reports')
-    console.log("--setproject-- is worked")
+  const handleWbsClick = (project) => {
+    console.log("handleWbsClick")
   }
 
+  let wbsCode
+  let wbsName
 
   return (
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <ItemsHeader setShow={setShow} />
+        <PozHeader setShow={setShow} />
       </Grid>
 
-      {show == "FormProjectCreate" &&
+      {show == "FormPozCreate" &&
         <Grid item >
-          <FormProjectCreate setShow={setShow} refetch_projects={refetch_projects} />
+          <FormPozCreate setShow={setShow} />
         </Grid>
       }
 
-      {show == "ProjectMain" && projectNames.empty &&
+      {show == "PozMain" && !isProject?.wbs &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
-            Dahil olduğunuz herhangi bir proje bulunamadı, menüler yardımı ile yeni bir proje oluşturabilirsiniz.
+            Poz ekleyebilmek için öncelikle poz eklenebilcek Wbs leri belirlemeniz gerekmektedir.
           </Alert>
         </Stack>
       }
 
-      {show == "ProjectMain" && !projectNames.empty &&
+      {show == "PozMain" && isProject?.wbs &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           {
-            projectNames.map(project => (
+            isProject.wbs.map(wbsOne => (
 
               <Grid
-                key={project._id}
-                container spacing={2}
-                onClick={() => handleProjectClick(project)}
+                key={wbsOne._id}
+                direction="column"
+                container spacing={0}
                 sx={{
                   "&:hover": {
                     color: "red",
@@ -90,20 +84,59 @@ export default function P_Pozlar() {
                 }}
               >
 
-                <Grid item>
-                  <FolderIcon
-                    sx={{
-                      // "&:hover": {
-                      //   color: "red",
-                      // },
-                      color: "#757575"
-                    }} />
-                </Grid>
 
                 <Grid item>
-                  <Typography sx={{ fontWeight: "normal" }}>
-                    {project.name}
-                  </Typography>
+                  <Grid container>
+                    <Grid item>
+                      <TurnedInIcon
+                        sx={{
+                          // "&:hover": {
+                          //   color: "red",
+                          // },
+                          color: "#757575"
+                        }} />
+                    </Grid>
+
+                    <Grid item>
+                      {
+                        wbsOne.code.split(".").map((codePart, index) => {
+                          if (index == 0) {
+                            wbsCode = codePart
+                            wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                          } else {
+                            wbsCode = wbsCode + "." + codePart
+                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).name
+                          }
+                        })
+                      }
+                      <Typography sx={{ fontWeight: "normal" }}>
+                        {wbsName}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+
+
+                <Grid item marginBottom={5}>
+                  {/* <Box sx={{ height: 400, width: '100%' }}> */}
+                  <Box >
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      hideFooter={true}
+                      initialState={{
+                        // pagination: {
+                        //   paginationModel: {
+                        //     pageSize: 5,
+                        //   },
+                        // },
+                      }}
+                      // pageSizeOptions={[5]}
+                      // checkboxSelection
+                      disableRowSelectionOnClick
+                    />
+                  </Box>
                 </Grid>
 
               </Grid>
@@ -122,3 +155,46 @@ export default function P_Pozlar() {
 }
 
 
+const columns = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  {
+    field: 'firstName',
+    headerName: 'First name',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'lastName',
+    headerName: 'Last name',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'age',
+    headerName: 'Age',
+    type: 'number',
+    width: 110,
+    editable: true,
+  },
+  {
+    field: 'fullName',
+    headerName: 'Full name',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 160,
+    valueGetter: (params) =>
+      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+  },
+];
+
+const rows = [
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+];

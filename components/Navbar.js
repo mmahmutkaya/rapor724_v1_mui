@@ -14,7 +14,6 @@ const Navbar = ({ setIsSidebar }) => {
 
   const clickSumButton = async () => {
     const result = await RealmApp.currentUser.callFunction("returnBack");
-    console.log(result)
   }
 
   const clickLogOut = async () => {
@@ -23,7 +22,6 @@ const Navbar = ({ setIsSidebar }) => {
   }
 
   function toggleSidebar() {
-    console.log("kliked navbar")
     setIsSidebar((prev) => !prev)
   }
 

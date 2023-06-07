@@ -19,11 +19,11 @@ import FolderIcon from '@mui/icons-material/Folder';
 
 
 
-export default function P_Pozlar() {
+export default function P_Projects() {
 
   const { isProject, setIsProject } = useContext(StoreContext)
   const [show, setShow] = useState("ProjectMain")
-  console.log(isProject)
+
   const router = useRouter();
 
   const RealmApp = useApp();
@@ -43,10 +43,16 @@ export default function P_Pozlar() {
   if (error) return "An error has occurred: " + error.message;
 
 
-  const handleProjectClick = async (project) => {
-    // const project = await RealmApp.currentUser.callFunction("getProject")
+  // const handleProjectClick = async (project) => {
+  //   // const project = await RealmApp.currentUser.callFunction("getProject")
+  //   setIsProject(project)
+  //   console.log(project)
+  //   router.push('/dashboard')
+  // }
+
+  const handleProjectClick = async (prj) => {
+    const project = await RealmApp.currentUser.callFunction("getProject",{projectId:prj._id})
     setIsProject(project)
-    console.log(project)
     router.push('/dashboard')
   }
 
