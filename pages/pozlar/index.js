@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
-import FormProjectCreate from '../../components/FormProjectCreate'
+import FormPozCreate from '../../components/FormPozCreate'
 import ItemsHeader from '../../components/ItemsHeader'
 
 
@@ -14,7 +14,7 @@ import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import List from '@mui/material/List';
 
-import FolderIcon from '@mui/icons-material/Folder';
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
 
 
@@ -22,33 +22,25 @@ import FolderIcon from '@mui/icons-material/Folder';
 export default function P_Pozlar() {
 
   const { isProject, setIsProject } = useContext(StoreContext)
-  console.log("isProject")
-  console.log(isProject)
+  const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
+
+  const [show, setShow] = useState("PozMain")
+
+  console.log("isProject", isProject)
+
+
   const router = useRouter();
+  !isProject ? router.push('/projects') : null
 
-  const RealmApp = useApp();
-  const { isLoading, isError, data: projectNames, error, refetch: refetch_projects } = useQuery({
-    queryKey: ['projectNames'],
-    // queryFn: deneme,
-    queryFn: async () => await RealmApp.currentUser.callFunction("getProjectNames"),
-    refetchOnWindowFocus: false,
-    enabled: !!RealmApp?.currentUser,
-    // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
-  })
+  // const RealmApp = useApp();
 
 
-  const [show, setShow] = useState("ProjectMain")
-
-  if (isLoading) return "Loading...";
-
-  if (error) return "An error has occurred: " + error.message;
-
-
-  const handleProjectClick = (project) => {
-    setIsProject(project)
-    router.push('/reports')
+  const handleWbsClick = (project) => {
+    console.log("handleWbsClick")
   }
 
+  let wbsCode
+  let wbsName
 
   return (
     <Grid container direction="column" spacing={1}>
@@ -57,13 +49,13 @@ export default function P_Pozlar() {
         <ItemsHeader setShow={setShow} />
       </Grid>
 
-      {show == "FormProjectCreate" &&
+      {show == "FormPozCreate" &&
         <Grid item >
-          <FormProjectCreate setShow={setShow} refetch_projects={refetch_projects} />
+          <FormPozCreate setShow={setShow} />
         </Grid>
       }
 
-      {show == "ProjectMain" && !isProject.wbs &&
+      {show == "PozMain" && !isProject?.wbs &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Poz ekleyebilmek için öncelikle poz eklenebilcek Wbs leri belirlemeniz gerekmektedir.
@@ -71,16 +63,15 @@ export default function P_Pozlar() {
         </Stack>
       }
 
-      {show == "ProjectMain" && isProject.wbs &&
+      {show == "PozMain" && isProject?.wbs &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           {
-            projectNames.map(project => (
+            isProject.wbs.map(wbsOne => (
 
               <Grid
-                key={project._id}
+                key={wbsOne._id}
                 container spacing={2}
-                onClick={() => handleProjectClick(project)}
                 sx={{
                   "&:hover": {
                     color: "red",
@@ -91,7 +82,7 @@ export default function P_Pozlar() {
               >
 
                 <Grid item>
-                  <FolderIcon
+                  <TurnedInIcon
                     sx={{
                       // "&:hover": {
                       //   color: "red",
@@ -101,10 +92,22 @@ export default function P_Pozlar() {
                 </Grid>
 
                 <Grid item>
+                  {
+                    wbsOne.code.split(".").map((codePart, index) => {
+                      if (index == 0) {
+                        wbsCode = codePart
+                        wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                      } else {
+                        wbsCode = wbsCode + "." + codePart
+                        wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).name
+                      }
+                    })
+                  }
                   <Typography sx={{ fontWeight: "normal" }}>
-                    {project.name}
+                    {wbsName}
                   </Typography>
                 </Grid>
+                
 
               </Grid>
 

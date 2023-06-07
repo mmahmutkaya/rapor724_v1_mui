@@ -84,7 +84,8 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
             variant="h5"
             fontWeight="bold"
           >
-            İş Alanları WBS {selectedWbs?.code}
+            {/* İş Alanları WBS {selectedWbs?.code} */}
+            İş Alanları WBS
           </Typography>
         </Grid>
 
