@@ -5,14 +5,16 @@ import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
 import FormPozCreate from '../../components/FormPozCreate'
-import ItemsHeader from '../../components/ItemsHeader'
+import PozHeader from '../../components/PozHeader'
 
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
-import List from '@mui/material/List';
+import Box from '@mui/material/Box';
+import { DataGrid } from '@mui/x-data-grid';
+
 
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
@@ -46,7 +48,7 @@ export default function P_Pozlar() {
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <ItemsHeader setShow={setShow} />
+        <PozHeader setShow={setShow} />
       </Grid>
 
       {show == "FormPozCreate" &&
@@ -71,7 +73,8 @@ export default function P_Pozlar() {
 
               <Grid
                 key={wbsOne._id}
-                container spacing={2}
+                direction="column"
+                container spacing={0}
                 sx={{
                   "&:hover": {
                     color: "red",
@@ -81,33 +84,60 @@ export default function P_Pozlar() {
                 }}
               >
 
-                <Grid item>
-                  <TurnedInIcon
-                    sx={{
-                      // "&:hover": {
-                      //   color: "red",
-                      // },
-                      color: "#757575"
-                    }} />
-                </Grid>
 
                 <Grid item>
-                  {
-                    wbsOne.code.split(".").map((codePart, index) => {
-                      if (index == 0) {
-                        wbsCode = codePart
-                        wbsName = isProject.wbs.find(item => item.code == wbsCode).name
-                      } else {
-                        wbsCode = wbsCode + "." + codePart
-                        wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).name
+                  <Grid container>
+                    <Grid item>
+                      <TurnedInIcon
+                        sx={{
+                          // "&:hover": {
+                          //   color: "red",
+                          // },
+                          color: "#757575"
+                        }} />
+                    </Grid>
+
+                    <Grid item>
+                      {
+                        wbsOne.code.split(".").map((codePart, index) => {
+                          if (index == 0) {
+                            wbsCode = codePart
+                            wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                          } else {
+                            wbsCode = wbsCode + "." + codePart
+                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).name
+                          }
+                        })
                       }
-                    })
-                  }
-                  <Typography sx={{ fontWeight: "normal" }}>
-                    {wbsName}
-                  </Typography>
+                      <Typography sx={{ fontWeight: "normal" }}>
+                        {wbsName}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </Grid>
-                
+
+
+
+                <Grid item marginBottom={5}>
+                  {/* <Box sx={{ height: 400, width: '100%' }}> */}
+                  <Box >
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      hideFooter={true}
+                      initialState={{
+                        // pagination: {
+                        //   paginationModel: {
+                        //     pageSize: 5,
+                        //   },
+                        // },
+                      }}
+                      // pageSizeOptions={[5]}
+                      // checkboxSelection
+                      disableRowSelectionOnClick
+                    />
+                  </Box>
+                </Grid>
 
               </Grid>
 
@@ -125,3 +155,46 @@ export default function P_Pozlar() {
 }
 
 
+const columns = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  {
+    field: 'firstName',
+    headerName: 'First name',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'lastName',
+    headerName: 'Last name',
+    width: 150,
+    editable: true,
+  },
+  {
+    field: 'age',
+    headerName: 'Age',
+    type: 'number',
+    width: 110,
+    editable: true,
+  },
+  {
+    field: 'fullName',
+    headerName: 'Full name',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 160,
+    valueGetter: (params) =>
+      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+  },
+];
+
+const rows = [
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+];

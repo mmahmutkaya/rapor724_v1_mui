@@ -15,7 +15,7 @@ import { styled } from '@mui/material/styles';
 
 
 
-export default function ItemsHeader({ setShow }) {
+export default function PozHeader({ setShow }) {
 
 
   const handleTry = () => {
@@ -68,7 +68,7 @@ export default function ItemsHeader({ setShow }) {
           <Grid container spacing={1}>
 
             <Grid item>
-              <IconButton onClick={() => console.log("deleted clicked")} aria-label="addWbs">
+              <IconButton onClick={() => console.log("deleted clicked")} aria-label="addPoz">
                 <DeleteIcon
                   // sx={{display: isProject_display}}
                   variant="contained" color="error"
@@ -77,7 +77,7 @@ export default function ItemsHeader({ setShow }) {
             </Grid>
 
             <Grid item>
-              <IconButton onClick={() => setShow("FormProjectCreate")} aria-label="addWbs">
+              <IconButton onClick={() => setShow("FormPozCreate")} aria-label="addWbs">
                 <AddCircleOutlineIcon variant="contained" color="success" />
               </IconButton>
             </Grid>

@@ -1,29 +1,27 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-// import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-
-import * as Realm from "realm-web";
+import { useState } from 'react';
 import { useApp } from "./useApp.js";
-import { Padding } from '@mui/icons-material';
 
 
-const theme = createTheme();
+//mui
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import WarningIcon from '@mui/icons-material/Warning';
+import { Typography } from '@mui/material';
 
-export default function SignIn({ setShow }) {
+
+export default function P_FormPozCreate({ setShow, isProject, setIsProject, selectedWbs, setSelectedWbs }) {
+
+  const [showDialogInfo, setShowDialogInfo] = useState(false)
+  const [showDialogError, setShowDialogError] = useState(false)
+  const [hataMesaj, setHataMesaj] = useState("")
 
   const RealmApp = useApp();
 
@@ -34,106 +32,149 @@ export default function SignIn({ setShow }) {
     try {
 
       const data = new FormData(event.currentTarget);
-      const email = data.get('email')
-      const password = data.get('password')
+      const wbsName = data.get('wbsName')
 
-      const credentials = Realm.Credentials.emailPassword(email, password);
-      const user = await RealmApp.logIn(credentials);
-      if (user) {
-        window.location.reload(false);
-        return console.log("Giriş işlemi başarılı")
-      }
-      return console.log("Giriş işlemi başarısız, iletişime geçiniz.")
+      // console.log({ projectId: isProject._id })
+      // console.log({ upWbs: selectedWbs?.code ? selectedWbs?.code : null })
+      // console.log({ upWbs: selectedWbs?.name ? selectedWbs?.name : "En üst seviyeye" })
+      // console.log(wbsName)
+
+      const project = await RealmApp.currentUser.callFunction("createWbs", {
+        projectId: isProject._id,
+        upWbs: selectedWbs?.code ? selectedWbs?.code : "0",
+        newWbsName:wbsName
+      });
+      setSelectedWbs(null)
+      setIsProject(project)
+      setShowDialogInfo(true)
+
+
+      // await RealmApp.currentUser.callFunction("createProject", { name: wbsName });
+
+      // refetch_projects()
+      // setShowDialogInfo(true)
 
     } catch (err) {
 
-      const hataMesaj = err.error
+      console.log(err)
+      // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
+      let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
-      if (hataMesaj.includes("expected a string 'password' parameter")) {
-        return console.log("Şifre girmelisiniz")
+      if (hataMesaj_.includes("duplicate key error")) {
+        hataMesaj_ = "Sistemde kayıtlı"
       }
 
-      if (hataMesaj === "invalid username") {
-        return console.log("Email girmelisiniz")
+      if (hataMesaj_.includes("çok kısa")) {
+        hataMesaj_ = "Çok kısa"
       }
 
-      if (hataMesaj === "invalid username/password") {
-        return console.log("Email ve şifre uyuşmuyor")
-      }
-
-      console.log(hataMesaj)
-      return console.log("Giriş esnasında hata oluştu, lütfen iletişime geçiniz..")
+      setHataMesaj(hataMesaj_)
+      setShowDialogError(true)
 
     }
 
   }
 
 
+  if (showDialogInfo) {
+    return (
+      <div>
+
+        <Dialog
+          PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
+          open={true}
+          onClose={() => setShow("ProjectMain")} >
+          {/* <DialogTitle>Subscribe</DialogTitle> */}
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
+            <DialogContent>
+              <Grid container spacing={1}>
+
+                <Grid item>
+                  <CheckCircleIcon variant="contained" color="success" pr={3} />
+                </Grid>
+
+                <Grid item>
+                  <DialogContentText>
+                    Wbs kaydı başarı ile gerçekleşti
+                  </DialogContentText>
+                </Grid>
+              </Grid>
+            </DialogContent>
+
+          </Box>
+        </Dialog>
+      </div >
+    );
+  }
+
+
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        {/* <CssBaseline /> */}
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Paper sx={{ padding: "1rem", backgroundColor: "#EEEEEE" }}>
+    <div>
 
-            {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar> */}
+      <Dialog
+        PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}
+        open={true}
+        onClose={() => setShow("WbsMain")} >
+        {/* <DialogTitle>Subscribe</DialogTitle> */}
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
-            <Grid container justifyContent="space-between">
-              <Grid item>
-                <Typography component="h1" variant="h5">
-                  Wbs İsmi Giriniz
+          <DialogContent>
+
+            <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
+              {/* <Typography sx> */}
+              Poz Oluştur
+              {/* </Typography> */}
+            </DialogContentText>
+
+            {selectedWbs &&
+              <>
+                <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
+                  {selectedWbs.code} {selectedWbs.name}
+                </DialogContentText>
+                <Typography >
+                  başlığı altına yeni bir Wbs eklemek üzeresiniz.
                 </Typography>
-              </Grid>
-              <Grid item>
-                <IconButton onClick={() => setShow("WbsMain")} aria-label="delete">
-                  <CloseIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
+              </>
+            }
 
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-              {/* <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            /> */}
+            {!selectedWbs &&
+              <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
+                {/* <Typography > */}
+                En üst düzeye yeni bir Wbs eklemek üzeresiniz.
+                {/* </Typography> */}
+              </DialogContentText>
+            }
+
+            <Box onClick={() => setShowDialogError(false)}>
               <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="wbs"
-                label="Wbs Adı"
-                type="wbs"
-                id="wbs"
-                autoComplete="wbs"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Tamam
-              </Button>
+                variant="standard"
+                // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
 
+                margin="normal"
+                id="wbsName"
+                name="wbsName"
+                // autoFocus
+                error={showDialogError}
+                helperText={showDialogError ? hataMesaj : ""}
+                // margin="dense"
+                label="Wbs Adı"
+                type="text"
+                fullWidth
+              />
             </Box>
-          </Paper>
+
+          </DialogContent>
+
+          <DialogActions sx={{ padding: "1.5rem" }}>
+            <Button onClick={() => setShow("ProjectWbsMain")}>İptal</Button>
+            <Button type="submit">Oluştur</Button>
+          </DialogActions>
+
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Dialog>
+    </div >
   );
+
+
 }
