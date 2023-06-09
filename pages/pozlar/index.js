@@ -125,6 +125,7 @@ export default function P_Pozlar() {
                       rows={rows}
                       columns={columns}
                       hideFooter={true}
+                      density="compact"
                       initialState={{
                         // pagination: {
                         //   paginationModel: {
