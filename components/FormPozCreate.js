@@ -7,21 +7,28 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import MenuItem from '@mui/material/MenuItem';
 import DialogTitle from '@mui/material/DialogTitle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Typography } from '@mui/material';
 
 
-export default function P_FormPozCreate({ setShow, isProject, setIsProject, selectedWbs, setSelectedWbs }) {
+export default function FormPozCreate({ setShow, isProject }) {
+
+  // console.log("FormPozCreate-->isProject",isProject)
 
   const [showDialogInfo, setShowDialogInfo] = useState(false)
   const [showDialogError, setShowDialogError] = useState(false)
   const [hataMesaj, setHataMesaj] = useState("")
+  const [wbsToCreatePoz, setWbsToCreatePoz] = useState("");
 
   const RealmApp = useApp();
 
@@ -37,12 +44,12 @@ export default function P_FormPozCreate({ setShow, isProject, setIsProject, sele
       // console.log({ projectId: isProject._id })
       // console.log({ upWbs: selectedWbs?.code ? selectedWbs?.code : null })
       // console.log({ upWbs: selectedWbs?.name ? selectedWbs?.name : "En üst seviyeye" })
-      // console.log(wbsName)
+      console.log("wbsName--", wbsName)
 
       const project = await RealmApp.currentUser.callFunction("createWbs", {
         projectId: isProject._id,
         upWbs: selectedWbs?.code ? selectedWbs?.code : "0",
-        newWbsName:wbsName
+        newWbsName: wbsName
       });
       setSelectedWbs(null)
       setIsProject(project)
@@ -76,6 +83,10 @@ export default function P_FormPozCreate({ setShow, isProject, setIsProject, sele
   }
 
 
+
+
+  //gösterim kodları başlangıcı --> koşulllu sayfa gösterimleri
+
   if (showDialogInfo) {
     return (
       <div>
@@ -96,7 +107,7 @@ export default function P_FormPozCreate({ setShow, isProject, setIsProject, sele
 
                 <Grid item>
                   <DialogContentText>
-                    Wbs kaydı başarı ile gerçekleşti
+                    Poz kaydı başarı ile gerçekleşti
                   </DialogContentText>
                 </Grid>
               </Grid>
@@ -109,9 +120,17 @@ export default function P_FormPozCreate({ setShow, isProject, setIsProject, sele
   }
 
 
+
+  const handleChange = (event) => {
+    setWbsToCreatePoz(event.target.value);
+    console.log(event.target.value)
+  };
+
+
+
+
   return (
     <div>
-
 
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}
@@ -128,30 +147,41 @@ export default function P_FormPozCreate({ setShow, isProject, setIsProject, sele
               {/* </Typography> */}
             </DialogContentText>
 
-            {selectedWbs &&
-              <>
-                <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
-                  {selectedWbs.code} {selectedWbs.name}
-                </DialogContentText>
-                <Typography >
-                  başlığı altına yeni bir Wbs eklemek üzeresiniz.
-                </Typography>
-              </>
-            }
 
-            {!selectedWbs &&
-              <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
-                {/* <Typography > */}
-                En üst düzeye yeni bir Wbs eklemek üzeresiniz.
-                {/* </Typography> */}
-              </DialogContentText>
-            }
+            <Box sx={{ minWidth: 120 }}>
+              <InputLabel id="demo-simple-select-label">Age</InputLabel>
+              <Select
+                fullWidth
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={wbsToCreatePoz}
+                label="Age"
+                // onChange={handleChange}
+              >
+                {
+                  /* <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem> */
+                }
 
-            <Box onClick={() => setShowDialogError(false)}>
+                {/* {console.log(isProject)} */}
+
+                {
+                  isProject?.wbs.map(wbs => (
+                    // console.log(wbs)
+                    <MenuItem key={wbs._id} value={wbs.name} name={wbsName}>
+                      {wbs.name}
+                    </MenuItem>
+                  ))
+                }
+
+              </Select>
+            </Box>
+
+            {/* <Box onClick={() => setShowDialogError(false)}>
               <TextField
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
-
                 margin="normal"
                 id="wbsName"
                 name="wbsName"
@@ -163,7 +193,7 @@ export default function P_FormPozCreate({ setShow, isProject, setIsProject, sele
                 type="text"
                 fullWidth
               />
-            </Box>
+            </Box> */}
 
           </DialogContent>
 
@@ -178,4 +208,31 @@ export default function P_FormPozCreate({ setShow, isProject, setIsProject, sele
   );
 
 
+
 }
+
+
+
+
+const currencies = [
+  {
+    value: 'USD',
+    label: '$',
+    name: "ahmed"
+  },
+  {
+    value: 'EUR',
+    label: '€',
+    name: "mahmut"
+  },
+  {
+    value: 'BTC',
+    label: '฿',
+    name: "muhammed"
+  },
+  {
+    value: 'JPY',
+    label: '¥',
+    name: "mustafa"
+  },
+];

@@ -16,7 +16,6 @@ export default function FormGroupCreate({ setShow, refetch_groups }) {
 
       const result = await RealmApp.currentUser.callFunction("createGroup", { name:groupName });
 
-      console.log(result)
       refetch_groups()
       return setShow("Groups")
       

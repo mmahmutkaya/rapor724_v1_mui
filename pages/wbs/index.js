@@ -56,9 +56,6 @@ export default function P_Wbs() {
 
     try {
 
-      // console.log(isProject._id)
-      // console.log(wbs)
-
 
       // await RealmApp.currentUser.callFunction("createWbs", { name: projectName });
 

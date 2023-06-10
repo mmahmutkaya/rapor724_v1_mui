@@ -93,7 +93,6 @@
 //   }
 
 //   const handleSidebar = () => {
-//     console.log("merhaba")
 //     setIsSidebar(prev => !prev)
 //   }
 

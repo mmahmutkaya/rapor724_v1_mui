@@ -28,9 +28,6 @@ export default function P_Pozlar() {
 
   const [show, setShow] = useState("PozMain")
 
-  console.log("isProject", isProject)
-
-
   const router = useRouter();
   !isProject ? router.push('/projects') : null
 
@@ -53,7 +50,7 @@ export default function P_Pozlar() {
 
       {show == "FormPozCreate" &&
         <Grid item >
-          <FormPozCreate setShow={setShow} />
+          <FormPozCreate isProject={isProject} setShow={setShow} />
         </Grid>
       }
 

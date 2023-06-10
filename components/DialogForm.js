@@ -11,7 +11,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 export default function DialogForm({ setShow }) {
 
   const handleSubmit = (e) => {
-    console.log(e)
   }
 
   return (
