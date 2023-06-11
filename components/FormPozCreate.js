@@ -26,9 +26,13 @@ export default function FormPozCreate({ setShow, isProject }) {
   // console.log("FormPozCreate-->isProject",isProject)
 
   const [showDialogInfo, setShowDialogInfo] = useState(false)
-  const [showDialogError, setShowDialogError] = useState(false)
+
+  const [error_for_wbs, setError_for_wbs] = useState(false)
+  const [error_for_name, setError_for_name] = useState(false)
+  const [error_for_unit, setError_for_unit] = useState(false)
+
   const [hataMesaj, setHataMesaj] = useState("")
-  const [wbsToCreatePoz, setWbsToCreatePoz] = useState("");
+  const [newWbsName_for_Poz, setNewPozName_for_Poz] = useState("");
 
   const RealmApp = useApp();
 
@@ -39,24 +43,42 @@ export default function FormPozCreate({ setShow, isProject }) {
     try {
 
       const data = new FormData(event.currentTarget);
-      const wbsName = data.get('wbsName')
+      const newPozName = data.get('newPozName')
+      const newPozUnit = data.get('newPozUnit')
 
-      // console.log({ projectId: isProject._id })
-      // console.log({ upWbs: selectedWbs?.code ? selectedWbs?.code : null })
-      // console.log({ upWbs: selectedWbs?.name ? selectedWbs?.name : "En üst seviyeye" })
-      console.log("wbsName--", wbsName)
+      if (!newWbsName_for_Poz) {
+        setError_for_wbs(true);
+      }
+      console.log("newWbsName_for_Poz--", newWbsName_for_Poz)
 
-      const project = await RealmApp.currentUser.callFunction("createWbs", {
-        projectId: isProject._id,
-        upWbs: selectedWbs?.code ? selectedWbs?.code : "0",
-        newWbsName: wbsName
-      });
-      setSelectedWbs(null)
-      setIsProject(project)
-      setShowDialogInfo(true)
+      if (!newPozName) {
+        setError_for_name(true);
+      }
+      console.log("newPozName--", newPozName)
+
+      if (!newPozUnit) {
+        setError_for_unit(true);
+      }
+      console.log("newPozUnit--", newPozUnit)
+
+      if (error_for_wbs || error_for_name || error_for_unit) {
+        return console.log("bittiiii hata ile")
+      }
 
 
-      // await RealmApp.currentUser.callFunction("createProject", { name: wbsName });
+
+
+      // const project = await RealmApp.currentUser.callFunction("createWbs", {
+      //   projectId: isProject._id,
+      //   upWbs: selectedWbs?.code ? selectedWbs?.code : "0",
+      //   newWbsName: wbsName
+      // });
+      // setSelectedWbs(null)
+      // setIsProject(project)
+      // setShowDialogInfo(true)
+
+
+      // await RealmApp.currentUser.callFunction("createProject", { name: newPozName });
 
       // refetch_projects()
       // setShowDialogInfo(true)
@@ -76,7 +98,8 @@ export default function FormPozCreate({ setShow, isProject }) {
       }
 
       setHataMesaj(hataMesaj_)
-      setShowDialogError(true)
+      // setError_for_name(true)
+      // setError_for_name(true)
 
     }
 
@@ -94,7 +117,7 @@ export default function FormPozCreate({ setShow, isProject }) {
         <Dialog
           PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
           open={true}
-          onClose={() => setShow("ProjectMain")} >
+          onClose={() => setShow("PozMain")} >
           {/* <DialogTitle>Subscribe</DialogTitle> */}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
@@ -115,14 +138,15 @@ export default function FormPozCreate({ setShow, isProject }) {
 
           </Box>
         </Dialog>
+
       </div >
     );
   }
 
 
 
-  const handleChange = (event) => {
-    setWbsToCreatePoz(event.target.value);
+  const handleChange_newWbsName = (event) => {
+    setNewPozName_for_Poz(event.target.value);
     console.log(event.target.value)
   };
 
@@ -135,41 +159,38 @@ export default function FormPozCreate({ setShow, isProject }) {
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}
         open={true}
-        onClose={() => setShow("WbsMain")} >
+        onClose={() => setShow("PozMain")} >
         {/* <DialogTitle>Subscribe</DialogTitle> */}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
           <DialogContent>
 
-            <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
+            <DialogContentText sx={{ fontWeight: "bold", marginBottom: "2.5rem" }}>
               {/* <Typography sx> */}
               Poz Oluştur
               {/* </Typography> */}
             </DialogContentText>
 
 
-            <Box sx={{ minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-label">Age</InputLabel>
+            {/* wbs adı seçme - çoktan seçmeli - poz başlığı için*/}
+            <Box onClick={() => setError_for_wbs(false)} sx={{ minWidth: 120, marginBottom:"1.5rem" }}>
+              <InputLabel error={error_for_wbs} id="select-wbs-label">Başlık seçiniz - poz için (Wbs)</InputLabel>
               <Select
+                error={error_for_wbs}
+                variant="standard"
                 fullWidth
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={wbsToCreatePoz}
-                label="Age"
-                // onChange={handleChange}
+                labelId="select-wbs-label"
+                id="select-wbs"
+                value={newWbsName_for_Poz}
+                // label="Poz için başlık seçiniz"
+                // label="Poz"
+                onChange={handleChange_newWbsName}
+                required
               >
-                {
-                  /* <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem> */
-                }
-
-                {/* {console.log(isProject)} */}
-
                 {
                   isProject?.wbs.map(wbs => (
                     // console.log(wbs)
-                    <MenuItem key={wbs._id} value={wbs.name} name={wbsName}>
+                    <MenuItem key={wbs._id} value={wbs.name}>
                       {wbs.name}
                     </MenuItem>
                   ))
@@ -178,27 +199,49 @@ export default function FormPozCreate({ setShow, isProject }) {
               </Select>
             </Box>
 
-            {/* <Box onClick={() => setShowDialogError(false)}>
+            {/* poz isminin yazıldığı alan */}
+            {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
+            <Box onClick={() => setError_for_name(false)} sx={{marginBottom:"1.5rem" }}>
               <TextField
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
                 margin="normal"
-                id="wbsName"
-                name="wbsName"
+                id="newPozName"
+                name="newPozName"
                 // autoFocus
-                error={showDialogError}
-                helperText={showDialogError ? hataMesaj : ""}
+                error={error_for_name}
+                helperText={error_for_name ? "hataMesaj düzenlenecek poz için" : ""}
                 // margin="dense"
-                label="Wbs Adı"
+                label="Poz Adı"
                 type="text"
                 fullWidth
               />
-            </Box> */}
+            </Box>
+
+
+            {/* poz biriminin yazıldığı alan */}
+            {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
+            <Box onClick={() => setError_for_unit(false)} sx={{marginBottom:"1.5rem" }}>
+              <TextField
+                variant="standard"
+                // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
+                margin="normal"
+                id="newPozUnit"
+                name="newPozUnit"
+                // autoFocus
+                error={error_for_unit}
+                helperText={error_for_unit ? "hataMesaj düzenlenecek birim için" : ""}
+                // margin="dense"
+                label="Poz Birim"
+                type="text"
+                fullWidth
+              />
+            </Box>
 
           </DialogContent>
 
           <DialogActions sx={{ padding: "1.5rem" }}>
-            <Button onClick={() => setShow("ProjectWbsMain")}>İptal</Button>
+            <Button onClick={() => setShow("PozMain")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>
 
