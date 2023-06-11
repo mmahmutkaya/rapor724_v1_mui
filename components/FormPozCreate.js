@@ -173,7 +173,7 @@ export default function FormPozCreate({ setShow, isProject }) {
 
 
             {/* wbs adı seçme - çoktan seçmeli - poz başlığı için*/}
-            <Box onClick={() => setError_for_wbs(false)} sx={{ minWidth: 120, marginBottom:"1.5rem" }}>
+            <Box onClick={() => setError_for_wbs(false)} sx={{ minWidth: 120, marginBottom: "1.5rem" }}>
               <InputLabel error={error_for_wbs} id="select-wbs-label">Başlık seçiniz - poz için (Wbs)</InputLabel>
               <Select
                 error={error_for_wbs}
@@ -201,8 +201,14 @@ export default function FormPozCreate({ setShow, isProject }) {
 
             {/* poz isminin yazıldığı alan */}
             {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
-            <Box onClick={() => setError_for_name(false)} sx={{marginBottom:"1.5rem" }}>
+            <Box onClick={() => setError_for_name(false)} sx={{ marginBottom: "1.5rem" }}>
               <TextField
+                sx={{
+                  "& input:-webkit-autofill",
+                  "& input:-webkit-autofill:focus" :{
+                    transition: "background-color 600000s 0s, color 600000s 0s"
+                  }
+                }}
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
                 margin="normal"
@@ -212,7 +218,7 @@ export default function FormPozCreate({ setShow, isProject }) {
                 error={error_for_name}
                 helperText={error_for_name ? "hataMesaj düzenlenecek poz için" : ""}
                 // margin="dense"
-                label="Poz Adı"
+                label="Poz Adi"
                 type="text"
                 fullWidth
               />
@@ -221,7 +227,7 @@ export default function FormPozCreate({ setShow, isProject }) {
 
             {/* poz biriminin yazıldığı alan */}
             {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
-            <Box onClick={() => setError_for_unit(false)} sx={{marginBottom:"1.5rem" }}>
+            <Box onClick={() => setError_for_unit(false)} sx={{ marginBottom: "1.5rem" }}>
               <TextField
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
