@@ -31,7 +31,6 @@ export default function P_Wbs() {
   const router = useRouter();
   !isProject ? router.push('/projects') : null
   
-
   const [hataMesaj, setHataMesaj] = useState()
   const [show, setShow] = useState("WbsMain")
 
@@ -169,6 +168,7 @@ export default function P_Wbs() {
                         // backgroundColor: bgColor(level).bg,
                         color: selectedWbs?.code == wbs.code ? "yellow" : bgColor(level).co,
                         // color: bgColor(level).co,
+                        cursor:"pointer",
                         "&:hover": {
                           backgroundColor: "blue",
                           color:"white"

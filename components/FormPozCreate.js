@@ -17,7 +17,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import MenuItem from '@mui/material/MenuItem';
 import DialogTitle from '@mui/material/DialogTitle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import WarningIcon from '@mui/icons-material/Warning';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Typography } from '@mui/material';
 
 
@@ -27,29 +27,41 @@ export default function FormPozCreate({ setShow, isProject }) {
 
   const [showDialogInfo, setShowDialogInfo] = useState(false)
 
+  const [error_for_project, setError_for_project] = useState(false)
   const [error_for_wbs, setError_for_wbs] = useState(false)
   const [error_for_name, setError_for_name] = useState(false)
   const [error_for_unit, setError_for_unit] = useState(false)
 
   const [hataMesaj, setHataMesaj] = useState("")
-  const [newWbsName_for_Poz, setNewPozName_for_Poz] = useState("");
+  const [wbsId_for_Poz, setWbsId_for_Poz] = useState("");
 
   const RealmApp = useApp();
 
+
+  // poz oluşturma fonksiyonu
   async function handleSubmit(event) {
 
     event.preventDefault();
 
     try {
 
+      //verileri tanımlama
       const data = new FormData(event.currentTarget);
       const newPozName = data.get('newPozName')
       const newPozUnit = data.get('newPozUnit')
 
-      if (!newWbsName_for_Poz) {
+
+      //verilerin kontrolü
+
+      if (!isProject?._id) {
+        setError_for_project(true);
+      }
+      console.log("isProject?._id", isProject?._id)
+
+      if (!wbsId_for_Poz) {
         setError_for_wbs(true);
       }
-      console.log("newWbsName_for_Poz--", newWbsName_for_Poz)
+      console.log("wbsId_for_Poz", wbsId_for_Poz)
 
       if (!newPozName) {
         setError_for_name(true);
@@ -61,18 +73,22 @@ export default function FormPozCreate({ setShow, isProject }) {
       }
       console.log("newPozUnit--", newPozUnit)
 
-      if (error_for_wbs || error_for_name || error_for_unit) {
-        return console.log("bittiiii hata ile")
+      //verilerin kontrolü
+      if (error_for_project || error_for_wbs || error_for_name || error_for_unit) {
+        throw new Error({ error: "db ye gönderilmek istenen verilerde hata var" })
       }
 
 
-
-
-      // const project = await RealmApp.currentUser.callFunction("createWbs", {
-      //   projectId: isProject._id,
-      //   upWbs: selectedWbs?.code ? selectedWbs?.code : "0",
-      //   newWbsName: wbsName
-      // });
+      const result = await RealmApp.currentUser.callFunction("createPoz", {
+        projectId: isProject._id,
+        wbsId: wbsId_for_Poz,
+        newPozName,
+        newPozUnit
+      });
+      if (!result.insertedId) {
+        throw new Error({ error: "Poz kaydedilemedi" })
+      }
+      console.log("result", result)
       // setSelectedWbs(null)
       // setIsProject(project)
       // setShowDialogInfo(true)
@@ -104,6 +120,7 @@ export default function FormPozCreate({ setShow, isProject }) {
     }
 
   }
+
 
 
 
@@ -146,7 +163,7 @@ export default function FormPozCreate({ setShow, isProject }) {
 
 
   const handleChange_newWbsName = (event) => {
-    setNewPozName_for_Poz(event.target.value);
+    setWbsId_for_Poz(event.target.value);
     console.log(event.target.value)
   };
 
@@ -174,14 +191,28 @@ export default function FormPozCreate({ setShow, isProject }) {
 
             {/* wbs adı seçme - çoktan seçmeli - poz başlığı için*/}
             <Box onClick={() => setError_for_wbs(false)} sx={{ minWidth: 120, marginBottom: "1.5rem" }}>
-              <InputLabel error={error_for_wbs} id="select-wbs-label">Başlık seçiniz - poz için (Wbs)</InputLabel>
+
+              <InputLabel
+                error={error_for_wbs}
+                id="select-wbs-label"
+              >
+                <Grid container justifyContent="space-between">
+                  <Grid item>Başlık seçiniz - poz için (Wbs)</Grid>
+                  <Grid item>
+                      wbs
+                     <ArrowForwardIcon sx={{ fontSize: 15 }} />
+                  </Grid>
+                </Grid>
+
+              </InputLabel>
+
               <Select
                 error={error_for_wbs}
                 variant="standard"
                 fullWidth
                 labelId="select-wbs-label"
                 id="select-wbs"
-                value={newWbsName_for_Poz}
+                value={wbsId_for_Poz}
                 // label="Poz için başlık seçiniz"
                 // label="Poz"
                 onChange={handleChange_newWbsName}
@@ -190,13 +221,14 @@ export default function FormPozCreate({ setShow, isProject }) {
                 {
                   isProject?.wbs.map(wbs => (
                     // console.log(wbs)
-                    <MenuItem key={wbs._id} value={wbs.name}>
+                    <MenuItem key={wbs._id} value={wbs._id}>
                       {wbs.name}
                     </MenuItem>
                   ))
                 }
 
               </Select>
+
             </Box>
 
             {/* poz isminin yazıldığı alan */}
@@ -204,10 +236,12 @@ export default function FormPozCreate({ setShow, isProject }) {
             <Box onClick={() => setError_for_name(false)} sx={{ marginBottom: "1.5rem" }}>
               <TextField
                 sx={{
-                  "& input:-webkit-autofill",
-                  "& input:-webkit-autofill:focus" :{
+                  "& input:-webkit-autofill:focus": {
                     transition: "background-color 600000s 0s, color 600000s 0s"
-                  }
+                  },
+                  "& input:-webkit-autofill": {
+                    transition: "background-color 600000s 0s, color 600000s 0s"
+                  },
                 }}
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
@@ -229,6 +263,14 @@ export default function FormPozCreate({ setShow, isProject }) {
             {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
             <Box onClick={() => setError_for_unit(false)} sx={{ marginBottom: "1.5rem" }}>
               <TextField
+                sx={{
+                  "& input:-webkit-autofill:focus": {
+                    transition: "background-color 600000s 0s, color 600000s 0s"
+                  },
+                  "& input:-webkit-autofill": {
+                    transition: "background-color 600000s 0s, color 600000s 0s"
+                  },
+                }}
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
                 margin="normal"

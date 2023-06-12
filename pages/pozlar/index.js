@@ -23,7 +23,7 @@ import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
 export default function P_Pozlar() {
 
-  const { isProject, setIsProject } = useContext(StoreContext)
+  const { isProject } = useContext(StoreContext)
   const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
 
   const [show, setShow] = useState("PozMain")
@@ -33,6 +33,7 @@ export default function P_Pozlar() {
 
   // const RealmApp = useApp();
 
+  console.log("selectedWbs",selectedWbs)
 
   const handleWbsClick = (project) => {
     console.log("handleWbsClick")
