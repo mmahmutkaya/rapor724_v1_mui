@@ -31,9 +31,10 @@ export default function P_Pozlar() {
   const router = useRouter();
   !isProject ? router.push('/projects') : null
 
-  // const RealmApp = useApp();
+  const RealmApp = useApp();
+  const pozlar = RealmApp?.currentUser.callFunction("getProjectPozlar", ({projectId:isProject?._id}))
+  console.log(pozlar)
 
-  console.log("selectedWbs",selectedWbs)
 
   const handleWbsClick = (project) => {
     console.log("handleWbsClick")

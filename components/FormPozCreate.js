@@ -91,7 +91,7 @@ export default function FormPozCreate({ setShow, isProject }) {
       console.log("result", result)
       // setSelectedWbs(null)
       // setIsProject(project)
-      // setShowDialogInfo(true)
+      setShowDialogInfo(true)
 
 
       // await RealmApp.currentUser.callFunction("createProject", { name: newPozName });
@@ -197,11 +197,14 @@ export default function FormPozCreate({ setShow, isProject }) {
                 id="select-wbs-label"
               >
                 <Grid container justifyContent="space-between">
-                  <Grid item>Başlık seçiniz - poz için (Wbs)</Grid>
-                  <Grid item>
-                      wbs
-                     <ArrowForwardIcon sx={{ fontSize: 15 }} />
+
+                  <Grid item>Başlık seçiniz</Grid>
+
+                  <Grid item onClick={() => console.log("poz create component wbs tıklandı")} >
+                    wbs
+                    <ArrowForwardIcon sx={{ fontSize: 15, verticalAlign: "middle" }} />
                   </Grid>
+
                 </Grid>
 
               </InputLabel>
