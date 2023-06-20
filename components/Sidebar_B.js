@@ -95,7 +95,7 @@ export default function Sidebar_B({ setMobileOpen }) {
               <ListItemIcon>
                 <DraftsIcon />
               </ListItemIcon>
-              <ListItemText primary="Drafts" />
+              <ListItemText primary="Yetkiler" />
             </ListItemButton>
 
             {/* <ListItemButton onClick={handleClick}>

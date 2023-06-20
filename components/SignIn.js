@@ -86,8 +86,8 @@ export default function SignIn({ setLoginFormMode }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container  >
-
+      {/* <Grid container  > */}
+{/* 
         <Grid item sx={{ zIndex: "-1", }} >
           <Image
             src={backgroundPicture}
@@ -97,9 +97,9 @@ export default function SignIn({ setLoginFormMode }) {
 
             alt="Background Image"
           />
-        </Grid>
+        </Grid> */}
 
-        <Grid item sx={{ border: "2px solid red", borderRadius: "25px" }}>
+        {/* <Grid item sx={{ border: "2px solid red", borderRadius: "25px" }}> */}
           <Container component="main" maxWidth="xs">
             {/* <CssBaseline /> */}
             <Box
@@ -167,9 +167,9 @@ export default function SignIn({ setLoginFormMode }) {
             </Box>
             <Copyright sx={{ mt: 8, mb: 4 }} />
           </Container>
-        </Grid>
+        {/* </Grid> */}
 
-      </Grid>
+      {/* </Grid> */}
     </ThemeProvider>
   );
 }
