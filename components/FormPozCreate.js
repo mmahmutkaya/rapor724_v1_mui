@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useApp } from "./useApp.js";
+import deleteLastSpace from '../functions/deleteLastSpace.js';
 
 
 //mui
@@ -17,6 +18,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import MenuItem from '@mui/material/MenuItem';
 import DialogTitle from '@mui/material/DialogTitle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Typography } from '@mui/material';
 
@@ -25,14 +27,14 @@ export default function FormPozCreate({ setShow, isProject }) {
 
   // console.log("FormPozCreate-->isProject",isProject)
 
-  const [showDialogInfo, setShowDialogInfo] = useState(false)
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false)
+  const [showErrorDialog, setShowErrorDialog] = useState(null)
 
   const [error_for_project, setError_for_project] = useState(false)
   const [error_for_wbs, setError_for_wbs] = useState(false)
   const [error_for_name, setError_for_name] = useState(false)
   const [error_for_unit, setError_for_unit] = useState(false)
 
-  const [hataMesaj, setHataMesaj] = useState("")
   const [wbsId_for_Poz, setWbsId_for_Poz] = useState("");
 
   const RealmApp = useApp();
@@ -47,8 +49,14 @@ export default function FormPozCreate({ setShow, isProject }) {
 
       //verileri tanımlama
       const data = new FormData(event.currentTarget);
+      // const newPozName = deleteLastSpace(data.get('newPozName'))
+      // const newPozUnit = deleteLastSpace(data.get('newPozUnit'))
+
       const newPozName = data.get('newPozName')
       const newPozUnit = data.get('newPozUnit')
+
+      console.log(newPozName)
+      console.log(newPozUnit)
 
 
       //verilerin kontrolü
@@ -78,26 +86,25 @@ export default function FormPozCreate({ setShow, isProject }) {
         throw new Error({ error: "db ye gönderilmek istenen verilerde hata var" })
       }
 
+      
 
-      const result = await RealmApp.currentUser.callFunction("createPoz", {
+      const result = await RealmApp?.currentUser?.callFunction("createPoz", {
         projectId: isProject._id,
         wbsId: wbsId_for_Poz,
         newPozName,
         newPozUnit
       });
+
       if (!result.insertedId) {
         throw new Error({ error: "Poz kaydedilemedi" })
       }
       console.log("result", result)
-      // setSelectedWbs(null)
-      // setIsProject(project)
-      setShowDialogInfo(true)
-
+      setShowSuccessDialog(true)
 
       // await RealmApp.currentUser.callFunction("createProject", { name: newPozName });
 
       // refetch_projects()
-      // setShowDialogInfo(true)
+      // setShowSuccessDialog(true)
 
     } catch (err) {
 
@@ -113,7 +120,8 @@ export default function FormPozCreate({ setShow, isProject }) {
         hataMesaj_ = "Çok kısa"
       }
 
-      setHataMesaj(hataMesaj_)
+      // setHataMesaj(hataMesaj_)
+      setShowErrorDialog(hataMesaj_)
       // setError_for_name(true)
       // setError_for_name(true)
 
@@ -127,7 +135,51 @@ export default function FormPozCreate({ setShow, isProject }) {
 
   //gösterim kodları başlangıcı --> koşulllu sayfa gösterimleri
 
-  if (showDialogInfo) {
+  if (showErrorDialog) {
+
+    let hataMesaj
+
+    if (typeof showErrorDialog !== "string") {
+      hataMesaj = "Tespit edilemeyen hata, sorun devam ederse lütfen Rapor7/24 ile irtibata geçiniz."
+    } else {
+      hataMesaj = showErrorDialog
+    }
+
+
+    return (
+      <div>
+
+        <Dialog
+          PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
+          open={true}
+          onClose={() => setShow("PozMain")} >
+          {/* <DialogTitle>Subscribe</DialogTitle> */}
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
+            <DialogContent>
+              <Grid container spacing={1}>
+
+                <Grid item>
+                  <ErrorIcon variant="contained" color="error" pr={3} />
+                </Grid>
+
+                <Grid item>
+                  <DialogContentText>
+                    {hataMesaj}
+                  </DialogContentText>
+                </Grid>
+              </Grid>
+            </DialogContent>
+
+          </Box>
+        </Dialog>
+
+      </div >
+    );
+  }
+
+
+  if (showSuccessDialog) {
     return (
       <div>
 
