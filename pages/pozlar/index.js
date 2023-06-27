@@ -29,7 +29,8 @@ export default function P_Pozlar() {
   const [show, setShow] = useState("PozMain")
 
   const router = useRouter();
-  !isProject ? router.push('/projects') : null
+  // !isProject ? router.push('/projects') : null
+  !isProject ? window.location.href = "/projects" : null
 
   const RealmApp = useApp();
   const pozlar = RealmApp?.currentUser.callFunction("getProjectPozlar", ({projectId:isProject?._id}))

@@ -66,7 +66,7 @@ export default function FormPozCreate({ setShow, isProject }) {
       }
       console.log("isProject?._id", isProject?._id)
 
-      if (!wbsId_for_Poz) {
+      if (!wbsId_for_Poz.length) {
         setError_for_wbs(true);
       }
       console.log("wbsId_for_Poz", wbsId_for_Poz)
@@ -95,10 +95,16 @@ export default function FormPozCreate({ setShow, isProject }) {
         newPozUnit
       });
 
+      // if (!result.insertedId) {
+      //   throw new Error({ error: "Poz kaydedilemedi" })
+      // }
+      
+      console.log("result", result)
+      return
+
       if (!result.insertedId) {
         throw new Error({ error: "Poz kaydedilemedi" })
       }
-      console.log("result", result)
       setShowSuccessDialog(true)
 
       // await RealmApp.currentUser.callFunction("createProject", { name: newPozName });
