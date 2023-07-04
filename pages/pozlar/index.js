@@ -33,7 +33,10 @@ export default function P_Pozlar() {
   !isProject ? window.location.href = "/projects" : null
 
   const RealmApp = useApp();
-  const pozlar = RealmApp?.currentUser.callFunction("getProjectPozlar", ({projectId:isProject?._id}))
+  const [pozlar, setPozlar] = useState()
+  if (RealmApp?.currentUser) {
+
+  }
   console.log(pozlar)
 
 
@@ -86,7 +89,9 @@ export default function P_Pozlar() {
 
 
                 <Grid item>
+
                   <Grid container>
+
                     <Grid item>
                       <TurnedInIcon
                         sx={{
@@ -113,7 +118,9 @@ export default function P_Pozlar() {
                         {wbsName}
                       </Typography>
                     </Grid>
+
                   </Grid>
+
                 </Grid>
 
 
@@ -122,7 +129,7 @@ export default function P_Pozlar() {
                   {/* <Box sx={{ height: 400, width: '100%' }}> */}
                   <Box >
                     <DataGrid
-                      rows={rows}
+                      rows={pozlar}
                       columns={columns}
                       hideFooter={true}
                       density="compact"
@@ -157,45 +164,43 @@ export default function P_Pozlar() {
 
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
+  // {
+  //   field: 'id',
+  //   headerName: 'ID',
+  //   width: 90,
+  // },
   {
-    field: 'firstName',
-    headerName: 'First name',
+    field: 'name',
+    headerName: 'Poz Adı',
     width: 150,
     editable: true,
   },
   {
-    field: 'lastName',
-    headerName: 'Last name',
+    field: 'unit',
+    headerName: 'Birim',
     width: 150,
     editable: true,
   },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-  },
+  // {
+  //   field: 'fullName',
+  //   headerName: 'Full name',
+  //   description: 'This column has a value getter and is not sortable.',
+  //   sortable: false,
+  //   width: 160,
+  //   valueGetter: (params) =>
+  //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+  // },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+
+// const rows = [
+//   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+//   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+//   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+//   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+//   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+//   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+//   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+//   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+//   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+// ];

@@ -30,15 +30,20 @@ export default function FormPozCreate({ setShow, isProject }) {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false)
   const [showErrorDialog, setShowErrorDialog] = useState(null)
 
-  const [error_for_project, setError_for_project] = useState(false)
   const [error_for_wbs, setError_for_wbs] = useState(false)
+  const [errorText_for_wbs, setErrorText_for_wbs] = useState()
+
   const [error_for_name, setError_for_name] = useState(false)
+  const [errorText_for_name, setErrorText_for_name] = useState()
+
   const [error_for_unit, setError_for_unit] = useState(false)
+  const [errorText_for_unit, setErrorText_for_unit] = useState()
 
   const [wbsId_for_Poz, setWbsId_for_Poz] = useState("");
 
   const RealmApp = useApp();
 
+  let isError = false
 
   // poz oluşturma fonksiyonu
   async function handleSubmit(event) {
@@ -46,6 +51,7 @@ export default function FormPozCreate({ setShow, isProject }) {
     event.preventDefault();
 
     try {
+      isError = false
 
       //verileri tanımlama
       const data = new FormData(event.currentTarget);
@@ -55,38 +61,54 @@ export default function FormPozCreate({ setShow, isProject }) {
       const newPozName = data.get('newPozName')
       const newPozUnit = data.get('newPozUnit')
 
-      console.log(newPozName)
-      console.log(newPozUnit)
-
-
       //verilerin kontrolü
 
       if (!isProject?._id) {
-        setError_for_project(true);
+        throw new Error({ error: "ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz." })
+      } else {
+        console.log("isProject?._id", isProject?._id)
       }
-      console.log("isProject?._id", isProject?._id)
 
-      if (!wbsId_for_Poz.length) {
+      if (!wbsId_for_Poz) {
         setError_for_wbs(true);
+        setErrorText_for_wbs("Zorunlu")
+        isError = true
+        console.log("wbsId_for_Poz", "yok -- error")
+      } else {
+        console.log("wbsId_for_Poz", wbsId_for_Poz)
       }
-      console.log("wbsId_for_Poz", wbsId_for_Poz)
 
       if (!newPozName) {
         setError_for_name(true);
+        setErrorText_for_name("Zorunlu")
+        isError = true
+        console.log("newPozName", "yok -- error")
       }
-      console.log("newPozName--", newPozName)
+
+      if (newPozName.length > 0 && newPozName.length < 3) {
+        setError_for_name(true)
+        setErrorText_for_name("3 haneden az")
+        isError = true
+        console.log("newPozName", "3 haneden az -- error")
+      }
 
       if (!newPozUnit) {
         setError_for_unit(true);
+        setErrorText_for_unit("Zorunlu")
+        isError = true
+        console.log("newPozUnit", "yok -- error")
+      } else {
+        console.log("newPozUnit", newPozUnit)
       }
-      console.log("newPozUnit--", newPozUnit)
 
       //verilerin kontrolü
-      if (error_for_project || error_for_wbs || error_for_name || error_for_unit) {
-        throw new Error({ error: "db ye gönderilmek istenen verilerde hata var" })
+      if (isError) {
+        console.log("hata var alt satırda duracak")
+        // return
+        console.log("hata var durdu 2")
+        // throw new Error({ error: "db ye gönderilmek istenen verilerde hata var" })
       }
 
-      
 
       const result = await RealmApp?.currentUser?.callFunction("createPoz", {
         projectId: isProject._id,
@@ -95,22 +117,37 @@ export default function FormPozCreate({ setShow, isProject }) {
         newPozUnit
       });
 
-      // if (!result.insertedId) {
-      //   throw new Error({ error: "Poz kaydedilemedi" })
-      // }
-      
-      console.log("result", result)
-      return
+      // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
+      if (result.errorObj) {
 
+        console.log("errorObj", errorObj)
+
+        if (result.errorObj.wbsId) {
+          setError_for_wbs(true);
+          setErrorText_for_wbs(result.errorObj.wbsId)
+          isError = true
+        }
+
+        if (result.errorObj.newPozName) {
+          setError_for_name(true);
+          setErrorText_for_name(result.errorObj.newPozName)
+          isError = true
+        }
+
+        if (result.errorObj.newPozUnit) {
+          setError_for_unit(true);
+          setErrorText_for_unit(result.errorObj.newPozUnit)
+          isError = true
+        }
+
+        return
+      }
+
+      // mongodan gelen dönüşte insertedId yoksa hata verir
       if (!result.insertedId) {
-        throw new Error({ error: "Poz kaydedilemedi" })
+        throw new Error({ errorForConsole:"Actually request is completed without error but result came from Mongo without insertedId property as Mongo default", errorForUser: "Beklenmedik şekilde kayıt yapılamadı, Rapor7/24 ile irtibata geçiniz.." })
       }
       setShowSuccessDialog(true)
-
-      // await RealmApp.currentUser.callFunction("createProject", { name: newPozName });
-
-      // refetch_projects()
-      // setShowSuccessDialog(true)
 
     } catch (err) {
 
@@ -118,18 +155,15 @@ export default function FormPozCreate({ setShow, isProject }) {
       // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
       let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
+      // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
-        hataMesaj_ = "Sistemde kayıtlı"
+        setError_for_name(true);
+        setErrorText_for_name("Bu poz ismi bu projede mevcut")
+        console.log("Bu poz ismi bu projede mevcut")
+        return
       }
 
-      if (hataMesaj_.includes("çok kısa")) {
-        hataMesaj_ = "Çok kısa"
-      }
-
-      // setHataMesaj(hataMesaj_)
       setShowErrorDialog(hataMesaj_)
-      // setError_for_name(true)
-      // setError_for_name(true)
 
     }
 
@@ -160,9 +194,10 @@ export default function FormPozCreate({ setShow, isProject }) {
           open={true}
           onClose={() => setShow("PozMain")} >
           {/* <DialogTitle>Subscribe</DialogTitle> */}
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
             <DialogContent>
+
               <Grid container spacing={1}>
 
                 <Grid item>
@@ -174,7 +209,9 @@ export default function FormPozCreate({ setShow, isProject }) {
                     {hataMesaj}
                   </DialogContentText>
                 </Grid>
+
               </Grid>
+
             </DialogContent>
 
           </Box>
@@ -194,7 +231,7 @@ export default function FormPozCreate({ setShow, isProject }) {
           open={true}
           onClose={() => setShow("PozMain")} >
           {/* <DialogTitle>Subscribe</DialogTitle> */}
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
             <DialogContent>
               <Grid container spacing={1}>
@@ -222,9 +259,7 @@ export default function FormPozCreate({ setShow, isProject }) {
 
   const handleChange_newWbsName = (event) => {
     setWbsId_for_Poz(event.target.value);
-    console.log(event.target.value)
   };
-
 
 
 
@@ -311,7 +346,7 @@ export default function FormPozCreate({ setShow, isProject }) {
                 name="newPozName"
                 // autoFocus
                 error={error_for_name}
-                helperText={error_for_name ? "hataMesaj düzenlenecek poz için" : ""}
+                helperText={error_for_name ? errorText_for_name : null}
                 // margin="dense"
                 label="Poz Adi"
                 type="text"
@@ -339,7 +374,7 @@ export default function FormPozCreate({ setShow, isProject }) {
                 name="newPozUnit"
                 // autoFocus
                 error={error_for_unit}
-                helperText={error_for_unit ? "hataMesaj düzenlenecek birim için" : ""}
+                helperText={error_for_unit ? errorText_for_unit : null}
                 // margin="dense"
                 label="Poz Birim"
                 type="text"
