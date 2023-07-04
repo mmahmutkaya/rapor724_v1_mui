@@ -18,10 +18,12 @@ import { DataGrid } from '@mui/x-data-grid';
 
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
+import { BSON } from "realm-web"
 
 
 
-export default async function P_Pozlar() {
+export default function P_Pozlar() {
+
 
   const { isProject } = useContext(StoreContext)
   const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
@@ -33,13 +35,22 @@ export default async function P_Pozlar() {
   !isProject ? window.location.href = "/projects" : null
 
   const RealmApp = useApp();
-  const [pozlar, setPozlar] = useState([])
-  if (RealmApp?.currentUser) {
-    const _pozlar = await RealmApp?.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id }))
-    setPozlar(_pozlar)
-  }
-  console.log(pozlar)
 
+  const { isLoading, isError, data: pozlar, error, refetch: refetch_groups } = useQuery({
+    queryKey: ['groups'],
+    // queryFn: deneme,
+    queryFn: async () => await RealmApp.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id })),
+    refetchOnWindowFocus: false,
+    enabled: !!RealmApp?.currentUser,
+    // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
+  })
+
+
+  if (isLoading) return "Loading...";
+
+  if (error) return "An error has occurred: " + error.message;
+
+  console.log(pozlar)
 
   const handleWbsClick = (project) => {
     console.log("handleWbsClick")
@@ -132,6 +143,7 @@ export default async function P_Pozlar() {
                     <DataGrid
                       rows={pozlar}
                       columns={columns}
+                      getRowId={(row) => new BSON.ObjectId(row._id).toString()}
                       hideFooter={true}
                       density="compact"
                       initialState={{
@@ -141,6 +153,7 @@ export default async function P_Pozlar() {
                         //   },
                         // },
                       }}
+                      onRowClick={(row)=>{console.log(row.id)}}
                       // pageSizeOptions={[5]}
                       // checkboxSelection
                       disableRowSelectionOnClick
@@ -165,11 +178,6 @@ export default async function P_Pozlar() {
 
 
 const columns = [
-  // {
-  //   field: 'id',
-  //   headerName: 'ID',
-  //   width: 90,
-  // },
   {
     field: 'name',
     headerName: 'Poz Adı',
@@ -192,6 +200,20 @@ const columns = [
   //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
   // },
 ];
+
+
+// const rows = [
+//   { unit: 1, name: 'Snow', firstName: 'Jon', age: 35 },
+//   { unit: 2, name: 'Lannister', firstName: 'Cersei', age: 42 },
+//   { unit: 3, name: 'Lannister', firstName: 'Jaime', age: 45 },
+//   { unit: 4, name: 'Stark', firstName: 'Arya', age: 16 },
+//   { unit: 5, name: 'Targaryen', firstName: 'Daenerys', age: null },
+//   { unit: 6, name: 'Melisandre', firstName: null, age: 150 },
+//   { unit: 7, name: 'Clifford', firstName: 'Ferrara', age: 44 },
+//   { unit: 8, name: 'Frances', firstName: 'Rossini', age: 36 },
+//   { unit: 9, name: 'Roxie', firstName: 'Harvey', age: 65 },
+// ];
+
 
 
 // const rows = [
