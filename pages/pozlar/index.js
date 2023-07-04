@@ -21,7 +21,7 @@ import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
 
 
-export default function P_Pozlar() {
+export default async function P_Pozlar() {
 
   const { isProject } = useContext(StoreContext)
   const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
@@ -33,9 +33,10 @@ export default function P_Pozlar() {
   !isProject ? window.location.href = "/projects" : null
 
   const RealmApp = useApp();
-  const [pozlar, setPozlar] = useState()
+  const [pozlar, setPozlar] = useState([])
   if (RealmApp?.currentUser) {
-
+    const _pozlar = await RealmApp?.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id }))
+    setPozlar(_pozlar)
   }
   console.log(pozlar)
 
