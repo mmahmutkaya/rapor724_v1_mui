@@ -23,7 +23,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Typography } from '@mui/material';
 
 
-export default function FormPozCreate({ setShow, isProject }) {
+export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
 
   // console.log("FormPozCreate-->isProject",isProject)
 
@@ -147,6 +147,8 @@ export default function FormPozCreate({ setShow, isProject }) {
       if (!result.insertedId) {
         throw new Error({ errorForConsole:"Actually request is completed without error but result came from Mongo without insertedId property as Mongo default", errorForUser: "Beklenmedik şekilde kayıt yapılamadı, Rapor7/24 ile irtibata geçiniz.." })
       }
+
+      refetch_pozlar()
       setShowSuccessDialog(true)
 
     } catch (err) {

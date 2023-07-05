@@ -36,7 +36,7 @@ export default function P_Pozlar() {
 
   const RealmApp = useApp();
 
-  const { isLoading, isError, data: pozlar, error, refetch: refetch_groups } = useQuery({
+  const { isLoading, isError, data: pozlar, error, refetch: refetch_pozlar } = useQuery({
     queryKey: ['groups'],
     // queryFn: deneme,
     queryFn: async () => await RealmApp.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id })),
@@ -50,7 +50,10 @@ export default function P_Pozlar() {
 
   if (error) return "An error has occurred: " + error.message;
 
-  console.log(pozlar)
+  // console.log(isProject.wbs[0]._id.toString())
+  // console.log(pozlar[0]._wbsId.toString())
+  // console.log(isProject.wbs[0]._id.toString() == pozlar[0]._wbsId.toString())
+  // console.log(pozlar.filter(item => item._wbsId == isProject.wbs[0]))
 
   const handleWbsClick = (project) => {
     console.log("handleWbsClick")
@@ -68,7 +71,7 @@ export default function P_Pozlar() {
 
       {show == "FormPozCreate" &&
         <Grid item >
-          <FormPozCreate isProject={isProject} setShow={setShow} />
+          <FormPozCreate isProject={isProject} setShow={setShow} refetch_pozlar={refetch_pozlar}/>
         </Grid>
       }
 
@@ -91,15 +94,12 @@ export default function P_Pozlar() {
                 direction="column"
                 container spacing={0}
                 sx={{
-                  "&:hover": {
-                    color: "red",
-                  },
                   padding: "0.2rem 1rem",
                   cursor: "pointer"
                 }}
               >
 
-
+                {/* wbs başlıkları */}
                 <Grid item>
 
                   <Grid container>
@@ -137,13 +137,14 @@ export default function P_Pozlar() {
 
 
 
+                {/* poz tabloları */}
                 <Grid item marginBottom={5}>
                   {/* <Box sx={{ height: 400, width: '100%' }}> */}
                   <Box >
                     <DataGrid
-                      rows={pozlar}
+                      rows={pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString())}
                       columns={columns}
-                      getRowId={(row) => new BSON.ObjectId(row._id).toString()}
+                      getRowId={(row) => row._id.toString()}
                       hideFooter={true}
                       density="compact"
                       initialState={{
