@@ -23,7 +23,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Sidebar_B from './Sidebar_B';
+import Sidebar from './Sidebar';
 import SearchIcon from '@mui/icons-material/Search'
 import InputBase from '@mui/material/InputBase';
 import UndoIcon from '@mui/icons-material/Undo';
@@ -392,7 +392,7 @@ export default function Layout({ window, children }) {
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
-          <Sidebar_B RealmApp={RealmApp} setMobileOpen={setMobileOpen} />
+          <Sidebar RealmApp={RealmApp} setMobileOpen={setMobileOpen} />
           {/* {drawer} */}
         </Drawer>
         <Drawer
@@ -403,7 +403,7 @@ export default function Layout({ window, children }) {
           }}
           open
         >
-          <Sidebar_B setMobileOpen={setMobileOpen} />
+          <Sidebar setMobileOpen={setMobileOpen} />
           {/* {drawer} */}
         </Drawer>
       </Box>

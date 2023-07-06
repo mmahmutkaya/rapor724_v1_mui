@@ -62,6 +62,10 @@ export default function P_Pozlar() {
   let wbsCode
   let wbsName
 
+  const handleOnCellClick = (params) => {
+    console.log(params);
+  };
+
   return (
     <Grid container direction="column" spacing={1}>
 
@@ -154,6 +158,7 @@ export default function P_Pozlar() {
                         //   },
                         // },
                       }}
+                      onCellClick={handleOnCellClick}
                       onRowClick={(row)=>{console.log(row.id)}}
                       // pageSizeOptions={[5]}
                       // checkboxSelection

@@ -1,56 +1,125 @@
-import React, { useState } from 'react'
-import styles from "../styles/Sidebar.module.css"
-import Link from 'next/link'
-import Sidebar_B from './Sidebar_B'
+import { useState, useContext, useEffect } from 'react';
+import { StoreContext } from './store'
+import { useRouter } from 'next/router';
+import { useApp } from "./useApp";
 
-const Sidebar = ({ isSidebar, setIsSidebar }) => {
+//material
+import Grid from '@mui/material/Grid';
+import ListSubheader from '@mui/material/ListSubheader';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import SendIcon from '@mui/icons-material/Send';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import StarBorder from '@mui/icons-material/StarBorder';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
 
-  // const [isSidebar, setIsSidebar] = useState(false)
 
-  function toggleSidebar() {
-    setIsSidebar((prev) => !prev)
-  }
+export default function Sidebar({ setMobileOpen }) {
 
-  function clickOverlay() {
-    setIsSidebar((prev) => !prev)
-  }
 
-  function clickSidebarMenu() {
-    setIsSidebar((prev) => !prev)
-  }
+  const router = useRouter();
+  const { isProject } = useContext(StoreContext)
+
+
+  const handleProject = () => {
+    setMobileOpen(false)
+    router.push('/projects')
+  };
+
 
   return (
+    <Grid container direction="column">
 
-    <div className={!isSidebar ? styles.sidebar : styles.sidebar + " " + styles.sidebar__active} >
+      {/* <Grid item sx={{ backgroundColor: "aquamarine" }}>
+        <Typography >
+          {header}
+        </Typography>
+      </Grid> */}
 
-      <div className={!isSidebar ? styles.sidebar__overlay : styles.sidebar__overlay + " " + styles.sidebar__overlay__active} onClick={clickOverlay}></div>
+      {!isProject &&
+        <Grid item>
+          <List
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+          // subheader={
+          //   <ListSubheader component="div" id="nested-list-subheader">
+          //     Başlık
+          //   </ListSubheader>
+          // }
+          >
 
-      <div className={!isSidebar ? styles.sidebar__menu : styles.sidebar__menu + " " + styles.sidebar__menu__active} onClick={clickSidebarMenu}>
-        
-        <Sidebar_B/>
+            <ListItemButton onClick={handleProject}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Projeler" />
+            </ListItemButton>
 
-        {/* <ul>
-          <li>
-            <Link href="/">Home</Link>
-          </li>
-          <li>
-            <Link href="/groups">Gruplar</Link>
-          </li>
-        </ul> */}
+          </List>
+        </Grid>
+      }
 
-      </div>
+      {isProject &&
+        <Grid item>
+          <List>
 
+            <ListItemButton onClick={() => router.push('/dashboard')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItemButton>
 
-      {/* <div className={styles.sidebar__button} onClick={toggleSidebar}>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div> */}
+            <ListItemButton onClick={() => router.push('/wbs')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="İş Alanları / WBS" />
+            </ListItemButton>
 
-    </div>
+            <ListItemButton onClick={() => router.push('/pozlar')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Pozlar" />
+            </ListItemButton>
 
+            <ListItemButton>
+              <ListItemIcon>
+                <DraftsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Yetkiler" />
+            </ListItemButton>
 
-  )
+            {/* <ListItemButton onClick={handleClick}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Inbox" />
+              {open ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText primary="Starred" />
+                </ListItemButton>
+              </List>
+            </Collapse> */}
+
+          </List>
+        </Grid>
+      }
+    </Grid>
+  );
 }
-
-export default Sidebar
