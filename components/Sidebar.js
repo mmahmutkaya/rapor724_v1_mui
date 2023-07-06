@@ -81,7 +81,7 @@ export default function Sidebar({ setMobileOpen }) {
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
-              <ListItemText primary="İş Alanları / WBS" />
+              <ListItemText primary="Poz Grupları" />
             </ListItemButton>
 
             <ListItemButton onClick={() => router.push('/pozlar')}>
@@ -89,6 +89,20 @@ export default function Sidebar({ setMobileOpen }) {
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Pozlar" />
+            </ListItemButton>
+
+            <ListItemButton onClick={() => router.push('/lbs')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Mahal Grupları" />
+            </ListItemButton>
+
+            <ListItemButton onClick={() => router.push('/mahaller')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Mahaller" />
             </ListItemButton>
 
             <ListItemButton>

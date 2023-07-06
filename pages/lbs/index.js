@@ -138,7 +138,7 @@ export default function P_Lbs() {
       {!isProject?.lbs?.length &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
-            "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
+            "{isProject?.name}" isimli projeye ait herhangi LBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
           </Alert>
         </Stack>
       }
