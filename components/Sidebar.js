@@ -26,12 +26,7 @@ export default function Sidebar({ setMobileOpen }) {
 
   const router = useRouter();
   const { isProject } = useContext(StoreContext)
-
-
-  const handleProject = () => {
-    setMobileOpen(false)
-    router.push('/projects')
-  };
+  const { persons } = useContext(StoreContext)
 
 
   return (
@@ -43,31 +38,50 @@ export default function Sidebar({ setMobileOpen }) {
         </Typography>
       </Grid> */}
 
-      {!isProject &&
-        <Grid item>
+
+      {/* hiçbirşey seçilmemişken - sidebar menüsü görünümü*/}
+      {!isProject && !persons &&
+        <Grid item onClick={(() => setMobileOpen(false))}>
           <List
             component="nav"
             aria-labelledby="nested-list-subheader"
-          // subheader={
-          //   <ListSubheader component="div" id="nested-list-subheader">
-          //     Başlık
-          //   </ListSubheader>
-          // }
+            // subheader={
+            //   <ListSubheader component="div" id="nested-list-subheader">
+            //     Başlık
+            //   </ListSubheader>
+            // }
           >
 
-            <ListItemButton onClick={handleProject}>
+            <ListItemButton onClick={() => router.push('/projects')}>
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Projeler" />
             </ListItemButton>
 
+            <ListItemButton onClick={() => router.push('/persons')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Kişiler" />
+            </ListItemButton>
+
+            <ListItemButton onClick={() => router.push('/companies')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Firmalar" />
+            </ListItemButton>
+
           </List>
         </Grid>
       }
 
+
+
+      {/* poz seçiminde - sidebar menüsü görünümü*/}
       {isProject &&
-        <Grid item>
+        <Grid item onClick={(() => setMobileOpen(false))}>
           <List>
 
             <ListItemButton onClick={() => router.push('/dashboard')}>
