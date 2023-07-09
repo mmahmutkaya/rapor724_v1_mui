@@ -5,9 +5,11 @@ export default function deleteLastSpace(sTr) {
     return sTr
   }
 
-  do {
-    sTr = sTr.slice(0, -1)
-  } while (sTr.endsWith(" "));
+  if (sTr.endsWith(" ")) {
+    do {
+      sTr = sTr.slice(0, -1)
+    } while (sTr.endsWith(" "));
+  }
 
   return sTr
 }

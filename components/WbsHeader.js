@@ -21,24 +21,6 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
 
   const [hataMesaj, setHataMesaj] = useState()
 
-
-  async function handleWbsCreate() {
-
-    try {
-      // const project = await RealmApp.currentUser.callFunction("createWbs", {
-      //   projectId: isProject._id,
-      //   upWbs: selectedWbs?.code ? selectedWbs?.code : 0,
-      // });
-      // setIsProject(project)
-      // setShowDialogInfo(true)
-    } catch (err) {
-      console.log(err)
-      let hataMesaj_ = "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
-      setHataMesaj(hataMesaj_)
-      // setShowDialogError(true)
-    }
-  }
-
   async function handleWbsDelete() {
     try {
       const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });

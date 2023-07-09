@@ -6,7 +6,7 @@ import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
 import FormPozCreate from '../../components/FormPozCreate'
 import PozHeader from '../../components/PozHeader'
-
+// import { usePozlarData } from '../../hooks/usePozlarData'
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
@@ -18,12 +18,8 @@ import { DataGrid } from '@mui/x-data-grid';
 
 import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
-import { BSON } from "realm-web"
-
-
 
 export default function P_Pozlar() {
-
 
   const { isProject } = useContext(StoreContext)
   const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
@@ -37,7 +33,7 @@ export default function P_Pozlar() {
   const RealmApp = useApp();
 
   const { isLoading, isError, data: pozlar, error, refetch: refetch_pozlar } = useQuery({
-    queryKey: ['groups'],
+    queryKey: ['pozlar'],
     // queryFn: deneme,
     queryFn: async () => await RealmApp.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id })),
     refetchOnWindowFocus: false,
@@ -45,19 +41,9 @@ export default function P_Pozlar() {
     // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
   })
 
-
   if (isLoading) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
-
-  // console.log(isProject.wbs[0]._id.toString())
-  // console.log(pozlar[0]._wbsId.toString())
-  // console.log(isProject.wbs[0]._id.toString() == pozlar[0]._wbsId.toString())
-  // console.log(pozlar.filter(item => item._wbsId == isProject.wbs[0]))
-
-  const handleWbsClick = (project) => {
-    console.log("handleWbsClick")
-  }
 
   let wbsCode
   let wbsName
@@ -65,6 +51,7 @@ export default function P_Pozlar() {
   const handleOnCellClick = (params) => {
     console.log(params);
   };
+
 
   return (
     <Grid container direction="column" spacing={1}>
@@ -75,7 +62,7 @@ export default function P_Pozlar() {
 
       {show == "FormPozCreate" &&
         <Grid item >
-          <FormPozCreate isProject={isProject} setShow={setShow} refetch_pozlar={refetch_pozlar}/>
+          <FormPozCreate isProject={isProject} setShow={setShow} refetch_pozlar={refetch_pozlar} />
         </Grid>
       }
 
@@ -159,7 +146,7 @@ export default function P_Pozlar() {
                         // },
                       }}
                       onCellClick={handleOnCellClick}
-                      onRowClick={(row)=>{console.log(row.id)}}
+                      onRowClick={(row) => { console.log(row.id) }}
                       // pageSizeOptions={[5]}
                       // checkboxSelection
                       disableRowSelectionOnClick

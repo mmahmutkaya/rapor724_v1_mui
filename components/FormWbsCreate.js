@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useApp } from "./useApp.js";
+import deleteLastSpace from '../functions/deleteLastSpace.js';
 
 
 //mui
@@ -13,17 +14,28 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Typography } from '@mui/material';
 
 
 export default function P_FormWbsCreate({ setShow, isProject, setIsProject, selectedWbs, setSelectedWbs }) {
 
-  const [showDialogInfo, setShowDialogInfo] = useState(false)
+  // proje ve _id si yoksa wbs oluşturma formunu göstermenin bir anlamı yok, hata vererek durduruyoruz
+  if (!isProject?._id) {
+    throw new Error({ error: "Wbs oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz." })
+  }
+
+  const [showDialogSuccess, setShowDialogSuccess] = useState(false)
   const [showDialogError, setShowDialogError] = useState(false)
   const [hataMesaj, setHataMesaj] = useState("")
 
+  const [error_for_wbsName, setError_for_wbsName] = useState(false)
+  const [errorText_for_wbsName, setErrorText_for_wbsName] = useState()
+
   const RealmApp = useApp();
+
+  let isError = false
 
   async function handleSubmit(event) {
 
@@ -32,27 +44,66 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
     try {
 
       const data = new FormData(event.currentTarget);
-      const wbsName = data.get('wbsName')
+      const wbsName = deleteLastSpace(data.get('wbsName'))
 
-      // console.log({ projectId: isProject._id })
-      // console.log({ upWbs: selectedWbs?.code ? selectedWbs?.code : null })
-      // console.log({ upWbs: selectedWbs?.name ? selectedWbs?.name : "En üst seviyeye" })
-      // console.log(wbsName)
+      // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır
+      if (!wbsName) {
+        setError_for_wbsName(true);
+        setErrorText_for_wbsName("Zorunlu")
+        isError = true
+        console.log("wbsName", "yok -- error")
+      }
 
-      const project = await RealmApp.currentUser.callFunction("createWbs", {
+      // ilgili hatalar yukarıda ilgili form alanlarına yazılmış olmalı
+      // db ye sorgu yapılıp db meşgul edilmesin diye burada durduruyoruz
+      // frontendden geçse bile db den errorObject kontrolü yapılıyor aşağıda
+      if (isError) {
+        console.log("return (fonksiyon durdurma) satırı bu mesaj satırının altında idi")
+        return
+      }
+
+
+
+      // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
+      // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
+      // sorgudan wbs datası güncellenmiş proje dödürüp, gelen data ile aşağıda react useContext deki projeyi update ediyoruz
+      const resultProje = await RealmApp.currentUser.callFunction("createWbs", {
         projectId: isProject._id,
         upWbs: selectedWbs?.code ? selectedWbs?.code : "0",
-        newWbsName:wbsName
+        newWbsName: wbsName
       });
+
+
+      // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
+      // yukarıda da frontend kontrolü yapılmıştı
+      if (resultProje.errorObj) {
+
+        console.log("errorObj", errorObj)
+
+        if (result.errorObj.newWbsName) {
+          setError_for_wbsName(true);
+          setErrorText_for_wbsName(result.errorObj.newWbsName)
+          isError = true
+        }
+
+        return
+      }
+
+
+      // _id yoksa istediğimiz proje verisi değil demekki, hata ile durduruyoruz
+      if (!resultProje._id) {
+        throw new Error
+      }
+
+
+      // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
+      // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
+      setIsProject(resultProje)
+
+      // sorgu işleminden önce seçilen wbs varsa, temizliyoruz, en büyük gerekçe seçilen wbs silinmiş olabilir, onunla işlem db de hata verir
       setSelectedWbs(null)
-      setIsProject(project)
-      setShowDialogInfo(true)
 
-
-      // await RealmApp.currentUser.callFunction("createProject", { name: wbsName });
-
-      // refetch_projects()
-      // setShowDialogInfo(true)
+      setShowDialogSuccess("Wbs kaydı başarı ile gerçekleşti")
 
     } catch (err) {
 
@@ -60,8 +111,12 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
       // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
       let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
+      // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
-        hataMesaj_ = "Sistemde kayıtlı"
+        setError_for_wbsName(true);
+        setErrorText_for_wbsName("Aynı seviyede, aynı isimde wbs olamaz")
+        console.log("Aynı seviyede, aynı isimde wbs olamaz")
+        return
       }
 
       if (hataMesaj_.includes("çok kısa")) {
@@ -76,7 +131,56 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
   }
 
 
-  if (showDialogInfo) {
+  if (showDialogError) {
+
+    let hataMesaj
+
+    if (typeof showDialogError !== "string") {
+      hataMesaj = "Tespit edilemeyen hata, sorun devam ederse lütfen Rapor7/24 ile irtibata geçiniz."
+    } else {
+      hataMesaj = showDialogError
+    }
+
+
+    return (
+      <div>
+
+        <Dialog
+          PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
+          open={true}
+          onClose={() => setShow("PozMain")} >
+          {/* <DialogTitle>Subscribe</DialogTitle> */}
+          <Box onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
+            <DialogContent>
+
+              <Grid container spacing={1}>
+
+                <Grid item>
+                  <ErrorIcon variant="contained" color="error" pr={3} />
+                </Grid>
+
+                <Grid item>
+                  <DialogContentText>
+                    {hataMesaj}
+                  </DialogContentText>
+                </Grid>
+
+              </Grid>
+
+            </DialogContent>
+
+          </Box>
+        </Dialog>
+
+      </div >
+    );
+  }
+
+
+
+  if (showDialogSuccess) {
+
     return (
       <div>
 
@@ -96,7 +200,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
                 <Grid item>
                   <DialogContentText>
-                    Wbs kaydı başarı ile gerçekleşti
+                    {showDialogSuccess}
                   </DialogContentText>
                 </Grid>
               </Grid>
@@ -155,8 +259,8 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
                 id="wbsName"
                 name="wbsName"
                 // autoFocus
-                error={showDialogError}
-                helperText={showDialogError ? hataMesaj : ""}
+                error={error_for_wbsName}
+                helperText={error_for_wbsName ? errorText_for_wbsName : ""}
                 // margin="dense"
                 label="Wbs Adı"
                 type="text"

@@ -39,13 +39,13 @@ export default function P_FormLbsCreate({ setShow, isProject, setIsProject, sele
       // console.log({ upLbs: selectedLbs?.name ? selectedLbs?.name : "En üst seviyeye" })
       // console.log(lbsName)
 
-      const project = await RealmApp.currentUser.callFunction("createLbs", {
+      const result = await RealmApp.currentUser.callFunction("createLbs", {
         projectId: isProject._id,
         upLbs: selectedLbs?.code ? selectedLbs?.code : "0",
         newLbsName:lbsName
       });
       setSelectedLbs(null)
-      setIsProject(project)
+      setIsProject(result)
       setShowDialogInfo(true)
 
 

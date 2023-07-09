@@ -1,5 +1,7 @@
-import { useState } from 'react';
 import { useApp } from "./useApp.js";
+import { useState, useContext } from 'react';
+import { StoreContext } from '../components/store'
+import { useQueryClient } from '@tanstack/react-query'
 import deleteLastSpace from '../functions/deleteLastSpace.js';
 
 
@@ -8,7 +10,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Dialog from '@mui/material/Dialog';
@@ -23,11 +24,15 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Typography } from '@mui/material';
 
 
-export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
+// export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
+export default function FormPozCreate({ setShow, refetch_pozlar }) {
+
 
   // console.log("FormPozCreate-->isProject",isProject)
 
-  const [showSuccessDialog, setShowSuccessDialog] = useState(false)
+  const { isProject, setIsProject } = useContext(StoreContext)
+
+  const [showDialogSuccess, setShowDialogSuccess] = useState(false)
   const [showErrorDialog, setShowErrorDialog] = useState(null)
 
   const [error_for_wbs, setError_for_wbs] = useState(false)
@@ -42,6 +47,7 @@ export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
   const [wbsId_for_Poz, setWbsId_for_Poz] = useState("");
 
   const RealmApp = useApp();
+  const queryClient = useQueryClient()
 
   let isError = false
 
@@ -55,20 +61,19 @@ export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
 
       //verileri tanımlama
       const data = new FormData(event.currentTarget);
-      // const newPozName = deleteLastSpace(data.get('newPozName'))
-      // const newPozUnit = deleteLastSpace(data.get('newPozUnit'))
+      const newPozName = deleteLastSpace(data.get('newPozName'))
+      const newPozUnit = deleteLastSpace(data.get('newPozUnit'))
 
-      const newPozName = data.get('newPozName')
-      const newPozUnit = data.get('newPozUnit')
 
-      //verilerin kontrolü
-
+      // useContext de proje ve _id si yoksa poz oluşturma formunu göstermenin bir anlamı yok, hata vererek durduruyoruz
       if (!isProject?._id) {
-        throw new Error({ error: "ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz." })
+        throw new Error({ error: "Poz oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz." })
       } else {
         console.log("isProject?._id", isProject?._id)
       }
 
+
+      // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır
       if (!wbsId_for_Poz) {
         setError_for_wbs(true);
         setErrorText_for_wbs("Zorunlu")
@@ -101,16 +106,16 @@ export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
         console.log("newPozUnit", newPozUnit)
       }
 
-      //verilerin kontrolü
+      // ilgili hatalar yukarıda ilgili form alanlarına yazılmış olmalı
+      // db ye sorgu yapılıp db meşgul edilmesin diye burada durduruyoruz
+      // frontendden geçse bile db den errorObject kontrolü yapılıyor aşağıda
       if (isError) {
-        console.log("hata var alt satırda duracak")
-        // return
-        console.log("hata var durdu 2")
+        console.log("return (fonksiyon durdurma) satırı bu mesaj satırının altında idi")
         // throw new Error({ error: "db ye gönderilmek istenen verilerde hata var" })
+        return
       }
 
-
-      const result = await RealmApp?.currentUser?.callFunction("createPoz", {
+      const result_newPoz = await RealmApp?.currentUser?.callFunction("createPoz", {
         projectId: isProject._id,
         wbsId: wbsId_for_Poz,
         newPozName,
@@ -118,7 +123,8 @@ export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
       });
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
-      if (result.errorObj) {
+      // yukarıda da frontend kontrolü yapılmıştı
+      if (result_newPoz.errorObj) {
 
         console.log("errorObj", errorObj)
 
@@ -143,13 +149,20 @@ export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
         return
       }
 
-      // mongodan gelen dönüşte insertedId yoksa hata verir
-      if (!result.insertedId) {
-        throw new Error({ errorForConsole:"Actually request is completed without error but result came from Mongo without insertedId property as Mongo default", errorForUser: "Beklenmedik şekilde kayıt yapılamadı, Rapor7/24 ile irtibata geçiniz.." })
+      // _id yoksa istediğimiz proje verisi değil demekki, hata ile durduruyoruz
+      if (!result_newPoz._id) {
+        throw new Error
       }
 
-      refetch_pozlar()
-      setShowSuccessDialog(true)
+      // refetch_pozlar()
+      // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
+      // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
+      console.log("result_newPoz", result_newPoz)
+      const prevPozlar = queryClient.getQueryData(["pozlar"])
+      const newPozlar = ([...prevPozlar, result_newPoz])
+      queryClient.setQueryData(["pozlar"], newPozlar)
+
+      setShowDialogSuccess("Poz kaydı başarı ile gerçekleşti")
 
     } catch (err) {
 
@@ -224,7 +237,7 @@ export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
   }
 
 
-  if (showSuccessDialog) {
+  if (showDialogSuccess) {
     return (
       <div>
 
@@ -244,7 +257,7 @@ export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
 
                 <Grid item>
                   <DialogContentText>
-                    Poz kaydı başarı ile gerçekleşti
+                    {showDialogSuccess}
                   </DialogContentText>
                 </Grid>
               </Grid>
