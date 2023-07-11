@@ -1,6 +1,15 @@
 import { useState } from 'react';
 // import useApp from "./../components/useApp"
 
+
+import Dialog from '@mui/material/Dialog';
+// import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+// import DialogTitle from '@mui/material/DialogTitle';
+// import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+
 import React from 'react'
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -17,9 +26,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedWbs, isProject, setIsProject }) {
 
-  // const RealmApp = useApp();
+  const [showDialogError, setShowDialogError] = useState(false)
 
-  const [hataMesaj, setHataMesaj] = useState()
 
   async function handleWbsDelete() {
     try {
@@ -30,24 +38,74 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
     } catch (err) {
 
       console.log(err)
-      // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
       let hataMesaj_ = err.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
-      if (hataMesaj_.includes("duplicate key error")) {
-        hataMesaj_ = "Sistemde kayıtlı"
+      if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
+        hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
       }
 
-      if (hataMesaj_.includes("çok kısa")) {
-        hataMesaj_ = "Çok kısa"
-      }
-
-      // setHataMesaj(hataMesaj_)
-      // setShowDialogError(true)
+      setShowDialogError(hataMesaj_)
     }
   }
 
+
+
+
+
+  function DialogError() {
+    if (showDialogError) {
+
+      let hataMesaj
+
+      if (typeof showDialogError !== "string") {
+        hataMesaj = "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
+      } else {
+        hataMesaj = showDialogError
+      }
+
+
+      return (
+        <div>
+
+          <Dialog
+            PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
+            open={true}
+            onClose={() => setShowDialogError(false)} >
+            {/* <DialogTitle>Subscribe</DialogTitle> */}
+
+            <DialogContent>
+
+              <Grid container spacing={1}>
+
+                <Grid item>
+                  <ErrorIcon variant="contained" color="error" pr={3} />
+                </Grid>
+
+                <Grid item>
+                  <DialogContentText>
+                    {hataMesaj}
+                  </DialogContentText>
+                </Grid>
+
+              </Grid>
+
+            </DialogContent>
+
+          </Dialog>
+
+        </div >
+      );
+    }
+  }
+
+
+
   return (
     <Paper>
+
+      {showDialogError &&
+        <DialogError />
+      }
 
       <Grid
         container

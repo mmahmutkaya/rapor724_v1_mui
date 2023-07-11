@@ -28,7 +28,6 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
   const [showDialogSuccess, setShowDialogSuccess] = useState(false)
   const [showDialogError, setShowDialogError] = useState(false)
-  const [hataMesaj, setHataMesaj] = useState("")
 
   const [error_for_wbsName, setError_for_wbsName] = useState(false)
   const [errorText_for_wbsName, setErrorText_for_wbsName] = useState()
@@ -108,8 +107,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
     } catch (err) {
 
       console.log(err)
-      // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
-      let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+      let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
 
       // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
@@ -119,12 +117,15 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
         return
       }
 
+      if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
+        hataMesaj_ = "Çok kısa"
+      }
+
       if (hataMesaj_.includes("çok kısa")) {
         hataMesaj_ = "Çok kısa"
       }
 
-      setHataMesaj(hataMesaj_)
-      setShowDialogError(true)
+      setShowDialogError(hataMesaj_)
 
     }
 
@@ -136,7 +137,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
     let hataMesaj
 
     if (typeof showDialogError !== "string") {
-      hataMesaj = "Tespit edilemeyen hata, sorun devam ederse lütfen Rapor7/24 ile irtibata geçiniz."
+      hataMesaj = "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
     } else {
       hataMesaj = showDialogError
     }
@@ -150,27 +151,24 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
           open={true}
           onClose={() => setShow("PozMain")} >
           {/* <DialogTitle>Subscribe</DialogTitle> */}
-          <Box onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <DialogContent>
 
-            <DialogContent>
+            <Grid container spacing={1}>
 
-              <Grid container spacing={1}>
-
-                <Grid item>
-                  <ErrorIcon variant="contained" color="error" pr={3} />
-                </Grid>
-
-                <Grid item>
-                  <DialogContentText>
-                    {hataMesaj}
-                  </DialogContentText>
-                </Grid>
-
+              <Grid item>
+                <ErrorIcon variant="contained" color="error" pr={3} />
               </Grid>
 
-            </DialogContent>
+              <Grid item>
+                <DialogContentText>
+                  {hataMesaj}
+                </DialogContentText>
+              </Grid>
 
-          </Box>
+            </Grid>
+
+          </DialogContent>
+
         </Dialog>
 
       </div >

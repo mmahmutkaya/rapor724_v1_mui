@@ -62,7 +62,7 @@ export default function P_Pozlar() {
 
       {show == "FormPozCreate" &&
         <Grid item >
-          <FormPozCreate isProject={isProject} setShow={setShow} refetch_pozlar={refetch_pozlar} />
+          <FormPozCreate isProject={isProject} setShow={setShow} />
         </Grid>
       }
 

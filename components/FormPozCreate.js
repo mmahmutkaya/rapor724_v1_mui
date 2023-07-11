@@ -25,7 +25,7 @@ import { Typography } from '@mui/material';
 
 
 // export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
-export default function FormPozCreate({ setShow, refetch_pozlar }) {
+export default function FormPozCreate({ setShow }) {
 
 
   // console.log("FormPozCreate-->isProject",isProject)
