@@ -2,14 +2,6 @@ import { useState } from 'react';
 // import useApp from "./../components/useApp"
 
 
-import Dialog from '@mui/material/Dialog';
-// import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-// import DialogTitle from '@mui/material/DialogTitle';
-// import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-
 import React from 'react'
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -22,11 +14,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { DialogWindow } from './general/DialogWindow';
 
 
 export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedWbs, isProject, setIsProject }) {
 
-  const [showDialogError, setShowDialogError] = useState(false)
+  const [showDialog, setShowDialog] = useState(false)
+  const [dialogCase, setDialogCase] = useState("")
 
 
   async function handleWbsDelete() {
@@ -34,7 +28,6 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
       const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
       setIsProject(project)
       setSelectedWbs(null)
-      // setShowDialogInfo(true)
     } catch (err) {
 
       console.log(err)
@@ -44,57 +37,8 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
         hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
       }
 
-      setShowDialogError(hataMesaj_)
-    }
-  }
-
-
-
-
-
-  function DialogError() {
-    if (showDialogError) {
-
-      let hataMesaj
-
-      if (typeof showDialogError !== "string") {
-        hataMesaj = "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
-      } else {
-        hataMesaj = showDialogError
-      }
-
-
-      return (
-        <div>
-
-          <Dialog
-            PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
-            open={true}
-            onClose={() => setShowDialogError(false)} >
-            {/* <DialogTitle>Subscribe</DialogTitle> */}
-
-            <DialogContent>
-
-              <Grid container spacing={1}>
-
-                <Grid item>
-                  <ErrorIcon variant="contained" color="error" pr={3} />
-                </Grid>
-
-                <Grid item>
-                  <DialogContentText>
-                    {hataMesaj}
-                  </DialogContentText>
-                </Grid>
-
-              </Grid>
-
-            </DialogContent>
-
-          </Dialog>
-
-        </div >
-      );
+      setDialogCase("error")
+      setShowDialog(hataMesaj_)
     }
   }
 
@@ -103,8 +47,8 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
   return (
     <Paper>
 
-      {showDialogError &&
-        <DialogError />
+      {showDialog &&
+        <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
       }
 
       <Grid
@@ -115,12 +59,6 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
         {/* başlık sol */}
         <Grid item>
           <Typography
-            // parent içinde position: "relative" gerekli
-            // sx={{
-            //   position: "absolute",
-            //   top: "50%",
-            //   transform: "translate(0, -50%)",
-            // }}
             variant="h5"
             fontWeight="bold"
           >

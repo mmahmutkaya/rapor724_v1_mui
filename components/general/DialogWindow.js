@@ -1,4 +1,7 @@
 
+import React from 'react'
+import Grid from '@mui/material/Grid';
+
 
 
 import Dialog from '@mui/material/Dialog';
@@ -12,26 +15,29 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 
 
-// switch (expression) {
-//   case x:
-//     // code block
-//     break;
-//   case y:
-//     // code block
-//     break;
-//   default:
-//   // code block
-// }
 
 
+export const DialogWindow = ({ dialogCase, showDialog, setShowDialog }) => {
 
-
-export const Dialog = (situation, message, setShowDialog) => {
-
-  if (typeof message !== "string") {
+  let hataMesaj
+  if (typeof showDialog !== "string") {
     hataMesaj = "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
   } else {
-    hataMesaj = message
+    hataMesaj = showDialog
+  }
+
+
+  const DilogIcon = () => {
+    switch (dialogCase) {
+      case "error":
+        return <ErrorIcon variant="contained" color="error" pr={3} />
+        break;
+      case "mahmut":
+        console.log("mahmut")
+        break;
+      default:
+        <ErrorIcon variant="contained" color="error" pr={3} />
+    }
   }
 
 
@@ -49,12 +55,12 @@ export const Dialog = (situation, message, setShowDialog) => {
           <Grid container spacing={1}>
 
             <Grid item>
-              <ErrorIcon variant="contained" color="error" pr={3} />
+              <DilogIcon />
             </Grid>
 
             <Grid item>
               <DialogContentText>
-                {message}
+                {hataMesaj}
               </DialogContentText>
             </Grid>
 
