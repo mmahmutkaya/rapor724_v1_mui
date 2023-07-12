@@ -105,11 +105,12 @@ export default function P_Wbs() {
                       {wbs.code + " - " + wbs.name}
                     </Box>
 
-                    {/* <Box sx={{ backgroundColor: bgColor(level).bg }}></Box> */}
-                    <Box sx={{ backgroundColor: "yellow" }}>
-                      <Box sx={{ width:"0,5rem", height:"0.5rem", backgroundColor: "red" }}>
+                    <Box>
 
+                      <Box sx={{ backgroundColor: bgColor(level).bg, color: bgColor(level).co, display: "flex", alignItems: "center", justifyContent: "center", width: "2rem", height: "2rem" }}>
+                        <Box sx={{ width: "0.5rem", height: "0.5rem", backgroundColor: "blue" }}></Box>
                       </Box>
+
                     </Box>
 
                   </Box>
@@ -124,7 +125,7 @@ export default function P_Wbs() {
         </Stack>
       }
 
-    </Grid>
+    </Grid >
 
   )
 
@@ -164,3 +165,15 @@ function bgColor(index) {
   }
 }
 
+
+
+{/* <Grid
+  container
+  direction="column"
+  justifyContent="center"
+  alignItems="center"
+>
+  <Grid item sx={{ position: "relative" }}>
+    <Box sx={{ position: "absolute", top: "50%", left: "50%", width: "0,5rem", height: "0,5rem", border: "2px solid", backgroundColor: "red" }}>a</Box>
+  </Grid>
+</Grid> */}
