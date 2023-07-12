@@ -80,7 +80,7 @@ export default function P_Wbs() {
                 level = wbs.code.split(".").length - 1
 
                 return (
-                  <Box key={wbs._id} display="grid" sx={{ gridTemplateColumns: level == 0 ? "auto 2rem" : "repeat(" + level + ", 1rem) auto 2rem" }}>
+                  <Box key={wbs._id} sx={{ display: "grid", gridTemplateColumns: level == 0 ? "1fr" : "repeat(" + level + ", 1rem) 1fr" }}>
 
                     <Items count={level} />
 
@@ -102,16 +102,26 @@ export default function P_Wbs() {
                         })
                       }}
                     >
-                      {wbs.code + " - " + wbs.name}
+
+                      <Grid container sx={{ display: "grid", gridTemplateColumns: "1fr 2rem" }}>
+
+                        <Grid item>
+                          <Box>  {wbs.code + " - " + wbs.name}</Box>
+                        </Grid>
+
+                        <Grid item onClick={() => console.log(wbs._id.toString())} >
+                          <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                            <Grid item >
+                              <Box sx={{ width: "0.5rem", height: "0.5rem", backgroundColor: "white" }}></Box>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+
+                      </Grid>
+
                     </Box>
 
-                    <Box>
 
-                      <Box sx={{ backgroundColor: bgColor(level).bg, color: bgColor(level).co, display: "flex", alignItems: "center", justifyContent: "center", width: "2rem", height: "2rem" }}>
-                        <Box sx={{ width: "0.5rem", height: "0.5rem", backgroundColor: "blue" }}></Box>
-                      </Box>
-
-                    </Box>
 
                   </Box>
                 )
