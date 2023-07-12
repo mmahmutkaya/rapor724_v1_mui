@@ -31,84 +31,7 @@ export default function P_Wbs() {
   const router = useRouter();
   !isProject ? router.push('/projects') : null
 
-  const [hataMesaj, setHataMesaj] = useState()
   const [show, setShow] = useState("WbsMain")
-
-  // const router = useRouter();
-
-
-  // const { isLoading, isError, data: projectWbs, error, refetch: refetch_projectWbs } = useQuery({
-  //   queryKey: ['projectWbs'],
-  //   // queryFn: deneme,
-  //   queryFn: async () => await RealmApp.currentUser.callFunction("getProjectWbs", { projectId: isProject._id }),
-  //   refetchOnWindowFocus: false,
-  //   enabled: !!RealmApp?.currentUser,
-  //   // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
-  // })
-
-  // if (isLoading) return "Loading...";
-
-  // if (error) return "An error has occurred: " + error.message;
-
-
-  async function handleSelectWbs2(wbs) {
-
-    try {
-
-
-      // await RealmApp.currentUser.callFunction("createWbs", { name: projectName });
-
-      // refetch_projects()
-      // setShowDialogInfo(true)
-      // console.log("merhaba22")
-
-
-      // const credentials = Realm.Credentials.emailPassword(email, password);
-      // const user = await RealmApp.logIn(credentials);
-      // if (user) {
-      //   window.location.reload(false);
-      //   return console.log("Giriş işlemi başarılı")
-      // }
-      // return console.log("Giriş işlemi başarısız, iletişime geçiniz.")
-
-    } catch (err) {
-
-      console.log(err)
-      // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
-      let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
-
-      if (hataMesaj_.includes("duplicate key error")) {
-        hataMesaj_ = "Sistemde kayıtlı"
-      }
-
-      if (hataMesaj_.includes("çok kısa")) {
-        hataMesaj_ = "Çok kısa"
-      }
-
-      setHataMesaj(hataMesaj_)
-      // setShowDialogError(true)
-
-      return console.log(hataMesaj)
-
-    }
-
-  }
-  // const RealmApp = useApp();
-  // const { isLoading, isError, data: projectNames, error, refetch: refetch_projects } = useQuery({
-  //   queryKey: ['projects'],
-  //   // queryFn: deneme,
-  //   queryFn: async () => await RealmApp.currentUser.callFunction("getProjectNames"),
-  //   refetchOnWindowFocus: false,
-  //   enabled: !!RealmApp?.currentUser,
-  //   // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
-  // })
-
-
-  // const [show, setShow] = useState("ProjectMain")
-
-  // if (isLoading) return "Loading...";
-
-  // if (error) return "An error has occurred: " + error.message;
 
 
   const handleSelectWbs = (wbs) => {
@@ -157,20 +80,19 @@ export default function P_Wbs() {
                 level = wbs.code.split(".").length - 1
 
                 return (
-                  <Box key={wbs._id} display="grid" sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}>
+                  <Box key={wbs._id} display="grid" sx={{ gridTemplateColumns: level == 0 ? "auto 2rem" : "repeat(" + level + ", 1rem) auto 2rem" }}>
 
                     <Items count={level} />
 
                     <Box
                       onClick={() => handleSelectWbs(wbs)}
                       sx={{
-                        // backgroundColor: (selectedWbs?.code == wbs.code ? "red" : bgColor(level).bg),
                         backgroundColor: bgColor(level).bg,
+                        color: bgColor(level).co,
                         ...(selectedWbs?.code == wbs.code && {
+                          color: "yellow",
                           backgroundColor: "red",
                         }),
-                        color: selectedWbs?.code == wbs.code ? "yellow" : bgColor(level).co,
-                        // color: bgColor(level).co,
                         cursor: "pointer",
                         ...(selectedWbs?.code !== wbs.code && {
                           "&:hover": {
@@ -181,6 +103,13 @@ export default function P_Wbs() {
                       }}
                     >
                       {wbs.code + " - " + wbs.name}
+                    </Box>
+
+                    {/* <Box sx={{ backgroundColor: bgColor(level).bg }}></Box> */}
+                    <Box sx={{ backgroundColor: "yellow" }}>
+                      <Box sx={{ width:"0,5rem", height:"0.5rem", backgroundColor: "red" }}>
+
+                      </Box>
                     </Box>
 
                   </Box>

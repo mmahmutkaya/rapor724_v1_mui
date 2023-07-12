@@ -17,3 +17,27 @@
 // console.log("id2",id2);
 
 
+// çalışıyor
+// sx={{ gridTemplateColumns: "repeat(" + level + ", 1rem) 1fr" }}
+
+{/* <Box
+  onClick={() => handleSelectWbs(wbs)}
+  sx={{
+    backgroundColor: (selectedWbs?.code == wbs.code ? "red" : bgColor(level).bg),
+    backgroundColor: bgColor(level).bg,
+    color: bgColor(level).co,
+    ...(selectedWbs?.code == wbs.code && {
+      color: "yellow",
+      backgroundColor: "red",
+    }),
+    cursor: "pointer",
+    ...(selectedWbs?.code !== wbs.code && {
+      "&:hover": {
+        backgroundColor: "blue",
+        color: "white"
+      }
+    })
+  }}
+>
+  {wbs.code + " - " + wbs.name}
+</Box> */}
