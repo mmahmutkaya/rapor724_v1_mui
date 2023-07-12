@@ -129,8 +129,7 @@ export default function P_Pozlar() {
 
 
                 {/* poz tabloları */}
-                <Grid item marginBottom={5}>
-                  {/* <Box sx={{ height: 400, width: '100%' }}> */}
+                {/* <Grid item marginBottom={5}>
                   <Box >
                     <DataGrid
                       rows={pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString())}
@@ -152,7 +151,34 @@ export default function P_Pozlar() {
                       disableRowSelectionOnClick
                     />
                   </Box>
-                </Grid>
+                </Grid> */}
+
+                {pozlar.find(item => item._wbsId.toString() == wbsOne._id.toString()) && 
+                  <Grid item marginBottom={5}>
+                    <Box >
+                      <DataGrid
+                        rows={pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString())}
+                        columns={columns}
+                        getRowId={(row) => row._id.toString()}
+                        hideFooter={true}
+                        density="compact"
+                        initialState={{
+                          // pagination: {
+                          //   paginationModel: {
+                          //     pageSize: 5,
+                          //   },
+                          // },
+                        }}
+                        onCellClick={handleOnCellClick}
+                        onRowClick={(row) => { console.log(row.id) }}
+                        // pageSizeOptions={[5]}
+                        // checkboxSelection
+                        disableRowSelectionOnClick
+                      />
+                    </Box>
+                  </Grid>
+                }
+
 
               </Grid>
 

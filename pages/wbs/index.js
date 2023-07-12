@@ -30,7 +30,7 @@ export default function P_Wbs() {
   // const [selectedWbs, setSelectedWbs] = useState()
   const router = useRouter();
   !isProject ? router.push('/projects') : null
-  
+
   const [hataMesaj, setHataMesaj] = useState()
   const [show, setShow] = useState("WbsMain")
 
@@ -164,15 +164,20 @@ export default function P_Wbs() {
                     <Box
                       onClick={() => handleSelectWbs(wbs)}
                       sx={{
-                        backgroundColor: selectedWbs?.code == wbs.code ? "red" : bgColor(level).bg,
-                        // backgroundColor: bgColor(level).bg,
+                        // backgroundColor: (selectedWbs?.code == wbs.code ? "red" : bgColor(level).bg),
+                        backgroundColor: bgColor(level).bg,
+                        ...(selectedWbs?.code == wbs.code && {
+                          backgroundColor: "red",
+                        }),
                         color: selectedWbs?.code == wbs.code ? "yellow" : bgColor(level).co,
                         // color: bgColor(level).co,
-                        cursor:"pointer",
-                        "&:hover": {
-                          backgroundColor: "blue",
-                          color:"white"
-                        }
+                        cursor: "pointer",
+                        ...(selectedWbs?.code !== wbs.code && {
+                          "&:hover": {
+                            backgroundColor: "blue",
+                            color: "white"
+                          }
+                        })
                       }}
                     >
                       {wbs.code + " - " + wbs.name}

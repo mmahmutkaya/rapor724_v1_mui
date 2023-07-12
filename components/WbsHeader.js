@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ClearOutlined from '@mui/icons-material/ClearOutlined';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -21,6 +22,11 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
+
+
+  async function handleWbsUnclicked() {
+    setSelectedWbs()
+  }
 
 
   async function handleWbsDelete() {
@@ -71,6 +77,11 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
         {/* başlık sağ */}
         <Grid item>
           <Grid container spacing={1}>
+            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <IconButton onClick={() => handleWbsUnclicked()} aria-label="delete">
+                <ClearOutlined variant="contained" color="error" />
+              </IconButton>
+            </Grid>
             <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
               <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
                 <KeyboardArrowUpIcon />
