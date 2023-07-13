@@ -22,7 +22,6 @@ import TurnedInIcon from '@mui/icons-material/TurnedIn';
 export default function P_Pozlar() {
 
   const { isProject } = useContext(StoreContext)
-  const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
 
   const [show, setShow] = useState("PozMain")
 

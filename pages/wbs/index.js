@@ -90,8 +90,8 @@ export default function P_Wbs() {
                         backgroundColor: bgColor(level).bg,
                         color: bgColor(level).co,
                         ...(selectedWbs?.code == wbs.code && {
-                          color: "yellow",
-                          backgroundColor: "red",
+                          color: "red",
+                          // backgroundColor: "red",
                         }),
                         cursor: "pointer",
                         ...(selectedWbs?.code !== wbs.code && {

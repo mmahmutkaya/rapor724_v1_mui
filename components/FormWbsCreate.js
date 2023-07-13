@@ -102,6 +102,8 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
       // sorgu işleminden önce seçilen wbs varsa, temizliyoruz, en büyük gerekçe seçilen wbs silinmiş olabilir, onunla işlem db de hata verir
       setSelectedWbs(null)
 
+      setShow("ProjectMain")
+
       // setShowDialogSuccess("Wbs kaydı başarı ile gerçekleşti")
 
     } catch (err) {
