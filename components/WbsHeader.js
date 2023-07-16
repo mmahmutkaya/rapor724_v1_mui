@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { StoreContext } from '../components/store'
+
 // import useApp from "./../components/useApp"
 
 
@@ -18,10 +20,49 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { DialogWindow } from './general/DialogWindow';
 
 
-export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedWbs, isProject, setIsProject }) {
+export default function WbsHeader({ RealmApp, setShow }) {
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
+
+
+  const { isProject, setIsProject } = useContext(StoreContext)
+  const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
+
+  async function handleWbsOpenForPoz() {
+
+    try {
+
+      if (!selectedWbs) {
+        console.log("alttaki satırda --return-- oldu")
+        return
+      }
+
+      let text = selectedWbs.code + "."
+
+      if (isProject.wbs.find(item => item.code.includes(text))) {
+        throw new Error({ error: "Tam olmadı - Alt seviyesinde başka grup olan kırılıma direk poz ekleyemezsiniz, eklemek istediğiniz poza uygun bir yeni alt başlık tanımlayınız eklemek istediğiniz pozu bu başlık içine ekleyiniz, başlık olan --Poz Grubuna--  " })
+      }
+
+      const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
+      setIsProject(project)
+      setSelectedWbs(null)
+
+    } catch (err) {
+
+      console.log(err)
+      let hataMesaj_ = err.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+
+      if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
+        hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
+      }
+
+      setDialogCase("error")
+      setShowDialog(hataMesaj_)
+    }
+
+  }
+
 
 
   async function handleWbsUnclicked() {
@@ -80,6 +121,11 @@ export default function WbsHeader({ RealmApp, setShow, selectedWbs, setSelectedW
             <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
               <IconButton onClick={() => handleWbsUnclicked()} aria-label="delete">
                 <ClearOutlined variant="contained" color="error" />
+              </IconButton>
+            </Grid>
+            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <IconButton onClick={() => handleWbsOpenForPoz()} aria-label="delete">
+                <Typography>wbs</Typography>
               </IconButton>
             </Grid>
             <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
