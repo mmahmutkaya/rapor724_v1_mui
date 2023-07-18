@@ -34,18 +34,17 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
   const RealmApp = useApp();
 
-  let isError = false
-
   async function handleSubmit(event) {
 
     event.preventDefault();
+    let isError = false
 
     try {
 
       const data = new FormData(event.currentTarget);
       const wbsName = deleteLastSpace(data.get('wbsName'))
 
-      // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır
+      // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır, aşağıda backend de
       if (!wbsName) {
         setError_for_wbsName(true);
         setErrorText_for_wbsName("Zorunlu")
@@ -79,6 +78,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
         console.log("errorObj", errorObj)
 
+        // başka form alanları olsaydı onlarınkini de ekleyecektik aşağıdaki returnden önce, onlarda da hata uyarılarını görecektik
         if (result.errorObj.newWbsName) {
           setError_for_wbsName(true);
           setErrorText_for_wbsName(result.errorObj.newWbsName)
