@@ -70,9 +70,10 @@ export default function WbsHeader({ RealmApp, setShow }) {
   }
 
 
+
   async function handleWbsDelete() {
     try {
-      const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
+      const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsCode: selectedWbs.code });
       setIsProject(resultProject)
       setSelectedWbs(null)
     } catch (err) {
