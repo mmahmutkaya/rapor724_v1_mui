@@ -18,6 +18,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { DialogWindow } from './general/DialogWindow';
+import { AppBar, Toolbar } from '@mui/material';
 
 
 export default function WbsHeader({ RealmApp, setShow }) {
@@ -93,76 +94,84 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
 
   return (
-    <Paper>
+    <Paper >
 
       {showDialog &&
         <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
       }
 
-      <Grid
-        container
-        justifyContent="space-between"
-        sx={{ padding: "1rem" }}>
+      <AppBar position="static" sx={{ backgroundColor: "white" }}>
+        {/* <Toolbar variant='dense'> */}
 
-        {/* başlık sol */}
-        <Grid item>
-          <Typography
-            variant="h5"
-            fontWeight="bold"
-          >
-            {/* İş Alanları WBS {selectedWbs?.code} */}
-            İş Alanları WBS
-          </Typography>
-        </Grid>
+        <Grid
+          container
+          justifyContent="space-between"
+          sx={{ padding: "1rem" }}
+        >
+
+          {/* başlık sol */}
+          <Grid item  >
+            <Typography
+              sx={{ display: { xs: 'none', sm:"block"} }}
+              color={"black"}
+              variant="h5"
+              fontWeight="bold"
+            >
+              İş Alanları WBS
+            </Typography>
+          </Grid>
 
 
-        {/* başlık sağ */}
-        <Grid item>
-          <Grid container spacing={1}>
-            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
-              <IconButton onClick={() => handleWbsUnclicked()} aria-label="delete">
-                <ClearOutlined variant="contained" color="error" />
-              </IconButton>
-            </Grid>
-            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
-              <IconButton onClick={() => handleWbsOpenForPoz()} aria-label="delete">
-                <Typography>wbs</Typography>
-              </IconButton>
-            </Grid>
-            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
-              <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
-                <KeyboardArrowUpIcon />
-              </IconButton>
-            </Grid>
-            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
-              <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
-                <KeyboardArrowDownIcon />
-              </IconButton>
-            </Grid>
-            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
-              <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
-                <KeyboardArrowLeftIcon />
-              </IconButton>
-            </Grid>
-            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
-              <IconButton onClick={() => setShow("FormWbs")} aria-label="moveRight">
-                <KeyboardArrowRightIcon />
-              </IconButton>
-            </Grid>
-            <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
-              <IconButton onClick={() => handleWbsDelete()} aria-label="delete">
-                <DeleteIcon variant="contained" color="error" />
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <IconButton onClick={() => setShow("FormWbsCreate")} aria-label="addWbs">
-                <AddCircleOutlineIcon variant="contained" color="success" />
-              </IconButton>
+          {/* başlık sağ */}
+          <Grid item>
+            <Grid container spacing={0.5}>
+              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+                <IconButton onClick={() => handleWbsUnclicked()} aria-label="delete">
+                  <ClearOutlined variant="contained" color="error" />
+                </IconButton>
+              </Grid>
+              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+                <IconButton onClick={() => handleWbsOpenForPoz()} aria-label="delete">
+                  <Typography>wbs</Typography>
+                </IconButton>
+              </Grid>
+              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+                <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+                  <KeyboardArrowUpIcon />
+                </IconButton>
+              </Grid>
+              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+                <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+                  <KeyboardArrowDownIcon />
+                </IconButton>
+              </Grid>
+              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+                <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+                  <KeyboardArrowLeftIcon />
+                </IconButton>
+              </Grid>
+              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+                <IconButton onClick={() => setShow("FormWbs")} aria-label="moveRight">
+                  <KeyboardArrowRightIcon />
+                </IconButton>
+              </Grid>
+              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+                <IconButton onClick={() => handleWbsDelete()} aria-label="delete">
+                  <DeleteIcon variant="contained" color="error" />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <IconButton onClick={() => setShow("FormWbsCreate")} aria-label="addWbs">
+                  <AddCircleOutlineIcon variant="contained" color="success" />
+                </IconButton>
+              </Grid>
             </Grid>
           </Grid>
+
         </Grid>
 
-      </Grid>
+        {/* </Toolbar> */}
+      </AppBar>
 
     </Paper>
   )

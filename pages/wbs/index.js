@@ -44,7 +44,7 @@ export default function P_Wbs() {
   return (
     <Grid container direction="column" spacing={1}>
 
-      <Grid item >
+      <Grid item  >
         <WbsHeader RealmApp={RealmApp} setShow={setShow} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} setIsProject={setIsProject} />
       </Grid>
 
@@ -73,7 +73,21 @@ export default function P_Wbs() {
           <Box display="grid">
 
             {
-              isProject.wbs.sort((a, b) => a.code.toLowerCase() >= b.code.toLowerCase() ? 1 : -1).map((wbs) => {
+              isProject.wbs.sort(function (a, b) {
+                var nums1 = a.code.split(".");
+                var nums2 = b.code.split(".");
+
+                for (var i = 0; i < nums1.length; i++) {
+                  if (nums2[i]) { // assuming 5..2 is invalid
+                    if (nums1[i] !== nums2[i]) {
+                      return nums1[i] - nums2[i];
+                    } // else continue
+                  } else {
+                    return 1; // no second number in b
+                  }
+                }
+                return -1; // was missing case b.len > a.len
+              }).map((wbs) => {
 
                 // wbs = { _id, code, name }
 
