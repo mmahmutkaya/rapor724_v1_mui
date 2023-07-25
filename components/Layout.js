@@ -10,7 +10,7 @@ import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -40,10 +40,14 @@ import SignIn from "./SignIn.js"
 
 
 
-
-const drawerWidth = 240;
+// useContext kullandım
+// const drawerWidth = 240;
 
 export default function Layout({ window, children }) {
+
+  const { drawerWidth, topBarHeight } = useContext(StoreContext)
+
+  console.log("topBarHeight",topBarHeight)
 
   const { isProject, setIsProject } = useContext(StoreContext)
   let header = "Rapor 7/24"
@@ -276,92 +280,112 @@ export default function Layout({ window, children }) {
             backgroundColor: "#3D4849",
             width: { md: `calc(100% - ${drawerWidth}px)` },
             ml: { md: `${drawerWidth}px` },
+            height:topBarHeight
           }}
         >
-          <Toolbar variant='dense'>
+          {/* <Toolbar variant='dense'> */}
 
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { md: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
+          <Grid container sx={{alignItems:"center"}}>
 
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleToProject}
-              sx={{ mr: 2, display: !isProject ? "none" : null }}
-            >
-              <UndoIcon />
-            </IconButton>
-
-            <Typography
-              onClick={() => isProject ? null : router.push('/')}
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ cursor: "pointer", display: { xs: 'none', md: 'block' } }}
-            >
-              {header}
-            </Typography>
-
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
-
-            <Box sx={{ flexGrow: 1 }} />
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
+            <Grid item>
               <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
                 color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { md: 'none' } }}
               >
-                <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
-                </Badge>
+                <MenuIcon />
               </IconButton>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Box>
-            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MoreIcon />
-              </IconButton>
-            </Box>
+            </Grid>
 
-          </Toolbar>
+            <Grid item>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleToProject}
+                sx={{ mr: 2, display: !isProject ? "none" : null }}
+              >
+                <UndoIcon />
+              </IconButton>
+            </Grid>
+
+
+            <Grid item>
+              <Typography
+                onClick={() => isProject ? null : router.push('/')}
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ cursor: "pointer", display: { xs: 'none', md: 'block' } }}
+              >
+                {header}
+              </Typography>
+            </Grid>
+
+            <Grid item>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </Search>
+            </Grid>
+
+            <Grid item>
+              <Box sx={{ flexGrow: 1 }} />
+            </Grid>
+
+            <Grid item>
+              {/* toolbardaki bildirim ikonları */}
+              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                  <Badge badgeContent={4} color="error">
+                    <MailIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={17} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              </Box>
+
+              <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                <IconButton
+                  size="large"
+                  aria-label="show more"
+                  aria-controls={mobileMenuId}
+                  aria-haspopup="true"
+                  onClick={handleMobileMenuOpen}
+                  color="inherit"
+                >
+                  <MoreIcon />
+                </IconButton>
+              </Box>
+            </Grid>
+
+          </Grid>
+          {/* </Toolbar> */}
         </AppBar>
 
         {renderMobileMenu}
@@ -374,7 +398,7 @@ export default function Layout({ window, children }) {
       <Box
         component="nav"
         sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
-        aria-label="mailbox folders"
+        aria-label="menu"
       >
 
         {/* drawer */}

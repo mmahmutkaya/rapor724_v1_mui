@@ -8,7 +8,8 @@ export default ({ children }) => {
 
   // const [sharing, setSharing] = useState([])
   // const [help, setHelp] = useState([])
-  // const [pairing, setPairing] = useState(teamMembersNames)
+  const topBarHeight = "3rem"
+  const drawerWidth = 240
   const [selectedWbs, setSelectedWbs] = useState()
   const [isProject, setIsProject] = useState()
   const [isContext] = useState(true)
@@ -17,6 +18,8 @@ export default ({ children }) => {
     // sharing, setSharing,
     // help, setHelp,
     // pairing, setPairing,
+    topBarHeight,
+    drawerWidth,
     selectedWbs, setSelectedWbs,
     isProject, setIsProject,
     isContext

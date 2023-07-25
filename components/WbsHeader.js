@@ -23,6 +23,8 @@ import { AppBar, Toolbar } from '@mui/material';
 
 export default function WbsHeader({ RealmApp, setShow }) {
 
+  const { drawerWidth } = useContext(StoreContext)
+
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
 
@@ -73,6 +75,13 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
 
   async function handleWbsDelete() {
+
+    // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
+    if (!selectedWbs) {
+      console.log("alttaki satırda --return-- oldu")
+      return
+    }
+
     try {
       const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsCode: selectedWbs.code });
       setIsProject(resultProject)
@@ -94,25 +103,30 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
 
   return (
-    <Paper >
+    <Paper>
 
       {showDialog &&
         <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
       }
 
-      <AppBar position="static" sx={{ backgroundColor: "white" }}>
+
+      {/* ToolBar koymamızın sebebi --> AppBAr kadar aşağı margin olması için dolgu */}
+      {/* <Toolbar variant='dense' sx={{ backgroundColor: "red" }}></Toolbar> */}
+
+
+      <AppBar position="fixed" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` }, mt: "3rem", ml: { md: `${drawerWidth}px` }, backgroundColor: "white" }}>
         {/* <Toolbar variant='dense'> */}
 
         <Grid
           container
           justifyContent="space-between"
-          sx={{ padding: "1rem" }}
+          sx={{ padding: "0.5rem" }}
         >
 
           {/* başlık sol */}
           <Grid item  >
             <Typography
-              sx={{ display: { xs: 'none', sm:"block"} }}
+              sx={{ display: { xs: 'none', sm: "block" } }}
               color={"black"}
               variant="h5"
               fontWeight="bold"
@@ -125,39 +139,39 @@ export default function WbsHeader({ RealmApp, setShow }) {
           {/* başlık sağ */}
           <Grid item>
             <Grid container spacing={0.5}>
-              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <Grid item >
                 <IconButton onClick={() => handleWbsUnclicked()} aria-label="delete">
-                  <ClearOutlined variant="contained" color="error" />
+                  <ClearOutlined variant="contained" sx={{ color: !selectedWbs ? "lightgray" : "red" }} />
                 </IconButton>
               </Grid>
-              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <Grid item >
                 <IconButton onClick={() => handleWbsOpenForPoz()} aria-label="delete">
-                  <Typography>wbs</Typography>
+                  <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >wbs</Typography>
                 </IconButton>
               </Grid>
-              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <Grid item >
                 <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
-                  <KeyboardArrowUpIcon />
+                  <KeyboardArrowUpIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
-              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <Grid item >
                 <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
-                  <KeyboardArrowDownIcon />
+                  <KeyboardArrowDownIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
-              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <Grid item>
                 <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
-                  <KeyboardArrowLeftIcon />
+                  <KeyboardArrowLeftIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
-              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <Grid item >
                 <IconButton onClick={() => setShow("FormWbs")} aria-label="moveRight">
-                  <KeyboardArrowRightIcon />
+                  <KeyboardArrowRightIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
-              <Grid item sx={{ display: !selectedWbs ? "none" : null }}>
+              <Grid item >
                 <IconButton onClick={() => handleWbsDelete()} aria-label="delete">
-                  <DeleteIcon variant="contained" color="error" />
+                  <DeleteIcon variant="contained" color="error" sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
               <Grid item>

@@ -42,7 +42,7 @@ export default function P_Wbs() {
 
 
   return (
-    <Grid container direction="column" spacing={1}>
+    <Grid container direction="column" spacing={0}>
 
       <Grid item  >
         <WbsHeader RealmApp={RealmApp} setShow={setShow} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} setIsProject={setIsProject} />
@@ -60,7 +60,7 @@ export default function P_Wbs() {
 
 
       {!isProject?.wbs?.length &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
+        <Stack sx={{ mt:"3rem", width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
           </Alert>
@@ -68,7 +68,7 @@ export default function P_Wbs() {
       }
 
       {isProject?.wbs?.length &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
+        <Stack sx={{ mt:"3rem", width: '100%', padding: "1rem" }} spacing={0}>
 
           <Box display="grid">
 
