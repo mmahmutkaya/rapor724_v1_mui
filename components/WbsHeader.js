@@ -23,11 +23,10 @@ import { AppBar, Toolbar } from '@mui/material';
 
 export default function WbsHeader({ RealmApp, setShow }) {
 
-  const { drawerWidth } = useContext(StoreContext)
+  const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
-
 
   const { isProject, setIsProject } = useContext(StoreContext)
   const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
@@ -110,17 +109,11 @@ export default function WbsHeader({ RealmApp, setShow }) {
       }
 
 
-      {/* ToolBar koymamızın sebebi --> AppBAr kadar aşağı margin olması için dolgu */}
-      {/* <Toolbar variant='dense' sx={{ backgroundColor: "red" }}></Toolbar> */}
-
-
-      <AppBar position="fixed" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` }, mt: "3rem", ml: { md: `${drawerWidth}px` }, backgroundColor: "white" }}>
-        {/* <Toolbar variant='dense'> */}
-
+      <AppBar position="fixed" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` }, mt:topBarHeight, ml: { md: `${drawerWidth}px` }, backgroundColor: "white" }}>
         <Grid
           container
           justifyContent="space-between"
-          sx={{ padding: "0.5rem" }}
+          sx={{ alignItems:"center", padding: "0rem 0.5rem", height: subHeaderHeight }}
         >
 
           {/* başlık sol */}
@@ -184,7 +177,6 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
         </Grid>
 
-        {/* </Toolbar> */}
       </AppBar>
 
     </Paper>

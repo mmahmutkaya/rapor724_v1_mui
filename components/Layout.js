@@ -47,8 +47,6 @@ export default function Layout({ window, children }) {
 
   const { drawerWidth, topBarHeight } = useContext(StoreContext)
 
-  console.log("topBarHeight",topBarHeight)
-
   const { isProject, setIsProject } = useContext(StoreContext)
   let header = "Rapor 7/24"
   isProject?.name ? header = isProject?.name : null
@@ -279,13 +277,11 @@ export default function Layout({ window, children }) {
           sx={{
             backgroundColor: "#3D4849",
             width: { md: `calc(100% - ${drawerWidth}px)` },
-            ml: { md: `${drawerWidth}px` },
-            height:topBarHeight
+            ml: { md: `${drawerWidth}px` }
           }}
         >
-          {/* <Toolbar variant='dense'> */}
 
-          <Grid container sx={{alignItems:"center"}}>
+          <Grid container sx={{ alignItems: "center", padding: "0rem 1rem", height: topBarHeight }}>
 
             <Grid item>
               <IconButton
@@ -436,10 +432,11 @@ export default function Layout({ window, children }) {
       {/* index page -- main */}
       <Box
         component="main"
-        sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{ flexGrow: 1, width: { md: `calc(100% - ${drawerWidth}px)` }, mt: topBarHeight }}
       >
         {/* ToolBar koymamızın sebebi --> AppBAr kadar aşağı margin olması için dolgu */}
-        <Toolbar variant='dense'></Toolbar>
+        {/* Yukarıda mt:topBarHeight ile çözdük */}
+        {/* <Toolbar variant='dense'></Toolbar> */}
         {children}
       </Box>
 

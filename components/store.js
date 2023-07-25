@@ -8,7 +8,8 @@ export default ({ children }) => {
 
   // const [sharing, setSharing] = useState([])
   // const [help, setHelp] = useState([])
-  const topBarHeight = "3rem"
+  const topBarHeight = "3.5rem"
+  const subHeaderHeight = "3.5rem"
   const drawerWidth = 240
   const [selectedWbs, setSelectedWbs] = useState()
   const [isProject, setIsProject] = useState()
@@ -18,6 +19,7 @@ export default ({ children }) => {
     // sharing, setSharing,
     // help, setHelp,
     // pairing, setPairing,
+    subHeaderHeight,
     topBarHeight,
     drawerWidth,
     selectedWbs, setSelectedWbs,

@@ -24,6 +24,8 @@ import FolderIcon from '@mui/icons-material/Folder';
 
 export default function P_Wbs() {
 
+  const { subHeaderHeight } = useContext(StoreContext)
+
   const RealmApp = useApp();
   const { isProject, setIsProject } = useContext(StoreContext)
   const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
@@ -42,7 +44,7 @@ export default function P_Wbs() {
 
 
   return (
-    <Grid container direction="column" spacing={0}>
+    <Grid container direction="column" spacing={0} sx={{ mt: subHeaderHeight }}>
 
       <Grid item  >
         <WbsHeader RealmApp={RealmApp} setShow={setShow} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} setIsProject={setIsProject} />
@@ -60,7 +62,7 @@ export default function P_Wbs() {
 
 
       {!isProject?.wbs?.length &&
-        <Stack sx={{ mt:"3rem", width: '100%', padding: "1rem" }} spacing={2}>
+        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
           </Alert>
@@ -68,7 +70,7 @@ export default function P_Wbs() {
       }
 
       {isProject?.wbs?.length &&
-        <Stack sx={{ mt:"3rem", width: '100%', padding: "1rem" }} spacing={0}>
+        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           <Box display="grid">
 
