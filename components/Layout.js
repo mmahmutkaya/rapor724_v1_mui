@@ -320,7 +320,7 @@ export default function Layout({ window, children }) {
               </Typography>
             </Grid>
 
-            <Grid item>
+            {/* <Grid item>
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
@@ -330,11 +330,11 @@ export default function Layout({ window, children }) {
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </Search>
-            </Grid>
+            </Grid> */}
 
-            <Grid item>
+            {/* <Grid item>
               <Box sx={{ flexGrow: 1 }} />
-            </Grid>
+            </Grid> */}
 
             <Grid item>
               {/* toolbardaki bildirim ikonları */}

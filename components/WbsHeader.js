@@ -113,7 +113,7 @@ export default function WbsHeader({ RealmApp, setShow }) {
         <Grid
           container
           justifyContent="space-between"
-          sx={{ alignItems:"center", padding: "0rem 0.5rem", height: subHeaderHeight }}
+          sx={{ alignItems:"center", padding: "0rem 0.5rem", height: subHeaderHeight, overflow:"auto" }}
         >
 
           {/* başlık sol */}
