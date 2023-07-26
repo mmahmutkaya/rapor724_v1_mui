@@ -62,7 +62,7 @@ export default function P_Wbs() {
 
 
       {!isProject?.wbs?.length &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
+        <Stack sx={{ width: '100%', padding: "0.5rem" }} spacing={2}>
           <Alert severity="info">
             "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
           </Alert>
@@ -70,7 +70,7 @@ export default function P_Wbs() {
       }
 
       {isProject?.wbs?.length &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
+        <Stack sx={{ width: '100%', padding: "0.5rem" }} spacing={0}>
 
           <Box display="grid">
 
@@ -105,9 +105,10 @@ export default function P_Wbs() {
                       sx={{
                         backgroundColor: bgColor(level).bg,
                         color: bgColor(level).co,
+                        pl: "0.1rem",
                         ...(selectedWbs?.code == wbs.code && {
                           // color: "red",
-                          backgroundColor: "red",
+                          backgroundColor: "red"
                         }),
                         cursor: "pointer",
                         ...(selectedWbs?.code !== wbs.code && {
@@ -124,6 +125,8 @@ export default function P_Wbs() {
                         <Grid item>
                           <Box>  {wbs.code + " - " + wbs.name}</Box>
                         </Grid>
+
+                        
 
                         <Grid item onClick={() => console.log(wbs._id.toString())} >
                           <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>

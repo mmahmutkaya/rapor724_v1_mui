@@ -41,10 +41,13 @@ export default function WbsHeader({ RealmApp, setShow }) {
       }
 
       let text = selectedWbs.code + "."
+      console.log("çalıştı")
 
-      if (isProject.wbs.find(item => item.code.includes(text))) {
-        throw new Error({ error: "Tam olmadı - Alt seviyesinde başka grup olan kırılıma direk poz ekleyemezsiniz, eklemek istediğiniz poza uygun bir yeni alt başlık tanımlayınız eklemek istediğiniz pozu bu başlık içine ekleyiniz, başlık olan --Poz Grubuna--  " })
+      if (isProject.wbs.find(item => item.code.indexOf(text) === 0)) {
+        throw new Error({ error: "isimli başlığın alt başlığı mevcut, direk poz eklemek için uygun değil" })
       }
+
+      console.log("çalıştı2")
 
       const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
       setIsProject(project)
@@ -52,14 +55,15 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
     } catch (err) {
 
-      console.log(err)
+      console.log("err", err)
       let hataMesaj_ = err.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
-      if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
-        hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
-      }
+      // if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
+      //   hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
+      // }
 
       setDialogCase("error")
+      console.log("...err", {...err})
       setShowDialog(hataMesaj_)
     }
 
@@ -68,6 +72,13 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
 
   async function handleWbsUnclicked() {
+
+    // aslında gerek yok zaten wbs yok ama olsun
+    if (!selectedWbs) {
+      console.log("alttaki satırda --return-- oldu")
+      return
+    }
+
     setSelectedWbs()
   }
 
@@ -109,11 +120,11 @@ export default function WbsHeader({ RealmApp, setShow }) {
       }
 
 
-      <AppBar position="fixed" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` }, mt:topBarHeight, ml: { md: `${drawerWidth}px` }, backgroundColor: "white" }}>
+      <AppBar position="fixed" sx={{ width: { md: `calc(100% - ${drawerWidth}px)` }, mt: topBarHeight, ml: { md: `${drawerWidth}px` }, backgroundColor: "white" }}>
         <Grid
           container
           justifyContent="space-between"
-          sx={{ alignItems:"center", padding: "0rem 0.5rem", height: subHeaderHeight, overflow:"auto" }}
+          sx={{ alignItems: "center", padding: "0rem 0.5rem", height: subHeaderHeight, overflow: "auto" }}
         >
 
           {/* başlık sol */}
