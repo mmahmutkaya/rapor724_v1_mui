@@ -23,7 +23,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
   // proje ve _id si yoksa wbs oluşturma formunu göstermenin bir anlamı yok, hata vererek durduruyoruz
   if (!isProject?._id) {
-    throw new Error({ error: "Wbs oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz." })
+    throw new Error("Wbs oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
   const [showDialogSuccess, setShowDialogSuccess] = useState(false)

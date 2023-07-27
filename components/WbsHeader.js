@@ -7,7 +7,6 @@ import { StoreContext } from '../components/store'
 import React from 'react'
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,7 +17,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { DialogWindow } from './general/DialogWindow';
-import { AppBar, Toolbar } from '@mui/material';
+import { AppBar } from '@mui/material';
 
 
 export default function WbsHeader({ RealmApp, setShow }) {
@@ -30,6 +29,7 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
   const { isProject, setIsProject } = useContext(StoreContext)
   const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
+
 
   async function handleWbsOpenForPoz() {
 
@@ -44,26 +44,25 @@ export default function WbsHeader({ RealmApp, setShow }) {
       console.log("çalıştı")
 
       if (isProject.wbs.find(item => item.code.indexOf(text) === 0)) {
-        throw new Error({ error: "isimli başlığın alt başlığı mevcut, direk poz eklemek için uygun değil" })
+        throw new Error("\"" + selectedWbs.name + "\" isimli başlığın bir veya daha fazla alt başlığı mevcut, bu sebeple direk poz eklemeye açık hale getirilemez, mevcut alt başlıklar uygun değilse, yeni bir alt başlık oluşturup, o başlığı poz eklemeye açabilirsiniz.")
       }
 
       console.log("çalıştı2")
 
-      const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
-      setIsProject(project)
-      setSelectedWbs(null)
+      // const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
+      // setIsProject(project)
+      // setSelectedWbs(null)
 
     } catch (err) {
 
-      console.log("err", err)
-      let hataMesaj_ = err.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+      console.log("err", err.message)
+      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
       // if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
       //   hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
       // }
 
       setDialogCase("error")
-      console.log("...err", {...err})
       setShowDialog(hataMesaj_)
     }
 

@@ -67,7 +67,7 @@ export default function FormPozCreate({ setShow }) {
 
       // useContext de proje ve _id si yoksa poz oluşturma formunu göstermenin bir anlamı yok, hata vererek durduruyoruz
       if (!isProject?._id) {
-        throw new Error({ error: "Poz oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz." })
+        throw new Error("Poz oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
       } else {
         console.log("isProject?._id", isProject?._id)
       }
@@ -111,7 +111,7 @@ export default function FormPozCreate({ setShow }) {
       // frontendden geçse bile db den errorObject kontrolü yapılıyor aşağıda
       if (isError) {
         console.log("return (fonksiyon durdurma) satırı bu mesaj satırının altında idi")
-        // throw new Error({ error: "db ye gönderilmek istenen verilerde hata var" })
+        // throw new Error("db ye gönderilmek istenen verilerde hata var")
         return
       }
 
@@ -168,7 +168,7 @@ export default function FormPozCreate({ setShow }) {
 
       console.log(err)
       // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
-      let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
       // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
