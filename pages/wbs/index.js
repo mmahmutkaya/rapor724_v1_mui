@@ -42,6 +42,8 @@ export default function P_Wbs() {
 
   let level
 
+  console.log(isProject?.wbs)
+
 
   return (
     <Grid container direction="column" spacing={0} sx={{ mt: subHeaderHeight }}>
@@ -122,19 +124,21 @@ export default function P_Wbs() {
 
                       <Grid container sx={{ display: "grid", gridTemplateColumns: "1fr 2rem" }}>
 
+                        {/* wbs isminin yazılı olduğu kısım */}
                         <Grid item>
                           <Box>  {wbs.code + " - " + wbs.name}</Box>
                         </Grid>
 
-                        
-
-                        <Grid item onClick={() => console.log(wbs._id.toString())} >
-                          <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                            <Grid item >
-                              <Box sx={{ width: "0.5rem", height: "0.5rem", backgroundColor: "white" }}></Box>
+                        {/* poza açık wbs lerin işaretli olduğu kısım */}
+                        {wbs.openForPoz &&
+                          <Grid item onClick={() => console.log(wbs._id.toString())} >
+                            <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                              <Grid item >
+                                <Box sx={{ width: "0.5rem", height: "0.5rem", backgroundColor: "white" }}></Box>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
+                        }
 
                       </Grid>
 

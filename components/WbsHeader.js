@@ -40,27 +40,24 @@ export default function WbsHeader({ RealmApp, setShow }) {
         return
       }
 
+      // bu kontrol backend de ayrıca yapılıyor
       let text = selectedWbs.code + "."
-      console.log("çalıştı")
-
       if (isProject.wbs.find(item => item.code.indexOf(text) === 0)) {
         throw new Error("\"" + selectedWbs.name + "\" isimli başlığın bir veya daha fazla alt başlığı mevcut, bu sebeple direk poz eklemeye açık hale getirilemez, mevcut alt başlıklar uygun değilse, yeni bir alt başlık oluşturup, o başlığı poz eklemeye açabilirsiniz.")
       }
 
-      console.log("çalıştı2")
-
-      // const project = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbs: selectedWbs.code });
-      // setIsProject(project)
-      // setSelectedWbs(null)
+      const resultProject = await RealmApp.currentUser.callFunction("openWbsForPoz", { projectId: isProject._id, wbsId:selectedWbs._id });
+      setIsProject(resultProject)
+      setSelectedWbs(null)
 
     } catch (err) {
 
       console.log("err", err.message)
       let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
-      // if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
-      //   hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
-      // }
+      if (hataMesaj_.includes("bir veya daha fazla alt başlığı mevcut")) {
+        hataMesaj_ = "\"" + selectedWbs.name + "\" isimli başlığın bir veya daha fazla alt başlığı mevcut, bu sebeple direk poz eklemeye açık hale getirilemez, mevcut alt başlıklar uygun değilse, yeni bir alt başlık oluşturup, o başlığı poz eklemeye açabilirsiniz."
+      }
 
       setDialogCase("error")
       setShowDialog(hataMesaj_)
