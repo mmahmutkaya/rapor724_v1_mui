@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from "./useApp.js";
 import deleteLastSpace from '../functions/deleteLastSpace.js';
+import { DialogWindow } from '../components/general/DialogWindow';
 
 
 //mui
@@ -26,6 +27,9 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
     throw new Error("Wbs oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
+  const [showDialog, setShowDialog] = useState(false)
+  const [dialogCase, setDialogCase] = useState("")
+
   const [showDialogSuccess, setShowDialogSuccess] = useState(false)
   const [showDialogError, setShowDialogError] = useState(false)
 
@@ -36,11 +40,14 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
   async function handleSubmit(event) {
 
+
+
     event.preventDefault();
     let isError = false
 
     try {
 
+      throw new Error("Wbs oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
       const data = new FormData(event.currentTarget);
       const wbsName = deleteLastSpace(data.get('wbsName'))
 
@@ -127,94 +134,106 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
         hataMesaj_ = "Çok kısa"
       }
 
-      setShowDialogError(hataMesaj_)
+
+      setDialogCase("error")
+      setShowDialog(hataMesaj_)
 
     }
 
   }
 
 
-  if (showDialogError) {
+  // if (showDialogError) {
 
-    let hataMesaj
+  //   let hataMesaj
 
-    if (typeof showDialogError !== "string") {
-      hataMesaj = "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
-    } else {
-      hataMesaj = showDialogError
-    }
+  //   if (typeof showDialogError !== "string") {
+  //     hataMesaj = "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
+  //   } else {
+  //     hataMesaj = showDialogError
+  //   }
 
 
-    return (
-      <div>
+  //   return (
+  //     <div>
 
-        <Dialog
-          PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
-          open={true}
-          onClose={() => setShow("PozMain")} >
-          {/* <DialogTitle>Subscribe</DialogTitle> */}
-          <DialogContent>
-
-            <Grid container spacing={1}>
-
-              <Grid item>
-                <ErrorIcon variant="contained" color="error" pr={3} />
-              </Grid>
-
-              <Grid item>
-                <DialogContentText>
-                  {hataMesaj}
-                </DialogContentText>
-              </Grid>
-
-            </Grid>
-
-          </DialogContent>
-
-        </Dialog>
-
-      </div >
-    );
-  }
+  //       {showDialog &&
+  //         <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
+  //       }
 
 
 
-  if (showDialogSuccess) {
+  //       <Dialog
+  //         PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
+  //         open={true}
+  //         onClose={() => setShow("PozMain")} >
+  //         {/* <DialogTitle>Subscribe</DialogTitle> */}
+  //         <DialogContent>
 
-    return (
-      <div>
+  //           <Grid container spacing={1}>
 
-        <Dialog
-          PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
-          open={true}
-          onClose={() => setShow("ProjectMain")} >
-          {/* <DialogTitle>Subscribe</DialogTitle> */}
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+  //             <Grid item>
+  //               <ErrorIcon variant="contained" color="error" pr={3} />
+  //             </Grid>
 
-            <DialogContent>
-              <Grid container spacing={1}>
+  //             <Grid item>
+  //               <DialogContentText>
+  //                 {hataMesaj}
+  //               </DialogContentText>
+  //             </Grid>
 
-                <Grid item>
-                  <CheckCircleIcon variant="contained" color="success" pr={3} />
-                </Grid>
+  //           </Grid>
 
-                <Grid item>
-                  <DialogContentText>
-                    {showDialogSuccess}
-                  </DialogContentText>
-                </Grid>
-              </Grid>
-            </DialogContent>
+  //         </DialogContent>
 
-          </Box>
-        </Dialog>
-      </div >
-    );
-  }
+  //       </Dialog>
+
+  //     </div >
+  //   );
+  // }
+
+
+
+  // if (showDialogSuccess) {
+
+  //   return (
+  //     <div>
+
+  //       <Dialog
+  //         PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
+  //         open={true}
+  //         onClose={() => setShow("ProjectMain")} >
+  //         {/* <DialogTitle>Subscribe</DialogTitle> */}
+  //         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
+  //           <DialogContent>
+  //             <Grid container spacing={1}>
+
+  //               <Grid item>
+  //                 <CheckCircleIcon variant="contained" color="success" pr={3} />
+  //               </Grid>
+
+  //               <Grid item>
+  //                 <DialogContentText>
+  //                   {showDialogSuccess}
+  //                 </DialogContentText>
+  //               </Grid>
+  //             </Grid>
+  //           </DialogContent>
+
+  //         </Box>
+  //       </Dialog>
+  //     </div >
+  //   );
+  // }
 
 
   return (
     <div>
+
+      {showDialog &&
+        <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
+      }
 
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}

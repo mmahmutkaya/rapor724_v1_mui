@@ -55,6 +55,7 @@ export default function P_Pozlar() {
   return (
     <Grid container direction="column" spacing={1}>
 
+
       <Grid item >
         <PozHeader setShow={setShow} />
       </Grid>
@@ -77,7 +78,7 @@ export default function P_Pozlar() {
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           {
-            isProject.wbs.map(wbsOne => (
+            isProject.wbs.filter(item => item.openForPoz === true).map(wbsOne => (
 
               <Grid
                 key={wbsOne._id}
@@ -152,7 +153,7 @@ export default function P_Pozlar() {
                   </Box>
                 </Grid> */}
 
-                {pozlar.find(item => item._wbsId.toString() == wbsOne._id.toString()) && 
+                {pozlar.find(item => item._wbsId.toString() == wbsOne._id.toString()) &&
                   <Grid item marginBottom={5}>
                     <Box >
                       <DataGrid

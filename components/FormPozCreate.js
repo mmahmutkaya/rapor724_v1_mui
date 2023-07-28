@@ -178,6 +178,8 @@ export default function FormPozCreate({ setShow }) {
         return
       }
 
+
+
       setShowErrorDialog(hataMesaj_)
 
     }
@@ -280,6 +282,9 @@ export default function FormPozCreate({ setShow }) {
 
   return (
     <div>
+
+
+    
 
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}
