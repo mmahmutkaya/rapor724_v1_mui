@@ -9,15 +9,16 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 // import DialogTitle from '@mui/material/DialogTitle';
-// import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
-import ErrorIcon from '@mui/icons-material/Error';
-
-
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import WarningIcon from '@mui/icons-material/Warning';
+import InfoIcon from '@mui/icons-material/Info';
 
 
+export const DialogWindow = ({ dialogCase, showDialog, setShowDialog, setAfterToDo, afterToDoData }) => {
 
-export const DialogWindow = ({ dialogCase, showDialog, setShowDialog }) => {
+  console.log("setShowDialog", setShowDialog)
+  console.log("setShow", setShow)
+  console.log("afterData", afterData)
 
   let hataMesaj
   if (typeof showDialog !== "string") {
@@ -30,14 +31,17 @@ export const DialogWindow = ({ dialogCase, showDialog, setShowDialog }) => {
   const DilogIcon = () => {
     switch (dialogCase) {
       case "error":
-        return <ErrorIcon variant="contained" color="error" pr={3} />
-        break;
-      case "mahmut":
-        console.log("mahmut")
-        break;
+        return <WarningIcon variant="contained" color="error" pr={3} />
+      case "succsess":
+        return <CheckCircleIcon variant="contained" color="success" pr={3} />
       default:
-        <ErrorIcon variant="contained" color="error" pr={3} />
+        <InfoIcon variant="contained" color="info" pr={3} />
     }
+  }
+
+  const onClose = () => {
+    // afterDo(afterData)
+    setShowDialog(false)
   }
 
 
@@ -47,7 +51,8 @@ export const DialogWindow = ({ dialogCase, showDialog, setShowDialog }) => {
       <Dialog
         PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
         open={true}
-        onClose={() => setShowDialog(false)} >
+        onClose={onClose}
+      >
         {/* <DialogTitle>Subscribe</DialogTitle> */}
 
         <DialogContent>

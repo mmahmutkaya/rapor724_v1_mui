@@ -54,7 +54,7 @@ export default function FormMailTeyit() {
 
     } catch (err) {
 
-      const hataMesaj = err.error
+      const hataMesaj = err.message
 
       if (hataMesaj.includes("expected a string 'password' parameter")) {
         return console.log("Şifre girmelisiniz")
@@ -72,7 +72,7 @@ export default function FormMailTeyit() {
       return console.log("Giriş esnasında hata oluştu, lütfen iletişime geçiniz..")
 
       console.log(err.statusCode);
-      console.log(err.error);
+      console.log(err.message);
     }
 
   }

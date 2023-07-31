@@ -56,7 +56,7 @@ export default function SignIn({ setLoginFormMode }) {
 
     } catch (err) {
 
-      const hataMesaj = err.error
+      const hataMesaj = err.message
 
       if (hataMesaj.includes("expected a string 'password' parameter")) {
         return console.log("Şifre girmelisiniz")

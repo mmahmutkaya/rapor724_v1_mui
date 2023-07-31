@@ -13,10 +13,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-import WarningIcon from '@mui/icons-material/Warning';
 import { Typography } from '@mui/material';
 
 
@@ -38,16 +34,14 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
   const RealmApp = useApp();
 
+  
   async function handleSubmit(event) {
-
-
 
     event.preventDefault();
     let isError = false
 
     try {
 
-      throw new Error("Wbs oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
       const data = new FormData(event.currentTarget);
       const wbsName = deleteLastSpace(data.get('wbsName'))
 
@@ -74,7 +68,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
       // sorgudan wbs datası güncellenmiş proje dödürüp, gelen data ile aşağıda react useContext deki projeyi update ediyoruz
       const resultProje = await RealmApp.currentUser.callFunction("createWbs", {
         projectId: isProject._id,
-        upWbs: selectedWbs?.code ? selectedWbs?.code : "0",
+        upWbsId: selectedWbs ? selectedWbs._id : "0",
         newWbsName: wbsName
       });
 
@@ -111,14 +105,18 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
       setShow("ProjectMain")
 
+      return
+
       // setShowDialogSuccess("Wbs kaydı başarı ile gerçekleşti")
 
     } catch (err) {
 
       console.log(err)
-      let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
+      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
+
 
       // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
+      // form sayfası kapanmadan hata gösterimi
       if (hataMesaj_.includes("duplicate key error")) {
         setError_for_wbsName(true);
         setErrorText_for_wbsName("Aynı seviyede, aynı isimde wbs olamaz")
@@ -126,9 +124,21 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
         return
       }
 
+
       if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
-        hataMesaj_ = "Çok kısa"
+        hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut"
       }
+
+
+      if (hataMesaj_.includes("Poz eklemeye açmış olduğunuz başlık altına alt başlık ekleyemezsiniz")) {
+        setShow("ProjectMain")
+        hataMesaj_ = "Poz eklemeye açmış olduğunuz başlık altına alt başlık ekleyemezsiniz, bu başlık altına hiç poz eklemediyseniz bu başlığı poz eklemeye kapatarak ya da yeni başlık hiyerarşisi oluşturup mevcut pozları yeni başlıklara taşıyarak bu işlemi olarak gerçekleştirebilirsiniz."
+        setDialogCase("error")
+        setShowDialog(hataMesaj_)
+        // console.log("deneme")
+        // return <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} setShow={setShow} afterData={"ProjectMain"}/>
+      }
+
 
       if (hataMesaj_.includes("çok kısa")) {
         hataMesaj_ = "Çok kısa"
@@ -141,91 +151,6 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
     }
 
   }
-
-
-  // if (showDialogError) {
-
-  //   let hataMesaj
-
-  //   if (typeof showDialogError !== "string") {
-  //     hataMesaj = "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
-  //   } else {
-  //     hataMesaj = showDialogError
-  //   }
-
-
-  //   return (
-  //     <div>
-
-  //       {showDialog &&
-  //         <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
-  //       }
-
-
-
-  //       <Dialog
-  //         PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
-  //         open={true}
-  //         onClose={() => setShow("PozMain")} >
-  //         {/* <DialogTitle>Subscribe</DialogTitle> */}
-  //         <DialogContent>
-
-  //           <Grid container spacing={1}>
-
-  //             <Grid item>
-  //               <ErrorIcon variant="contained" color="error" pr={3} />
-  //             </Grid>
-
-  //             <Grid item>
-  //               <DialogContentText>
-  //                 {hataMesaj}
-  //               </DialogContentText>
-  //             </Grid>
-
-  //           </Grid>
-
-  //         </DialogContent>
-
-  //       </Dialog>
-
-  //     </div >
-  //   );
-  // }
-
-
-
-  // if (showDialogSuccess) {
-
-  //   return (
-  //     <div>
-
-  //       <Dialog
-  //         PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
-  //         open={true}
-  //         onClose={() => setShow("ProjectMain")} >
-  //         {/* <DialogTitle>Subscribe</DialogTitle> */}
-  //         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-
-  //           <DialogContent>
-  //             <Grid container spacing={1}>
-
-  //               <Grid item>
-  //                 <CheckCircleIcon variant="contained" color="success" pr={3} />
-  //               </Grid>
-
-  //               <Grid item>
-  //                 <DialogContentText>
-  //                   {showDialogSuccess}
-  //                 </DialogContentText>
-  //               </Grid>
-  //             </Grid>
-  //           </DialogContent>
-
-  //         </Box>
-  //       </Dialog>
-  //     </div >
-  //   );
-  // }
 
 
   return (

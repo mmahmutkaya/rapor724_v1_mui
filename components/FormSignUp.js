@@ -24,7 +24,7 @@ export default function FormSignUp({ setLoginFormMode }) {
 
     } catch (err) {
 
-      const hataMesaj = err.error
+      const hataMesaj = err.message
 
       if (err.statusCode === 409) {
         return console.log("Bu mail sistemde kayıtlı")
@@ -51,7 +51,7 @@ export default function FormSignUp({ setLoginFormMode }) {
       //   return console.log("Şifre en az 6 karakter olmalı")
       // }
       console.log(err.statusCode);
-      console.log(err.error);
+      console.log(err.message);
     }
 
   }

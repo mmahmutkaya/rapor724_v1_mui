@@ -28,11 +28,11 @@ export default function FormLogin({ setLoginFormMode }) {
 
     } catch (err) {
 
-      const hataMesaj = err.error
+      const hataMesaj = err.message
 
       if (hataMesaj.includes("expected a string 'password' parameter")) {
         return console.log("Şifre girmelisiniz")
-      }
+      }0
 
       if (hataMesaj === "invalid username") {
         return console.log("Email girmelisiniz")

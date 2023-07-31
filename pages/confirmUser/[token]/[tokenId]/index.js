@@ -85,7 +85,7 @@ export default function ConfirmUserIndex() {
       //   return console.log("Şifre en az 6 karakter olmalı")
       // }
       console.log(err.statusCode);
-      console.log(err.error);
+      console.log(err.message);
     }
 
   }

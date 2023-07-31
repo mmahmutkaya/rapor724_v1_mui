@@ -42,9 +42,6 @@ export default function P_Wbs() {
 
   let level
 
-  console.log(isProject?.wbs)
-
-
   return (
     <Grid container direction="column" spacing={0} sx={{ mt: subHeaderHeight }}>
 

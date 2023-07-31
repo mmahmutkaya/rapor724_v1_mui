@@ -32,8 +32,8 @@ export default function FormPozCreate({ setShow }) {
 
   const { isProject, setIsProject } = useContext(StoreContext)
 
-  const [showDialogSuccess, setShowDialogSuccess] = useState(false)
-  const [showErrorDialog, setShowErrorDialog] = useState(null)
+  const [showDialog, setShowDialog] = useState(false)
+  const [dialogCase, setDialogCase] = useState("")
 
   const [error_for_wbs, setError_for_wbs] = useState(false)
   const [errorText_for_wbs, setErrorText_for_wbs] = useState()
@@ -162,12 +162,12 @@ export default function FormPozCreate({ setShow }) {
       const newPozlar = ([...prevPozlar, result_newPoz])
       queryClient.setQueryData(["pozlar"], newPozlar)
 
-      setShowDialogSuccess("Poz kaydı başarı ile gerçekleşti")
+      setDialogCase("succsess")
+      setShowDialog("Poz kaydı başarı ile gerçekleşti")
 
     } catch (err) {
 
       console.log(err)
-      // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
       let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
       // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
@@ -178,100 +178,12 @@ export default function FormPozCreate({ setShow }) {
         return
       }
 
-
-
-      setShowErrorDialog(hataMesaj_)
+      setDialogCase("error")
+      setShowDialog(hataMesaj_)
 
     }
 
   }
-
-
-
-
-
-  //gösterim kodları başlangıcı --> koşulllu sayfa gösterimleri
-
-  if (showErrorDialog) {
-
-    let hataMesaj
-
-    if (typeof showErrorDialog !== "string") {
-      hataMesaj = "Tespit edilemeyen hata, sorun devam ederse lütfen Rapor7/24 ile irtibata geçiniz."
-    } else {
-      hataMesaj = showErrorDialog
-    }
-
-
-    return (
-      <div>
-
-        <Dialog
-          PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
-          open={true}
-          onClose={() => setShow("PozMain")} >
-          {/* <DialogTitle>Subscribe</DialogTitle> */}
-          <Box onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-
-            <DialogContent>
-
-              <Grid container spacing={1}>
-
-                <Grid item>
-                  <ErrorIcon variant="contained" color="error" pr={3} />
-                </Grid>
-
-                <Grid item>
-                  <DialogContentText>
-                    {hataMesaj}
-                  </DialogContentText>
-                </Grid>
-
-              </Grid>
-
-            </DialogContent>
-
-          </Box>
-        </Dialog>
-
-      </div >
-    );
-  }
-
-
-  if (showDialogSuccess) {
-    return (
-      <div>
-
-        <Dialog
-          PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
-          open={true}
-          onClose={() => setShow("PozMain")} >
-          {/* <DialogTitle>Subscribe</DialogTitle> */}
-          <Box onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-
-            <DialogContent>
-              <Grid container spacing={1}>
-
-                <Grid item>
-                  <CheckCircleIcon variant="contained" color="success" pr={3} />
-                </Grid>
-
-                <Grid item>
-                  <DialogContentText>
-                    {showDialogSuccess}
-                  </DialogContentText>
-                </Grid>
-              </Grid>
-            </DialogContent>
-
-          </Box>
-        </Dialog>
-
-      </div >
-    );
-  }
-
 
 
   const handleChange_newWbsName = (event) => {
@@ -283,8 +195,9 @@ export default function FormPozCreate({ setShow }) {
   return (
     <div>
 
-
-    
+      {showDialog &&
+        <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
+      }
 
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}

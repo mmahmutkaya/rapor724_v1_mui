@@ -57,8 +57,8 @@ export default function P_FormLbsCreate({ setShow, isProject, setIsProject, sele
     } catch (err) {
 
       console.log(err)
-      // err?.error ? setHataMesaj(err.error) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
-      let hataMesaj_ = err?.error ? err.error : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+      // err?.message ? setHataMesaj(err.message) : setHataMesaj("Beklenmedik bir hata oluştu, lütfen Rapor7/24 ile irtibata geçiniz..")
+      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
       if (hataMesaj_.includes("duplicate key error")) {
         hataMesaj_ = "Sistemde kayıtlı"
