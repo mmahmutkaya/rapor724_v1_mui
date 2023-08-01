@@ -14,11 +14,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import InfoIcon from '@mui/icons-material/Info';
 
 
-export const DialogWindow = ({ dialogCase, showDialog, setShowDialog, setAfterToDo, afterToDoData }) => {
-
-  console.log("setShowDialog", setShowDialog)
-  console.log("setShow", setShow)
-  console.log("afterData", afterData)
+export const DialogWindow = ({ dialogCase, showDialog, setShowDialog, afterDone }) => {
 
   let hataMesaj
   if (typeof showDialog !== "string") {
@@ -40,8 +36,8 @@ export const DialogWindow = ({ dialogCase, showDialog, setShowDialog, setAfterTo
   }
 
   const onClose = () => {
-    // afterDo(afterData)
     setShowDialog(false)
+    afterDone ? afterDone() : null
   }
 
 

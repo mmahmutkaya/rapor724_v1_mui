@@ -95,7 +95,7 @@ export default function Sidebar({ setMobileOpen }) {
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
-              <ListItemText primary="Poz Grupları" />
+              <ListItemText primary="Poz Başlıkları" />
             </ListItemButton>
 
             <ListItemButton onClick={() => router.push('/pozlar')}>

@@ -26,15 +26,13 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
 
-  const [showDialogSuccess, setShowDialogSuccess] = useState(false)
-  const [showDialogError, setShowDialogError] = useState(false)
-
   const [error_for_wbsName, setError_for_wbsName] = useState(false)
   const [errorText_for_wbsName, setErrorText_for_wbsName] = useState()
 
   const RealmApp = useApp();
 
-  
+  const callBack_m = () => setShow()
+
   async function handleSubmit(event) {
 
     event.preventDefault();
@@ -103,7 +101,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
       // sorgu işleminden önce seçilen wbs varsa, temizliyoruz, en büyük gerekçe seçilen wbs silinmiş olabilir, onunla işlem db de hata verir
       setSelectedWbs(null)
 
-      setShow("ProjectMain")
+      setShow()
 
       return
 
@@ -114,6 +112,13 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
       console.log(err)
       let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
 
+      let text1 = "__mesajBaslangic__"
+      let text2 = "__mesajBitis__"
+      let mesajBaslangic = hataMesaj_.includes(text1) ? hataMesaj_.indexOf(text1) + text1.length : 0
+      let mesajBitis = hataMesaj_.includes(text2) ? hataMesaj_.indexOf(text2) : hataMesaj_.length
+      // console.log(hataMesaj_.slice(mesajBaslangic + "mesajBaslangic:".length, mesajBitis))
+      hataMesaj_ = hataMesaj_.slice(mesajBaslangic, mesajBitis)
+      console.log(hataMesaj_)
 
       // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       // form sayfası kapanmadan hata gösterimi
@@ -123,27 +128,6 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
         console.log("Aynı seviyede, aynı isimde wbs olamaz")
         return
       }
-
-
-      if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
-        hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut"
-      }
-
-
-      if (hataMesaj_.includes("Poz eklemeye açmış olduğunuz başlık altına alt başlık ekleyemezsiniz")) {
-        setShow("ProjectMain")
-        hataMesaj_ = "Poz eklemeye açmış olduğunuz başlık altına alt başlık ekleyemezsiniz, bu başlık altına hiç poz eklemediyseniz bu başlığı poz eklemeye kapatarak ya da yeni başlık hiyerarşisi oluşturup mevcut pozları yeni başlıklara taşıyarak bu işlemi olarak gerçekleştirebilirsiniz."
-        setDialogCase("error")
-        setShowDialog(hataMesaj_)
-        // console.log("deneme")
-        // return <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} setShow={setShow} afterData={"ProjectMain"}/>
-      }
-
-
-      if (hataMesaj_.includes("çok kısa")) {
-        hataMesaj_ = "Çok kısa"
-      }
-
 
       setDialogCase("error")
       setShowDialog(hataMesaj_)
@@ -157,13 +141,13 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
     <div>
 
       {showDialog &&
-        <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
+        <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} afterDone={callBack_m} />
       }
 
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}
         open={true}
-        onClose={() => setShow("WbsMain")} >
+        onClose={() => setShow()} >
         {/* <DialogTitle>Subscribe</DialogTitle> */}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
@@ -194,7 +178,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
               </DialogContentText>
             }
 
-            <Box onClick={() => setShowDialogError(false)}>
+            <Box onClick={() => setError_for_wbsName(false)}>
               <TextField
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
@@ -215,7 +199,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
           </DialogContent>
 
           <DialogActions sx={{ padding: "1.5rem" }}>
-            <Button onClick={() => setShow("ProjectWbsMain")}>İptal</Button>
+            <Button onClick={() => setShow()}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>
 

@@ -130,6 +130,11 @@ export default function WbsHeader({ RealmApp, setShow }) {
       return
     }
 
+    // bu kontrol backend de ayrıca yapılıyor
+    // if (selectedWbs.openForPoz) {
+    //   throw new Error("Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız")
+    // }
+
     try {
       const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsId: selectedWbs._id });
       setIsProject(resultProject)
@@ -141,6 +146,10 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
       if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
         hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
+      }
+
+      if (hataMesaj_.includes("Poz eklemeye açık başlıklar silinemez")) {
+        hataMesaj_ = "Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız."
       }
 
       setDialogCase("error")
@@ -179,7 +188,7 @@ export default function WbsHeader({ RealmApp, setShow }) {
               variant="h5"
               fontWeight="bold"
             >
-              İş Alanları WBS
+              Poz Başlıkları
             </Typography>
           </Grid>
 
