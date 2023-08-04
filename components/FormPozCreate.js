@@ -150,7 +150,7 @@ export default function FormPozCreate({ setShow }) {
         return
       }
 
-      console.log("result.newPoz", result.newPoz)
+      console.log("newPoz", result.newPoz)
       // _id yoksa istediğimiz proje verisi değil demekki, hata ile durduruyoruz
       // if (!result.newPoz._id) {
       //   throw new Error
@@ -159,7 +159,7 @@ export default function FormPozCreate({ setShow }) {
       // refetch_pozlar()
       // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
       // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
-      console.log("result", result)
+      console.log("proje", result.proje)
 
       // const prevPozlar = queryClient.getQueryData(["pozlar"])
       // const newPozlar = ([...prevPozlar, result_newPoz])

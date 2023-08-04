@@ -36,8 +36,8 @@ export default function P_Wbs() {
   const [show, setShow] = useState("WbsMain")
 
 
-  const handleSelectWbs = (wbs) => {
-    setSelectedWbs(wbs)
+  const handleSelectWbs = (theWbs) => {
+    setSelectedWbs(theWbs)
   }
 
   let level
@@ -88,31 +88,31 @@ export default function P_Wbs() {
                   }
                 }
                 return -1; // was missing case b.len > a.len
-              }).map((wbs) => {
+              }).map((theWbs) => {
 
-                // wbs = { _id, code, name }
+                // theWbs = { _id, code, name }
 
-                level = wbs.code.split(".").length - 1
+                level = theWbs.code.split(".").length - 1
 
                 return (
-                  <Box key={wbs._id} sx={{ display: "grid", gridTemplateColumns: level == 0 ? "1fr" : "repeat(" + level + ", 1rem) 1fr" }}>
+                  <Box key={theWbs._id} sx={{ display: "grid", gridTemplateColumns: level == 0 ? "1fr" : "repeat(" + level + ", 1rem) 1fr" }}>
 
                     <Items count={level} />
 
                     <Box
-                      onClick={() => handleSelectWbs(wbs)}
+                      onClick={() => handleSelectWbs(theWbs)}
                       sx={{
                         backgroundColor: bgColor(level).bg,
                         color: bgColor(level).co,
                         pl: "0.1rem",
-                        ...(selectedWbs?.code == wbs.code && {
+                        ...(selectedWbs?.code == theWbs.code && {
                           // color: "red",
-                          backgroundColor: "red"
+                          backgroundColor: "#8B0000"
                         }),
                         cursor: "pointer",
-                        ...(selectedWbs?.code !== wbs.code && {
+                        ...(selectedWbs?.code !== theWbs.code && {
                           "&:hover": {
-                            backgroundColor: "blue",
+                            backgroundColor: "#DC143C",
                             color: "white"
                           }
                         })
@@ -121,17 +121,24 @@ export default function P_Wbs() {
 
                       <Grid container sx={{ display: "grid", gridTemplateColumns: "1fr 2rem" }}>
 
-                        {/* wbs isminin yazılı olduğu kısım */}
+                        {/* theWbs isminin yazılı olduğu kısım */}
                         <Grid item>
-                          <Box>  {wbs.code + " - " + wbs.name}</Box>
+                          <Box>  {theWbs.code + " - " + theWbs.name}</Box>
                         </Grid>
 
-                        {/* poza açık wbs lerin işaretli olduğu kısım */}
-                        {wbs.openForPoz &&
-                          <Grid item onClick={() => console.log(wbs._id.toString())} >
+                        {/* poza açık theWbs lerin işaretli olduğu kısım */}
+                        {theWbs.openForPoz &&
+                          <Grid item onClick={() => console.log(theWbs._id.toString())} >
                             <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
                               <Grid item >
-                                <Box sx={{ width: "0.5rem", height: "0.5rem", backgroundColor: "white" }}></Box>
+                                <Box sx={{
+                                  width: "0.5rem",
+                                  height: "0.5rem",
+                                  backgroundColor: theWbs.includesPoz ? "red" : "white",
+                                  backgroundColor: theWbs.includesPoz ? "red" : "white",
+                                }}
+                                >
+                                </Box>
                               </Grid>
                             </Grid>
                           </Grid>
@@ -177,23 +184,46 @@ const Items = ({ count }) => (
 function bgColor(index) {
   switch (index) {
     case 0:
-      return { bg: "#202020", co: "white" }
+      return { bg: "#000000", co: "white" }
     case 1:
-      return { bg: "#660033", co: "white" }
+      return { bg: "#404040", co: "white" }
     case 2:
-      return { bg: "#330066", co: "white" }
+      return { bg: "#000000", co: "white" }
     case 3:
-      return { bg: "#006666", co: "white" }
+      return { bg: "#808080", co: "white" }
     case 4:
-      return { bg: "#303030", co: "white" }
+      return { bg: "#000000", co: "white" }
     case 5:
-      return { bg: "#550033", co: "white" }
+      return { bg: "#808080", co: "white" }
     case 6:
-      return { bg: "#330055", co: "white" }
+      return { bg: "#000000", co: "white" }
     case 7:
-      return { bg: "#005555", co: "white" }
+      return { bg: "#808080", co: "white" }
   }
 }
+
+
+
+// function bgColor(index) {
+//   switch (index) {
+//     case 0:
+//       return { bg: "#000000", co: "white" }
+//     case 1:
+//       return { bg: "#808080", co: "white" }
+//     case 2:
+//       return { bg: "#0000FF", co: "white" }
+//     case 3:
+//       return { bg: "#5F9EA0", co: "white" }
+//     case 4:
+//       return { bg: "#00008B", co: "white" }
+//     case 5:
+//       return { bg: "#008B8B", co: "white" }
+//     case 6:
+//       return { bg: "#006400", co: "white" }
+//     case 7:
+//       return { bg: "#4B0082", co: "white" }
+//   }
+// }
 
 
 
