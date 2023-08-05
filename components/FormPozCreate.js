@@ -3,7 +3,6 @@ import { useState, useContext } from 'react';
 import { StoreContext } from '../components/store'
 import { useQueryClient } from '@tanstack/react-query'
 import deleteLastSpace from '../functions/deleteLastSpace.js';
-import { DialogWindow } from '../components/general/DialogWindow';
 
 
 //mui
@@ -116,7 +115,7 @@ export default function FormPozCreate({ setShow }) {
         return
       }
 
-      const result = await RealmApp?.currentUser?.callFunction("createPoz", {
+      const result_newPoz = await RealmApp?.currentUser?.callFunction("createPoz", {
         projectId: isProject._id,
         wbsId: wbsId_for_Poz,
         newPozName,
@@ -125,7 +124,7 @@ export default function FormPozCreate({ setShow }) {
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
       // yukarıda da frontend kontrolü yapılmıştı
-      if (result.errorObj) {
+      if (result_newPoz.errorObj) {
 
         console.log("errorObj", errorObj)
 
@@ -150,23 +149,19 @@ export default function FormPozCreate({ setShow }) {
         return
       }
 
-      console.log("newPoz", result.newPoz)
+      console.log("result.newPoz", result.newPoz)
       // _id yoksa istediğimiz proje verisi değil demekki, hata ile durduruyoruz
-      // if (!result.newPoz._id) {
-      //   throw new Error
-      // }
+      if (!result_newPoz._id) {
+        throw new Error
+      }
 
       // refetch_pozlar()
       // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
       // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
-      console.log("proje", result.proje)
+      console.log("result", result)
 
-      // const prevPozlar = queryClient.getQueryData(["pozlar"])
-      // const newPozlar = ([...prevPozlar, result_newPoz])
-      // queryClient.setQueryData(["pozlar"], newPozlar)
-
-      // setDialogCase("succsess")
-      // setShowDialog("Poz kaydı başarı ile gerçekleşti")
+      setDialogCase("succsess")
+      setShowDialog("Poz kaydı başarı ile gerçekleşti")
 
     } catch (err) {
 
