@@ -103,33 +103,48 @@ export default function P_Wbs() {
                       onClick={() => handleSelectWbs(theWbs)}
                       sx={{
                         backgroundColor: bgColor(level).bg,
+                        "&:hover": {
+                          backgroundColor: "#DC143C",
+                          color: "white"
+                        },
                         color: bgColor(level).co,
-                        pl: "0.1rem",
-                        ...(selectedWbs?.code == theWbs.code && {
-                          // color: "red",
-                          backgroundColor: "#8B0000"
-                        }),
+                        pl: "1rem",
                         cursor: "pointer",
-                        ...(selectedWbs?.code !== theWbs.code && {
-                          "&:hover": {
-                            backgroundColor: "#DC143C",
-                            color: "white"
-                          }
-                        })
                       }}
                     >
 
-                      <Grid container sx={{ display: "grid", gridTemplateColumns: "1fr 2rem" }}>
+                      <Grid container sx={{ display: "grid", gridTemplateColumns: "1fr 2rem 2rem" }}>
 
                         {/* theWbs isminin yazılı olduğu kısım */}
-                        <Grid item>
+                        <Grid
+                          item
+                          sx={{
+                            "&:hover": {
+                              backgroundColor: bgColor(level).bg,
+                              color: bgColor(level).co,
+                            }
+                          }}
+                        >
                           <Box>  {theWbs.code + " - " + theWbs.name}</Box>
                         </Grid>
 
                         {/* poza açık theWbs lerin işaretli olduğu kısım */}
                         {theWbs.openForPoz &&
                           <Grid item onClick={() => console.log(theWbs._id.toString())} >
-                            <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                            <Grid
+                              container
+                              sx={{
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "100%",
+                                height: "100%",
+
+                                "&:hover": {
+                                  backgroundColor: bgColor(level).bg,
+                                  color: bgColor(level).co,
+                                }
+                              }}
+                            >
                               <Grid item >
                                 <Box sx={{
                                   width: "0.5rem",
@@ -143,6 +158,39 @@ export default function P_Wbs() {
                             </Grid>
                           </Grid>
                         }
+
+                        {/* openForPoz true değilse onun yerine dolgu  */}
+                        {!theWbs.openForPoz &&
+                          <Grid
+                            item
+                            onClick={() => console.log(theWbs._id.toString())}
+                            sx={{
+                              width: "100%",
+                              height: "100%",
+
+                              backgroundColor: bgColor(level).bg,
+                              color: bgColor(level).co,
+                              "&:hover": {
+                                backgroundColor: bgColor(level).bg,
+                                color: bgColor(level).co,
+                              }
+
+                            }}
+                          >
+                          </Grid>
+                        }
+
+                        {/* seçim belirleme */}
+                        <Grid
+                          item
+                          onClick={() => console.log(theWbs._id.toString())}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: selectedWbs.code == theWbs.code ? "red" : null
+                          }}
+                        >
+                        </Grid>
 
                       </Grid>
 
