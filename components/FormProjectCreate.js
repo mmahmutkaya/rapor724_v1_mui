@@ -19,7 +19,6 @@ import { Typography } from '@mui/material';
 
 export default function P_FormProjectCreate({ setShow, refetch_projects }) {
 
-  const [showDialogInfo, setShowDialogInfo] = useState(false)
   const [showDialogError, setShowDialogError] = useState(false)
   const [hataMesaj, setHataMesaj] = useState("")
 
@@ -34,11 +33,12 @@ export default function P_FormProjectCreate({ setShow, refetch_projects }) {
       const data = new FormData(event.currentTarget);
       const projectName = data.get('projectName')
 
-      await RealmApp.currentUser.callFunction("createProject", { name: projectName });
+      const newProject = { name: projectName }
+
+      const resultProject = await RealmApp.currentUser.callFunction("createProject", newProject);
 
       refetch_projects()
-      setShowDialogInfo(true)
-      console.log("merhaba22")
+      setShow("ProjectMain")
 
     } catch (err) {
 
@@ -61,38 +61,6 @@ export default function P_FormProjectCreate({ setShow, refetch_projects }) {
 
   }
 
-
-  if (showDialogInfo) {
-    return (
-      <div>
-
-        <Dialog
-          PaperProps={{ sx: { position: "fixed", top: "10rem", margin: { xs: '2rem' } } }}
-          open={true}
-          onClose={() => setShow("ProjectMain")} >
-          {/* <DialogTitle>Subscribe</DialogTitle> */}
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-
-            <DialogContent>
-              <Grid container spacing={1}>
-
-                <Grid item>
-                  <CheckCircleIcon variant="contained" color="success" pr={3} />
-                </Grid>
-
-                <Grid item>
-                  <DialogContentText>
-                    Projeniz başarı ile oluşturuldu
-                  </DialogContentText>
-                </Grid>
-              </Grid>
-            </DialogContent>
-
-          </Box>
-        </Dialog>
-      </div >
-    );
-  }
 
 
   return (
@@ -134,7 +102,7 @@ export default function P_FormProjectCreate({ setShow, refetch_projects }) {
 
           </DialogContent>
 
-          <DialogActions sx={{padding:"1.5rem"}}>
+          <DialogActions sx={{ padding: "1.5rem" }}>
             <Button onClick={() => setShow("ProjectMain")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>

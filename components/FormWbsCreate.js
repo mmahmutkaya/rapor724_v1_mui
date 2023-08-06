@@ -29,9 +29,14 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
   const [error_for_wbsName, setError_for_wbsName] = useState(false)
   const [errorText_for_wbsName, setErrorText_for_wbsName] = useState()
 
+  const [error_for_wbsCodeName, setError_for_wbsCodeName] = useState(false)
+  const [errorText_for_wbsCodeName, setErrorText_for_wbsCodeName] = useState()
+
   const RealmApp = useApp();
 
   const callBack_m = () => setShow()
+
+
 
   async function handleSubmit(event) {
 
@@ -40,8 +45,10 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
     try {
 
+      // girilen verileri alma ve sonlarındaki boşlukları kaldırma
       const data = new FormData(event.currentTarget);
       const wbsName = deleteLastSpace(data.get('wbsName'))
+      const wbsCodeName = deleteLastSpace(data.get('wbsCodeName'))
 
       // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır, aşağıda backend de
       if (!wbsName) {
@@ -51,11 +58,26 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
         console.log("wbsName", "yok -- error")
       }
 
+      // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır, aşağıda backend de
+      if (!wbsCodeName) {
+        setError_for_wbsCodeName(true);
+        setErrorText_for_wbsCodeName("Zorunlu")
+        isError = true
+        console.log("wbsCodeName", "yok -- error")
+      }
+
+      if (wbsCodeName.includes(" ") ) {
+        setError_for_wbsCodeName(true);
+        setErrorText_for_wbsCodeName("Boşluk kullanmayınız")
+        isError = true
+        console.log("wbsCodeName", "yok -- error")
+      }
+
       // ilgili hatalar yukarıda ilgili form alanlarına yazılmış olmalı
       // db ye sorgu yapılıp db meşgul edilmesin diye burada durduruyoruz
-      // frontendden geçse bile db den errorObject kontrolü yapılıyor aşağıda
+      // frontendden geçse bile db den errorFormObject kontrolü yapılıyor aşağıda
       if (isError) {
-        console.log("return (fonksiyon durdurma) satırı bu mesaj satırının altında idi")
+        console.log("bu satırın altında fonksiyon --return-- ile durduruldu")
         return
       }
 
@@ -64,23 +86,35 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
       // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
       // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
       // sorgudan wbs datası güncellenmiş proje dödürüp, gelen data ile aşağıda react useContext deki projeyi update ediyoruz
-      const resultProje = await RealmApp.currentUser.callFunction("createWbs", {
+      const newWbsItem = {
         projectId: isProject._id,
         upWbsId: selectedWbs ? selectedWbs._id : "0",
-        newWbsName: wbsName
-      });
+        newWbsName: wbsName,
+        newWbsCodeName: wbsCodeName
+      }
+      const resultProject = await RealmApp.currentUser.callFunction("createWbs", newWbsItem);
+      console.log("resultProject",resultProject)
 
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
       // yukarıda da frontend kontrolü yapılmıştı
-      if (resultProje.errorObj) {
+      if (resultProject.errorFormObj) {
 
-        console.log("errorObj", errorObj)
+        const errorFormObj = resultProject.errorFormObj
+
+        console.log("errorFormObj", errorFormObj)
 
         // başka form alanları olsaydı onlarınkini de ekleyecektik aşağıdaki returnden önce, onlarda da hata uyarılarını görecektik
-        if (result.errorObj.newWbsName) {
+        if (errorFormObj.newWbsName) {
           setError_for_wbsName(true);
-          setErrorText_for_wbsName(result.errorObj.newWbsName)
+          setErrorText_for_wbsName(errorFormObj.newWbsName)
+          isError = true
+        }
+
+        // başka form alanları olsaydı onlarınkini de ekleyecektik aşağıdaki returnden önce, onlarda da hata uyarılarını görecektik
+        if (errorFormObj.newWbsCodeName) {
+          setError_for_wbsCodeName(true);
+          setErrorText_for_wbsCodeName(errorFormObj.newWbsCodeName)
           isError = true
         }
 
@@ -89,14 +123,14 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
 
 
       // _id yoksa istediğimiz proje verisi değil demekki, hata ile durduruyoruz
-      if (!resultProje._id) {
-        throw new Error
+      if (!resultProject._id) {
+        throw new Error("db den Proje olarak beklenen verinin _id property yok, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
       }
 
 
       // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
       // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
-      setIsProject(resultProje)
+      setIsProject(resultProject)
 
       // sorgu işleminden önce seçilen wbs varsa, temizliyoruz, en büyük gerekçe seçilen wbs silinmiş olabilir, onunla işlem db de hata verir
       setSelectedWbs(null)
@@ -162,7 +196,7 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
             {selectedWbs &&
               <>
                 <DialogContentText sx={{ fontWeight: "bold", paddingBottom: "1rem" }}>
-                  {selectedWbs.code} {selectedWbs.name}
+                  {selectedWbs.code} {"-->"} {selectedWbs.name}
                 </DialogContentText>
                 <Typography >
                   başlığı altına yeni bir Wbs eklemek üzeresiniz.
@@ -186,11 +220,29 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
                 margin="normal"
                 id="wbsName"
                 name="wbsName"
-                // autoFocus
+                autoFocus
                 error={error_for_wbsName}
                 helperText={error_for_wbsName ? errorText_for_wbsName : ""}
                 // margin="dense"
                 label="Wbs Adı"
+                type="text"
+                fullWidth
+              />
+            </Box>
+
+            <Box onClick={() => setError_for_wbsCodeName(false)}>
+              <TextField
+                variant="standard"
+                // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
+
+                margin="normal"
+                id="wbsCodeName"
+                name="wbsCodeName"
+                // autoFocus
+                error={error_for_wbsCodeName}
+                helperText={error_for_wbsCodeName ? errorText_for_wbsCodeName : "Örnek : KABA İNŞAAT --> KAB"}
+                // margin="dense"
+                label="Wbs Kod Adı"
                 type="text"
                 fullWidth
               />

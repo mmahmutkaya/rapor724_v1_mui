@@ -36,8 +36,8 @@ export default function P_Wbs() {
   const [show, setShow] = useState("WbsMain")
 
 
-  const handleSelectWbs = (theWbs) => {
-    setSelectedWbs(theWbs)
+  const handleSelectWbs = (wbs) => {
+    setSelectedWbs(wbs)
   }
 
   let level
@@ -68,10 +68,13 @@ export default function P_Wbs() {
         </Stack>
       }
 
-      {isProject?.wbs?.length &&
-        <Stack sx={{ width: '100%', padding: "0.5rem" }} spacing={0}>
+      {isProject?.wbs?.length > 0 &&
+        < Stack sx={{ width: '100%', padding: "0.5rem" }} spacing={0}>
 
+          {/* {console.log("isProject?.wbs?.length", isProject?.wbs?.length)} */}
           <Box display="grid">
+
+            {console.log("wbsS",isProject.wbs)}
 
             {
               isProject.wbs.sort(function (a, b) {
@@ -92,7 +95,7 @@ export default function P_Wbs() {
 
                 // theWbs = { _id, code, name }
 
-                level = theWbs.code.split(".").length - 1
+                level = theWbs?.code?.split(".").length - 1
 
                 return (
                   <Box key={theWbs._id} sx={{ display: "grid", gridTemplateColumns: level == 0 ? "1fr" : "repeat(" + level + ", 1rem) 1fr" }}>
@@ -102,95 +105,59 @@ export default function P_Wbs() {
                     <Box
                       onClick={() => handleSelectWbs(theWbs)}
                       sx={{
+
+                        pl: "0.1rem",
+                        
+                        // önce hepsini bu şekilde sonra seçilmişi aşağıda değiştiriyoruz
                         backgroundColor: bgColor(level).bg,
-                        "&:hover": {
-                          backgroundColor: "#DC143C",
-                          color: "white"
-                        },
                         color: bgColor(level).co,
-                        pl: "1rem",
+
+                        ...(selectedWbs?.code == theWbs.code && {
+                          backgroundColor: "#ffff00",
+                          color: "red",
+                        }),
+
+                        "&:hover": {
+                          backgroundColor: "yellow",
+                          color: "red",
+                        },
+
+                        "&:hover .poz-box": {
+                          border: "2px solid red"
+                        },
+
                         cursor: "pointer",
+
                       }}
                     >
 
-                      <Grid container sx={{ display: "grid", gridTemplateColumns: "1fr 2rem 2rem" }}>
+                      <Grid container sx={{ display: "grid", gridTemplateColumns: "1fr 2rem" }}>
 
                         {/* theWbs isminin yazılı olduğu kısım */}
-                        <Grid
-                          item
-                          sx={{
-                            "&:hover": {
-                              backgroundColor: bgColor(level).bg,
-                              color: bgColor(level).co,
-                            }
-                          }}
-                        >
-                          <Box>  {theWbs.code + " - " + theWbs.name}</Box>
+                        <Grid item>
+                          <Box>  {theWbs.code.split(".")[theWbs.code.split(".").length - 1] + " - " + theWbs.name}</Box>
                         </Grid>
 
                         {/* poza açık theWbs lerin işaretli olduğu kısım */}
                         {theWbs.openForPoz &&
                           <Grid item onClick={() => console.log(theWbs._id.toString())} >
-                            <Grid
-                              container
-                              sx={{
-                                alignItems: "center",
-                                justifyContent: "center",
-                                width: "100%",
-                                height: "100%",
-
-                                "&:hover": {
-                                  backgroundColor: bgColor(level).bg,
-                                  color: bgColor(level).co,
-                                }
-                              }}
-                            >
+                            <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
                               <Grid item >
-                                <Box sx={{
-                                  width: "0.5rem",
-                                  height: "0.5rem",
-                                  backgroundColor: theWbs.includesPoz ? "red" : "white",
-                                  backgroundColor: theWbs.includesPoz ? "red" : "white",
-                                }}
-                                >
-                                </Box>
+                                <Box className="poz-box" sx={{
+                                  boxSizing: "border-box",
+                                  width: "0.5rem", height: "0.5rem",
+                                  backgroundColor: "white",
+                                  ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
+                                    backgroundColor: "red",
+                                  }),
+                                  ...(selectedWbs?.code == theWbs.code && {
+                                    border: "2px solid red"
+                                  }),
+                                }}></Box>
                               </Grid>
                             </Grid>
                           </Grid>
                         }
-
-                        {/* openForPoz true değilse onun yerine dolgu  */}
-                        {!theWbs.openForPoz &&
-                          <Grid
-                            item
-                            onClick={() => console.log(theWbs._id.toString())}
-                            sx={{
-                              width: "100%",
-                              height: "100%",
-
-                              backgroundColor: bgColor(level).bg,
-                              color: bgColor(level).co,
-                              "&:hover": {
-                                backgroundColor: bgColor(level).bg,
-                                color: bgColor(level).co,
-                              }
-
-                            }}
-                          >
-                          </Grid>
-                        }
-
-                        {/* seçim belirleme */}
-                        <Grid
-                          item
-                          onClick={() => console.log(theWbs._id.toString())}
-                          sx={{
-                            width: "100%",
-                            height: "100%",
-                            backgroundColor: selectedWbs.code == theWbs.code ? "red" : null
-                          }}
-                        >
-                        </Grid>
 
                       </Grid>
 
@@ -229,50 +196,58 @@ const Items = ({ count }) => (
 
 
 
+// function bgColor(index) {
+//   switch (index) {
+//     case 0:
+//       return { bg: "#202020", co: "white" }
+//     case 1:
+//       return { bg: "#8b0000", co: "white" }
+//     case 2:
+//       return { bg: "#330066", co: "white" }
+//     case 3:
+//       return { bg: "#005555", co: "white" }
+//     case 4:
+//       return { bg: "#006666", co: "white" }
+//     case 5:
+//       return { bg: "#8b008b", co: "white" }
+//     case 6:
+//       return { bg: "#737373", co: "white" }
+//     case 7:
+//       return { bg: "#2929bc", co: "white" }
+//   }
+// }
+
+
 function bgColor(index) {
   switch (index) {
     case 0:
-      return { bg: "#000000", co: "white" }
+      return { bg: "#202020", co: "white" }
     case 1:
-      return { bg: "#404040", co: "white" }
+      return { bg: "#8b0000", co: "white" }
     case 2:
-      return { bg: "#000000", co: "white" }
+      return { bg: "#330066", co: "white" }
     case 3:
-      return { bg: "#808080", co: "white" }
+      return { bg: "#005555", co: "white" }
     case 4:
-      return { bg: "#000000", co: "white" }
+      return { bg: "#737373", co: "white" }
     case 5:
-      return { bg: "#808080", co: "white" }
+      return { bg: "#8b008b", co: "white" }
     case 6:
-      return { bg: "#000000", co: "white" }
+      return { bg: "#2929bc", co: "white" }
     case 7:
-      return { bg: "#808080", co: "white" }
+      return { bg: "#267347", co: "white" }
   }
 }
 
 
-
-// function bgColor(index) {
-//   switch (index) {
-//     case 0:
-//       return { bg: "#000000", co: "white" }
-//     case 1:
-//       return { bg: "#808080", co: "white" }
-//     case 2:
-//       return { bg: "#0000FF", co: "white" }
-//     case 3:
-//       return { bg: "#5F9EA0", co: "white" }
-//     case 4:
-//       return { bg: "#00008B", co: "white" }
-//     case 5:
-//       return { bg: "#008B8B", co: "white" }
-//     case 6:
-//       return { bg: "#006400", co: "white" }
-//     case 7:
-//       return { bg: "#4B0082", co: "white" }
-//   }
-// }
-
+// 0 - 202020
+// 1 - 330066
+// 2 - 330066
+// 3 - 2929bc
+// 4 - 005555
+// 5 - 006666
+// 6 - 005555
+// 7 - 006666
 
 
 {/* <Grid

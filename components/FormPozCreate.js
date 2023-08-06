@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 import { StoreContext } from '../components/store'
 import { useQueryClient } from '@tanstack/react-query'
 import deleteLastSpace from '../functions/deleteLastSpace.js';
+import { DialogWindow } from './general/DialogWindow';
 
 
 //mui
@@ -65,105 +66,106 @@ export default function FormPozCreate({ setShow }) {
       const newPozUnit = deleteLastSpace(data.get('newPozUnit'))
 
 
-      // useContext de proje ve _id si yoksa poz oluşturma formunu göstermenin bir anlamı yok, hata vererek durduruyoruz
-      if (!isProject?._id) {
-        throw new Error("Poz oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
-      } else {
-        console.log("isProject?._id", isProject?._id)
-      }
+      // // useContext de proje ve _id si yoksa poz oluşturma formunu göstermenin bir anlamı yok, hata vererek durduruyoruz
+      // if (!isProject?._id) {
+      //   throw new Error("Poz oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+      // } else {
+      //   console.log("isProject?._id", isProject?._id)
+      // }
 
 
-      // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır
-      if (!wbsId_for_Poz) {
-        setError_for_wbs(true);
-        setErrorText_for_wbs("Zorunlu")
-        isError = true
-        console.log("wbsId_for_Poz", "yok -- error")
-      } else {
-        console.log("wbsId_for_Poz", wbsId_for_Poz)
-      }
+      // // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır
+      // if (!wbsId_for_Poz) {
+      //   setError_for_wbs(true);
+      //   setErrorText_for_wbs("Zorunlu")
+      //   isError = true
+      //   console.log("wbsId_for_Poz", "yok -- error")
+      // } else {
+      //   console.log("wbsId_for_Poz", wbsId_for_Poz)
+      // }
 
-      if (!newPozName) {
-        setError_for_name(true);
-        setErrorText_for_name("Zorunlu")
-        isError = true
-        console.log("newPozName", "yok -- error")
-      }
+      // if (!newPozName) {
+      //   setError_for_name(true);
+      //   setErrorText_for_name("Zorunlu")
+      //   isError = true
+      //   console.log("newPozName", "yok -- error")
+      // }
 
-      if (newPozName.length > 0 && newPozName.length < 3) {
-        setError_for_name(true)
-        setErrorText_for_name("3 haneden az")
-        isError = true
-        console.log("newPozName", "3 haneden az -- error")
-      }
+      // if (newPozName.length > 0 && newPozName.length < 3) {
+      //   setError_for_name(true)
+      //   setErrorText_for_name("3 haneden az")
+      //   isError = true
+      //   console.log("newPozName", "3 haneden az -- error")
+      // }
 
-      if (!newPozUnit) {
-        setError_for_unit(true);
-        setErrorText_for_unit("Zorunlu")
-        isError = true
-        console.log("newPozUnit", "yok -- error")
-      } else {
-        console.log("newPozUnit", newPozUnit)
-      }
+      // if (!newPozUnit) {
+      //   setError_for_unit(true);
+      //   setErrorText_for_unit("Zorunlu")
+      //   isError = true
+      //   console.log("newPozUnit", "yok -- error")
+      // } else {
+      //   console.log("newPozUnit", newPozUnit)
+      // }
 
-      // ilgili hatalar yukarıda ilgili form alanlarına yazılmış olmalı
-      // db ye sorgu yapılıp db meşgul edilmesin diye burada durduruyoruz
-      // frontendden geçse bile db den errorObject kontrolü yapılıyor aşağıda
-      if (isError) {
-        console.log("return (fonksiyon durdurma) satırı bu mesaj satırının altında idi")
-        // throw new Error("db ye gönderilmek istenen verilerde hata var")
-        return
-      }
+      // // ilgili hatalar yukarıda ilgili form alanlarına yazılmış olmalı
+      // // db ye sorgu yapılıp db meşgul edilmesin diye burada durduruyoruz
+      // // frontendden geçse bile db den errorFormObject kontrolü yapılıyor aşağıda
+      // if (isError) {
+      //   console.log("return (fonksiyon durdurma) satırı bu mesaj satırının altında idi")
+      //   // throw new Error("db ye gönderilmek istenen verilerde hata var")
+      //   return
+      // }
 
-      const result_newPoz = await RealmApp?.currentUser?.callFunction("createPoz", {
+      const newPoz = {
         projectId: isProject._id,
         wbsId: wbsId_for_Poz,
         newPozName,
         newPozUnit
-      });
+      }
+
+      const result = await RealmApp?.currentUser?.callFunction("createPoz", newPoz);
+
+      console.log("result",result)
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
       // yukarıda da frontend kontrolü yapılmıştı
-      if (result_newPoz.errorObj) {
+      if (result_newPoz.errorFormObj) {
 
-        console.log("errorObj", errorObj)
+        const errorFormObj = result_newPoz.errorFormObj
 
-        if (result.errorObj.wbsId) {
-          setError_for_wbs(true);
-          setErrorText_for_wbs(result.errorObj.wbsId)
-          isError = true
-        }
+        console.log("errorFormObj", errorFormObj)
 
-        if (result.errorObj.newPozName) {
+        if (errorFormObj.newPozName) {
           setError_for_name(true);
-          setErrorText_for_name(result.errorObj.newPozName)
+          setErrorText_for_name(errorFormObj.newPozName)
           isError = true
         }
 
-        if (result.errorObj.newPozUnit) {
+        if (errorFormObj.newPozUnit) {
           setError_for_unit(true);
-          setErrorText_for_unit(result.errorObj.newPozUnit)
+          setErrorText_for_unit(errorFormObj.newPozUnit)
           isError = true
         }
 
         return
       }
 
-      // _id yoksa istediğimiz proje verisi değil demekki, hata ile durduruyoruz
-      if (!result_newPoz._id) {
-        throw new Error
+      if (!result.newPoz?._id) {
+        throw new Error("db den -newPoz- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
+      }
+
+      if (!result.newProject?._id) {
+        throw new Error("db den -newPproject- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
       }
 
       // refetch_pozlar()
       // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
       // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
-      console.log("result_newPoz", result_newPoz)
       const prevPozlar = queryClient.getQueryData(["pozlar"])
-      const newPozlar = ([...prevPozlar, result_newPoz])
+      const newPozlar = ([...prevPozlar, result.newPoz])
       queryClient.setQueryData(["pozlar"], newPozlar)
 
-      setDialogCase("succsess")
-      setShowDialog("Poz kaydı başarı ile gerçekleşti")
+      setShow("PozMain")
 
     } catch (err) {
 
@@ -191,6 +193,9 @@ export default function FormPozCreate({ setShow }) {
   };
 
 
+  // poz üst başlıkları ile beraber gösterimi için
+  let wbsCode
+  let wbsName
 
   return (
     <div>
@@ -248,10 +253,21 @@ export default function FormPozCreate({ setShow }) {
                 required
               >
                 {
-                  isProject?.wbs.map(wbs => (
+                  isProject?.wbs.filter(item => item.openForPoz).map(wbsOne => (
                     // console.log(wbs)
-                    <MenuItem key={wbs._id} value={wbs._id}>
-                      {wbs.name}
+                    <MenuItem key={wbsOne._id} value={wbsOne._id}>
+                      {
+                        wbsOne.code.split(".").map((codePart, index) => {
+                          if (index == 0) {
+                            wbsCode = codePart
+                            wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                          } else {
+                            wbsCode = wbsCode + "." + codePart
+                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).name
+                          }
+                        })
+                      }
+                      {wbsName}
                     </MenuItem>
                   ))
                 }

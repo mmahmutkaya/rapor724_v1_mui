@@ -44,6 +44,8 @@ export default function P_Pozlar() {
 
   if (error) return "An error has occurred: " + error.message;
 
+  
+  // poz üst başlıkları ile beraber gösterimi için
   let wbsCode
   let wbsName
 

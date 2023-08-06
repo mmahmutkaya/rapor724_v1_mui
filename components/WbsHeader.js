@@ -199,7 +199,9 @@ export default function WbsHeader({ RealmApp, setShow }) {
 
               <Grid item >
                 <IconButton onClick={() => handleWbsUnclicked()} aria-label="wbsUncliced">
-                  <ClearOutlined variant="contained" sx={{ color: !selectedWbs ? "lightgray" : "red" }} />
+                  <ClearOutlined variant="contained" sx={{
+                    color: !selectedWbs ? "lightgray" : "red",
+                  }} />
                 </IconButton>
               </Grid>
 
@@ -207,6 +209,17 @@ export default function WbsHeader({ RealmApp, setShow }) {
                 <Grid container direction={"column"} alignItems={"center"}>
                   <Grid item>
                     <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >poz</Typography>
+                  </Grid>
+                  <Grid item >
+                    <AntSwitch disabled={!selectedWbs} checked={selectedWbs?.openForPoz ? true : false} onChange={handleWbsOpenForPoz} />
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item ml={"1rem"}>
+                <Grid container direction={"column"} alignItems={"center"}>
+                  <Grid item>
+                    <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >kısa</Typography>
                   </Grid>
                   <Grid item >
                     <AntSwitch disabled={!selectedWbs} checked={selectedWbs?.openForPoz ? true : false} onChange={handleWbsOpenForPoz} />
@@ -240,8 +253,8 @@ export default function WbsHeader({ RealmApp, setShow }) {
                 </IconButton>
               </Grid>
               <Grid item>
-                <IconButton onClick={() => setShow("FormWbsCreate")} aria-label="addWbs">
-                  <AddCircleOutlineIcon variant="contained" color="success" />
+                <IconButton onClick={() => setShow("FormWbsCreate")} disabled={selectedWbs?.code.split(".").length == 8 ? true : false} aria-label="addWbs">
+                  <AddCircleOutlineIcon variant="contained" color={selectedWbs?.code.split(".").length == 8 ? " lightgray" : "success"} />
                 </IconButton>
               </Grid>
             </Grid>
