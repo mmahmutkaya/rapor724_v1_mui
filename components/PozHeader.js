@@ -17,6 +17,7 @@ import { styled } from '@mui/material/styles';
 
 export default function PozHeader({ setShow }) {
 
+  const { isProject } = useContext(StoreContext)
 
   const handleTry = () => {
     // return isProject ? setIsProject(isProject.name) : null
@@ -67,17 +68,17 @@ export default function PozHeader({ setShow }) {
           <Grid container spacing={1}>
 
             <Grid item>
-              <IconButton onClick={() => console.log("deleted clicked")} aria-label="addPoz">
+              <IconButton onClick={() => console.log("deleted clicked")} aria-label="addPoz" disabled>
                 <DeleteIcon
                   // sx={{display: isProject_display}}
-                  variant="contained" color="error"
+                  variant="contained" color="lightgray"
                 />
               </IconButton>
             </Grid>
 
             <Grid item>
-              <IconButton onClick={() => setShow("FormPozCreate")} aria-label="addWbs">
-                <AddCircleOutlineIcon variant="contained" color="success" />
+              <IconButton onClick={() => setShow("FormPozCreate")} aria-label="addWbs" disabled={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? true : false}>
+                <AddCircleOutlineIcon variant="contained" color={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? " lightgray" : "success"} />
               </IconButton>
             </Grid>
 

@@ -68,10 +68,10 @@ export default function P_Pozlar() {
         </Grid>
       }
 
-      {show == "PozMain" && !isProject?.wbs &&
+      {show == "PozMain" && isProject?.wbs.filter(item => item.openForPoz).length == 0 &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
-            Poz ekleyebilmek için öncelikle poz eklenebilcek Wbs leri belirlemeniz gerekmektedir.
+            Henüz hiç bir poz başlığını poz eklemeye açmamış görünüyorsunumuz.
           </Alert>
         </Stack>
       }

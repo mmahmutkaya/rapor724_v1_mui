@@ -129,11 +129,17 @@ export default function FormPozCreate({ setShow }) {
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
       // yukarıda da frontend kontrolü yapılmıştı
-      if (result_newPoz.errorFormObj) {
+      if (result.errorFormObj) {
 
-        const errorFormObj = result_newPoz.errorFormObj
+        const errorFormObj = result.errorFormObj
 
         console.log("errorFormObj", errorFormObj)
+
+        if (errorFormObj.wbsId) {
+          setError_for_wbs(true);
+          setErrorText_for_wbs(errorFormObj.wbsId)
+          isError = true
+        }
 
         if (errorFormObj.newPozName) {
           setError_for_name(true);
@@ -155,15 +161,18 @@ export default function FormPozCreate({ setShow }) {
       }
 
       if (!result.newProject?._id) {
-        throw new Error("db den -newPproject- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
+        throw new Error("db den -newProject- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
       }
 
       // refetch_pozlar()
       // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
       // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
-      const prevPozlar = queryClient.getQueryData(["pozlar"])
-      const newPozlar = ([...prevPozlar, result.newPoz])
+      const oldPozlar = queryClient.getQueryData(["pozlar"])
+      const newPozlar = ([...oldPozlar, result.newPoz])
       queryClient.setQueryData(["pozlar"], newPozlar)
+
+      const newProject = result.newProject
+      setIsProject(newProject)
 
       setShow("PozMain")
 

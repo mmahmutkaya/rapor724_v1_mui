@@ -74,8 +74,6 @@ export default function P_Wbs() {
           {/* {console.log("isProject?.wbs?.length", isProject?.wbs?.length)} */}
           <Box display="grid">
 
-            {console.log("wbsS",isProject.wbs)}
-
             {
               isProject.wbs.sort(function (a, b) {
                 var nums1 = a.code.split(".");
@@ -146,10 +144,10 @@ export default function P_Wbs() {
                                 <Box className="poz-box" sx={{
                                   boxSizing: "border-box",
                                   width: "0.5rem", height: "0.5rem",
-                                  backgroundColor: "white",
-                                  ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
-                                    backgroundColor: "red",
-                                  }),
+                                  backgroundColor: theWbs.includesPoz ? "red" : "white",
+                                  // ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
+                                  //   backgroundColor: "red",
+                                  // }),
                                   ...(selectedWbs?.code == theWbs.code && {
                                     border: "2px solid red"
                                   }),
