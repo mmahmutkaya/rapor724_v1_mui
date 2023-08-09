@@ -109,19 +109,21 @@ export default function P_Wbs() {
                         // önce hepsini bu şekilde sonra seçilmişi aşağıda değiştiriyoruz
                         backgroundColor: bgColor(level).bg,
                         color: bgColor(level).co,
+                        
+                        // // seçim yapılan poz başlığı ise
+                        // ...(selectedWbs?.code == theWbs.code && {
+                        //   backgroundColor: "#ffff00",
+                        //   color: "red",
+                        // }),
 
-                        ...(selectedWbs?.code == theWbs.code && {
-                          backgroundColor: "#ffff00",
-                          color: "red",
-                        }),
+                        // v1
+                        // "&:hover": {
+                        //   backgroundColor: "yellow",
+                        //   color: "red",
+                        // },
 
-                        "&:hover": {
-                          backgroundColor: "yellow",
-                          color: "red",
-                        },
-
-                        "&:hover .poz-box": {
-                          border: "2px solid red"
+                        "&:hover .hoverTheWbs": {
+                          visibility: "visible"
                         },
 
                         cursor: "pointer",
@@ -133,7 +135,7 @@ export default function P_Wbs() {
 
                         {/* theWbs isminin yazılı olduğu kısım */}
                         <Grid item>
-                          <Box>  {theWbs.code.split(".")[theWbs.code.split(".").length - 1] + " - " + theWbs.name}</Box>
+                          <Box >  {theWbs.code.split(".")[level] + " - " + theWbs.name + " - (" + theWbs.codeName + ")"} <Box className="hoverTheWbs" component="span" sx={{visibility: 'hidden' }}>mmm</Box> </Box>
                         </Grid>
 
                         {/* poza açık theWbs lerin işaretli olduğu kısım */}
@@ -148,9 +150,9 @@ export default function P_Wbs() {
                                   // ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
                                   //   backgroundColor: "red",
                                   // }),
-                                  ...(selectedWbs?.code == theWbs.code && {
-                                    border: "2px solid red"
-                                  }),
+                                  // ...(selectedWbs?.code == theWbs.code && {
+                                  //   border: "2px solid red"
+                                  // }),
                                 }}></Box>
                               </Grid>
                             </Grid>
