@@ -44,7 +44,7 @@ export default function WbsHeader({ RealmApp, setShow }) {
   }
 
 
-  async function handleWbsOpenForPoz(event) {
+  async function handleSwitchForPoz(event) {
 
     // wbs poza açık hale getirilecekse
     if (event.target.checked === true) {
@@ -211,7 +211,7 @@ export default function WbsHeader({ RealmApp, setShow }) {
                     <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >poz</Typography>
                   </Grid>
                   <Grid item >
-                    <AntSwitch disabled={!selectedWbs} checked={selectedWbs?.openForPoz ? true : false} onChange={handleWbsOpenForPoz} />
+                    <AntSwitch disabled={!selectedWbs} checked={selectedWbs?.openForPoz ? true : false} onChange={handleSwitchForPoz} />
                   </Grid>
                 </Grid>
               </Grid>
@@ -222,7 +222,7 @@ export default function WbsHeader({ RealmApp, setShow }) {
                     <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >kısa</Typography>
                   </Grid>
                   <Grid item >
-                    <AntSwitch disabled={!selectedWbs} checked={selectedWbs?.openForPoz ? true : false} onChange={handleWbsOpenForPoz} />
+                    <AntSwitch disabled={!selectedWbs} checked={selectedWbs?.openForPoz ? true : false} onChange={handleSwitchForPoz} />
                   </Grid>
                 </Grid>
               </Grid>
@@ -232,31 +232,37 @@ export default function WbsHeader({ RealmApp, setShow }) {
                   <KeyboardArrowUpIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
+
               <Grid item >
                 <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
                   <KeyboardArrowDownIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
+
               <Grid item>
                 <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
                   <KeyboardArrowLeftIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
+
               <Grid item >
                 <IconButton onClick={() => setShow("FormWbs")} aria-label="moveRight">
                   <KeyboardArrowRightIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
+
               <Grid item >
                 <IconButton onClick={() => handleWbsDelete()} aria-label="delete">
                   <DeleteIcon variant="contained" color="error" sx={{ color: !selectedWbs ? "lightgray" : "rgb(139,0,0)" }} />
                 </IconButton>
               </Grid>
+
               <Grid item>
                 <IconButton onClick={() => setShow("FormWbsCreate")} disabled={selectedWbs?.code.split(".").length == 8 ? true : false} aria-label="addWbs">
                   <AddCircleOutlineIcon variant="contained" color={selectedWbs?.code.split(".").length == 8 ? " lightgray" : "success"} />
                 </IconButton>
               </Grid>
+
             </Grid>
           </Grid>
 

@@ -17,7 +17,9 @@ import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import List from '@mui/material/List';
 
+import IconButton from '@mui/material/IconButton';
 import FolderIcon from '@mui/icons-material/Folder';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 
 
 
@@ -105,11 +107,11 @@ export default function P_Wbs() {
                       sx={{
 
                         pl: "0.1rem",
-                        
+
                         // önce hepsini bu şekilde sonra seçilmişi aşağıda değiştiriyoruz
                         backgroundColor: bgColor(level).bg,
                         color: bgColor(level).co,
-                        
+
                         // // seçim yapılan poz başlığı ise
                         // ...(selectedWbs?.code == theWbs.code && {
                         //   backgroundColor: "#ffff00",
@@ -123,6 +125,7 @@ export default function P_Wbs() {
                         // },
 
                         "&:hover .hoverTheWbs": {
+                          // display: "inline"
                           visibility: "visible"
                         },
 
@@ -135,7 +138,28 @@ export default function P_Wbs() {
 
                         {/* theWbs isminin yazılı olduğu kısım */}
                         <Grid item>
-                          <Box >  {theWbs.code.split(".")[level] + " - " + theWbs.name + " - (" + theWbs.codeName + ")"} <Box className="hoverTheWbs" component="span" sx={{visibility: 'hidden' }}>mmm</Box> </Box>
+
+                          <Grid container>
+
+                            <Grid item>
+                              {theWbs.code.split(".")[level] + " - " + theWbs.name + " - (" + theWbs.codeName + ")"}
+                            </Grid>
+
+                            <Grid item className='hoverTheWbs'
+                              sx={{
+                                ml: "0.5rem",
+                                visibility: selectedWbs?.code === theWbs.code ? "visible" : "hidden",
+                                justifySelf: "center",
+                                alignSelf: "center",
+                                width: "1rem",
+                                height: "0.5rem",
+                                borderRadius:"0.1rem",
+                                border:"0.15rem solid black",
+                                backgroundColor: "yellow",
+                              }}>
+                            </Grid>
+
+                          </Grid>
                         </Grid>
 
                         {/* poza açık theWbs lerin işaretli olduğu kısım */}
@@ -143,8 +167,7 @@ export default function P_Wbs() {
                           <Grid item onClick={() => console.log(theWbs._id.toString())} >
                             <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
                               <Grid item >
-                                <Box className="poz-box" sx={{
-                                  boxSizing: "border-box",
+                                <Box sx={{
                                   width: "0.5rem", height: "0.5rem",
                                   backgroundColor: theWbs.includesPoz ? "red" : "white",
                                   // ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
