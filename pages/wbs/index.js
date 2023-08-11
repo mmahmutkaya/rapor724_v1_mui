@@ -36,6 +36,8 @@ export default function P_Wbs() {
   !isProject ? router.push('/projects') : null
 
   const [show, setShow] = useState("WbsMain")
+  const [showName, setShowName] = useState(true)
+  const [showCodeName, setShowCodeName] = useState(false)
 
 
   const handleSelectWbs = (wbs) => {
@@ -48,7 +50,12 @@ export default function P_Wbs() {
     <Grid container direction="column" spacing={0} sx={{ mt: subHeaderHeight }}>
 
       <Grid item  >
-        <WbsHeader RealmApp={RealmApp} setShow={setShow} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} isProject={isProject} setIsProject={setIsProject} />
+        <WbsHeader
+          RealmApp={RealmApp}
+          setShow={setShow}
+          showName={showName} setShowName={setShowName}
+          showCodeName={showCodeName} setShowCodeName={setShowCodeName}
+        />
       </Grid>
 
       {/* <Grid item >
@@ -141,9 +148,17 @@ export default function P_Wbs() {
 
                           <Grid container>
 
-                            <Grid item>
-                              {theWbs.code.split(".")[level] + " - " + theWbs.name + " - (" + theWbs.codeName + ")"}
-                            </Grid>
+                            {showCodeName &&
+                              <Grid item>
+                                {theWbs.code.split(".")[level] + " - " + theWbs.name + " - (" + theWbs.codeName + ")"}
+                              </Grid>
+                            }
+
+                            {!showCodeName &&
+                              <Grid item>
+                                {theWbs.code.split(".")[level] + " - " + theWbs.name}
+                              </Grid>
+                            }
 
                             <Grid item className='hoverTheWbs'
                               sx={{
@@ -153,8 +168,8 @@ export default function P_Wbs() {
                                 alignSelf: "center",
                                 width: "1rem",
                                 height: "0.5rem",
-                                borderRadius:"0.1rem",
-                                border:"0.15rem solid black",
+                                borderRadius: "0.1rem",
+                                border: "0.15rem solid black",
                                 backgroundColor: "yellow",
                               }}>
                             </Grid>

@@ -21,7 +21,7 @@ import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 
 
-export default function WbsHeader({ RealmApp, setShow }) {
+export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCodeName, showName, setShowName }) {
 
   const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
@@ -120,7 +120,23 @@ export default function WbsHeader({ RealmApp, setShow }) {
   }
 
 
+  async function handleSwitchCodeName(event) {
+    // wbs poza açık hale getirilecekse
+    if (event.target.checked === false) {
+      setShowCodeName(false)
+    } else {
+      setShowCodeName(true)
+    }
+  }
 
+  async function handleSwitchName(event) {
+    // wbs poza açık hale getirilecekse
+    if (event.target.checked === false) {
+      setShowName(false)
+    } else {
+      setShowName(true)
+    }
+  }
 
   async function handleWbsDelete() {
 
@@ -205,13 +221,13 @@ export default function WbsHeader({ RealmApp, setShow }) {
                 </IconButton>
               </Grid>
 
-              <Grid item >
+              <Grid item ml={"1rem"}>
                 <Grid container direction={"column"} alignItems={"center"}>
                   <Grid item>
-                    <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >poz</Typography>
+                    <Typography sx={{ color: !showCodeName ? "lightgray" : "rgb(24,24,24)" }} >ism</Typography>
                   </Grid>
                   <Grid item >
-                    <AntSwitch disabled={!selectedWbs} checked={selectedWbs?.openForPoz ? true : false} onChange={handleSwitchForPoz} />
+                    <AntSwitch disabled={!showCodeName} checked={showName ? true : false} onChange={handleSwitchName} />
                   </Grid>
                 </Grid>
               </Grid>
@@ -219,7 +235,18 @@ export default function WbsHeader({ RealmApp, setShow }) {
               <Grid item ml={"1rem"}>
                 <Grid container direction={"column"} alignItems={"center"}>
                   <Grid item>
-                    <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >kısa</Typography>
+                    <Typography sx={{ color: !showName ? "lightgray" : "rgb(24,24,24)" }} >kod</Typography>
+                  </Grid>
+                  <Grid item >
+                    <AntSwitch disabled={!showName} checked={showCodeName ? true : false} onChange={handleSwitchCodeName} />
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item >
+                <Grid container direction={"column"} alignItems={"center"}>
+                  <Grid item>
+                    <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >poz</Typography>
                   </Grid>
                   <Grid item >
                     <AntSwitch disabled={!selectedWbs} checked={selectedWbs?.openForPoz ? true : false} onChange={handleSwitchForPoz} />
