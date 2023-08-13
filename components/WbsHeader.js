@@ -4,8 +4,11 @@ import { DialogWindow } from './general/DialogWindow';
 
 
 
-import React from 'react'
 import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
@@ -22,6 +25,14 @@ import { styled } from '@mui/material/styles';
 
 
 export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCodeName, showName, setShowName }) {
+
+
+  const [age, setAge] = useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
 
   const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
@@ -221,7 +232,7 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
                 </IconButton>
               </Grid>
 
-              <Grid item ml={"1rem"}>
+              {/* <Grid item ml={"1rem"}>
                 <Grid container direction={"column"} alignItems={"center"}>
                   <Grid item>
                     <Typography sx={{ color: !showCodeName ? "lightgray" : "rgb(24,24,24)" }} >ism</Typography>
@@ -230,17 +241,26 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
                     <AntSwitch disabled={!showCodeName} checked={showName ? true : false} onChange={handleSwitchName} />
                   </Grid>
                 </Grid>
-              </Grid>
+              </Grid> */}
 
               <Grid item ml={"1rem"}>
-                <Grid container direction={"column"} alignItems={"center"}>
-                  <Grid item>
-                    <Typography sx={{ color: !showName ? "lightgray" : "rgb(24,24,24)" }} >kod</Typography>
-                  </Grid>
-                  <Grid item >
-                    <AntSwitch disabled={!showName} checked={showCodeName ? true : false} onChange={handleSwitchCodeName} />
-                  </Grid>
-                </Grid>
+                <FormControl variant="standard" size="small" sx={{ m: 1, minWidth: 120 }}>
+                  {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={age}
+                    onChange={handleChange}
+                    label="Age"
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
 
               <Grid item >
