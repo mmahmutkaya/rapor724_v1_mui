@@ -27,6 +27,9 @@ import Sidebar from './Sidebar';
 import SearchIcon from '@mui/icons-material/Search'
 import InputBase from '@mui/material/InputBase';
 import UndoIcon from '@mui/icons-material/Undo';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 
 
 import Badge from '@mui/material/Badge';
@@ -281,7 +284,7 @@ export default function Layout({ window, children }) {
           }}
         >
 
-          <Grid container sx={{ alignItems: "center", padding: "0rem 1rem", height: topBarHeight }}>
+          <Grid sx={{ alignItems: "center", padding: "0rem 1rem", height: topBarHeight, display: "grid", gridTemplateColumns: "auto auto 1fr auto" }}>
 
             <Grid item>
               <IconButton
@@ -301,12 +304,11 @@ export default function Layout({ window, children }) {
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleToProject}
-                sx={{ mr: 2, display: !isProject ? "none" : null }}
+                sx={{ display: !isProject ? "none" : null }}
               >
                 <UndoIcon />
               </IconButton>
             </Grid>
-
 
             <Grid item>
               <Typography
@@ -378,7 +380,10 @@ export default function Layout({ window, children }) {
                   <MoreIcon />
                 </IconButton>
               </Box>
+
             </Grid>
+
+
 
           </Grid>
           {/* </Toolbar> */}

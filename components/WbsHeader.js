@@ -5,10 +5,6 @@ import { DialogWindow } from './general/DialogWindow';
 
 
 import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
@@ -18,20 +14,15 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import Divider from '@mui/material/Divider';
 import { AppBar } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 
 
 export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCodeName, showName, setShowName }) {
-
-
-  const [age, setAge] = useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
 
   const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
@@ -204,7 +195,7 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
         <Grid
           container
           justifyContent="space-between"
-          sx={{ alignItems: "center", padding: "0rem 0.5rem", height: subHeaderHeight, overflow: "auto" }}
+          sx={{ alignItems: "center", padding: "0rem 0.5rem", height: subHeaderHeight }}
         >
 
           {/* başlık sol */}
@@ -222,7 +213,22 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
 
           {/* başlık sağ */}
           <Grid item>
-            <Grid container spacing={0.5}>
+            <Grid container spacing={0.5} sx={{ alignItems: "center" }}>
+
+              <Grid item >
+                <Grid container direction={"column"} >
+                  <Grid item>
+                    <Typography sx={{ height: "1rem", color: "gray", mb: "0.3rem" }} >ism</Typography>
+                  </Grid>
+                  <Grid item sx={{ height: "1rem", mb: "0.5rem" }}>
+                    <ChangeCircleIcon variant="contained" sx={{
+                      color: "gray"
+                    }} />
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Divider sx={{ ml:"1rem" }} orientation="vertical" flexItem/>
 
               <Grid item >
                 <IconButton onClick={() => handleWbsUnclicked()} aria-label="wbsUncliced">
@@ -232,40 +238,9 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
                 </IconButton>
               </Grid>
 
-              {/* <Grid item ml={"1rem"}>
-                <Grid container direction={"column"} alignItems={"center"}>
-                  <Grid item>
-                    <Typography sx={{ color: !showCodeName ? "lightgray" : "rgb(24,24,24)" }} >ism</Typography>
-                  </Grid>
-                  <Grid item >
-                    <AntSwitch disabled={!showCodeName} checked={showName ? true : false} onChange={handleSwitchName} />
-                  </Grid>
-                </Grid>
-              </Grid> */}
-
-              <Grid item ml={"1rem"}>
-                <FormControl variant="standard" size="small" sx={{ m: 1, minWidth: 120 }}>
-                  {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
-                  <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    value={age}
-                    onChange={handleChange}
-                    label="Age"
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-
               <Grid item >
                 <Grid container direction={"column"} alignItems={"center"}>
-                  <Grid item>
+                  <Grid item >
                     <Typography sx={{ color: !selectedWbs ? "lightgray" : "rgb(24,24,24)" }} >poz</Typography>
                   </Grid>
                   <Grid item >
@@ -317,7 +292,7 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
 
       </AppBar>
 
-    </Paper>
+    </Paper >
   )
 }
 
