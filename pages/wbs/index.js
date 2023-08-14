@@ -21,7 +21,7 @@ import IconButton from '@mui/material/IconButton';
 import FolderIcon from '@mui/icons-material/Folder';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 
 export default function P_Wbs() {
@@ -36,8 +36,7 @@ export default function P_Wbs() {
   !isProject ? router.push('/projects') : null
 
   const [show, setShow] = useState("WbsMain")
-  const [showName, setShowName] = useState(true)
-  const [showCodeName, setShowCodeName] = useState(false)
+  const [nameMode, setNameMode] = useState(false)
 
 
   const handleSelectWbs = (wbs) => {
@@ -53,8 +52,7 @@ export default function P_Wbs() {
         <WbsHeader
           RealmApp={RealmApp}
           setShow={setShow}
-          showName={showName} setShowName={setShowName}
-          showCodeName={showCodeName} setShowCodeName={setShowCodeName}
+          nameMode={nameMode} setNameMode={setNameMode}
         />
       </Grid>
 
@@ -124,11 +122,11 @@ export default function P_Wbs() {
                         <Grid container sx={{ backgroundColor: "yellow", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
                           <Grid item >
                             <Box sx={{
-                              backgroundColor:"#00008B",
-                              borderRadius:"0.5rem",
+                              backgroundColor: "#00008B",
+                              borderRadius: "0.5rem",
                               visibility: theWbs.includesPoz ? "visible" : "hidden",
-                              height:"0.5rem",
-                              width:"0.5rem",
+                              height: "0.5rem",
+                              width: "0.5rem",
                               // borderLeft: "1px solid " + color("border")
                               // width: "1rem", height: "1rem",
                               // border: "1px solid black",
@@ -171,10 +169,10 @@ export default function P_Wbs() {
                         //   color: "red",
                         // },
 
-                        // "&:hover .hoverTheWbs": {
-                        //   // display: "inline"
-                        //   visibility: "visible"
-                        // },
+                        "&:hover .hoverTheWbs": {
+                          // display: "inline"
+                          visibility: "visible"
+                        },
 
                         cursor: "pointer",
 
@@ -186,34 +184,54 @@ export default function P_Wbs() {
                         {/* theWbs isminin yazılı olduğu kısım */}
                         <Grid item>
 
-                          <Grid container>
+                          <Grid container sx={{ color: "#cccccc" }}>
 
-                            {showCodeName &&
-                              <Grid item>
+                            {nameMode === null &&
+                              <Grid item >
                                 {theWbs.code.split(".")[level] + " - " + theWbs.name + " - (" + theWbs.codeName + ")"}
                               </Grid>
                             }
 
-                            {!showCodeName &&
+                            {nameMode === false &&
                               <Grid item>
                                 {theWbs.code.split(".")[level] + " - " + theWbs.name}
                               </Grid>
                             }
 
-                            {/* <Grid item className='hoverTheWbs'
+                            {nameMode === true &&
+                              <Grid item>
+                                {theWbs.code.split(".")[level] + " - " + theWbs.codeName}
+                              </Grid>
+                            }
+
+                            <Grid item className='hoverTheWbs'
                               sx={{
                                 ml: "0.5rem",
                                 visibility: selectedWbs?.code === theWbs.code ? "visible" : "hidden",
-                                justifySelf: "center",
-                                alignSelf: "center",
-                                width: "1rem",
-                                height: "0.5rem",
-                                borderRadius: "0.1rem",
-                                border: "0.15rem solid black",
-                                backgroundColor: "yellow",
                               }}>
-                            </Grid> */}
 
+                              <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                                <Grid item >
+                                  <Box sx={{
+                                    backgroundColor: "yellow",
+                                    borderRadius: "0.5rem",
+                                    height: "0.5rem",
+                                    width: "0.5rem",
+                                    // borderLeft: "1px solid " + color("border")
+                                    // width: "1rem", height: "1rem",
+                                    // border: "1px solid black",
+                                    // ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
+                                    //   backgroundColor: "red",
+                                    // }),
+                                    // ...(selectedWbs?.code == theWbs.code && {
+                                    //   border: "2px solid red"
+                                    // }),
+                                  }}>
+                                  </Box>
+                                </Grid>
+                              </Grid>
+
+                            </Grid>
                           </Grid>
                         </Grid>
 

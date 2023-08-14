@@ -17,13 +17,12 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Divider from '@mui/material/Divider';
-import { AppBar } from '@mui/material';
+import { AppBar, Select } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 
 
-export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCodeName, showName, setShowName }) {
-
+export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode }) {
 
   const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
@@ -122,22 +121,53 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
   }
 
 
-  async function handleSwitchCodeName(event) {
-    // wbs poza açık hale getirilecekse
-    if (event.target.checked === false) {
-      setShowCodeName(false)
-    } else {
-      setShowCodeName(true)
+  const nameMode_name = () => {
+    switch (nameMode) {
+      case null:
+        return (
+          "i+k"
+        )
+      case false:
+        return (
+          "ism"
+        )
+      case true:
+        return (
+          "kod"
+        )
+      default:
+        return (
+          "i+k"
+        )
     }
+
   }
 
-  async function handleSwitchName(event) {
-    // wbs poza açık hale getirilecekse
-    if (event.target.checked === false) {
-      setShowName(false)
-    } else {
-      setShowName(true)
+
+
+
+  async function handleTextMode() {
+
+    switch (nameMode) {
+      case null:
+        return (
+          setNameMode(false)
+        )
+      case false:
+        return (
+          setNameMode(true)
+        )
+      case true:
+        return (
+          setNameMode(null)
+        )
+      default:
+        return (
+          // nameMode_name = "i+k",
+          setNameMode(false)
+        )
     }
+
   }
 
   async function handleWbsDelete() {
@@ -175,11 +205,6 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
     }
   }
 
-  // const [checked, setChecked] = useState(false);
-  // const wbsSwitch = (event) => {
-  //   setChecked(event.target.checked);
-  //   console.log(event.target.checked)
-  // };
 
 
   return (
@@ -215,20 +240,21 @@ export default function WbsHeader({ RealmApp, setShow, showCodeName, setShowCode
           <Grid item>
             <Grid container spacing={0.5} sx={{ alignItems: "center" }}>
 
-              <Grid item >
+              {/* nameMode değiştir */}
+              <Grid item onClick={handleTextMode} sx={{ cursor: "pointer" }}>
                 <Grid container direction={"column"} >
                   <Grid item>
-                    <Typography sx={{ height: "1rem", color: "gray", mb: "0.3rem" }} >ism</Typography>
+                    <Typography sx={{ height: "1rem", width: "1rem", color: "#595959", mb: "0.3rem" }} >{nameMode_name()}</Typography>
                   </Grid>
-                  <Grid item sx={{ height: "1rem", mb: "0.5rem" }}>
+                  <Grid item sx={{ height: "1rem", width: "1rem", mb: "0.5rem" }}>
                     <ChangeCircleIcon variant="contained" sx={{
-                      color: "gray"
+                      color: "#595959"
                     }} />
                   </Grid>
                 </Grid>
               </Grid>
 
-              <Divider sx={{ ml:"1rem" }} orientation="vertical" flexItem/>
+              <Divider sx={{ ml: "2rem"}} color={"#b3b3b3"} orientation="vertical" flexItem />
 
               <Grid item >
                 <IconButton onClick={() => handleWbsUnclicked()} aria-label="wbsUncliced">
