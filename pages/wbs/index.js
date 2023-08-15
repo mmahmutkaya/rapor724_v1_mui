@@ -37,6 +37,7 @@ export default function P_Wbs() {
 
   const [show, setShow] = useState("WbsMain")
   const [nameMode, setNameMode] = useState(false)
+  const [codeMode, setCodeMode] = useState(true)
 
 
   const handleSelectWbs = (wbs) => {
@@ -53,6 +54,7 @@ export default function P_Wbs() {
           RealmApp={RealmApp}
           setShow={setShow}
           nameMode={nameMode} setNameMode={setNameMode}
+          codeMode={codeMode} setCodeMode={setCodeMode}
         />
       </Grid>
 
@@ -186,21 +188,27 @@ export default function P_Wbs() {
 
                           <Grid container sx={{ color: "#cccccc" }}>
 
+                            {codeMode === true &&
+                              <Grid item sx={{ml:"0.2rem"}}>
+                                {theWbs.code.split(".")[level] + " - "}
+                              </Grid>
+                            }
+
                             {nameMode === null &&
-                              <Grid item >
-                                {theWbs.code.split(".")[level] + " - " + theWbs.name + " - (" + theWbs.codeName + ")"}
+                              <Grid item sx={{ml:"0.3rem"}}>
+                                {theWbs.name + " - (" + theWbs.codeName + ")"}
                               </Grid>
                             }
 
                             {nameMode === false &&
-                              <Grid item>
-                                {theWbs.code.split(".")[level] + " - " + theWbs.name}
+                              <Grid item sx={{ml:"0.3rem"}}>
+                                {theWbs.name}
                               </Grid>
                             }
 
                             {nameMode === true &&
-                              <Grid item>
-                                {theWbs.code.split(".")[level] + " - " + theWbs.codeName}
+                              <Grid item sx={{ml:"0.3rem"}}>
+                                {theWbs.codeName}
                               </Grid>
                             }
 

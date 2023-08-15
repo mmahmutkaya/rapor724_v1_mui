@@ -16,13 +16,15 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 import Divider from '@mui/material/Divider';
 import { AppBar, Select } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 
 
-export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode }) {
+export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, codeMode, setCodeMode }) {
 
   const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
@@ -240,21 +242,35 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode }) 
           <Grid item>
             <Grid container spacing={0.5} sx={{ alignItems: "center" }}>
 
-              {/* nameMode değiştir */}
-              <Grid item onClick={handleTextMode} sx={{ cursor: "pointer" }}>
+              {/* codeMode değiştir */}
+              <Grid item onClick={() => setCodeMode(prev => !prev)} sx={{ cursor: "pointer", color: codeMode ? "#595959" : "lightgray" }}>
                 <Grid container direction={"column"} >
                   <Grid item>
-                    <Typography sx={{ height: "1rem", width: "1rem", color: "#595959", mb: "0.3rem" }} >{nameMode_name()}</Typography>
+                    <Typography sx={{ height: "1rem", width: "1rem", mb: "0.3rem" }} >kod</Typography>
                   </Grid>
                   <Grid item sx={{ height: "1rem", width: "1rem", mb: "0.5rem" }}>
-                    <ChangeCircleIcon variant="contained" sx={{
-                      color: "#595959"
+                    <VisibilityIcon variant="contained" sx={{
+
                     }} />
                   </Grid>
                 </Grid>
               </Grid>
 
-              <Divider sx={{ ml: "2rem"}} color={"#b3b3b3"} orientation="vertical" flexItem />
+              {/* nameMode değiştir */}
+              <Grid item onClick={handleTextMode} sx={{ cursor: "pointer", ml: "1.5rem", color: "#595959" }}>
+                <Grid container direction={"column"} >
+                  <Grid item>
+                    <Typography sx={{ height: "1rem", width: "1rem", mb: "0.3rem" }} >{nameMode_name()}</Typography>
+                  </Grid>
+                  <Grid item sx={{ height: "1rem", width: "1rem", mb: "0.5rem" }}>
+                    <ChangeCircleIcon variant="contained" sx={{
+                      
+                    }} />
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Divider sx={{ ml: "2rem" }} color={"#b3b3b3"} orientation="vertical" flexItem />
 
               <Grid item >
                 <IconButton onClick={() => handleWbsUnclicked()} aria-label="wbsUncliced">
