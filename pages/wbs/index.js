@@ -188,26 +188,34 @@ export default function P_Wbs() {
 
                           <Grid container sx={{ color: "#cccccc" }}>
 
-                            {codeMode === true &&
-                              <Grid item sx={{ml:"0.2rem"}}>
+                            {codeMode === null && //kısa
+                              <Grid item sx={{ ml: "0.2rem" }}>
                                 {theWbs.code.split(".")[level] + " - "}
                               </Grid>
                             }
 
+                            {codeMode === false && //tam
+                              <Grid item sx={{ ml: "0.2rem" }}>
+                                {theWbs.code + " - "}
+                              </Grid>
+                            }
+
+                            {/* codeMode === true && //yok */}
+
                             {nameMode === null &&
-                              <Grid item sx={{ml:"0.3rem"}}>
+                              <Grid item sx={{ ml: "0.3rem" }}>
                                 {theWbs.name + " - (" + theWbs.codeName + ")"}
                               </Grid>
                             }
 
                             {nameMode === false &&
-                              <Grid item sx={{ml:"0.3rem"}}>
+                              <Grid item sx={{ ml: "0.3rem" }}>
                                 {theWbs.name}
                               </Grid>
                             }
 
                             {nameMode === true &&
-                              <Grid item sx={{ml:"0.3rem"}}>
+                              <Grid item sx={{ ml: "0.3rem" }}>
                                 {theWbs.codeName}
                               </Grid>
                             }

@@ -17,6 +17,8 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import PinIcon from '@mui/icons-material/Pin';
+import FontDownloadIcon from '@mui/icons-material/FontDownload';
 
 import Divider from '@mui/material/Divider';
 import { AppBar, Select } from '@mui/material';
@@ -75,13 +77,18 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
       } catch (err) {
 
-        console.log("err", err.message)
-        let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+        console.log(err)
+        let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
+  
+        let text1 = "__mesajBaslangic__"
+        let text2 = "__mesajBitis__"
+        let mesajBaslangic = hataMesaj_.includes(text1) ? hataMesaj_.indexOf(text1) + text1.length : 0
+        let mesajBitis = hataMesaj_.includes(text2) ? hataMesaj_.indexOf(text2) : hataMesaj_.length
+        // console.log(hataMesaj_.slice(mesajBaslangic + "mesajBaslangic:".length, mesajBitis))
+        hataMesaj_ = hataMesaj_.slice(mesajBaslangic, mesajBitis)
 
-        if (hataMesaj_.includes("bir veya daha fazla alt başlığı mevcut")) {
-          hataMesaj_ = "\"" + selectedWbs.name + "\" isimli başlığın bir veya daha fazla alt başlığı mevcut, bu sebeple direk poz eklemeye açık hale getirilemez, mevcut alt başlıklar uygun değilse, yeni bir alt başlık oluşturup, o başlığı poz eklemeye açabilirsiniz."
-        }
-
+        console.log(hataMesaj_)
+  
         setDialogCase("error")
         setShowDialog(hataMesaj_)
       }
@@ -142,13 +149,33 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
           "i+k"
         )
     }
+  }
 
+  const codeMode_name = () => {
+    switch (codeMode) {
+      case null:
+        return (
+          "ksa"
+        )
+      case false:
+        return (
+          "tam"
+        )
+      case true:
+        return (
+          "yok"
+        )
+      default:
+        return (
+          "ksa"
+        )
+    }
   }
 
 
 
 
-  async function handleTextMode() {
+  function handleTextMode() {
 
     switch (nameMode) {
       case null:
@@ -171,6 +198,32 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
     }
 
   }
+
+  function handleCodeMode() {
+
+    switch (codeMode) {
+      case null:
+        return (
+          setCodeMode(false)
+        )
+      case false:
+        return (
+          setCodeMode(true)
+        )
+      case true:
+        return (
+          setCodeMode(null)
+        )
+      default:
+        return (
+          // nameMode_name = "i+k",
+          setCodeMode(false)
+        )
+    }
+
+  }
+
+  handleCodeMode
 
   async function handleWbsDelete() {
 
@@ -243,14 +296,14 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
             <Grid container spacing={0.5} sx={{ alignItems: "center" }}>
 
               {/* codeMode değiştir */}
-              <Grid item onClick={() => setCodeMode(prev => !prev)} sx={{ cursor: "pointer", color: codeMode ? "#595959" : "lightgray" }}>
+              <Grid item onClick={handleCodeMode} sx={{ cursor: "pointer", color: "#595959" }}>
                 <Grid container direction={"column"} >
                   <Grid item>
-                    <Typography sx={{ height: "1rem", width: "1rem", mb: "0.3rem" }} >kod</Typography>
+                    <Typography sx={{ height: "1rem", width: "1rem", mb: "0.3rem" }} >{codeMode_name()}</Typography>
                   </Grid>
                   <Grid item sx={{ height: "1rem", width: "1rem", mb: "0.5rem" }}>
-                    <VisibilityIcon variant="contained" sx={{
-
+                    <PinIcon variant="contained" sx={{
+                      fontSize: "1.55rem"
                     }} />
                   </Grid>
                 </Grid>
@@ -263,8 +316,8 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
                     <Typography sx={{ height: "1rem", width: "1rem", mb: "0.3rem" }} >{nameMode_name()}</Typography>
                   </Grid>
                   <Grid item sx={{ height: "1rem", width: "1rem", mb: "0.5rem" }}>
-                    <ChangeCircleIcon variant="contained" sx={{
-                      
+                    <FontDownloadIcon variant="contained" sx={{
+                      fontSize: "1.4rem"
                     }} />
                   </Grid>
                 </Grid>

@@ -7,16 +7,14 @@ import { Typography } from '@mui/material'
 
 export default function P_Dashboard() {
 
-  const { isProject, setIsProject } = useContext(StoreContext)
+  const { isProject } = useContext(StoreContext)
   const router = useRouter();
   // !isProject ? router.push('/projects') : null
   !isProject ? window.location.href = "/projects" : null
 
-
-
   return (
     <Typography p={2}>
-      {isProject?.reports}
+      {isProject?.name} + " projesinin adı db den geldi"
     </Typography>
   )
 }
