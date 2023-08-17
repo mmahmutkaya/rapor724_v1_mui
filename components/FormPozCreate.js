@@ -269,10 +269,10 @@ export default function FormPozCreate({ setShow }) {
                         wbsOne.code.split(".").map((codePart, index) => {
                           if (index == 0) {
                             wbsCode = codePart
-                            wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                            wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
                           } else {
                             wbsCode = wbsCode + "." + codePart
-                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).name
+                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).codeName
                           }
                         })
                       }

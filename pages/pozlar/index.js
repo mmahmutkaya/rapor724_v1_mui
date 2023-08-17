@@ -44,7 +44,7 @@ export default function P_Pozlar() {
 
   if (error) return "An error has occurred: " + error.message;
 
-  
+
   // poz üst başlıkları ile beraber gösterimi için
   let wbsCode
   let wbsName
@@ -103,7 +103,7 @@ export default function P_Pozlar() {
                           // "&:hover": {
                           //   color: "red",
                           // },
-                          color: "#757575"
+                          color: wbsOne.includesPoz ? "darkgreen" : "darkred" 
                         }} />
                     </Grid>
 
@@ -112,14 +112,14 @@ export default function P_Pozlar() {
                         wbsOne.code.split(".").map((codePart, index) => {
                           if (index == 0) {
                             wbsCode = codePart
-                            wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                            wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
                           } else {
                             wbsCode = wbsCode + "." + codePart
-                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).name
+                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).codeName
                           }
                         })
                       }
-                      <Typography sx={{ fontWeight: "normal" }}>
+                      <Typography sx={{ fontWeight: "bold" }}>
                         {wbsName}
                       </Typography>
                     </Grid>
@@ -128,32 +128,6 @@ export default function P_Pozlar() {
 
                 </Grid>
 
-
-
-                {/* poz tabloları */}
-                {/* <Grid item marginBottom={5}>
-                  <Box >
-                    <DataGrid
-                      rows={pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString())}
-                      columns={columns}
-                      getRowId={(row) => row._id.toString()}
-                      hideFooter={true}
-                      density="compact"
-                      initialState={{
-                        // pagination: {
-                        //   paginationModel: {
-                        //     pageSize: 5,
-                        //   },
-                        // },
-                      }}
-                      onCellClick={handleOnCellClick}
-                      onRowClick={(row) => { console.log(row.id) }}
-                      // pageSizeOptions={[5]}
-                      // checkboxSelection
-                      disableRowSelectionOnClick
-                    />
-                  </Box>
-                </Grid> */}
 
                 {pozlar.find(item => item._wbsId.toString() == wbsOne._id.toString()) &&
                   <Grid item marginBottom={5}>
@@ -176,6 +150,15 @@ export default function P_Pozlar() {
                         // pageSizeOptions={[5]}
                         // checkboxSelection
                         disableRowSelectionOnClick
+                        sx={{
+                          '.MuiDataGrid-columnHeaders': {
+                            backgroundColor: 'lightgray',
+                          },
+                          '.MuiDataGrid-columnHeaderTitle': {
+                            fontSize: "1rem",
+                            fontWeight: "700",
+                          },
+                        }}
                       />
                     </Box>
                   </Grid>
