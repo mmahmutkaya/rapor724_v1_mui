@@ -86,10 +86,6 @@ export default function P_Pozlar() {
                 key={wbsOne._id}
                 direction="column"
                 container spacing={0}
-                sx={{
-                  padding: "0.2rem 1rem",
-                  cursor: "pointer"
-                }}
               >
 
                 {/* wbs başlıkları */}
@@ -103,7 +99,7 @@ export default function P_Pozlar() {
                           // "&:hover": {
                           //   color: "red",
                           // },
-                          color: wbsOne.includesPoz ? "darkgreen" : "darkred" 
+                          color: wbsOne.includesPoz ? "darkgreen" : "darkred"
                         }} />
                     </Grid>
 
@@ -130,7 +126,7 @@ export default function P_Pozlar() {
 
 
                 {pozlar.find(item => item._wbsId.toString() == wbsOne._id.toString()) &&
-                  <Grid item marginBottom={5}>
+                  <Grid item marginBottom={1}>
                     <Box >
                       <DataGrid
                         rows={pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString())}
@@ -151,12 +147,26 @@ export default function P_Pozlar() {
                         // checkboxSelection
                         disableRowSelectionOnClick
                         sx={{
+                          '.MuiDataGrid-columnHeader': {
+                            backgroundColor: 'lightgray',
+                            borderLeft: 1,
+                          },
+                          '.MuiDataGrid-columnHeader:last-child': {
+                            borderRight: 1,
+                          },
                           '.MuiDataGrid-columnHeaders': {
                             backgroundColor: 'lightgray',
+                            borderRight: 1,
                           },
                           '.MuiDataGrid-columnHeaderTitle': {
                             fontSize: "1rem",
                             fontWeight: "700",
+                          },
+                          "& .MuiDataGrid-cell": {
+                            borderLeft: 1,
+                          },
+                          "& .MuiDataGrid-cell:last-child": {
+                            borderRight: 1,
                           },
                         }}
                       />
@@ -185,7 +195,7 @@ const columns = [
   {
     field: 'name',
     headerName: 'Poz Adı',
-    width: 150,
+    width: 500,
     editable: true,
   },
   {
@@ -193,7 +203,7 @@ const columns = [
     headerName: 'Birim',
     width: 150,
     editable: true,
-  },
+  }
   // {
   //   field: 'fullName',
   //   headerName: 'Full name',
