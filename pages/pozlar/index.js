@@ -14,9 +14,8 @@ import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
+import InfoIcon from '@mui/icons-material/Info';
 
-
-import TurnedInIcon from '@mui/icons-material/TurnedIn';
 
 
 export default function P_Pozlar() {
@@ -45,18 +44,19 @@ export default function P_Pozlar() {
   if (error) return "An error has occurred: " + error.message;
 
 
-  // poz üst başlıkları ile beraber gösterimi için
-  let wbsCode
-  let wbsName
-
   const handleOnCellClick = (params) => {
     console.log(params);
   };
 
+  // aşağıda kullanılıyor
+  let wbsCode = ""
+  let wbsName = ""
+  let cOunt = 0
+  let pozlar2
+  const gridTemplateColumns_Poz = "2rem 1fr 5rem"
 
   return (
     <Grid container direction="column" spacing={1}>
-
 
       <Grid item >
         <PozHeader setShow={setShow} />
@@ -76,8 +76,27 @@ export default function P_Pozlar() {
         </Stack>
       }
 
-      {show == "PozMain" && isProject?.wbs &&
+      {show == "PozMain" && isProject?.wbs?.length &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
+
+          <Grid sx={{ display: "grid", gridAutoFlow: "column", gridTemplateColumns: gridTemplateColumns_Poz, backgroundColor: "lightgray", fontWeight: "600", height: "2rem", alignItems: "center" }} >
+
+            <Grid item >
+              <Grid sx={{ display: "grid", justifyContent: "center", width: "100%", height: "100%" }}>
+                <InfoIcon sx={{fontSize:"1.2rem"}} />
+              </Grid>
+            </Grid>
+
+            <Grid item>
+              Poz Tanımı
+            </Grid>
+
+            <Grid item sx={{ textAlign: "center" }}>
+              Birim
+            </Grid>
+
+          </Grid>
+
 
           {
             isProject.wbs.filter(item => item.openForPoz === true).map(wbsOne => (
@@ -86,6 +105,7 @@ export default function P_Pozlar() {
                 key={wbsOne._id}
                 direction="column"
                 container spacing={0}
+                sx={{ mt: "1rem" }}
               >
 
                 {/* wbs başlıkları */}
@@ -93,30 +113,63 @@ export default function P_Pozlar() {
 
                   <Grid container>
 
-                    <Grid item>
+                    {/* <Grid item>
                       <TurnedInIcon
                         sx={{
                           // "&:hover": {
                           //   color: "red",
                           // },
-                          color: wbsOne.includesPoz ? "darkgreen" : "darkred"
+                          color: wbsOne.includesPoz ? "darkred" : "darkred"
                         }} />
-                    </Grid>
+                    </Grid> */}
 
                     <Grid item>
+
+                      <Box sx={{ display: "none" }}>
+                        {cOunt = wbsOne.code.split(".").length}
+                      </Box>
+
                       {
                         wbsOne.code.split(".").map((codePart, index) => {
+
+                          // console.log(cOunt)
+                          // console.log(index + 1)
+                          // console.log("---")
+
                           if (index == 0) {
                             wbsCode = codePart
                             wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
-                          } else {
-                            wbsCode = wbsCode + "." + codePart
-                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).codeName
                           }
+
+                          if (index !== 0 && index + 1 !== cOunt) {
+                            wbsCode = wbsCode + "." + codePart
+                            wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
+                          }
+
+                          if (index !== 0 && index + 1 == cOunt) {
+                            wbsCode = wbsCode + "." + codePart
+                            wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
+                          }
+
                         })
                       }
+
+                      <Box sx={{ display: "none" }}>
+                        {cOunt = wbsName.split(">").length}
+                      </Box>
+
                       <Typography sx={{ fontWeight: "bold" }}>
-                        {wbsName}
+
+                        {wbsName.split(">").map((item, index) => (
+
+                          <Box key={index} component={"span"} >
+                            {item}
+                            {index + 1 !== cOunt &&
+                              <Box component={"span"} sx={{ color: "darkred" }}>{"--"}</Box>
+                            }
+                          </Box>
+
+                        ))}
                       </Typography>
                     </Grid>
 
@@ -124,8 +177,87 @@ export default function P_Pozlar() {
 
                 </Grid>
 
+                <Box sx={{ display: "none" }}>
+                  {cOunt = pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString()).length}
+                </Box>
 
-                {pozlar.find(item => item._wbsId.toString() == wbsOne._id.toString()) &&
+                {
+                  pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((item, index) => {
+
+                    // 1 den fazla poz varsa son poz hariç
+                    if (cOunt !== 1 && index + 1 !== cOunt) {
+                      return (
+
+                        <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, alignContent: "center", justifyContent: "center" }}>
+
+                          <Grid sx={{ border: "1px solid black", borderRight: "0", borderBottom: "0", textAlign: "center" }}>
+                            x
+                          </Grid>
+
+                          <Grid sx={{ border: "1px solid black" }}>
+                            {item.name}
+                          </Grid>
+
+                          <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
+                            {item.unit}
+                          </Grid>
+
+                        </Grid>
+                      )
+                    }
+
+                    // 1 den fazla poz varsa son poz
+                    if (cOunt !== 1 && index + 1 == cOunt) {
+                      return (
+
+                        <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
+
+                          <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
+                            x
+                          </Grid>
+
+                          <Grid sx={{ border: "1px solid black", borderTop: "0" }}>
+                            {item.name}
+                          </Grid>
+
+                          <Grid sx={{ border: "1px solid black", borderLeft: "0", borderTop: "0", textAlign: "center" }}>
+                            {item.unit}
+                          </Grid>
+
+                        </Grid>
+                      )
+                    }
+
+                    // 1 poz varsa
+                    if (cOunt == 1) {
+                      return (
+
+                        <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
+
+                          <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign:"center"}}>
+                            x
+                          </Grid>
+
+                          <Grid sx={{ border: "1px solid black" }}>
+                            {item.name}
+                          </Grid>
+
+                          <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
+                            {item.unit}
+                          </Grid>
+
+                        </Grid>
+                      )
+                    }
+
+
+
+                  })
+                }
+
+
+                {/* {
+                  pozlar.find(item => item._wbsId.toString() == wbsOne._id.toString()) &&
                   <Grid item marginBottom={1}>
                     <Box >
                       <DataGrid
@@ -145,24 +277,26 @@ export default function P_Pozlar() {
                         onRowClick={(row) => { console.log(row.id) }}
                         // pageSizeOptions={[5]}
                         // checkboxSelection
-                        disableRowSelectionOnClick
+                        // disableRowSelectionOnClick
                         sx={{
-                          '.MuiDataGrid-columnHeader': {
-                            backgroundColor: 'lightgray',
-                            borderLeft: 1,
-                          },
-                          '.MuiDataGrid-columnHeader:last-child': {
-                            borderRight: 1,
-                          },
+                          // '.MuiDataGrid-columnHeader': {
+                          //   backgroundColor: 'lightgray',
+                          //   borderLeft: 1,
+                          // },
+                          // '.MuiDataGrid-columnHeader:last-child': {
+                          //   borderRight: 1,
+                          // },
                           '.MuiDataGrid-columnHeaders': {
                             backgroundColor: 'lightgray',
                             borderRight: 1,
+                            display: "none"
                           },
-                          '.MuiDataGrid-columnHeaderTitle': {
-                            fontSize: "1rem",
-                            fontWeight: "700",
-                          },
+                          // '.MuiDataGrid-columnHeaderTitle': {
+                          //   fontSize: "1rem",
+                          //   fontWeight: "700",
+                          // },
                           "& .MuiDataGrid-cell": {
+                            borderLeft: 1,
                             borderLeft: 1,
                           },
                           "& .MuiDataGrid-cell:last-child": {
@@ -172,7 +306,7 @@ export default function P_Pozlar() {
                       />
                     </Box>
                   </Grid>
-                }
+                } */}
 
 
               </Grid>
@@ -184,7 +318,7 @@ export default function P_Pozlar() {
         </Stack>
       }
 
-    </Grid>
+    </Grid >
 
   )
 
@@ -195,13 +329,15 @@ const columns = [
   {
     field: 'name',
     headerName: 'Poz Adı',
-    width: 500,
+    // minWidth: "50%",
+    // flex:4,
     editable: true,
   },
   {
     field: 'unit',
     headerName: 'Birim',
-    width: 150,
+    // minWidth: "10%",
+    // flex:1,
     editable: true,
   }
   // {

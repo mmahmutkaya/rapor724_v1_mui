@@ -125,7 +125,7 @@ export default function FormPozCreate({ setShow }) {
 
       const result = await RealmApp?.currentUser?.callFunction("createPoz", newPoz);
 
-      console.log("result",result)
+      console.log("result", result)
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
       // yukarıda da frontend kontrolü yapılmıştı
@@ -202,9 +202,10 @@ export default function FormPozCreate({ setShow }) {
   };
 
 
-  // poz üst başlıkları ile beraber gösterimi için
+  // aşağıda kullanılıyor
   let wbsCode
   let wbsName
+  let cOunt
 
   return (
     <div>
@@ -265,18 +266,45 @@ export default function FormPozCreate({ setShow }) {
                   isProject?.wbs.filter(item => item.openForPoz).map(wbsOne => (
                     // console.log(wbs)
                     <MenuItem key={wbsOne._id} value={wbsOne._id}>
+
                       {
                         wbsOne.code.split(".").map((codePart, index) => {
+
+                          // console.log(cOunt)
+                          // console.log(index + 1)
+                          // console.log("---")
+
+                          cOunt = wbsOne.code.split(".").length
+
                           if (index == 0) {
                             wbsCode = codePart
                             wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
-                          } else {
-                            wbsCode = wbsCode + "." + codePart
-                            wbsName = wbsName + " --> " + isProject.wbs.find(item => item.code == wbsCode).codeName
                           }
+
+                          if (index !== 0 && index + 1 !== cOunt) {
+                            wbsCode = wbsCode + "." + codePart
+                            wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
+                          }
+
+                          if (index !== 0 && index + 1 == cOunt) {
+                            wbsCode = wbsCode + "." + codePart
+                            wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
+                          }
+
                         })
                       }
-                      {wbsName}
+
+                      {wbsName.split(">").map((item, index) => (
+
+                        <Box key={index} component={"span"} >
+                          {item}
+                          {index + 1 !== wbsName.split(">").length &&
+                            <Box component={"span"} ml={0.1} mr={0.3}>{"--"}</Box>
+                          }
+                        </Box>
+
+                      ))}
+
                     </MenuItem>
                   ))
                 }
