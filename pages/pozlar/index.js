@@ -83,7 +83,7 @@ export default function P_Pozlar() {
 
             <Grid item >
               <Grid sx={{ display: "grid", justifyContent: "center", width: "100%", height: "100%" }}>
-                <InfoIcon sx={{fontSize:"1.2rem"}} />
+                <InfoIcon sx={{ fontSize: "1.2rem" }} />
               </Grid>
             </Grid>
 
@@ -109,72 +109,54 @@ export default function P_Pozlar() {
               >
 
                 {/* wbs başlıkları */}
-                <Grid item>
+                <Grid item sx={{backgroundColor:"#FAEBD7"}}>
 
-                  <Grid container>
+                  <Box sx={{ display: "none" }}>
+                    {cOunt = wbsOne.code.split(".").length}
+                  </Box>
 
-                    {/* <Grid item>
-                      <TurnedInIcon
-                        sx={{
-                          // "&:hover": {
-                          //   color: "red",
-                          // },
-                          color: wbsOne.includesPoz ? "darkred" : "darkred"
-                        }} />
-                    </Grid> */}
+                  {
+                    wbsOne.code.split(".").map((codePart, index) => {
 
-                    <Grid item>
+                      // console.log(cOunt)
+                      // console.log(index + 1)
+                      // console.log("---")
 
-                      <Box sx={{ display: "none" }}>
-                        {cOunt = wbsOne.code.split(".").length}
-                      </Box>
-
-                      {
-                        wbsOne.code.split(".").map((codePart, index) => {
-
-                          // console.log(cOunt)
-                          // console.log(index + 1)
-                          // console.log("---")
-
-                          if (index == 0) {
-                            wbsCode = codePart
-                            wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 !== cOunt) {
-                            wbsCode = wbsCode + "." + codePart
-                            wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 == cOunt) {
-                            wbsCode = wbsCode + "." + codePart
-                            wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
-                          }
-
-                        })
+                      if (index == 0) {
+                        wbsCode = codePart
+                        wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
                       }
 
-                      <Box sx={{ display: "none" }}>
-                        {cOunt = wbsName.split(">").length}
+                      if (index !== 0 && index + 1 !== cOunt) {
+                        wbsCode = wbsCode + "." + codePart
+                        wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
+                      }
+
+                      if (index !== 0 && index + 1 == cOunt) {
+                        wbsCode = wbsCode + "." + codePart
+                        wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
+                      }
+
+                    })
+                  }
+
+                  <Box sx={{ display: "none" }}>
+                    {cOunt = wbsName.split(">").length}
+                  </Box>
+
+                  <Typography sx={{ fontWeight: "bold" }}>
+
+                    {wbsName.split(">").map((item, index) => (
+
+                      <Box key={index} component={"span"} >
+                        {item}
+                        {index + 1 !== cOunt &&
+                          <Box component={"span"} sx={{ color: "darkred" }}>{"--"}</Box>
+                        }
                       </Box>
 
-                      <Typography sx={{ fontWeight: "bold" }}>
-
-                        {wbsName.split(">").map((item, index) => (
-
-                          <Box key={index} component={"span"} >
-                            {item}
-                            {index + 1 !== cOunt &&
-                              <Box component={"span"} sx={{ color: "darkred" }}>{"--"}</Box>
-                            }
-                          </Box>
-
-                        ))}
-                      </Typography>
-                    </Grid>
-
-                  </Grid>
-
+                    ))}
+                  </Typography>
                 </Grid>
 
                 <Box sx={{ display: "none" }}>
@@ -234,7 +216,7 @@ export default function P_Pozlar() {
 
                         <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
 
-                          <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign:"center"}}>
+                          <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
                             x
                           </Grid>
 
