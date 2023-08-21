@@ -79,7 +79,10 @@ export default function P_Pozlar() {
       {show == "PozMain" && isProject?.wbs?.length &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
-          <Grid sx={{ display: "grid", gridAutoFlow: "column", gridTemplateColumns: gridTemplateColumns_Poz, backgroundColor: "lightgray", fontWeight: "600", height: "2rem", alignItems: "center" }} >
+          <Grid sx={{
+            display: "grid", gridAutoFlow: "column", gridTemplateColumns: gridTemplateColumns_Poz,
+            backgroundColor: "lightgray", fontWeight: "600", height: "2rem", alignItems: "center"
+          }} >
 
             <Grid item >
               <Grid sx={{ display: "grid", justifyContent: "center", width: "100%", height: "100%" }}>
@@ -109,7 +112,7 @@ export default function P_Pozlar() {
               >
 
                 {/* wbs başlıkları */}
-                <Grid item sx={{backgroundColor:"#FAEBD7"}}>
+                <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black", borderBottom: wbsOne.includesPoz ? "0" : null }}>
 
                   <Box sx={{ display: "none" }}>
                     {cOunt = wbsOne.code.split(".").length}
@@ -144,19 +147,18 @@ export default function P_Pozlar() {
                     {cOunt = wbsName.split(">").length}
                   </Box>
 
-                  <Typography sx={{ fontWeight: "bold" }}>
+                  {/* wbs başlığpın yazdığı yer */}
+                  {wbsName.split(">").map((item, index) => (
 
-                    {wbsName.split(">").map((item, index) => (
+                    <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight:"normal" }} >
+                      {item}
+                      {index + 1 !== cOunt &&
+                        <Typography component={"span"} sx={{ color: "darkred" }}>{"--"}</Typography>
+                      }
+                    </Typography>
 
-                      <Box key={index} component={"span"} >
-                        {item}
-                        {index + 1 !== cOunt &&
-                          <Box component={"span"} sx={{ color: "darkred" }}>{"--"}</Box>
-                        }
-                      </Box>
+                  ))}
 
-                    ))}
-                  </Typography>
                 </Grid>
 
                 <Box sx={{ display: "none" }}>
@@ -173,15 +175,21 @@ export default function P_Pozlar() {
                         <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, alignContent: "center", justifyContent: "center" }}>
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", borderBottom: "0", textAlign: "center" }}>
-                            x
+                            <Typography>
+                              xx
+                            </Typography>
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black" }}>
-                            {item.name}
+                            <Typography sx={{ ml: "0.2rem" }}>
+                              {item.name}
+                            </Typography>
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
-                            {item.unit}
+                            <Typography >
+                              {item.unit}
+                            </Typography>
                           </Grid>
 
                         </Grid>
@@ -195,15 +203,21 @@ export default function P_Pozlar() {
                         <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
-                            x
+                            <Typography >
+                              xx
+                            </Typography>
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black", borderTop: "0" }}>
-                            {item.name}
+                            <Typography sx={{ ml: "0.2rem" }}>
+                              {item.name}
+                            </Typography>
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black", borderLeft: "0", borderTop: "0", textAlign: "center" }}>
-                            {item.unit}
+                            <Typography >
+                              {item.unit}
+                            </Typography>
                           </Grid>
 
                         </Grid>
@@ -217,15 +231,21 @@ export default function P_Pozlar() {
                         <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
-                            x
+                            <Typography >
+                              xx
+                            </Typography>
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black" }}>
-                            {item.name}
+                            <Typography sx={{ ml: "0.2rem" }}>
+                              {item.name}
+                            </Typography>
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
-                            {item.unit}
+                            <Typography >
+                              {item.unit}
+                            </Typography>
                           </Grid>
 
                         </Grid>
