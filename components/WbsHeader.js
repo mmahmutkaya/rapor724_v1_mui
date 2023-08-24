@@ -223,7 +223,6 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
   }
 
-  handleCodeMode
 
   async function handleWbsDelete() {
 
