@@ -12,6 +12,7 @@ export default ({ children }) => {
   const subHeaderHeight = "3.5rem"
   const drawerWidth = 240
   const [selectedWbs, setSelectedWbs] = useState()
+  const [selectedPoz, setSelectedPoz] = useState()
   const [isProject, setIsProject] = useState()
   const [isContext] = useState(true)
 
@@ -23,6 +24,7 @@ export default ({ children }) => {
     topBarHeight,
     drawerWidth,
     selectedWbs, setSelectedWbs,
+    selectedPoz, setSelectedPoz,
     isProject, setIsProject,
     isContext
   }

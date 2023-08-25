@@ -21,6 +21,7 @@ import InfoIcon from '@mui/icons-material/Info';
 export default function P_Pozlar() {
 
   const { isProject } = useContext(StoreContext)
+  const { selectedPoz, setSelectedPoz } = useContext(StoreContext)
 
   const [show, setShow] = useState("PozMain")
 
@@ -44,15 +45,16 @@ export default function P_Pozlar() {
   if (error) return "An error has occurred: " + error.message;
 
 
-  const handleOnCellClick = (params) => {
-    console.log(params);
-  };
+  const handleSelectPoz = (poz) => {
+    setSelectedPoz(prevPoz => poz)
+  }
+
 
   // aşağıda kullanılıyor
   let wbsCode = ""
   let wbsName = ""
   let cOunt = 0
-  let pozlar2
+
   const gridTemplateColumns_Poz = "2rem 1fr 5rem"
 
   return (
@@ -111,7 +113,7 @@ export default function P_Pozlar() {
                 sx={{ mt: "1rem" }}
               >
 
-                {/* wbs başlıkları */}
+                {/* poz için wbs başlıkları */}
                 <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black", borderBottom: wbsOne.includesPoz ? "0" : null }}>
 
                   <Box sx={{ display: "none" }}>
@@ -150,7 +152,7 @@ export default function P_Pozlar() {
                   {/* wbs başlığpın yazdığı yer */}
                   {wbsName.split(">").map((item, index) => (
 
-                    <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight:"normal" }} >
+                    <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
                       {item}
                       {index + 1 !== cOunt &&
                         <Typography component={"span"} sx={{ color: "darkred" }}>{"--"}</Typography>
@@ -172,7 +174,7 @@ export default function P_Pozlar() {
                     if (cOunt !== 1 && index + 1 !== cOunt) {
                       return (
 
-                        <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, alignContent: "center", justifyContent: "center" }}>
+                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, alignContent: "center", justifyContent: "center" }}>
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", borderBottom: "0", textAlign: "center" }}>
                             <Typography>
@@ -200,7 +202,7 @@ export default function P_Pozlar() {
                     if (cOunt !== 1 && index + 1 == cOunt) {
                       return (
 
-                        <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
+                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
                             <Typography >
@@ -228,7 +230,7 @@ export default function P_Pozlar() {
                     if (cOunt == 1) {
                       return (
 
-                        <Grid key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
+                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
                             <Typography >

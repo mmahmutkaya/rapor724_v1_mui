@@ -19,6 +19,8 @@ export default function PozHeader({ setShow }) {
 
   const { isProject } = useContext(StoreContext)
 
+  const { selectedPoz, setSelectedPoz } = useContext(StoreContext)
+
   const handleTry = () => {
     // return isProject ? setIsProject(isProject.name) : null
   }
@@ -45,10 +47,10 @@ export default function PozHeader({ setShow }) {
         container
         justifyContent="space-between"
         alignItems="center"
-        sx={{ padding: "0.5rem 1rem", maxHeight:"5rem" }}
+        sx={{ padding: "0.5rem 1rem", maxHeight: "5rem" }}
       >
 
-        
+
 
         {/* sol kısım (başlık) */}
         <Grid item xs>
@@ -67,8 +69,8 @@ export default function PozHeader({ setShow }) {
         <Grid item xs="auto">
           <Grid container spacing={1}>
 
-            <Grid item>
-              <IconButton onClick={() => console.log("deleted clicked")} aria-label="addPoz" disabled>
+            <Grid item onClick={() => console.log(selectedPoz.name)}>
+              <IconButton  aria-label="addPoz" disabled>
                 <DeleteIcon
                   // sx={{display: isProject_display}}
                   variant="contained" color="lightgray"
