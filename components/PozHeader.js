@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { styled } from '@mui/material/styles';
+import ClearOutlined from '@mui/icons-material/ClearOutlined';
 
 
 
@@ -69,14 +69,26 @@ export default function PozHeader({ setShow }) {
         <Grid item xs="auto">
           <Grid container spacing={1}>
 
-            <Grid item onClick={() => console.log(selectedPoz.name)}>
-              <IconButton  aria-label="addPoz" disabled>
-                <DeleteIcon
-                  // sx={{display: isProject_display}}
-                  variant="contained" color="lightgray"
-                />
+            <Grid item >
+              <IconButton onClick={() => setSelectedPoz()} aria-label="wbsUncliced">
+                <ClearOutlined variant="contained" sx={{
+                  color: selectedPoz ? "red" : "lightgray",
+                }} />
               </IconButton>
             </Grid>
+
+
+            <Grid item onClick={() => console.log(selectedPoz)}>
+              <IconButton aria-label="addPoz" disabled>
+                <DeleteIcon
+                  // sx={{display: isProject_display}}
+                  variant="contained" sx={{
+                    color: selectedPoz ? "darkred" : "lightgray",
+                  }} />
+              </IconButton>
+            </Grid>
+
+
 
             <Grid item>
               <IconButton onClick={() => setShow("FormPozCreate")} aria-label="addWbs" disabled={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? true : false}>

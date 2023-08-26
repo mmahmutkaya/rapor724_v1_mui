@@ -170,11 +170,18 @@ export default function P_Pozlar() {
                 {
                   pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((item, index) => {
 
-                    // 1 den fazla poz varsa son poz hariç
+                    // 1 -- 1 den fazla poz varsa son poz hariç
                     if (cOunt !== 1 && index + 1 !== cOunt) {
                       return (
 
-                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, alignContent: "center", justifyContent: "center" }}>
+                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{
+                          cursor: "pointer",
+                          display: "grid", gridTemplateColumns: gridTemplateColumns_Poz,
+                          "&:hover .hoverTheWbs": {
+                            // display: "inline"
+                            visibility: "visible"
+                          },
+                        }}>
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", borderBottom: "0", textAlign: "center" }}>
                             <Typography>
@@ -183,9 +190,35 @@ export default function P_Pozlar() {
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black" }}>
-                            <Typography sx={{ ml: "0.2rem" }}>
-                              {item.name}
-                            </Typography>
+
+                            <Grid container >
+
+                              <Grid item>
+                                <Typography sx={{ ml: "0.2rem" }}>
+                                  {item.name}
+                                </Typography>
+                              </Grid>
+
+                              <Grid item className='hoverTheWbs'
+                                sx={{
+                                  ml: "0.5rem",
+                                  visibility: selectedPoz?._id.toString() === item._id.toString() ? "visible" : "hidden",
+                                }}>
+                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                                  <Grid item >
+                                    <Box sx={{
+                                      backgroundColor: "red",
+                                      borderRadius: "0.5rem",
+                                      height: "0.5rem",
+                                      width: "0.5rem",
+                                    }}>
+                                    </Box>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+
+                            </Grid>
+
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
@@ -198,11 +231,18 @@ export default function P_Pozlar() {
                       )
                     }
 
-                    // 1 den fazla poz varsa son poz
+                    // 2 -- 1 den fazla poz varsa son poz
                     if (cOunt !== 1 && index + 1 == cOunt) {
                       return (
 
-                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
+                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{
+                          cursor: "pointer",
+                          display: "grid", gridTemplateColumns: gridTemplateColumns_Poz,
+                          "&:hover .hoverTheWbs": {
+                            // display: "inline"
+                            visibility: "visible"
+                          },
+                        }}>
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
                             <Typography >
@@ -211,9 +251,35 @@ export default function P_Pozlar() {
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black", borderTop: "0" }}>
-                            <Typography sx={{ ml: "0.2rem" }}>
-                              {item.name}
-                            </Typography>
+
+                            <Grid container >
+
+                              <Grid item>
+                                <Typography component={"span"} sx={{ ml: "0.2rem" }}>
+                                  {item.name}
+                                </Typography>
+                              </Grid>
+
+                              <Grid item className='hoverTheWbs'
+                                sx={{
+                                  ml: "0.5rem",
+                                  visibility: selectedPoz?._id.toString() === item._id.toString() ? "visible" : "hidden",
+                                }}>
+                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                                  <Grid item >
+                                    <Box sx={{
+                                      backgroundColor: "red",
+                                      borderRadius: "0.5rem",
+                                      height: "0.5rem",
+                                      width: "0.5rem",
+                                    }}>
+                                    </Box>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+
+                            </Grid>
+
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black", borderLeft: "0", borderTop: "0", textAlign: "center" }}>
@@ -226,11 +292,19 @@ export default function P_Pozlar() {
                       )
                     }
 
-                    // 1 poz varsa
+                    // 3 -- 1 poz varsa
                     if (cOunt == 1) {
                       return (
 
-                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_Poz, }}>
+                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{
+                          cursor: "pointer",
+                          display: "grid", gridTemplateColumns: gridTemplateColumns_Poz,
+                          "&:hover .hoverTheWbs": {
+                            // display: "inline"
+                            visibility: "visible"
+                          },
+                        }}>
+
 
                           <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
                             <Typography >
@@ -239,9 +313,35 @@ export default function P_Pozlar() {
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black" }}>
-                            <Typography sx={{ ml: "0.2rem" }}>
-                              {item.name}
-                            </Typography>
+
+                            <Grid container >
+
+                              <Grid >
+                                <Typography sx={{ ml: "0.2rem" }}>
+                                  {item.name}
+                                </Typography>
+                              </Grid>
+
+                              <Grid item className='hoverTheWbs'
+                                sx={{
+                                  ml: "0.5rem",
+                                  visibility: selectedPoz?._id.toString() === item._id.toString() ? "visible" : "hidden",
+                                }}>
+                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                                  <Grid item >
+                                    <Box sx={{
+                                      backgroundColor: "red",
+                                      borderRadius: "0.5rem",
+                                      height: "0.5rem",
+                                      width: "0.5rem",
+                                    }}>
+                                    </Box>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+
+                            </Grid>
+
                           </Grid>
 
                           <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
