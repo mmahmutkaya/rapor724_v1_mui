@@ -21,9 +21,49 @@ export default function PozHeader({ setShow }) {
 
   const { selectedPoz, setSelectedPoz } = useContext(StoreContext)
 
-  const handleTry = () => {
-    // return isProject ? setIsProject(isProject.name) : null
+  async function handlePozDelete(poz) {
+
+    // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
+    if (!selectedPoz) {
+      console.log("alttaki satırda --return-- oldu")
+      return
+    }
+
+    // bu kontrol backend de ayrıca yapılıyor
+    if (selectedPoz.includesPoz) {
+      throw new Error("Bu poz metraj içerdiği için silinemez, öncelikle metrajları silmelisiniz.")
+    }
+
+    try {
+      const result = await RealmApp.currentUser.callFunction("deletePoz", { pozId: poz._id });
+      if (result.acknowledged) {
+
+        const oldPozlar = queryClient.getQueryData(["pozlar"])
+        const newPozlar = oldPozlar.filter(item => item._id.toString() !== poz._id.toString())
+        queryClient.setQueryData(["pozlar"], newPozlar)
+
+        // setShow("PozMain")
+
+      }
+    } catch (err) {
+
+      console.log(err)
+      let hataMesaj_ = err.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+
+      if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
+        hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
+      }
+
+      if (hataMesaj_.includes("Poz eklemeye açık başlıklar silinemez")) {
+        hataMesaj_ = "Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız."
+      }
+
+      setDialogCase("error")
+      setShowDialog(hataMesaj_)
+    }
   }
+
+
 
   let header = "Pozlar"
   // isProject?.name ? header = isProject?.name : null
@@ -78,7 +118,7 @@ export default function PozHeader({ setShow }) {
             </Grid>
 
 
-            <Grid item onClick={() => console.log(selectedPoz)}>
+            <Grid item onClick={() => handlePozDelete(selectedPoz)}>
               <IconButton aria-label="addPoz" disabled>
                 <DeleteIcon
                   // sx={{display: isProject_display}}
@@ -101,18 +141,6 @@ export default function PozHeader({ setShow }) {
 
       </Grid>
 
-
-      {/* <Grid container spacing={3}>
-        <Grid item xs="auto">
-          <Item>variable width content</Item>
-        </Grid>
-        <Grid item xs={6}>
-          <Item>xs=6</Item>
-        </Grid>
-        <Grid item xs>
-          <Item>xs</Item>
-        </Grid>
-      </Grid> */}
 
     </Paper>
   )

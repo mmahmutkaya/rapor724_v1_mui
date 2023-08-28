@@ -233,9 +233,9 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
     }
 
     // bu kontrol backend de ayrıca yapılıyor
-    // if (selectedWbs.openForPoz) {
-    //   throw new Error("Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız")
-    // }
+    if (selectedWbs.openForPoz) {
+      throw new Error("Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız")
+    }
 
     try {
       const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsId: selectedWbs._id });
