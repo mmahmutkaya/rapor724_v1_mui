@@ -79,7 +79,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
         console.log(err)
         let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
-  
+
         let text1 = "__mesajBaslangic__"
         let text2 = "__mesajBitis__"
         let mesajBaslangic = hataMesaj_.includes(text1) ? hataMesaj_.indexOf(text1) + text1.length : 0
@@ -88,7 +88,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
         hataMesaj_ = hataMesaj_.slice(mesajBaslangic, mesajBitis)
 
         console.log(hataMesaj_)
-  
+
         setDialogCase("error")
         setShowDialog(hataMesaj_)
       }
@@ -232,15 +232,17 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       return
     }
 
-    // bu kontrol backend de ayrıca yapılıyor
-    if (selectedWbs.openForPoz) {
-      throw new Error("Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız")
-    }
-
     try {
+
+      // bu kontrol backend de ayrıca yapılıyor
+      if (selectedWbs.openForPoz) {
+        throw new Error("Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız")
+      }
+
       const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsId: selectedWbs._id });
       setIsProject(resultProject)
       setSelectedWbs(null)
+
     } catch (err) {
 
       console.log(err)
@@ -262,33 +264,39 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
   async function handleWbsMoveUp() {
 
-    console.log("deneme")
-
-    let level = selectedWbs?.code?.split(".").length - 1
-
-    
     // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
     if (!selectedWbs) {
       console.log("alttaki satırda --return-- oldu")
       return
     }
-    
-    // bu kontrol backend de ayrıca yapılıyor
-    if (selectedWbs.openForPoz) {
-      throw new Error("Poz eklemeye açık başlıklar üst başlık olamaz, öncelikle poz eklemeye kapatınız")
-    }
-    
-    // bu kontrol backend de ayrıca yapılıyor
-    if (selectedWbs.openForPoz) {
-      throw new Error("Poz eklemeye açık başlıklar üst başlık olamaz, öncelikle poz eklemeye kapatınız")
-    }
-    
-    return
+
 
     try {
+
+      let level = selectedWbs?.code?.split(".").length - 1
+      let theNumber = selectedWbs.code.split(".")[level]
+
+      // bu kontrol backend de ayrıca yapılmalı - kontrol
+      if (theNumber == 1) {
+        throw new Error("Zaten en üstte")
+      }
+
+      // bu kontrol backend de ayrıca yapılmalı - kontrol
+      if (selectedWbs.find(item => {
+        let level2 = item.code?.split(".").length - 1
+        let theNumber2 = item.code.split(".")[level]
+        theNumber2 == theNumber + 1
+        console.log("deneme")
+      })) {
+        throw new Error("Zaten en altta")
+      }
+
+      return
+
       const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsId: selectedWbs._id });
       setIsProject(resultProject)
       setSelectedWbs(null)
+
     } catch (err) {
 
       console.log(err)
@@ -391,7 +399,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
                 </Grid>
               </Grid>
 
-              <Grid item onClick={()=> handleWbsMoveUp()}>
+              <Grid item onClick={() => handleWbsMoveUp()}>
                 <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
                   <KeyboardArrowUpIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
