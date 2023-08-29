@@ -160,7 +160,7 @@ export default function P_Pozlar() {
                     <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
                       {item}
                       {index + 1 !== cOunt &&
-                        <Typography component={"span"} sx={{ color: "darkred" }}>{"--"}</Typography>
+                        <Typography component={"span"} sx={{ fontWeight:"600", color: "darkred" }}>{">"}</Typography>
                       }
                     </Typography>
 
