@@ -1,7 +1,11 @@
 import React from 'react'
 
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { StoreContext } from './store'
+import { DialogWindow } from './general/DialogWindow';
+
+import { useApp } from "../components/useApp";
+import { useQueryClient } from '@tanstack/react-query'
 
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -17,9 +21,15 @@ import ClearOutlined from '@mui/icons-material/ClearOutlined';
 
 export default function PozHeader({ setShow }) {
 
-  const { isProject } = useContext(StoreContext)
+  const queryClient = useQueryClient()
+
+  const { isProject, setIsProject } = useContext(StoreContext)
+  const RealmApp = useApp();
 
   const { selectedPoz, setSelectedPoz } = useContext(StoreContext)
+
+  const [showDialog, setShowDialog] = useState(false)
+  const [dialogCase, setDialogCase] = useState("")
 
   async function handlePozDelete(poz) {
 
@@ -36,15 +46,27 @@ export default function PozHeader({ setShow }) {
 
     try {
       const result = await RealmApp.currentUser.callFunction("deletePoz", { pozId: poz._id });
-      if (result.acknowledged) {
+
+      if (result.deletedCount) {
 
         const oldPozlar = queryClient.getQueryData(["pozlar"])
         const newPozlar = oldPozlar.filter(item => item._id.toString() !== poz._id.toString())
         queryClient.setQueryData(["pozlar"], newPozlar)
 
-        // setShow("PozMain")
+      }
+
+      if (result.isIncludesPozFalse) {
+
+        let oldProject = JSON.parse(JSON.stringify(isProject))
+
+        oldProject.wbs.find(item => item._id.toString() === poz._wbsId.toString()).includesPoz = false
+
+        setIsProject(oldProject)
 
       }
+
+      setSelectedPoz()
+
     } catch (err) {
 
       console.log(err)
@@ -58,6 +80,7 @@ export default function PozHeader({ setShow }) {
         hataMesaj_ = "Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız."
       }
 
+      setSelectedPoz()
       setDialogCase("error")
       setShowDialog(hataMesaj_)
     }
@@ -82,6 +105,12 @@ export default function PozHeader({ setShow }) {
 
   return (
     <Paper >
+
+      {showDialog &&
+        <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
+      }
+
+
 
       <Grid
         container
@@ -118,7 +147,7 @@ export default function PozHeader({ setShow }) {
             </Grid>
 
 
-            <Grid item onClick={() => handlePozDelete(selectedPoz)}>
+            <Grid item onClick={() => handlePozDelete(selectedPoz)} sx={{ cursor: "pointer" }}>
               <IconButton aria-label="addPoz" disabled>
                 <DeleteIcon
                   // sx={{display: isProject_display}}
