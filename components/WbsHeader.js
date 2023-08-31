@@ -274,18 +274,23 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
     try {
 
       let level = selectedWbs?.code?.split(".").length - 1
-      let theNumber = selectedWbs.code.split(".")[level]
+      let sortNumberInLevelself = selectedWbs.code.split(".")[level]
 
       // bu kontrol backend de ayrıca yapılmalı - kontrol
-      if (theNumber == 1) {
+      if (sortNumberInLevelself == 1) {
         throw new Error("Zaten en üstte")
       }
+
+      console.log(selectedWbs)
+
+      console.log("alttaki satırda --return-- oldu-2")
+      return
 
       // bu kontrol backend de ayrıca yapılmalı - kontrol
       if (selectedWbs.find(item => {
         let level2 = item.code?.split(".").length - 1
         let theNumber2 = item.code.split(".")[level]
-        theNumber2 == theNumber + 1
+        theNumber2 == sortNumberInLevelself + 1
         console.log("deneme")
       })) {
         throw new Error("Zaten en altta")
