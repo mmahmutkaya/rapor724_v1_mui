@@ -92,9 +92,6 @@ export default function P_FormWbsCreate({ setShow, isProject, setIsProject, sele
         newWbsName: wbsName,
         newWbsCodeName: wbsCodeName
       }
-      const resultProject = await RealmApp.currentUser.callFunction("createWbs", newWbsItem);
-      console.log("resultProject",resultProject)
-
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
       // yukarıda da frontend kontrolü yapılmıştı
