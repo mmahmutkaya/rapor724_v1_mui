@@ -281,7 +281,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
         throw new Error("Zaten en üstte")
       }
 
-      console.log(selectedWbs)
+      console.log("selectedWbs",selectedWbs)
 
       console.log("alttaki satırda --return-- oldu-2")
       return
