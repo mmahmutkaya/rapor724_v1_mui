@@ -64,7 +64,8 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
         // bu kontrol backend de ayrıca yapılıyor
         let text = selectedWbs.code + "."
         if (isProject.wbs.find(item => item.code.indexOf(text) === 0)) {
-          throw new Error("\"" + selectedWbs.name + "\" isimli başlığın bir veya daha fazla alt başlığı mevcut, bu sebeple direk poz eklemeye açık hale getirilemez, mevcut alt başlıklar uygun değilse, yeni bir alt başlık oluşturup, o başlığı poz eklemeye açabilirsiniz.")
+          // throw new Error("\"" + selectedWbs.name + "\" isimli başlığın bir veya daha fazla alt başlığı mevcut, bu sebeple direk poz eklemeye açık hale getirilemez, mevcut alt başlıklar uygun değilse, yeni bir alt başlık oluşturup, o başlığı poz eklemeye açabilirsiniz.")
+          throw new Error("Alt başlığı bulunan başlıklar poz eklemeye açılamaz.")
         }
 
         const resultProject = await RealmApp.currentUser.callFunction("openWbsForPoz", { projectId: isProject._id, wbsId: selectedWbs._id });
@@ -270,18 +271,41 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       return
     }
 
+    let _wbs = JSON.parse(JSON.stringify(isProject.wbs))
+    let _selectedWbs = JSON.parse(JSON.stringify(selectedWbs))
 
     try {
 
-      let level = selectedWbs?.code?.split(".").length - 1
-      let sortNumberInLevelself = selectedWbs.code.split(".")[level]
+      let leftPart = _selectedWbs.code.substring(0, _selectedWbs.code.lastIndexOf("."))
+
+      console.log("leftPart", leftPart)
+      return
+
+      let longText
+      let rightPartWithTheNumber
+      let rightPart
+      let theNumberText
+      let theNumber
+
+      let level
+      let sortNumber
+
+      level = selectedWbs?.code?.split(".").length - 1
+      sortNumber = Number(selectedWbs.code.split(".")[level])
 
       // bu kontrol backend de ayrıca yapılmalı - kontrol
-      if (sortNumberInLevelself == 1) {
+      if (sortNumber == 1) {
         throw new Error("Zaten en üstte")
       }
 
-      console.log("selectedWbs",selectedWbs)
+
+      let Wbs2 = JSON.parse(JSON.stringify(isProject.wbs))
+
+      // Wbs2.map(item => {
+      //   if(item.code.indexOf())
+      // })
+
+      console.log("selectedWbs", selectedWbs)
 
       console.log("alttaki satırda --return-- oldu-2")
       return
@@ -290,7 +314,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       if (selectedWbs.find(item => {
         let level2 = item.code?.split(".").length - 1
         let theNumber2 = item.code.split(".")[level]
-        theNumber2 == sortNumberInLevelself + 1
+        theNumber2 == sortNumber + 1
         console.log("deneme")
       })) {
         throw new Error("Zaten en altta")
