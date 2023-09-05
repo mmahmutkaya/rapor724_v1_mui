@@ -273,58 +273,165 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
     let _wbs = JSON.parse(JSON.stringify(isProject.wbs))
     let _selectedWbs = JSON.parse(JSON.stringify(selectedWbs))
+    let _wbs2
 
     try {
 
-      let leftPart = _selectedWbs.code.substring(0, _selectedWbs.code.lastIndexOf("."))
-
-      console.log("leftPart", leftPart)
-      return
-
-      let longText
-      let rightPartWithTheNumber
-      let rightPart
-      let theNumberText
-      let theNumber
-
+      let leftPart
       let level
       let sortNumber
+      let longText
 
-      level = selectedWbs?.code?.split(".").length - 1
-      sortNumber = Number(selectedWbs.code.split(".")[level])
+
+      leftPart = _selectedWbs.code.substring(0, _selectedWbs.code.lastIndexOf("."))
+      level = _selectedWbs?.code?.split(".").length - 1
+      sortNumber = Number(_selectedWbs.code.split(".")[level])
+      longText = _selectedWbs.code
+
+      console.log("leftPart", leftPart)
 
       // bu kontrol backend de ayrıca yapılmalı - kontrol
       if (sortNumber == 1) {
         throw new Error("Zaten en üstte")
       }
 
+      let switch1 = false
 
-      let Wbs2 = JSON.parse(JSON.stringify(isProject.wbs))
 
-      // Wbs2.map(item => {
-      //   if(item.code.indexOf())
-      // })
+      // taşınacak başlık en üst seviyede ise
+      if (!leftPart) {
 
-      console.log("selectedWbs", selectedWbs)
+        _wbs2 = _wbs.map(item => {
 
-      console.log("alttaki satırda --return-- oldu-2")
-      return
+          let leftPart2
+          let level2
+          let sortNumber2
+          let longText2
+          let rightPartWithTheNumber2
+          let rightPart2
+          let theNumberText2
+          let theNumber2
 
-      // bu kontrol backend de ayrıca yapılmalı - kontrol
-      if (selectedWbs.find(item => {
-        let level2 = item.code?.split(".").length - 1
-        let theNumber2 = item.code.split(".")[level]
-        theNumber2 == sortNumber + 1
-        console.log("deneme")
-      })) {
-        throw new Error("Zaten en altta")
+          longText2 = item.code
+
+
+          level2 = longText2.split(".").length - 1
+          rightPartWithTheNumber2 = longText2
+          theNumberText2 = rightPartWithTheNumber2.split(".")[0]
+          theNumber2 = parseInt(theNumberText2)
+          rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
+          console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
+          console.log("theNumber2", theNumber2)
+          console.log("rightPart2", rightPart2)
+          console.log("---")
+
+          if (level2 == level && theNumber2 == sortNumber - 1) {
+            let deneme = { ...item, code: (theNumber2 + 1).toString() }
+            // console.log("deneme", deneme)
+            switch1 = true
+            return deneme
+          }
+
+          if (level2 > level && theNumber2 == sortNumber - 1) {
+            let deneme2 = { ...item, code: (theNumber2 + 1) + "." + rightPart2 }
+            // console.log("deneme2", deneme2)
+            switch1 = true
+            return deneme2
+          }
+
+          if (level2 == level && theNumber2 == sortNumber) {
+            let deneme3 = { ...item, code: (theNumber2 - 1).toString() }
+            // console.log("deneme3", deneme3)
+            switch1 = true
+            return deneme3
+          }
+
+          if (level2 > level && theNumber2 == sortNumber) {
+            let deneme4 = { ...item, code: (theNumber2 - 1) + "." + rightPart2 }
+            // console.log("deneme4", deneme4)
+            switch1 = true
+            return deneme4
+          }
+
+          return item
+
+        })
       }
 
-      return
 
-      const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsId: selectedWbs._id });
-      setIsProject(resultProject)
-      setSelectedWbs(null)
+      // taşınacak başlık en üst seviyede değilse
+      if (leftPart) {
+
+        _wbs2 = _wbs.map(item => {
+
+          let leftPart2
+          let level2
+          let sortNumber2
+          let longText2
+          let rightPartWithTheNumber2
+          let rightPart2
+          let theNumberText2
+          let theNumber2
+
+          longText2 = item.code
+
+          if (longText2.indexOf(leftPart + ".") === 0) {
+
+            level2 = longText2.split(".").length - 1
+            rightPartWithTheNumber2 = longText2.substring(leftPart.length + 1, longText2.length)
+            theNumberText2 = rightPartWithTheNumber2.split(".")[0]
+            theNumber2 = parseInt(theNumberText2)
+            rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
+            // console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
+            // console.log("theNumber2", theNumber2)
+            // console.log("rightPart2", rightPart2)
+            // console.log("---")
+
+            if (level2 == level && theNumber2 == sortNumber - 1) {
+              let deneme = { ...item, code: leftPart + "." + (theNumber2 + 1) }
+              // console.log("deneme", deneme)
+              switch1 = true
+              return deneme
+            }
+
+            if (level2 > level && theNumber2 == sortNumber - 1) {
+              let deneme2 = { ...item, code: leftPart + "." + (theNumber2 + 1) + "." + rightPart2 }
+              // console.log("deneme2", deneme2)
+              switch1 = true
+              return deneme2
+            }
+
+            if (level2 == level && theNumber2 == sortNumber) {
+              let deneme3 = { ...item, code: leftPart + "." + (theNumber2 - 1) }
+              // console.log("deneme3", deneme3)
+              switch1 = true
+              return deneme3
+            }
+
+            if (level2 > level && theNumber2 == sortNumber) {
+              let deneme4 = { ...item, code: leftPart + "." + (theNumber2 - 1) + "." + rightPart2 }
+              // console.log("deneme4", deneme4)
+              switch1 = true
+              return deneme4
+            }
+
+          }
+
+          return item
+
+        })
+      }
+
+
+      if (switch1) {
+        // console.log("_wbs2", _wbs2)
+        setIsProject({ ...isProject, wbs: _wbs2 })
+      }
+
+      // const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsId: selectedWbs._id });
+      // setIsProject(resultProject)
+      // setSelectedWbs(null)
+
 
     } catch (err) {
 
