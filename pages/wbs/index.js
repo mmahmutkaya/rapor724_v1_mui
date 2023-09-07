@@ -121,7 +121,7 @@ export default function P_Wbs() {
                     <Box sx={{ backgroundColor: color(level).bg, borderLeft: "1px solid " + color("border") }}>
 
                       {theWbs.openForPoz &&
-                        <Grid container sx={{ backgroundColor: "yellow", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                        <Grid container sx={{ backgroundColor: "#65FF00", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
                           <Grid item >
                             <Box sx={{
                               backgroundColor: "#00008B",
