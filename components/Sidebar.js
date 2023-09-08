@@ -126,6 +126,13 @@ export default function Sidebar({ setMobileOpen }) {
               <ListItemText primary="Yetkiler" />
             </ListItemButton>
 
+            <ListItemButton onClick={() => router.push('/records')}>
+              <ListItemIcon>
+                <DraftsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Kayıtlar" />
+            </ListItemButton>
+
             {/* <ListItemButton onClick={handleClick}>
               <ListItemIcon>
                 <InboxIcon />

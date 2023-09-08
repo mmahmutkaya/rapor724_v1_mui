@@ -105,10 +105,9 @@ export default function P_Wbs() {
                 level = theWbs?.code?.split(".").length - 1
 
                 return (
-                  // <Box key={theWbs._id} sx={{ display: "grid", gridTemplateColumns: level == 0 ? "1fr" : "repeat(" + level + ", 1rem) 1fr" }}>
                   <Box key={theWbs._id} sx={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(" + (level + 1) + ", 1rem) 1fr",
+                    gridTemplateColumns: level == 0 ? "1rem 1fr" : "1rem repeat(" + (level) + ", 1rem) 1fr", // baştaki poz var mı yok mu için
                     "&:hover .hoverTheWbsLeft": {
                       visibility: "visible",
                       color: "red",
@@ -116,31 +115,35 @@ export default function P_Wbs() {
 
                   }}>
 
+                    {/* grid item */}
                     <Items count={(level)} />
 
-                    <Box sx={{ backgroundColor: color(level).bg, borderLeft: "1px solid " + color("border") }}>
+
+                    {/* grid item - bu alana open for poz gelecek fakat open for poz olmasa da bu kutu içi boş şekilde olmalı*/}
+                    {/* color("border") - değişken (variable) kulanma*/}
+                    {/* <Box sx={{ position: "relative", backgroundColor: color(level).bg, borderLeft: "1px solid " + color("border") }}> */}
+                    <Box sx={{ position: "relative", backgroundColor: color(level).bg, borderLeft: "1px solid " + color("border") }}>
+
 
                       {theWbs.openForPoz &&
-                        <Grid container sx={{ backgroundColor: "#65FF00", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                          <Grid item >
-                            <Box sx={{
-                              backgroundColor: "#00008B",
-                              borderRadius: "0.5rem",
-                              visibility: theWbs.includesPoz ? "visible" : "hidden",
-                              height: "0.5rem",
-                              width: "0.5rem",
-                              // borderLeft: "1px solid " + color("border")
-                              // width: "1rem", height: "1rem",
-                              // border: "1px solid black",
-                              // ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
-                              //   backgroundColor: "red",
-                              // }),
-                              // ...(selectedWbs?.code == theWbs.code && {
-                              //   border: "2px solid red"
-                              // }),
-                            }}>
-                            </Box>
-                          </Grid>
+                        // wbs poza açıksa - var olan mevcut kutunun içinde beliren sarı kutu
+                        <Grid container sx={{ position: "absolute", borderRadius: "10%", backgroundColor: "#65FF00", top: "20%", left: "20%", width: "0.8rem", height: "0.8rem" }}>
+
+                          {/* poz kayıtlı ise yanan siyah nokta */}
+
+                          {theWbs.includesPoz &&
+                            <Grid item sx={{ position: "relative", width: "100%", height: "100%" }}>
+
+                              <Box sx={{ position: "absolute", borderRadius: "50%", backgroundColor: "black", top: "25%", left: "25%", width: "50%", height: "50%" }}>
+
+                                
+
+                              </Box>
+
+                            </Grid>
+                          }
+
+
                         </Grid>
                       }
 
@@ -151,7 +154,7 @@ export default function P_Wbs() {
                       onClick={() => handleSelectWbs(theWbs)}
                       sx={{
 
-                        pl: "0.1rem",
+                        pl: "2px",
 
                         borderBottom: "0.5px solid " + color("border"),
 
@@ -248,7 +251,7 @@ export default function P_Wbs() {
                               </Grid>
 
                             </Grid>
-                            
+
                           </Grid>
                         </Grid>
 
