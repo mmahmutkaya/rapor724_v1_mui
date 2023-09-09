@@ -290,7 +290,6 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
       // bu kontrol backend de ayrıca yapılmalı - kontrol
       if (sortNumber == 1) {
-        console.log(selectedWbs)
         console.log("Zaten en üstte")
         return
         // throw new Error("Zaten en üstte - f")
