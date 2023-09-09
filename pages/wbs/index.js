@@ -223,7 +223,7 @@ export default function P_Wbs() {
                             <Grid item className='hoverTheWbs'
                               sx={{
                                 ml: "0.5rem",
-                                visibility: selectedWbs?.code === theWbs.code ? "visible" : "hidden",
+                                visibility: selectedWbs?._id.toString() === theWbs._id.toString() ? "visible" : "hidden",
                               }}>
 
                               <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>

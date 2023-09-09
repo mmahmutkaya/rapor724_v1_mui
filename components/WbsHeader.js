@@ -267,7 +267,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
     // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
     if (!selectedWbs) {
-      console.log("alttaki satırda --return-- oldu")
+      console.log("alttaki satırda --return-- oldu - handleMoveWbsUp -1 ")
       return
     }
 
@@ -290,7 +290,8 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
       // bu kontrol backend de ayrıca yapılmalı - kontrol
       if (sortNumber == 1) {
-        console.log("alttaki satırda --return-- oldu")
+        console.log(selectedWbs)
+        console.log("Zaten en üstte")
         return
         // throw new Error("Zaten en üstte - f")
       }
@@ -430,8 +431,8 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
       const result = await RealmApp.currentUser.callFunction("moveWbsUp", { projectId: isProject._id, wbsId: selectedWbs._id });
       setIsProject(result.project)
-      console.log(result._selectedWbs2)
-      setSelectedWbs(result._selectedWbs2)
+      // console.log(result._selectedWbs2)
+      setSelectedWbs(result.project.wbs.find(item => item._id.toString() === selectedWbs._id.toString()))
 
     } catch (err) {
 
@@ -455,7 +456,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
     // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
     if (!selectedWbs) {
-      console.log("alttaki satırda --return-- oldu")
+      console.log("alttaki satırda --return-- oldu - handleMoveWbsDown")
       return
     }
 
@@ -611,8 +612,8 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
       const result = await RealmApp.currentUser.callFunction("moveWbsDown", { projectId: isProject._id, wbsId: selectedWbs._id });
       setIsProject(result.project)
-      console.log(result._selectedWbs2)
-      setSelectedWbs(item => result._selectedWbs2)
+      // console.log(result._selectedWbs2)
+      setSelectedWbs(result.project.wbs.find(item => item._id.toString() === selectedWbs._id.toString()))
 
     } catch (err) {
 
@@ -620,6 +621,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       let hataMesaj_ = err.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
       if (hataMesaj_.includes("Zaten")) {
+        return
         hataMesaj_ = "Zaten en üstte"
       }
 
