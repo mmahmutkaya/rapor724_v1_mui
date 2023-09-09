@@ -263,7 +263,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
   }
 
 
-  async function handleWbsMoveUp() {
+  async function handleMoveWbsUp() {
 
     // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
     if (!selectedWbs) {
@@ -288,168 +288,349 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       sortNumber = Number(_selectedWbs.code.split(".")[level])
       longText = _selectedWbs.code
 
-      console.log("leftPart", leftPart)
-
       // bu kontrol backend de ayrıca yapılmalı - kontrol
       if (sortNumber == 1) {
-        throw new Error("Zaten en üstte")
+        console.log("alttaki satırda --return-- oldu")
+        return
+        // throw new Error("Zaten en üstte - f")
       }
 
-      let switch1 = false
+      // let switch1 = false
 
 
-      // taşınacak başlık en üst seviyede ise
-      if (!leftPart) {
+      // // taşınacak başlık en üst seviyede ise
+      // if (!leftPart) {
 
-        _wbs2 = _wbs.map(item => {
+      //   _wbs2 = _wbs.map(item => {
 
-          let leftPart2
-          let level2
-          let sortNumber2
-          let longText2
-          let rightPartWithTheNumber2
-          let rightPart2
-          let theNumberText2
-          let theNumber2
+      //     let leftPart2
+      //     let level2
+      //     let sortNumber2
+      //     let longText2
+      //     let rightPartWithTheNumber2
+      //     let rightPart2
+      //     let theNumberText2
+      //     let theNumber2
 
-          longText2 = item.code
-
-
-          level2 = longText2.split(".").length - 1
-          rightPartWithTheNumber2 = longText2
-          theNumberText2 = rightPartWithTheNumber2.split(".")[0]
-          theNumber2 = parseInt(theNumberText2)
-          rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
-          console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
-          console.log("theNumber2", theNumber2)
-          console.log("rightPart2", rightPart2)
-          console.log("---")
-
-          if (level2 == level && theNumber2 == sortNumber - 1) {
-            let deneme = { ...item, code: (theNumber2 + 1).toString() }
-            // console.log("deneme", deneme)
-            switch1 = true
-            return deneme
-          }
-
-          if (level2 > level && theNumber2 == sortNumber - 1) {
-            let deneme2 = { ...item, code: (theNumber2 + 1) + "." + rightPart2 }
-            // console.log("deneme2", deneme2)
-            switch1 = true
-            return deneme2
-          }
-
-          if (level2 == level && theNumber2 == sortNumber) {
-            let deneme3 = { ...item, code: (theNumber2 - 1).toString() }
-            // console.log("deneme3", deneme3)
-            switch1 = true
-            return deneme3
-          }
-
-          if (level2 > level && theNumber2 == sortNumber) {
-            let deneme4 = { ...item, code: (theNumber2 - 1) + "." + rightPart2 }
-            // console.log("deneme4", deneme4)
-            switch1 = true
-            return deneme4
-          }
-
-          return item
-
-        })
-      }
+      //     longText2 = item.code
 
 
-      // taşınacak başlık en üst seviyede değilse
-      if (leftPart) {
+      //     level2 = longText2.split(".").length - 1
+      //     rightPartWithTheNumber2 = longText2
+      //     theNumberText2 = rightPartWithTheNumber2.split(".")[0]
+      //     theNumber2 = parseInt(theNumberText2)
+      //     rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
+      //     console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
+      //     console.log("theNumber2", theNumber2)
+      //     console.log("rightPart2", rightPart2)
+      //     console.log("---")
 
-        _wbs2 = _wbs.map(item => {
+      //     if (level2 == level && theNumber2 == sortNumber - 1) {
+      //       let deneme = { ...item, code: (theNumber2 + 1).toString() }
+      //       // console.log("deneme", deneme)
+      //       switch1 = true
+      //       return deneme
+      //     }
 
-          let leftPart2
-          let level2
-          let sortNumber2
-          let longText2
-          let rightPartWithTheNumber2
-          let rightPart2
-          let theNumberText2
-          let theNumber2
+      //     if (level2 > level && theNumber2 == sortNumber - 1) {
+      //       let deneme2 = { ...item, code: (theNumber2 + 1) + "." + rightPart2 }
+      //       // console.log("deneme2", deneme2)
+      //       switch1 = true
+      //       return deneme2
+      //     }
 
-          longText2 = item.code
+      //     if (level2 == level && theNumber2 == sortNumber) {
+      //       let deneme3 = { ...item, code: (theNumber2 - 1).toString() }
+      //       // console.log("deneme3", deneme3)
+      //       switch1 = true
+      //       return deneme3
+      //     }
 
-          if (longText2.indexOf(leftPart + ".") === 0) {
+      //     if (level2 > level && theNumber2 == sortNumber) {
+      //       let deneme4 = { ...item, code: (theNumber2 - 1) + "." + rightPart2 }
+      //       // console.log("deneme4", deneme4)
+      //       switch1 = true
+      //       return deneme4
+      //     }
 
-            level2 = longText2.split(".").length - 1
-            rightPartWithTheNumber2 = longText2.substring(leftPart.length + 1, longText2.length)
-            theNumberText2 = rightPartWithTheNumber2.split(".")[0]
-            theNumber2 = parseInt(theNumberText2)
-            rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
-            // console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
-            // console.log("theNumber2", theNumber2)
-            // console.log("rightPart2", rightPart2)
-            // console.log("---")
+      //     return item
 
-            if (level2 == level && theNumber2 == sortNumber - 1) {
-              let deneme = { ...item, code: leftPart + "." + (theNumber2 + 1) }
-              // console.log("deneme", deneme)
-              switch1 = true
-              return deneme
-            }
-
-            if (level2 > level && theNumber2 == sortNumber - 1) {
-              let deneme2 = { ...item, code: leftPart + "." + (theNumber2 + 1) + "." + rightPart2 }
-              // console.log("deneme2", deneme2)
-              switch1 = true
-              return deneme2
-            }
-
-            if (level2 == level && theNumber2 == sortNumber) {
-              let deneme3 = { ...item, code: leftPart + "." + (theNumber2 - 1) }
-              // console.log("deneme3", deneme3)
-              switch1 = true
-              return deneme3
-            }
-
-            if (level2 > level && theNumber2 == sortNumber) {
-              let deneme4 = { ...item, code: leftPart + "." + (theNumber2 - 1) + "." + rightPart2 }
-              // console.log("deneme4", deneme4)
-              switch1 = true
-              return deneme4
-            }
-
-          }
-
-          return item
-
-        })
-      }
+      //   })
+      // }
 
 
-      if (switch1) {
-        // console.log("_wbs2", _wbs2)
-        setIsProject({ ...isProject, wbs: _wbs2 })
-      }
+      // // taşınacak başlık en üst seviyede değilse
+      // if (leftPart) {
 
-      // const resultProject = await RealmApp.currentUser.callFunction("deleteWbs", { projectId: isProject._id, wbsId: selectedWbs._id });
-      // setIsProject(resultProject)
-      // setSelectedWbs(null)
+      //   _wbs2 = _wbs.map(item => {
 
+      //     let leftPart2
+      //     let level2
+      //     let sortNumber2
+      //     let longText2
+      //     let rightPartWithTheNumber2
+      //     let rightPart2
+      //     let theNumberText2
+      //     let theNumber2
+
+      //     longText2 = item.code
+
+      //     if (longText2.indexOf(leftPart + ".") === 0) {
+
+      //       level2 = longText2.split(".").length - 1
+      //       rightPartWithTheNumber2 = longText2.substring(leftPart.length + 1, longText2.length)
+      //       theNumberText2 = rightPartWithTheNumber2.split(".")[0]
+      //       theNumber2 = parseInt(theNumberText2)
+      //       rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
+      //       // console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
+      //       // console.log("theNumber2", theNumber2)
+      //       // console.log("rightPart2", rightPart2)
+      //       // console.log("---")
+
+      //       if (level2 == level && theNumber2 == sortNumber - 1) {
+      //         let deneme = { ...item, code: leftPart + "." + (theNumber2 + 1) }
+      //         // console.log("deneme", deneme)
+      //         switch1 = true
+      //         return deneme
+      //       }
+
+      //       if (level2 > level && theNumber2 == sortNumber - 1) {
+      //         let deneme2 = { ...item, code: leftPart + "." + (theNumber2 + 1) + "." + rightPart2 }
+      //         // console.log("deneme2", deneme2)
+      //         switch1 = true
+      //         return deneme2
+      //       }
+
+      //       if (level2 == level && theNumber2 == sortNumber) {
+      //         let deneme3 = { ...item, code: leftPart + "." + (theNumber2 - 1) }
+      //         // console.log("deneme3", deneme3)
+      //         switch1 = true
+      //         return deneme3
+      //       }
+
+      //       if (level2 > level && theNumber2 == sortNumber) {
+      //         let deneme4 = { ...item, code: leftPart + "." + (theNumber2 - 1) + "." + rightPart2 }
+      //         // console.log("deneme4", deneme4)
+      //         switch1 = true
+      //         return deneme4
+      //       }
+
+      //     }
+
+      //     return item
+
+      //   })
+      // }
+
+
+      // if (switch1) {
+      //   // console.log("_wbs2", _wbs2)
+      //   setIsProject({ ...isProject, wbs: _wbs2 })
+      // }
+
+      const result = await RealmApp.currentUser.callFunction("moveWbsUp", { projectId: isProject._id, wbsId: selectedWbs._id });
+      setIsProject(result.project)
+      console.log(result._selectedWbs2)
+      setSelectedWbs(result._selectedWbs2)
 
     } catch (err) {
 
       console.log(err)
       let hataMesaj_ = err.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
-      if (hataMesaj_.includes("Silmek istediğiniz  WBS'in alt seviyeleri mevcut")) {
-        hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
-      }
-
-      if (hataMesaj_.includes("Poz eklemeye açık başlıklar silinemez")) {
-        hataMesaj_ = "Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız."
+      if (hataMesaj_.includes("Zaten")) {
+        hataMesaj_ = "Zaten en üstte"
       }
 
       setDialogCase("error")
       setShowDialog(hataMesaj_)
     }
   }
+
+
+
+
+
+  async function handleMoveWbsDown() {
+
+    // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
+    if (!selectedWbs) {
+      console.log("alttaki satırda --return-- oldu")
+      return
+    }
+
+    // let _wbs = JSON.parse(JSON.stringify(isProject.wbs))
+    // let _selectedWbs = JSON.parse(JSON.stringify(selectedWbs))
+    // let _wbs2
+
+    try {
+
+      //   let leftPart
+      //   let level
+      //   let sortNumber
+      //   let longText
+
+
+      //   leftPart = _selectedWbs.code.substring(0, _selectedWbs.code.lastIndexOf("."))
+      //   level = _selectedWbs?.code?.split(".").length - 1
+      //   sortNumber = Number(_selectedWbs.code.split(".")[level])
+      //   longText = _selectedWbs.code
+
+      //   let switch1 = false
+
+      //   // taşınacak başlık en üst seviyede ise
+      //   if (!leftPart) {
+
+      //     _wbs2 = _wbs.map(item => {
+
+      //       let leftPart2
+      //       let level2
+      //       let sortNumber2
+      //       let longText2
+      //       let rightPartWithTheNumber2
+      //       let rightPart2
+      //       let theNumberText2
+      //       let theNumber2
+
+      //       longText2 = item.code
+
+
+      //       level2 = longText2.split(".").length - 1
+      //       rightPartWithTheNumber2 = longText2
+      //       theNumberText2 = rightPartWithTheNumber2.split(".")[0]
+      //       theNumber2 = parseInt(theNumberText2)
+      //       rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
+      //       console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
+      //       console.log("theNumber2", theNumber2)
+      //       console.log("rightPart2", rightPart2)
+      //       console.log("---")
+
+      //       // aynı seviyede bir altında varsa onu üste alma işlemi, switch kontrlün yapılıyor, altında yoksa işlem yok diye
+      //       if (level2 == level && theNumber2 == sortNumber + 1) {
+      //         let deneme = { ...item, code: (sortNumber).toString() }
+      //         // console.log("deneme", deneme)
+      //         switch1 = true
+      //         return deneme
+      //       }
+
+      //       // aynı seviyede bir altında varsa onun alt başlıklarını üste alma işlemi, switch kontrlüne gerek yok, zaten üst başlığında yapıldı
+      //       if (level2 > level && theNumber2 == sortNumber + 1) {
+      //         let deneme2 = { ...item, code: (sortNumber) + "." + rightPart2 }
+      //         // console.log("deneme2", deneme2)
+      //         return deneme2
+      //       }
+
+      //       // taşınacak wbs i bir alta alma işlemi, switch kontrlüne gerek yok, zaten bu var kendisi
+      //       if (level2 == level && theNumber2 == sortNumber) {
+      //         let deneme3 = { ...item, code: (sortNumber + 1).toString() }
+      //         // console.log("deneme3", deneme3)
+      //         return deneme3
+      //       }
+
+      //       // taşınacak wbs i bir alta alma işlemi, switch kontrlüne gerek yok, zaten bu var kendisi
+      //       if (level2 > level && theNumber2 == sortNumber) {
+      //         let deneme4 = { ...item, code: (sortNumber + 1) + "." + rightPart2 }
+      //         // console.log("deneme4", deneme4)
+      //         return deneme4
+      //       }
+
+      //       return item
+
+      //     })
+      //   }
+
+
+      //   // taşınacak başlık en üst seviyede değilse
+      //   if (leftPart) {
+
+      //     _wbs2 = _wbs.map(item => {
+
+      //       let leftPart2
+      //       let level2
+      //       let sortNumber2
+      //       let longText2
+      //       let rightPartWithTheNumber2
+      //       let rightPart2
+      //       let theNumberText2
+      //       let theNumber2
+
+      //       longText2 = item.code
+
+      //       if (longText2.indexOf(leftPart + ".") === 0) {
+
+      //         level2 = longText2.split(".").length - 1
+      //         rightPartWithTheNumber2 = longText2.substring(leftPart.length + 1, longText2.length)
+      //         theNumberText2 = rightPartWithTheNumber2.split(".")[0]
+      //         theNumber2 = parseInt(theNumberText2)
+      //         rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
+      //         // console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
+      //         // console.log("theNumber2", theNumber2)
+      //         // console.log("rightPart2", rightPart2)
+      //         // console.log("---")
+
+      //         if (level2 == level && theNumber2 == sortNumber + 1) {
+      //           let deneme = { ...item, code: leftPart + "." + (theNumber2 - 1) }
+      //           // console.log("deneme", deneme)
+      //           switch1 = true
+      //           return deneme
+      //         }
+
+      //         if (level2 > level && theNumber2 == sortNumber + 1) {
+      //           let deneme2 = { ...item, code: leftPart + "." + (theNumber2 - 1) + "." + rightPart2 }
+      //           // console.log("deneme2", deneme2)
+      //           switch1 = true
+      //           return deneme2
+      //         }
+
+      //         if (level2 == level && theNumber2 == sortNumber) {
+      //           let deneme3 = { ...item, code: leftPart + "." + (theNumber2 + 1) }
+      //           // console.log("deneme3", deneme3)
+      //           switch1 = true
+      //           return deneme3
+      //         }
+
+      //         if (level2 > level && theNumber2 == sortNumber) {
+      //           let deneme4 = { ...item, code: leftPart + "." + (theNumber2 + 1) + "." + rightPart2 }
+      //           // console.log("deneme4", deneme4)
+      //           switch1 = true
+      //           return deneme4
+      //         }
+
+      //       }
+
+      //       return item
+
+      //     })
+      //   }
+
+
+      //   if (switch1) {
+      //     // console.log("_wbs2", _wbs2)
+      //     setIsProject({ ...isProject, wbs: _wbs2 })
+      //   }
+
+      const result = await RealmApp.currentUser.callFunction("moveWbsDown", { projectId: isProject._id, wbsId: selectedWbs._id });
+      setIsProject(result.project)
+      console.log(result._selectedWbs2)
+      setSelectedWbs(item => result._selectedWbs2)
+
+    } catch (err) {
+
+      console.log(err)
+      let hataMesaj_ = err.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+
+      if (hataMesaj_.includes("Zaten")) {
+        hataMesaj_ = "Zaten en üstte"
+      }
+
+      setDialogCase("error")
+      setShowDialog(hataMesaj_)
+
+    }
+
+
+  }
+
 
 
 
@@ -535,32 +716,32 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
                 </Grid>
               </Grid>
 
-              <Grid item onClick={() => handleWbsMoveUp()}>
-                <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+              <Grid item onClick={() => handleMoveWbsUp()}>
+                <IconButton aria-label="moveUp">
                   <KeyboardArrowUpIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
 
-              <Grid item >
-                <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+              <Grid item onClick={() => handleMoveWbsDown()}>
+                <IconButton aria-label="moveDown">
                   <KeyboardArrowDownIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
 
               <Grid item>
-                <IconButton onClick={() => setShow("FormWbs")} aria-label="moveLeft">
+                <IconButton aria-label="moveLeft">
                   <KeyboardArrowLeftIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
 
               <Grid item >
-                <IconButton onClick={() => setShow("FormWbs")} aria-label="moveRight">
+                <IconButton aria-label="moveRight">
                   <KeyboardArrowRightIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
 
-              <Grid item >
-                <IconButton onClick={() => handleWbsDelete()} aria-label="delete">
+              <Grid item onClick={() => handleWbsDelete()} >
+                <IconButton aria-label="delete">
                   <DeleteIcon variant="contained" color="error" sx={{ color: !selectedWbs ? "lightgray" : "rgb(139,0,0)" }} />
                 </IconButton>
               </Grid>

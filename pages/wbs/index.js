@@ -127,16 +127,13 @@ export default function P_Wbs() {
 
                       {theWbs.openForPoz &&
                         // wbs poza açıksa - var olan mevcut kutunun içinde beliren sarı kutu
-                        <Grid container sx={{ position: "absolute", borderRadius: "10%", backgroundColor: "#65FF00", top: "20%", left: "20%", width: "0.8rem", height: "0.8rem" }}>
+                        <Grid container sx={{ position: "absolute", borderRadius: "10%", backgroundColor: "#65FF00", top: "20%", left: "30%", width: "0.7rem", height: "0.7rem" }}>
 
-                          {/* poz kayıtlı ise yanan siyah nokta */}
-
+                          {/* poz kayıtlı ise sarı kutunun içinde beliren siyah nokta */}
                           {theWbs.includesPoz &&
                             <Grid item sx={{ position: "relative", width: "100%", height: "100%" }}>
 
-                              <Box sx={{ position: "absolute", borderRadius: "50%", backgroundColor: "black", top: "25%", left: "25%", width: "50%", height: "50%" }}>
-
-                                
+                              <Box sx={{ position: "absolute", borderRadius: "50%", backgroundColor: "red", top: "25%", left: "25%", width: "50%", height: "50%" }}>
 
                               </Box>
 
