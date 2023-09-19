@@ -641,160 +641,140 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       return
     }
 
-    // let _wbs = JSON.parse(JSON.stringify(isProject.wbs))
-    // let _selectedWbs = JSON.parse(JSON.stringify(selectedWbs))
-    // let _wbs2
+    let _wbs = JSON.parse(JSON.stringify(isProject.wbs))
+    let _selectedWbs = JSON.parse(JSON.stringify(selectedWbs))
+    let _wbs2
 
     try {
 
-      //   let leftPart
-      //   let level
-      //   let sortNumber
-      //   let longText
+      let leftPart
+      let level
+      let sortNumber
+      let longText
+      let leftPartB
+      let levelB
+      let sortNumberB
+      let longTextB
 
 
-      //   leftPart = _selectedWbs.code.substring(0, _selectedWbs.code.lastIndexOf("."))
-      //   level = _selectedWbs?.code?.split(".").length - 1
-      //   sortNumber = Number(_selectedWbs.code.split(".")[level])
-      //   longText = _selectedWbs.code
+      leftPart = _selectedWbs.code.substring(0, _selectedWbs.code.lastIndexOf("."))
+      level = _selectedWbs.code.split(".").length - 1
+      sortNumber = Number(_selectedWbs.code.split(".")[level])
+      longText = _selectedWbs.code
 
-      //   let switch1 = false
+      leftPartB = leftPart.substring(0, leftPart.lastIndexOf("."))
+      levelB = leftPart.split(".").length - 1
+      sortNumberB = Number(leftPart.split(".")[levelB])
+      longTextB = leftPart
 
-      //   // taşınacak başlık en üst seviyede ise
-      //   if (!leftPart) {
+      let switch1 = false
 
-      //     _wbs2 = _wbs.map(item => {
+      if (!leftPart) {
+        setDialogCase("error")
+        setShowDialog("Zaten en üstte")
+      }
 
-      //       let leftPart2
-      //       let level2
-      //       let sortNumber2
-      //       let longText2
-      //       let rightPartWithTheNumber2
-      //       let rightPart2
-      //       let theNumberText2
-      //       let theNumber2
+      // taşınacak başlık en üst seviyede değilse
+      if (leftPart) {
 
-      //       longText2 = item.code
+        _wbs2 = _wbs.map(item => {
 
+          let leftPart2
+          let level2
+          let longText2
+          let rightPartWithTheNumber2
+          let rightPart2
+          let theNumberText2
+          let theNumber2
 
-      //       level2 = longText2.split(".").length - 1
-      //       rightPartWithTheNumber2 = longText2
-      //       theNumberText2 = rightPartWithTheNumber2.split(".")[0]
-      //       theNumber2 = parseInt(theNumberText2)
-      //       rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
-      //       console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
-      //       console.log("theNumber2", theNumber2)
-      //       console.log("rightPart2", rightPart2)
-      //       console.log("---")
+          longText2 = item.code
 
-      //       // aynı seviyede bir altında varsa onu üste alma işlemi, switch kontrlün yapılıyor, altında yoksa işlem yok diye
-      //       if (level2 == level && theNumber2 == sortNumber + 1) {
-      //         let deneme = { ...item, code: (sortNumber).toString() }
-      //         // console.log("deneme", deneme)
-      //         switch1 = true
-      //         return deneme
-      //       }
+          // taşınacak başlığın seviyesinde olanlar tüm başlıklar ve bu başlıklardaki tüm alt başlıklar
+          if (longText2.indexOf(leftPart + ".") === 0) {
 
-      //       // aynı seviyede bir altında varsa onun alt başlıklarını üste alma işlemi, switch kontrlüne gerek yok, zaten üst başlığında yapıldı
-      //       if (level2 > level && theNumber2 == sortNumber + 1) {
-      //         let deneme2 = { ...item, code: (sortNumber) + "." + rightPart2 }
-      //         // console.log("deneme2", deneme2)
-      //         return deneme2
-      //       }
+            level2 = longText2.split(".").length - 1
+            rightPartWithTheNumber2 = longText2.substring(leftPart.length + 1, longText2.length)
+            theNumberText2 = rightPartWithTheNumber2.split(".")[0]
+            theNumber2 = parseInt(theNumberText2)
+            rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
 
-      //       // taşınacak wbs i bir alta alma işlemi, switch kontrlüne gerek yok, zaten bu var kendisi
-      //       if (level2 == level && theNumber2 == sortNumber) {
-      //         let deneme3 = { ...item, code: (sortNumber + 1).toString() }
-      //         // console.log("deneme3", deneme3)
-      //         return deneme3
-      //       }
+            // taşınacak başlığın kendisinin bir üst seviyeye alınması
+            if (level2 == level && theNumber2 == sortNumber) {
+              let deneme = { ...item, code: leftPartB ? leftPartB + "." + (sortNumberB + 1) : (sortNumberB + 1).toString() }
+              // console.log("deneme", deneme)
+              switch1 = true
+              return deneme
+            }
 
-      //       // taşınacak wbs i bir alta alma işlemi, switch kontrlüne gerek yok, zaten bu var kendisi
-      //       if (level2 > level && theNumber2 == sortNumber) {
-      //         let deneme4 = { ...item, code: (sortNumber + 1) + "." + rightPart2 }
-      //         // console.log("deneme4", deneme4)
-      //         return deneme4
-      //       }
+            // taşınacak başlığın alt başlıklarının taşınması
+            if (longText2.indexOf(longText + ".") === 0) {
+              let rightPartWithTheNumber = longText2.substring(longText.length + 1, longText2.length)
+              let deneme = { ...item, code: leftPartB ? leftPartB + "." + (sortNumberB + 1) + "." + rightPartWithTheNumber : (sortNumberB + 1).toString() + "." + rightPartWithTheNumber }
+              switch1 = true
+              return deneme
+            }
 
-      //       return item
+            // taşınacak başlığın taşındığı seviyedeki kendinden küçük kodların bir alt seviyelere taşınması
+            if (longText2.indexOf(longText + ".") === 0) {
+              let rightPartWithTheNumber = longText2.substring(longText.length + 1, longText2.length)
+              let deneme = { ...item, code: leftPartB ? leftPartB + "." + (sortNumberB + 1) + "." + rightPartWithTheNumber : (sortNumberB + 1).toString() + "." + rightPartWithTheNumber }
+              switch1 = true
+              return deneme
+            }
 
-      //     })
-      //   }
+            // // taşınacak başlığın beraberinde taşınacak alt başlıkları
+            // if (level2 == level && theNumber2 == sortNumber + 1) {
+            //   let deneme = { ...item, code: leftPart + "." + (theNumber2 - 1) }
+            //   // console.log("deneme", deneme)
+            //   switch1 = true
+            //   return deneme
+            // }
 
+            // if (level2 == level && theNumber2 == sortNumber + 1) {
+            //   let deneme = { ...item, code: leftPart + "." + (theNumber2 - 1) }
+            //   // console.log("deneme", deneme)
+            //   switch1 = true
+            //   return deneme
+            // }
 
-      //   // taşınacak başlık en üst seviyede değilse
-      //   if (leftPart) {
+            // if (level2 > level && theNumber2 == sortNumber + 1) {
+            //   let deneme2 = { ...item, code: leftPart + "." + (theNumber2 - 1) + "." + rightPart2 }
+            //   // console.log("deneme2", deneme2)
+            //   switch1 = true
+            //   return deneme2
+            // }
 
-      //     _wbs2 = _wbs.map(item => {
+            // if (level2 == level && theNumber2 == sortNumber) {
+            //   let deneme3 = { ...item, code: leftPart + "." + (theNumber2 + 1) }
+            //   // console.log("deneme3", deneme3)
+            //   switch1 = true
+            //   return deneme3
+            // }
 
-      //       let leftPart2
-      //       let level2
-      //       let sortNumber2
-      //       let longText2
-      //       let rightPartWithTheNumber2
-      //       let rightPart2
-      //       let theNumberText2
-      //       let theNumber2
+            // if (level2 > level && theNumber2 == sortNumber) {
+            //   let deneme4 = { ...item, code: leftPart + "." + (theNumber2 + 1) + "." + rightPart2 }
+            //   // console.log("deneme4", deneme4)
+            //   switch1 = true
+            //   return deneme4
+            // }
 
-      //       longText2 = item.code
+          }
 
-      //       if (longText2.indexOf(leftPart + ".") === 0) {
+          return item
 
-      //         level2 = longText2.split(".").length - 1
-      //         rightPartWithTheNumber2 = longText2.substring(leftPart.length + 1, longText2.length)
-      //         theNumberText2 = rightPartWithTheNumber2.split(".")[0]
-      //         theNumber2 = parseInt(theNumberText2)
-      //         rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
-      //         // console.log("rightPartWithTheNumber2", rightPartWithTheNumber2)
-      //         // console.log("theNumber2", theNumber2)
-      //         // console.log("rightPart2", rightPart2)
-      //         // console.log("---")
-
-      //         if (level2 == level && theNumber2 == sortNumber + 1) {
-      //           let deneme = { ...item, code: leftPart + "." + (theNumber2 - 1) }
-      //           // console.log("deneme", deneme)
-      //           switch1 = true
-      //           return deneme
-      //         }
-
-      //         if (level2 > level && theNumber2 == sortNumber + 1) {
-      //           let deneme2 = { ...item, code: leftPart + "." + (theNumber2 - 1) + "." + rightPart2 }
-      //           // console.log("deneme2", deneme2)
-      //           switch1 = true
-      //           return deneme2
-      //         }
-
-      //         if (level2 == level && theNumber2 == sortNumber) {
-      //           let deneme3 = { ...item, code: leftPart + "." + (theNumber2 + 1) }
-      //           // console.log("deneme3", deneme3)
-      //           switch1 = true
-      //           return deneme3
-      //         }
-
-      //         if (level2 > level && theNumber2 == sortNumber) {
-      //           let deneme4 = { ...item, code: leftPart + "." + (theNumber2 + 1) + "." + rightPart2 }
-      //           // console.log("deneme4", deneme4)
-      //           switch1 = true
-      //           return deneme4
-      //         }
-
-      //       }
-
-      //       return item
-
-      //     })
-      //   }
+        })
+      }
 
 
-      //   if (switch1) {
-      //     // console.log("_wbs2", _wbs2)
-      //     setIsProject({ ...isProject, wbs: _wbs2 })
-      //   }
+      if (switch1) {
+        // console.log("_wbs2", _wbs2)
+        setIsProject({ ...isProject, wbs: _wbs2 })
+      }
 
-      const result = await RealmApp.currentUser.callFunction("moveWbsLeft", { projectId: isProject._id, wbsId: selectedWbs._id });
-      setIsProject(result.project)
-      // console.log(result._selectedWbs2)
-      setSelectedWbs(result.project.wbs.find(item => item._id.toString() === selectedWbs._id.toString()))
+      // const result = await RealmApp.currentUser.callFunction("moveWbsLeft", { projectId: isProject._id, wbsId: selectedWbs._id });
+      // setIsProject(result.project)
+      // // console.log(result._selectedWbs2)
+      // setSelectedWbs(result.project.wbs.find(item => item._id.toString() === selectedWbs._id.toString()))
 
     } catch (err) {
 
