@@ -667,6 +667,9 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       sortNumberB = Number(leftPart.split(".")[levelB])
       longTextB = leftPart
 
+      console.log("leftPartB", leftPartB)
+      console.log("---")
+
       let switch1 = false
 
       if (!leftPart) {
@@ -714,51 +717,108 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
               return deneme
             }
 
-            // taşınacak başlığın taşındığı seviyedeki kendinden küçük kodların bir alt seviyelere taşınması
-            if (longText2.indexOf(longText + ".") === 0) {
-              let rightPartWithTheNumber = longText2.substring(longText.length + 1, longText2.length)
-              let deneme = { ...item, code: leftPartB ? leftPartB + "." + (sortNumberB + 1) + "." + rightPartWithTheNumber : (sortNumberB + 1).toString() + "." + rightPartWithTheNumber }
-              switch1 = true
-              return deneme
-            }
-
-            // // taşınacak başlığın beraberinde taşınacak alt başlıkları
-            // if (level2 == level && theNumber2 == sortNumber + 1) {
-            //   let deneme = { ...item, code: leftPart + "." + (theNumber2 - 1) }
-            //   // console.log("deneme", deneme)
-            //   switch1 = true
-            //   return deneme
-            // }
-
-            // if (level2 == level && theNumber2 == sortNumber + 1) {
-            //   let deneme = { ...item, code: leftPart + "." + (theNumber2 - 1) }
-            //   // console.log("deneme", deneme)
-            //   switch1 = true
-            //   return deneme
-            // }
-
-            // if (level2 > level && theNumber2 == sortNumber + 1) {
-            //   let deneme2 = { ...item, code: leftPart + "." + (theNumber2 - 1) + "." + rightPart2 }
-            //   // console.log("deneme2", deneme2)
-            //   switch1 = true
-            //   return deneme2
-            // }
-
-            // if (level2 == level && theNumber2 == sortNumber) {
-            //   let deneme3 = { ...item, code: leftPart + "." + (theNumber2 + 1) }
-            //   // console.log("deneme3", deneme3)
-            //   switch1 = true
-            //   return deneme3
-            // }
-
-            // if (level2 > level && theNumber2 == sortNumber) {
-            //   let deneme4 = { ...item, code: leftPart + "." + (theNumber2 + 1) + "." + rightPart2 }
-            //   // console.log("deneme4", deneme4)
-            //   switch1 = true
-            //   return deneme4
-            // }
-
           }
+
+
+          // taşınacak başlığın kendi seviyesinde, kendi altında bulunan başlıkların numaralarının düzeltilmesi
+          if (longText2.indexOf(leftPart + ".") === 0) {
+            let rightPartWithTheNumber = longText2.substring(leftPart.length + 1, longText2.length)
+            let theNumberText = rightPartWithTheNumber.split(".")[0]
+            let theNumber = parseInt(theNumberText)
+            // rightPart 11.23.45 --> 23.45
+            let rightPart = rightPartWithTheNumber.substring(theNumberText.length + 1, rightPartWithTheNumber.length)
+            if (theNumber > sortNumber) {
+              return { ...item, code: rightPart ? leftPart + "." + (theNumber - 1) + "." + rightPart : leftPart + "." + (theNumber - 1) }
+            } else {
+              return item
+            }
+          }
+
+          // taşınacak başlığın taşındığı seviyedeki kendinden küçük kodların bir alt seviyelere taşınması - taşınacak seviye en üst seviye ise
+          if (!leftPartB) {
+            let rightPartWithTheNumber = longText2
+            let theNumberText = rightPartWithTheNumber.split(".")[0]
+            let theNumber = parseInt(theNumberText)
+            // rightPart 11.23.45 --> 23.45
+            let rightPart = rightPartWithTheNumber.substring(theNumberText.length + 1, rightPartWithTheNumber.length)
+            if (theNumber >= sortNumberB + 1) {
+              return { ...item, code: rightPart ? (theNumber + 1) + "." + rightPart : (theNumber + 1).toString() }
+            } else {
+              return item
+            }
+          }
+          
+          // taşınacak başlığın taşındığı seviyedeki kendinden küçük kodların bir alt seviyelere taşınması - taşınacak seviye en üst seviye değilse
+          if (leftPartB && longText2.indexOf(leftPartB + ".") === 0) {
+            let rightPartWithTheNumber = longText2.substring(leftPartB.length + 1, longText2.length)
+            let theNumberText = rightPartWithTheNumber.split(".")[0]
+            let theNumber = parseInt(theNumberText)
+            // rightPart 11.23.45 --> 23.45
+            let rightPart = rightPartWithTheNumber.substring(theNumberText.length + 1, rightPartWithTheNumber.length)
+            if (theNumber >= sortNumberB + 1) {
+              return { ...item, code: rightPart ? leftPartB + "." + (theNumber + 1) + "." + rightPart : leftPartB + "." + (theNumber + 1) }
+            } else {
+              return item
+            }
+          }
+          
+          // // taşınacak başlığın taşındığı seviyedeki kendinden küçük kodların bir alt seviyelere taşınması - en üst seviye değil ise
+          // if (!longText2.includes(".")) {
+          //   // theNumberText = longText.split(".")[0]
+          //   // theNumberText = longText
+          //   // theNumber = parseInt(theNumberText)
+          //   theNumber = parseInt(longText)
+
+          //   if (theNumber > willBeDeletedNumber) {
+          //     return { ...item, code: (theNumber - 1).toString() }
+          //   } else {
+          //     return item
+          //   }
+          // }
+
+
+          // if (longText2.indexOf(longText + ".") === 0) {
+          //   let rightPartWithTheNumber = longText2.substring(longText.length + 1, longText2.length)
+          //   let deneme = { ...item, code: leftPartB ? leftPartB + "." + (sortNumberB + 1) + "." + rightPartWithTheNumber : (sortNumberB + 1).toString() + "." + rightPartWithTheNumber }
+          //   switch1 = true
+          //   return deneme
+          // }
+
+          // // taşınacak başlığın beraberinde taşınacak alt başlıkları
+          // if (level2 == level && theNumber2 == sortNumber + 1) {
+          //   let deneme = { ...item, code: leftPart + "." + (theNumber2 - 1) }
+          //   // console.log("deneme", deneme)
+          //   switch1 = true
+          //   return deneme
+          // }
+
+          // if (level2 == level && theNumber2 == sortNumber + 1) {
+          //   let deneme = { ...item, code: leftPart + "." + (theNumber2 - 1) }
+          //   // console.log("deneme", deneme)
+          //   switch1 = true
+          //   return deneme
+          // }
+
+          // if (level2 > level && theNumber2 == sortNumber + 1) {
+          //   let deneme2 = { ...item, code: leftPart + "." + (theNumber2 - 1) + "." + rightPart2 }
+          //   // console.log("deneme2", deneme2)
+          //   switch1 = true
+          //   return deneme2
+          // }
+
+          // if (level2 == level && theNumber2 == sortNumber) {
+          //   let deneme3 = { ...item, code: leftPart + "." + (theNumber2 + 1) }
+          //   // console.log("deneme3", deneme3)
+          //   switch1 = true
+          //   return deneme3
+          // }
+
+          // if (level2 > level && theNumber2 == sortNumber) {
+          //   let deneme4 = { ...item, code: leftPart + "." + (theNumber2 + 1) + "." + rightPart2 }
+          //   // console.log("deneme4", deneme4)
+          //   switch1 = true
+          //   return deneme4
+          // }
 
           return item
 
@@ -769,6 +829,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       if (switch1) {
         // console.log("_wbs2", _wbs2)
         setIsProject({ ...isProject, wbs: _wbs2 })
+        setSelectedWbs(_wbs2.find(item => item._id.toString() === selectedWbs._id.toString()))
       }
 
       // const result = await RealmApp.currentUser.callFunction("moveWbsLeft", { projectId: isProject._id, wbsId: selectedWbs._id });
