@@ -18,6 +18,7 @@ import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PinIcon from '@mui/icons-material/Pin';
+import EditIcon from '@mui/icons-material/Edit';
 import FontDownloadIcon from '@mui/icons-material/FontDownload';
 
 import Divider from '@mui/material/Divider';
@@ -355,7 +356,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
     // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
     if (!selectedWbs) {
-      console.log("alttaki satırda --return-- oldu - handleMoveWbsLeft")
+      console.log("alttaki satırda --return-- oldu - handleMoveWbsLeft1")
       return
     }
 
@@ -379,115 +380,27 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       if (!leftPart) {
         setDialogCase("error")
         setShowDialog("Zaten en üstte")
+        console.log("alttaki satırda --return-- oldu - handleMoveWbsLeft2")
+        return
       }
 
-      // taşınacak başlık en üst seviyede değilse
-      if (leftPart) {
-
-        _wbs2 = _wbs.map(item => {
-
-          let leftPart2
-          let level2
-          let longText2
-          let rightPartWithTheNumber2
-          let rightPart2
-          let theNumberText2
-          let theNumber2
-
-          longText2 = item.code
-
-          // taşınacak başlığın seviyesinde olanlar tüm başlıklar ve bu başlıklardaki tüm alt başlıklar
-          if (longText2.indexOf(leftPart + ".") === 0) {
-
-            level2 = longText2.split(".").length - 1
-            rightPartWithTheNumber2 = longText2.substring(leftPart.length + 1, longText2.length)
-            theNumberText2 = rightPartWithTheNumber2.split(".")[0]
-            theNumber2 = parseInt(theNumberText2)
-            rightPart2 = rightPartWithTheNumber2.substring(theNumberText2.length + 1, rightPartWithTheNumber2.length)
-
-            // taşınacak başlığın kendisinin bir üst seviyeye alınması
-            if (level2 == level && theNumber2 == sortNumber) {
-              let deneme = { ...item, code: leftPartB ? leftPartB + "." + (sortNumberB + 1) : (sortNumberB + 1).toString() }
-              // console.log("deneme", deneme)
-              switch1 = true
-              return deneme
-            }
-
-            // taşınacak başlığın alt başlıklarının taşınması
-            if (longText2.indexOf(longText + ".") === 0) {
-              let rightPartWithTheNumber = longText2.substring(longText.length + 1, longText2.length)
-              let deneme = { ...item, code: leftPartB ? leftPartB + "." + (sortNumberB + 1) + "." + rightPartWithTheNumber : (sortNumberB + 1).toString() + "." + rightPartWithTheNumber }
-              switch1 = true
-              return deneme
-            }
-
-          }
-
-
-          // taşınacak başlığın kendi seviyesinde, kendi altında bulunan başlıkların numaralarının düzeltilmesi
-          if (longText2.indexOf(leftPart + ".") === 0) {
-            let rightPartWithTheNumber = longText2.substring(leftPart.length + 1, longText2.length)
-            let theNumberText = rightPartWithTheNumber.split(".")[0]
-            let theNumber = parseInt(theNumberText)
-            // rightPart 11.23.45 --> 23.45
-            let rightPart = rightPartWithTheNumber.substring(theNumberText.length + 1, rightPartWithTheNumber.length)
-            if (theNumber > sortNumber) {
-              return { ...item, code: rightPart ? leftPart + "." + (theNumber - 1) + "." + rightPart : leftPart + "." + (theNumber - 1) }
-            } else {
-              return item
-            }
-          }
-
-          // taşınacak başlığın taşındığı seviyedeki kendinden küçük kodların bir alt seviyelere taşınması - taşınacak seviye en üst seviye ise
-          if (!leftPartB) {
-            let rightPartWithTheNumber = longText2
-            let theNumberText = rightPartWithTheNumber.split(".")[0]
-            let theNumber = parseInt(theNumberText)
-            // rightPart 11.23.45 --> 23.45
-            let rightPart = rightPartWithTheNumber.substring(theNumberText.length + 1, rightPartWithTheNumber.length)
-            if (theNumber >= sortNumberB + 1) {
-              return { ...item, code: rightPart ? (theNumber + 1) + "." + rightPart : (theNumber + 1).toString() }
-            } else {
-              return item
-            }
-          }
-
-          // taşınacak başlığın taşındığı seviyedeki kendinden küçük kodların bir alt seviyelere taşınması - taşınacak seviye en üst seviye değilse
-          if (leftPartB && longText2.indexOf(leftPartB + ".") === 0) {
-            let rightPartWithTheNumber = longText2.substring(leftPartB.length + 1, longText2.length)
-            let theNumberText = rightPartWithTheNumber.split(".")[0]
-            let theNumber = parseInt(theNumberText)
-            // rightPart 11.23.45 --> 23.45
-            let rightPart = rightPartWithTheNumber.substring(theNumberText.length + 1, rightPartWithTheNumber.length)
-            if (theNumber >= sortNumberB + 1) {
-              return { ...item, code: rightPart ? leftPartB + "." + (theNumber + 1) + "." + rightPart : leftPartB + "." + (theNumber + 1) }
-            } else {
-              return item
-            }
-          }
-
-
-          return item
-
-        })
-      }
-
-      if (switch1) {
-        const result = await RealmApp.currentUser.callFunction("moveWbsLeft", { projectId: isProject._id, wbsId: selectedWbs._id });
-        setIsProject(result.project)
-        // console.log(result._selectedWbs2)
-        setSelectedWbs(result.project.wbs.find(item => item._id.toString() === selectedWbs._id.toString()))
-      }
+      const result = await RealmApp.currentUser.callFunction("moveWbsLeft", { projectId: isProject._id, wbsId: selectedWbs._id });
+      setIsProject(result.project)
+      // console.log(result._selectedWbs2)
+      setSelectedWbs(result.project.wbs.find(item => item._id.toString() === selectedWbs._id.toString()))
 
     } catch (err) {
 
-      console.log(err)
-      let hataMesaj_ = err.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+      console.log("err", err)
+      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
 
-      if (hataMesaj_.includes("Zaten")) {
-        return
-        hataMesaj_ = "Zaten en üstte"
-      }
+      let text1 = "__mesajBaslangic__"
+      let text2 = "__mesajBitis__"
+      let mesajBaslangic = hataMesaj_.includes(text1) ? hataMesaj_.indexOf(text1) + text1.length : 0
+      let mesajBitis = hataMesaj_.includes(text2) ? hataMesaj_.indexOf(text2) : hataMesaj_.length
+
+      hataMesaj_ = hataMesaj_.slice(mesajBaslangic, mesajBitis)
+      console.log("hataMesaj_", hataMesaj_)
 
       setDialogCase("error")
       setShowDialog(hataMesaj_)
@@ -519,7 +432,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
     } catch (err) {
 
-      console.log("err",err)
+      console.log("err", err)
       let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
 
       let text1 = "__mesajBaslangic__"
@@ -528,8 +441,8 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
       let mesajBitis = hataMesaj_.includes(text2) ? hataMesaj_.indexOf(text2) : hataMesaj_.length
 
       hataMesaj_ = hataMesaj_.slice(mesajBaslangic, mesajBitis)
-      console.log("hataMesaj_",hataMesaj_)
-      
+      console.log("hataMesaj_", hataMesaj_)
+
       setDialogCase("error")
       setShowDialog(hataMesaj_)
 
@@ -537,6 +450,45 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
   }
 
+
+
+  async function handleWbsEdit() {
+
+    // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
+    if (!selectedWbs) {
+      console.log("alttaki satırda --return-- oldu - handleMoveWbsRight")
+      return
+    }
+
+    try {
+
+      let new_keyValues_wbs = {
+        name:"yeni isim"
+      }
+      
+      const result = await RealmApp.currentUser.callFunction("updateWbs", { projectId: isProject._id, wbsId: selectedWbs._id, new_keyValues_wbs });
+      setIsProject(result?.project)
+      setSelectedWbs(result.project?.wbs?.find(item => item._id.toString() === selectedWbs._id.toString()))
+
+    } catch (err) {
+
+      console.log("err", err)
+      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
+
+      let text1 = "__mesajBaslangic__"
+      let text2 = "__mesajBitis__"
+      let mesajBaslangic = hataMesaj_.includes(text1) ? hataMesaj_.indexOf(text1) + text1.length : 0
+      let mesajBitis = hataMesaj_.includes(text2) ? hataMesaj_.indexOf(text2) : hataMesaj_.length
+
+      hataMesaj_ = hataMesaj_.slice(mesajBaslangic, mesajBitis)
+      console.log("hataMesaj_", hataMesaj_)
+
+      setDialogCase("error")
+      setShowDialog(hataMesaj_)
+
+    }
+
+  }
 
 
   return (
@@ -642,6 +594,12 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
               <Grid item onClick={() => handleMoveWbsRight()}>
                 <IconButton aria-label="moveRight">
                   <KeyboardArrowRightIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
+                </IconButton>
+              </Grid>
+
+              <Grid item onClick={() => handleWbsEdit()}>
+                <IconButton aria-label="moveRight">
+                  <EditIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
               </Grid>
 
