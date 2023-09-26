@@ -6,6 +6,7 @@ import { useApp } from "../../components/useApp";
 
 import { useQuery } from '@tanstack/react-query'
 import FormWbsCreate from '../../components/FormWbsCreate'
+import FormWbsUpdate from '../../components/FormWbsUpdate'
 import WbsHeader from '../../components/WbsHeader'
 import WbsMain from '../../components/WbsMain'
 
@@ -65,6 +66,12 @@ export default function P_Wbs() {
       {show == "FormWbsCreate" &&
         <Grid item >
           <FormWbsCreate setShow={setShow} isProject={isProject} setIsProject={setIsProject} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} />
+        </Grid>
+      }
+
+      {show == "FormWbsUpdate" &&
+        <Grid item >
+          <FormWbsUpdate setShow={setShow} isProject={isProject} setIsProject={setIsProject} selectedWbs={selectedWbs} setSelectedWbs={setSelectedWbs} />
         </Grid>
       }
 

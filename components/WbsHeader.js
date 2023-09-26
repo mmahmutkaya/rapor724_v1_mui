@@ -597,7 +597,7 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
                 </IconButton>
               </Grid>
 
-              <Grid item onClick={() => handleWbsEdit()}>
+              <Grid item onClick={() => setShow("FormWbsUpdate")} sx={{ color: !selectedWbs ? "lightgray" : "rgb(139,0,0)" }} aria-label="updateWbs">
                 <IconButton aria-label="moveRight">
                   <EditIcon sx={{ color: !selectedWbs ? "lightgray" : "rgb(100,100,100)" }} />
                 </IconButton>
