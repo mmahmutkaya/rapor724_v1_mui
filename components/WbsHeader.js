@@ -451,46 +451,6 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
   }
 
 
-
-  async function handleWbsEdit() {
-
-    // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
-    if (!selectedWbs) {
-      console.log("alttaki satırda --return-- oldu - handleMoveWbsRight")
-      return
-    }
-
-    try {
-
-      let new_keyValues_wbs = {
-        name:"yeni isim"
-      }
-      
-      const result = await RealmApp.currentUser.callFunction("updateWbs", { projectId: isProject._id, wbsId: selectedWbs._id, new_keyValues_wbs });
-      setIsProject(result?.project)
-      setSelectedWbs(result.project?.wbs?.find(item => item._id.toString() === selectedWbs._id.toString()))
-
-    } catch (err) {
-
-      console.log("err", err)
-      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.."
-
-      let text1 = "__mesajBaslangic__"
-      let text2 = "__mesajBitis__"
-      let mesajBaslangic = hataMesaj_.includes(text1) ? hataMesaj_.indexOf(text1) + text1.length : 0
-      let mesajBitis = hataMesaj_.includes(text2) ? hataMesaj_.indexOf(text2) : hataMesaj_.length
-
-      hataMesaj_ = hataMesaj_.slice(mesajBaslangic, mesajBitis)
-      console.log("hataMesaj_", hataMesaj_)
-
-      setDialogCase("error")
-      setShowDialog(hataMesaj_)
-
-    }
-
-  }
-
-
   return (
     <Paper>
 

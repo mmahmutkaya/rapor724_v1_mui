@@ -1,28 +1,19 @@
 
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 
-import { useQuery } from '@tanstack/react-query'
 import FormWbsCreate from '../../components/FormWbsCreate'
 import FormWbsUpdate from '../../components/FormWbsUpdate'
 import WbsHeader from '../../components/WbsHeader'
-import WbsMain from '../../components/WbsMain'
 
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { Typography } from '@mui/material';
-import List from '@mui/material/List';
 
-import IconButton from '@mui/material/IconButton';
-import FolderIcon from '@mui/icons-material/Folder';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 
 export default function P_Wbs() {
@@ -32,7 +23,7 @@ export default function P_Wbs() {
   const RealmApp = useApp();
   const { isProject, setIsProject } = useContext(StoreContext)
   const { selectedWbs, setSelectedWbs } = useContext(StoreContext)
-  // const [selectedWbs, setSelectedWbs] = useState()
+
   const router = useRouter();
   !isProject ? router.push('/projects') : null
 
@@ -125,12 +116,7 @@ export default function P_Wbs() {
                     {/* grid item */}
                     <Items count={(level)} />
 
-
-                    {/* grid item - bu alana open for poz gelecek fakat open for poz olmasa da bu kutu içi boş şekilde olmalı*/}
-                    {/* color("border") - değişken (variable) kulanma*/}
-                    {/* <Box sx={{ position: "relative", backgroundColor: color(level).bg, borderLeft: "1px solid " + color("border") }}> */}
                     <Box sx={{ position: "relative", backgroundColor: color(level).bg, borderLeft: "1px solid " + color("border") }}>
-
 
                       {theWbs.openForPoz &&
                         // wbs poza açıksa - var olan mevcut kutunun içinde beliren sarı kutu
@@ -165,18 +151,6 @@ export default function P_Wbs() {
                         // önce hepsini bu şekilde sonra seçilmişi aşağıda değiştiriyoruz
                         backgroundColor: color(level).bg,
                         color: color(level).co,
-
-                        // // seçim yapılan poz başlığı ise
-                        // ...(selectedWbs?.code == theWbs.code && {
-                        //   backgroundColor: "#ffff00",
-                        //   color: "red",
-                        // }),
-
-                        // v1
-                        // "&:hover": {
-                        //   backgroundColor: "yellow",
-                        //   color: "red",
-                        // },
 
                         "&:hover .hoverTheWbs": {
                           // display: "inline"
@@ -223,7 +197,7 @@ export default function P_Wbs() {
 
                             {nameMode === true &&
                               <Grid item sx={{ ml: "0.3rem" }}>
-                                {theWbs.codeName}
+                                ({theWbs.codeName})
                               </Grid>
                             }
 
@@ -240,15 +214,7 @@ export default function P_Wbs() {
                                     borderRadius: "0.5rem",
                                     height: "0.5rem",
                                     width: "0.5rem",
-                                    // borderLeft: "1px solid " + color("border")
-                                    // width: "1rem", height: "1rem",
-                                    // border: "1px solid black",
-                                    // ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
-                                    //   backgroundColor: "red",
-                                    // }),
-                                    // ...(selectedWbs?.code == theWbs.code && {
-                                    //   border: "2px solid red"
-                                    // }),
+
                                   }}>
                                   </Box>
                                 </Grid>
@@ -258,26 +224,6 @@ export default function P_Wbs() {
 
                           </Grid>
                         </Grid>
-
-                        {/* poza açık theWbs lerin işaretli olduğu kısım */}
-                        {/* {theWbs.openForPoz &&
-                          <Grid item onClick={() => console.log(theWbs._id.toString())} >
-                            <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                              <Grid item >
-                                <Box sx={{
-                                  width: "0.5rem", height: "0.5rem",
-                                  backgroundColor: theWbs.includesPoz ? "red" : "white",
-                                  // ...(selectedWbs?.code == theWbs.code && theWbs.includesPoz && {
-                                  //   backgroundColor: "red",
-                                  // }),
-                                  // ...(selectedWbs?.code == theWbs.code && {
-                                  //   border: "2px solid red"
-                                  // }),
-                                }}></Box>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        } */}
 
                       </Grid>
 
@@ -306,36 +252,12 @@ export default function P_Wbs() {
 
 
 const Item = ({ index }) => (
-  // <Box sx={{ backgroundColor: color(index).bg }}></Box>
   <Box sx={{ backgroundColor: color(index).bg, borderLeft: "1px solid " + color("border") }}></Box>
 );
 
 const Items = ({ count }) => (
   Array.from({ length: count }).map((_item, index) => <Item key={index + 1} index={index} />)
 )
-
-
-
-// function color(index) {
-//   switch (index) {
-//     case 0:
-//       return { bg: "#202020", co: "white" }
-//     case 1:
-//       return { bg: "#8b0000", co: "white" }
-//     case 2:
-//       return { bg: "#330066", co: "white" }
-//     case 3:
-//       return { bg: "#005555", co: "white" }
-//     case 4:
-//       return { bg: "#006666", co: "white" }
-//     case 5:
-//       return { bg: "#8b008b", co: "white" }
-//     case 6:
-//       return { bg: "#737373", co: "white" }
-//     case 7:
-//       return { bg: "#2929bc", co: "white" }
-//   }
-// }
 
 
 function color(index) {
@@ -362,25 +284,3 @@ function color(index) {
       return "#e6e6e6"
   }
 }
-
-
-// 0 - 202020
-// 1 - 330066
-// 2 - 330066
-// 3 - 2929bc
-// 4 - 005555
-// 5 - 006666
-// 6 - 005555
-// 7 - 006666
-
-
-{/* <Grid
-  container
-  direction="column"
-  justifyContent="center"
-  alignItems="center"
->
-  <Grid item sx={{ position: "relative" }}>
-    <Box sx={{ position: "absolute", top: "50%", left: "50%", width: "0,5rem", height: "0,5rem", border: "2px solid", backgroundColor: "red" }}>a</Box>
-  </Grid>
-</Grid> */}
