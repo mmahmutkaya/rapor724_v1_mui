@@ -88,19 +88,18 @@ export default function P_FormWbsEdit({ setShow, isProject, setIsProject, select
       // sorgudan wbs datası güncellenmiş proje dödürüp, gelen data ile aşağıda react useContext deki projeyi update ediyoruz
       const newWbsItem = {
         projectId: isProject._id,
-        upWbsId: selectedWbs ? selectedWbs._id : "0",
         wbsId:selectedWbs._id,
         newWbsName: wbsName,
         newWbsCodeName: wbsCodeName
       }
 
-      const resultProject = await RealmApp.currentUser.callFunction("updateWbs", newWbsItem);
+      const result = await RealmApp.currentUser.callFunction("updateWbs", newWbsItem);
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
       // yukarıda da frontend kontrolü yapılmıştı
-      if (resultProject.errorFormObj) {
+      if (result.errorFormObj) {
 
-        const errorFormObj = resultProject.errorFormObj
+        const errorFormObj = result.errorFormObj
 
         console.log("errorFormObj", errorFormObj)
 
@@ -123,14 +122,14 @@ export default function P_FormWbsEdit({ setShow, isProject, setIsProject, select
 
 
       // _id yoksa istediğimiz proje verisi değil demekki, hata ile durduruyoruz
-      if (!resultProject._id) {
+      if (!result.project._id) {
         throw new Error("db den Proje olarak beklenen verinin _id property yok, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
       }
 
 
       // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
       // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
-      setIsProject(resultProject)
+      setIsProject(result.project)
 
       // sorgu işleminden önce seçilen wbs varsa, temizliyoruz, en büyük gerekçe seçilen wbs silinmiş olabilir, onunla işlem db de hata verir
       setSelectedWbs(null)
@@ -233,6 +232,7 @@ export default function P_FormWbsEdit({ setShow, isProject, setIsProject, select
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
 
+                defaultValue={selectedWbs.codeName}
                 margin="normal"
                 id="wbsCodeName"
                 name="wbsCodeName"
@@ -250,7 +250,7 @@ export default function P_FormWbsEdit({ setShow, isProject, setIsProject, select
 
           <DialogActions sx={{ padding: "1.5rem" }}>
             <Button onClick={() => setShow()}>İptal</Button>
-            <Button type="submit">Oluştur</Button>
+            <Button type="submit">Güncelle</Button>
           </DialogActions>
 
         </Box>
