@@ -27,7 +27,7 @@ export default function P_Wbs() {
   const router = useRouter();
   !isProject ? router.push('/projects') : null
 
-  const [show, setShow] = useState("WbsMain")
+  const [show, setShow] = useState()
   const [nameMode, setNameMode] = useState(false)
   const [codeMode, setCodeMode] = useState(true)
 

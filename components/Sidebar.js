@@ -109,7 +109,7 @@ export default function Sidebar({ setMobileOpen }) {
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
-              <ListItemText primary="Mahal Grupları" />
+              <ListItemText primary="Mahal Başlıkları" />
             </ListItemButton>
 
             <ListItemButton onClick={() => router.push('/mahaller')}>

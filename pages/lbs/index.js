@@ -27,7 +27,7 @@ export default function P_Lbs() {
   const router = useRouter();
   !isProject ? router.push('/projects') : null
 
-  const [show, setShow] = useState("LbsMain")
+  const [show, setShow] = useState()
   const [nameMode, setNameMode] = useState(false)
   const [codeMode, setCodeMode] = useState(true)
 
@@ -193,7 +193,7 @@ export default function P_Lbs() {
 
                             {nameMode === true &&
                               <Grid item sx={{ ml: "0.3rem" }}>
-                                {theLbs.codeName}
+                                ({theLbs.codeName})
                               </Grid>
                             }
 
