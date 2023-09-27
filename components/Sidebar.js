@@ -130,7 +130,7 @@ export default function Sidebar({ setMobileOpen }) {
               <ListItemIcon>
                 <DraftsIcon />
               </ListItemIcon>
-              <ListItemText primary="Kayıtlar" />
+              <ListItemText primary="Yayın/Bildirim/Duyuru" />
             </ListItemButton>
 
             <ListItemButton onClick={() => router.push('/mongo')}>

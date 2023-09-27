@@ -101,7 +101,7 @@ export default function P_Lbs() {
                 return (
                   <Box key={theLbs._id} sx={{
                     display: "grid",
-                    gridTemplateColumns: level == 0 ? "1rem 1fr" : "1rem repeat(" + (level) + ", 1rem) 1fr", // baştaki poz var mı yok mu için
+                    gridTemplateColumns: level == 0 ? "1rem 1fr" : "1rem repeat(" + (level) + ", 1rem) 1fr", // baştaki mahal var mı yok mu için
                     "&:hover .hoverTheLbsLeft": {
                       visibility: "visible",
                       color: "red",
@@ -114,12 +114,12 @@ export default function P_Lbs() {
 
                     <Box sx={{ position: "relative", backgroundColor: color(level).bg, borderLeft: "1px solid " + color("border") }}>
 
-                      {theLbs.openForPoz &&
-                        // lbs poza açıksa - var olan mevcut kutunun içinde beliren sarı kutu
+                      {theLbs.openForMahal &&
+                        // lbs mahal eklemeye açıksa - var olan mevcut kutunun içinde beliren sarı kutu
                         <Grid container sx={{ position: "absolute", borderRadius: "10%", backgroundColor: "#65FF00", top: "20%", left: "30%", width: "0.7rem", height: "0.7rem" }}>
 
-                          {/* poz kayıtlı ise sarı kutunun içinde beliren siyah nokta */}
-                          {theLbs.includesPoz &&
+                          {/* mahal eklenmiş ise sarı kutunun içinde beliren siyah nokta */}
+                          {theLbs.includesMahal &&
                             <Grid item sx={{ position: "relative", width: "100%", height: "100%" }}>
 
                               <Box sx={{ position: "absolute", borderRadius: "50%", backgroundColor: "red", top: "25%", left: "25%", width: "50%", height: "50%" }}>

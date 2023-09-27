@@ -83,9 +83,6 @@ export default function P_FormLbsEdit({ setShow, isProject, setIsProject, select
 
 
 
-      // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
-      // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
-      // sorgudan lbs datası güncellenmiş proje dödürüp, gelen data ile aşağıda react useContext deki projeyi update ediyoruz
       const newLbsItem = {
         projectId: isProject._id,
         lbsId:selectedLbs._id,
@@ -127,8 +124,7 @@ export default function P_FormLbsEdit({ setShow, isProject, setIsProject, select
       }
 
 
-      // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
-      // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
+      // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch() yapıp db yi yormaya gerek yok
       setIsProject(result.project)
 
       // sorgu işleminden önce seçilen lbs varsa, temizliyoruz, en büyük gerekçe seçilen lbs silinmiş olabilir, onunla işlem db de hata verir
@@ -153,7 +149,7 @@ export default function P_FormLbsEdit({ setShow, isProject, setIsProject, select
       hataMesaj_ = hataMesaj_.slice(mesajBaslangic, mesajBitis)
       console.log(hataMesaj_)
 
-      // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
+      // eğer çifte kayıt oluyorsa form içindeki mahal ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       // form sayfası kapanmadan hata gösterimi
       if (hataMesaj_.includes("duplicate key error")) {
         setError_for_lbsName(true);

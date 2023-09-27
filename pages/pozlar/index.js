@@ -6,7 +6,6 @@ import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
 import FormPozCreate from '../../components/FormPozCreate'
 import PozHeader from '../../components/PozHeader'
-// import { usePozlarData } from '../../hooks/usePozlarData'
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';

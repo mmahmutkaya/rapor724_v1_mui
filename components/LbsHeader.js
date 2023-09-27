@@ -50,9 +50,9 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
   }
 
 
-  async function handleSwitchForPoz(event) {
+  async function handleSwitchForMahal(event) {
 
-    // lbs poza açık hale getirilecekse
+    // lbs mahale açık hale getirilecekse
     if (event.target.checked === true) {
 
       try {
@@ -65,11 +65,11 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
         // bu kontrol backend de ayrıca yapılıyor
         let text = selectedLbs.code + "."
         if (isProject.lbs.find(item => item.code.indexOf(text) === 0)) {
-          // throw new Error("\"" + selectedLbs.name + "\" isimli başlığın bir veya daha fazla alt başlığı mevcut, bu sebeple direk poz eklemeye açık hale getirilemez, mevcut alt başlıklar uygun değilse, yeni bir alt başlık oluşturup, o başlığı poz eklemeye açabilirsiniz.")
-          throw new Error("Alt başlığı bulunan başlıklar poz eklemeye açılamaz.")
+          // throw new Error("\"" + selectedLbs.name + "\" isimli başlığın bir veya daha fazla alt başlığı mevcut, bu sebeple direk mahal eklemeye açık hale getirilemez, mevcut alt başlıklar uygun değilse, yeni bir alt başlık oluşturup, o başlığı mahal eklemeye açabilirsiniz.")
+          throw new Error("Alt başlığı bulunan başlıklar mahal eklemeye açılamaz.")
         }
 
-        const resultProject = await RealmApp.currentUser.callFunction("openLbsForPoz", { projectId: isProject._id, lbsId: selectedLbs._id });
+        const resultProject = await RealmApp.currentUser.callFunction("openLbsForMahal", { projectId: isProject._id, lbsId: selectedLbs._id });
         setIsProject(resultProject)
 
         // switch on-off gösterim durumunu güncellemesi için 
@@ -97,7 +97,7 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
     }
 
 
-    // lbs poza kapalı hale getirilecekse
+    // lbs mahale kapalı hale getirilecekse
     if (event.target.checked === false) {
 
       try {
@@ -107,7 +107,7 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
           return
         }
 
-        const resultProject = await RealmApp.currentUser.callFunction("closeLbsForPoz", { projectId: isProject._id, lbsId: selectedLbs._id });
+        const resultProject = await RealmApp.currentUser.callFunction("closeLbsForMahal", { projectId: isProject._id, lbsId: selectedLbs._id });
         setIsProject(resultProject)
 
         // switch on-off gösterim durumunu güncellemesi için 
@@ -120,8 +120,8 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
         console.log("err", err.message)
         let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
-        if (hataMesaj_.includes("kayıtlı pozlar mevcut")) {
-          hataMesaj_ = "\"" + selectedLbs.name + "\" isimli başlık altında kayıtlı pozlar mevcut olduğu için silinemez, öncelikle pozları silmeli ya da başka başlık altına taşımalısınız."
+        if (hataMesaj_.includes("kayıtlı mahaller mevcut")) {
+          hataMesaj_ = "\"" + selectedLbs.name + "\" isimli başlık altında kayıtlı mahaller mevcut olduğu için silinemez, öncelikle mahalleri silmeli ya da başka başlık altına taşımalısınız."
         }
 
         setDialogCase("error")
@@ -237,8 +237,8 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
     try {
 
       // bu kontrol backend de ayrıca yapılıyor
-      if (selectedLbs.openForPoz) {
-        throw new Error("Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız")
+      if (selectedLbs.openForMahal) {
+        throw new Error("Mahal eklemeye açık başlıklar silinemez, öncelikle mahal eklemeye kapatınız")
       }
 
       const resultProject = await RealmApp.currentUser.callFunction("deleteLbs", { projectId: isProject._id, lbsId: selectedLbs._id });
@@ -254,8 +254,8 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
         hataMesaj_ = "Silmek istediğiniz  WBS'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
       }
 
-      if (hataMesaj_.includes("Poz eklemeye açık başlıklar silinemez")) {
-        hataMesaj_ = "Poz eklemeye açık başlıklar silinemez, öncelikle poz eklemeye kapatınız."
+      if (hataMesaj_.includes("Mahal eklemeye açık başlıklar silinemez")) {
+        hataMesaj_ = "Mahal eklemeye açık başlıklar silinemez, öncelikle mahal eklemeye kapatınız."
       }
 
       setDialogCase("error")
@@ -475,7 +475,7 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
               variant="h5"
               fontWeight="bold"
             >
-              Poz Başlıkları
+              Mahal Başlıkları
             </Typography>
           </Grid>
 
@@ -525,10 +525,10 @@ export default function LbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
               <Grid item >
                 <Grid container direction={"column"} alignItems={"center"}>
                   <Grid item >
-                    <Typography sx={{ color: !selectedLbs ? "lightgray" : "rgb(24,24,24)" }} >poz</Typography>
+                    <Typography sx={{ color: !selectedLbs ? "lightgray" : "rgb(24,24,24)" }} >mahal</Typography>
                   </Grid>
                   <Grid item >
-                    <AntSwitch disabled={!selectedLbs} checked={selectedLbs?.openForPoz ? true : false} onChange={handleSwitchForPoz} />
+                    <AntSwitch disabled={!selectedLbs} checked={selectedLbs?.openForMahal ? true : false} onChange={handleSwitchForMahal} />
                   </Grid>
                 </Grid>
               </Grid>
