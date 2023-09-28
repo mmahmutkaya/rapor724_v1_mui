@@ -48,7 +48,7 @@ exports = async function({projectId,wbsId}){
 
   // zaten en üst seviyede ise daha fazla sağa alınamaz
   if(sortNumber == 1) {
-    throw new Error("MONGO // moveWbsRight // __mesajBaslangic__ bu başlık zaten bir üstteki başlığın alt başlığı, daha fazla sağa alınamaz __mesajBitis__")
+    throw new Error("MONGO // moveWbsRight // __mesajBaslangic__ deneme -- bu başlık zaten bir üstteki başlığın alt başlığı, daha fazla sağa alınamaz __mesajBitis__")
   }
 
 
