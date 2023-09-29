@@ -3,5 +3,13 @@
         "name": "Function_0",
         "private": false,
         "disable_arg_logs": true
+    },
+    {
+        "name": "auth_confirmUser",
+        "private": true
+    },
+    {
+        "name": "auth_userPasswordReset",
+        "private": true
     }
 ]
