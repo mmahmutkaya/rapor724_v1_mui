@@ -269,27 +269,32 @@ export default function FormPozCreate({ setShow }) {
                       {
                         wbsOne.code.split(".").map((codePart, index) => {
 
+                          let cOunt = wbsOne.code.split(".").length
+
                           // console.log(cOunt)
                           // console.log(index + 1)
                           // console.log("---")
 
-                          cOunt = wbsOne.code.split(".").length
-
-                          if (index == 0) {
+                          if  (index == 0 && cOunt == 1) {
+                            wbsCode = codePart
+                            wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                          }
+    
+                          if (index == 0 && cOunt !== 1) {
                             wbsCode = codePart
                             wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 !== cOunt) {
+                          }  
+    
+                          if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
                             wbsCode = wbsCode + "." + codePart
                             wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
                           }
-
-                          if (index !== 0 && index + 1 == cOunt) {
+    
+                          if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
                             wbsCode = wbsCode + "." + codePart
                             wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
                           }
-
+    
                         })
                       }
 

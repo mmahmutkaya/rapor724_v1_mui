@@ -269,19 +269,28 @@ export default function FormMahalCreate({ setShow }) {
                           // console.log(index + 1)
                           // console.log("---")
 
-                          cOunt = lbsOne.code.split(".").length
+                          let cOunt = lbsOne.code.split(".").length
 
-                          if (index == 0) {
+                          // console.log(cOunt)
+                          // console.log(index + 1)
+                          // console.log("---")
+
+                          if  (index == 0 && cOunt == 1) {
+                            lbsCode = codePart
+                            lbsName = isProject.lbs.find(item => item.code == lbsCode).name
+                          }
+    
+                          if (index == 0 && cOunt !== 1) {
                             lbsCode = codePart
                             lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 !== cOunt) {
+                          }  
+    
+                          if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
                             lbsCode = lbsCode + "." + codePart
                             lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
                           }
-
-                          if (index !== 0 && index + 1 == cOunt) {
+    
+                          if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
                             lbsCode = lbsCode + "." + codePart
                             lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
                           }

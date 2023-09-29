@@ -119,6 +119,13 @@ export default function Sidebar({ setMobileOpen }) {
               <ListItemText primary="Mahaller" />
             </ListItemButton>
 
+            <ListItemButton onClick={() => router.push('/mahallistesi')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Mahal Listesi" />
+            </ListItemButton>
+
             <ListItemButton>
               <ListItemIcon>
                 <DraftsIcon />
