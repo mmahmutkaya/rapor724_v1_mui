@@ -48,7 +48,7 @@ exports = async function({projectId,wbsId}){
   
   // zaten en üst seviyede ise daha fazla sola alınamaz
   if(!leftPart) {
-    throw new Error("MONGO // moveWbsLeft // zaten en üst seviyede")
+    throw new Error("MONGO // moveWbsLeft // __mesajBaslangic__ zaten en üst seviyede __mesajBaslangic__")
   }
 
 

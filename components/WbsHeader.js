@@ -377,12 +377,12 @@ export default function WbsHeader({ RealmApp, setShow, nameMode, setNameMode, co
 
       let switch1 = false
 
-      if (!leftPart) {
-        setDialogCase("error")
-        setShowDialog("Zaten en üstte")
-        console.log("alttaki satırda --return-- oldu - handleMoveWbsLeft2")
-        return
-      }
+      // if (!leftPart) {
+      //   setDialogCase("error")
+      //   setShowDialog("Zaten en üstte")
+      //   console.log("alttaki satırda --return-- oldu - handleMoveWbsLeft2")
+      //   return
+      // }
 
       const result = await RealmApp.currentUser.callFunction("moveWbsLeft", { projectId: isProject._id, wbsId: selectedWbs._id });
       setIsProject(result.project)
