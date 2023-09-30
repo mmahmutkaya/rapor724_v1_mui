@@ -54,8 +54,10 @@ export default function P_Mahallistesi() {
   let lbsName = ""
   let cOunt = 0
 
-  const gridTemplateColumns_Width = "2rem 10rem 5rem 2rem 1fr"
-  const gridTemplateColumns_Mahal_Width = "17rem"
+  const _3_mahal_width = "2rem 10rem 5rem"
+  const total_mahal_width = "17rem"
+  const _1_bosluk_width = "2rem"
+  const _3_poz_width = "10rem 3rem 20rem"
 
   return (
     <Grid container direction="column" spacing={1}>
@@ -84,53 +86,73 @@ export default function P_Mahallistesi() {
 
           {/* en üst başlık */}
           <Grid sx={{
-            display: "grid", gridAutoFlow: "column", gridTemplateColumns: gridTemplateColumns_Width,
+            display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width + " " + _1_bosluk_width + " " + _3_poz_width,
             backgroundColor: "lightgray", fontWeight: "600", height: "2rem", alignItems: "center"
           }} >
 
+            {/* _3_mahal_width -- 1 */}
             <Grid item >
               <Grid sx={{ display: "grid", backgroundColor: "lightgray", justifyContent: "center", width: "100%", height: "100%" }}>
                 <InfoIcon sx={{ fontSize: "1.2rem" }} />
               </Grid>
             </Grid>
 
+            {/* _3_mahal_width -- 2 */}
             <Grid item>
               Mahal Tanımı
             </Grid>
 
+            {/* _3_mahal_width -- 3 */}
             <Grid item sx={{ textAlign: "center" }}>
               Birim
             </Grid>
 
+            {/* _1_bosluk_width -- 1 */}
             <Grid item sx={{ height: "100%", backgroundColor: "white", lineHeight: "2rem", textAlign: "center" }}>
               {/* boş */}
             </Grid>
 
+            {/* poz - 1 */}
             <Grid item sx={{ height: "100%", backgroundColor: "yellow", lineHeight: "2rem", textAlign: "center" }}>
-              poz başlığı
+              poz 1
+            </Grid>
+
+            {/* poz - 2 */}
+            <Grid item sx={{ height: "100%", backgroundColor: "red", lineHeight: "2rem", textAlign: "center" }}>
+              poz 2
+            </Grid>
+
+            {/* poz - 3 */}
+            <Grid item sx={{ height: "100%", backgroundColor: "yellow", lineHeight: "2rem", textAlign: "center" }}>
+              poz 3
             </Grid>
 
           </Grid>
 
 
+          {/* lbs başlığı ve altındaki mahaller */}
           {
             isProject.lbs.filter(item => item.openForMahal === true).map(lbsOne => (
 
+
               <Box key={lbsOne._id.toString()}>
 
+                {/* lbs başlığı ve altındaki mahaller */}
                 <Grid
                   key={lbsOne._id.toString()}
                   container spacing={0}
                   sx={{
-                    display: "grid", gridAutoFlow: "column", gridTemplateColumns: "17rem 2rem 1fr",
+                    display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_mahal_width + " " + _1_bosluk_width + " " + _3_poz_width,
                     fontWeight: "600", alignItems: "center", mt: "1rem"
                   }}
 
                 >
 
-                  {/* mahal için lbs başlıkları */}
+                  {/* lbs başlığı */}
+                  {/* 1.sutun - 17rem - mahal için lbs başlıkları*/}
                   <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black", borderBottom: lbsOne.includesMahal ? "0" : null }}>
 
+                    {/* sadece cOunt tespiti için görünmez bir componenet */}
                     <Box sx={{ display: "none" }}>
                       {cOunt = lbsOne.code.split(".").length}
                     </Box>
@@ -166,7 +188,7 @@ export default function P_Mahallistesi() {
                       {cOunt = lbsName.split(">").length}
                     </Box>
 
-                    {/* lbs başlığının yazdığı yer */}
+                    {/* bu seviyede tek görünür grid item bu --> lbs başlığının yazdığı yer */}
                     {lbsName.split(">").map((item, index) => (
 
                       <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
@@ -180,12 +202,25 @@ export default function P_Mahallistesi() {
 
                   </Grid>
 
+
+                  {/* 2.sutun - 2rem --> boşluk*/}
                   <Grid>
                     {/* boş */}
                   </Grid>
 
+                  {/* _3_poz_width - 1 */}
                   <Grid sx={{ backgroundColor: "aquamarine", textAlign: "center" }}>
-                    dolu
+                    p1
+                  </Grid>
+
+                  {/* _3_poz_width - 2 */}
+                  <Grid sx={{ backgroundColor: "aquamarine", textAlign: "center" }}>
+                    p2
+                  </Grid>
+
+                  {/* _3_poz_width - 3 */}
+                  <Grid sx={{ backgroundColor: "aquamarine", textAlign: "center" }}>
+                    p3
                   </Grid>
 
                   {/* <Box sx={{ display: "none" }}>
