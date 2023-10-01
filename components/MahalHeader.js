@@ -88,7 +88,7 @@ export default function MahalHeader({ setShow }) {
 
 
 
-  let header = "Mahaller"
+  let header = "Mahal Listesi"
   // isProject?.name ? header = isProject?.name : null
 
 
