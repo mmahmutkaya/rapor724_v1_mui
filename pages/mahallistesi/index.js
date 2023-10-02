@@ -78,15 +78,15 @@ export default function P_Mahallistesi() {
 
   let pozCount
 
-  const _3_mahal_width = "2rem 15rem 5rem"
+  const _3_mahal_width_rem = "2rem 15rem 5rem"
   toplam = 0
-  _3_mahal_width.split(" ").map(item => {
+  _3_mahal_width_rem.split(" ").map(item => {
     let gecici = Number(item.replace("rem", ""))
     toplam = toplam + gecici
   })
-  const total_mahal_width = toplam + "rem"
+  const total_mahal_width = toplam
 
-  const _1_bosluk_width = "2rem"
+  const one_bosluk_width = 2
 
   const one_poz_width = 5
 
@@ -116,31 +116,29 @@ export default function P_Mahallistesi() {
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
 
-          <Box sx={{ display: "none" }}>
-            {console.log((Number(total_mahal_width.replace("rem", "")) + Number(total_mahal_width.replace("rem", ""))))}
-          </Box>
-
+          {/* Grid - En üst başlık */}
           <Grid sx={{
-            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (Number(total_mahal_width.replace("rem", "")) + Number(_1_bosluk_width.replace("rem", ""))) + "rem " + (pozlar.length * one_poz_width) + "rem",
+            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
           }}>
 
 
-            {/* total_mahal_width */}
+            {/* 1/2 - (total_mahal_width + one_bosluk_width)*/}
             <Grid item sx={{}}>
 
+              {/* total_mahal_width */}
               {/* en üst başlık */}
               <Grid sx={{
-                position: "fixed", display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width + " " + _1_bosluk_width
+                position: "fixed", display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem "
               }} >
 
-                {/* _3_mahal_width -- 1 */}
+                {/* _3_mahal_width_rem -- 1 */}
                 <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
                   <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
                     <InfoIcon sx={{ fontSize: "1.2rem" }} />
                   </Grid>
                 </Grid>
 
-                {/* _3_mahal_width -- 2 */}
+                {/* _3_mahal_width_rem -- 2 */}
                 <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center", width: "100%", maxHeight: "4rem" }}>
                   <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
                     <Typography sx={{ fontWeight: "600" }}>
@@ -149,7 +147,7 @@ export default function P_Mahallistesi() {
                   </Grid>
                 </Grid>
 
-                {/* _3_mahal_width -- 3 */}
+                {/* _3_mahal_width_rem -- 3 */}
                 <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
                   <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
                     <Typography sx={{ fontWeight: "600" }}>
@@ -158,7 +156,8 @@ export default function P_Mahallistesi() {
                   </Grid>
                 </Grid>
 
-                {/* _1_bosluk_width -- 1 */}
+
+                {/* one_bosluk_width */}
                 <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "white", color: "white", width: "100%", maxHeight: "4rem" }}>
                   {/* boş */}.
                 </Grid>
@@ -174,6 +173,7 @@ export default function P_Mahallistesi() {
               {pozCount = pozlar.length}
             </Box>
 
+            {/* 2/2 - (poz_width) */}
             <Grid item>
               <Grid sx={{ display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)" }}>
 
@@ -203,96 +203,105 @@ export default function P_Mahallistesi() {
 
               <Box key={lbsOne._id.toString()}>
 
-                {/* lbs başlığı ve altındaki mahaller */}
+                {/* Grid - lbs başlığı ve varsa altındaki mahaller */}
                 <Grid
                   key={lbsOne._id.toString()}
                   container spacing={0}
                   sx={{
-                    display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_mahal_width + " " + _1_bosluk_width + " " + (pozlar.length * one_poz_width) + "rem",
+                    display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
                     fontWeight: "600", alignItems: "center", mt: "1rem"
                   }}
 
                 >
 
-                  {/* lbs başlığı */}
-                  {/* 1.sutun - 17rem - mahal için lbs başlıkları*/}
-                  <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black" }}>
+                  {/* 1/2 - (total_mahal_width + one_bosluk_width) - sabit kısım*/}
+                  <Grid item sx={{}}>
 
-                    {/* sadece cOunt tespiti için görünmez bir componenet */}
-                    <Box sx={{ display: "none" }}>
-                      {cOunt = lbsOne.code.split(".").length}
-                    </Box>
+                    {/* Grid - lbs başlığı ve varsa altındaki mahaller */}
+                    <Grid sx={{
+                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_mahal_width + " " + one_bosluk_width + "rem "
+                    }}>
 
-                    {
-                      lbsOne.code.split(".").map((codePart, index) => {
+                      {/* 1/2 - total_mahal_width - lbs başlığı */}
+                      <Grid item sx={{ width: total_mahal_width + "rem", backgroundColor: "#FAEBD7", border: "1px solid black" }}>
 
-                        if (index == 0 && cOunt == 1) {
-                          lbsCode = codePart
-                          lbsName = isProject.lbs.find(item => item.code == lbsCode).name
+                        {/* sadece cOunt tespiti için görünmez bir componenet */}
+                        <Box sx={{ display: "none" }}>
+                          {cOunt = lbsOne.code.split(".").length}
+                        </Box>
+
+                        {
+                          lbsOne.code.split(".").map((codePart, index) => {
+
+                            if (index == 0 && cOunt == 1) {
+                              lbsCode = codePart
+                              lbsName = isProject.lbs.find(item => item.code == lbsCode).name
+                            }
+
+                            if (index == 0 && cOunt !== 1) {
+                              lbsCode = codePart
+                              lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
+                            }
+
+                            if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
+                              lbsCode = lbsCode + "." + codePart
+                              lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
+                            }
+
+                            if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
+                              lbsCode = lbsCode + "." + codePart
+                              lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
+                            }
+
+                          })
                         }
 
-                        if (index == 0 && cOunt !== 1) {
-                          lbsCode = codePart
-                          lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
-                        }
-
-                        if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
-                          lbsCode = lbsCode + "." + codePart
-                          lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
-                        }
-
-                        if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
-                          lbsCode = lbsCode + "." + codePart
-                          lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
-                        }
-
-                      })
-                    }
 
 
+                        {/* sadece cOunt tespiti için görünmez bir componenet */}
+                        <Box sx={{ display: "none" }}>
+                          {cOunt = lbsName.split(">").length}
+                        </Box>
 
-                    {/* sadece cOunt tespiti için görünmez bir componenet */}
-                    <Box sx={{ display: "none" }}>
-                      {cOunt = lbsName.split(">").length}
-                    </Box>
+                        {/* bu seviyede tek görünür grid item bu --> lbs başlığının yazdığı yer */}
+                        {lbsName.split(">").map((item, index) => (
 
-                    {/* bu seviyede tek görünür grid item bu --> lbs başlığının yazdığı yer */}
-                    {lbsName.split(">").map((item, index) => (
+                          <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
+                            {item}
+                            {index + 1 !== cOunt &&
+                              <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
+                            }
+                          </Typography>
 
-                      <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
-                        {item}
-                        {index + 1 !== cOunt &&
-                          <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
-                        }
-                      </Typography>
+                        ))}
 
-                    ))}
+                      </Grid>
+
+
+                      {/* 2/2 - (pozlar.length * one_poz_width) - pozlar genişliğinde dolgu boşluk*/}
+                      <Grid>
+                        {/* boş */}
+                      </Grid>
+
+
+                    </Grid>
 
                   </Grid>
 
 
-                  {/* 2.sutun - boşluk*/}
-                  <Grid>
-                    {/* boş */}
-                  </Grid>
 
-
-                  {/* 3.sutun --> poz alanı*/}
+                  {/* 2/2 - one_bosluk_width - poz alanı genişliğinde dolgu boşluk*/}
                   <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
                     .
                   </Grid>
-
-                  {/* <Box sx={{ display: "none" }}>
-                  {cOunt = mahaller.filter(item => item._lbsId.toString() == lbsOne._id.toString()).length}
-                </Box> */}
 
                 </Grid>
 
 
 
 
-                {/* lbs başlığı altındaki başlığa ait mahaller */}
-                <Box sx={{ display: "none" }}>
+                {/* lbs başlığı altındaki mahaller */}
+                < Box sx={{ display: "none" }}>
                   {cOunt = mahaller.filter(item => item._lbsId.toString() == lbsOne._id.toString()).length}
                 </Box>
 
@@ -303,7 +312,7 @@ export default function P_Mahallistesi() {
 
                       <Grid key={index} onClick={() => handleSelectMahal(item)} sx={{
                         cursor: "pointer",
-                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width + " " + _1_bosluk_width + " " + "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
+                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem " + "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
                         "&:hover .hoverTheLbs": {
                           // display: "inline"
                           visibility: "visible"
@@ -355,7 +364,7 @@ export default function P_Mahallistesi() {
                         </Grid>
 
 
-                        {/* _1_bosluk_width --> boşluk*/}
+                        {/* one_bosluk_width --> boşluk*/}
                         <Grid>
                           {/* boş */}
                         </Grid>
@@ -387,7 +396,7 @@ export default function P_Mahallistesi() {
 
 
 
-        </Stack>
+        </Stack >
       }
 
     </Grid >

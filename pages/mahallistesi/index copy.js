@@ -78,15 +78,15 @@ export default function P_Mahallistesi() {
 
   let pozCount
 
-  const _3_mahal_width = "2rem 15rem 5rem"
+  const _3_mahal_width_rem = "2rem 15rem 5rem"
   toplam = 0
-  _3_mahal_width.split(" ").map(item => {
+  _3_mahal_width_rem.split(" ").map(item => {
     let gecici = Number(item.replace("rem", ""))
     toplam = toplam + gecici
   })
-  const total_mahal_width = toplam + "rem"
+  const total_mahal_width = toplam
 
-  const _1_bosluk_width = "2rem"
+  const one_bosluk_width = 2
 
   const one_poz_width = 5
 
@@ -115,40 +115,54 @@ export default function P_Mahallistesi() {
       {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length > 0 &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
-          {/* en üst başlık */}
+
           <Grid sx={{
-            display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width + " " + _1_bosluk_width + " " + "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
-          }} >
+            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+          }}>
 
-            {/* _3_mahal_width -- 1 */}
-            <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
-              <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
-                <InfoIcon sx={{ fontSize: "1.2rem" }} />
+
+            {/* total_mahal_width */}
+            <Grid item sx={{}}>
+
+              {/* en üst başlık */}
+              <Grid sx={{
+                position: "fixed", display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem "
+              }} >
+
+                {/* _3_mahal_width_rem -- 1 */}
+                <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
+                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                    <InfoIcon sx={{ fontSize: "1.2rem" }} />
+                  </Grid>
+                </Grid>
+
+                {/* _3_mahal_width_rem -- 2 */}
+                <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center", width: "100%", maxHeight: "4rem" }}>
+                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                    <Typography sx={{ fontWeight: "600" }}>
+                      Mahal Tanımı
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                {/* _3_mahal_width_rem -- 3 */}
+                <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
+                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                    <Typography sx={{ fontWeight: "600" }}>
+                      Birim
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                {/* one_bosluk_width -- 1 */}
+                <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "white", color: "white", width: "100%", maxHeight: "4rem" }}>
+                  {/* boş */}.
+                </Grid>
+
               </Grid>
+
             </Grid>
 
-            {/* _3_mahal_width -- 2 */}
-            <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center", width: "100%", maxHeight: "4rem" }}>
-              <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
-                <Typography sx={{ fontWeight: "600" }}>
-                  Mahal Tanımı
-                </Typography>
-              </Grid>
-            </Grid>
-
-            {/* _3_mahal_width -- 3 */}
-            <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
-              <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
-                <Typography sx={{ fontWeight: "600" }}>
-                  Birim
-                </Typography>
-              </Grid>
-            </Grid>
-
-            {/* _1_bosluk_width -- 1 */}
-            <Grid item sx={{ padding: "0.5rem 0rem", backgroundColor: "white", width: "100%", maxHeight: "4rem" }}>
-              {/* boş */}
-            </Grid>
 
 
             {/* sadece cOunt tespiti için görünmez bir componenet */}
@@ -156,20 +170,27 @@ export default function P_Mahallistesi() {
               {pozCount = pozlar.length}
             </Box>
 
-              {pozlar.map((item, index) => {
-                return (
-                  <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
-                    <Grid sx={{ overflow: "hidden", display: "grid", width: "100%", height: "100%" }}>
-                      <Typography sx={{}}>
-                        {item.name}
-                      </Typography>
+            <Grid item>
+              <Grid sx={{ display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)" }}>
+
+                {pozlar.map((item, index) => {
+                  return (
+                    <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
+                      <Grid sx={{ overflow: "hidden", display: "grid", width: "100%", height: "100%" }}>
+                        <Typography >
+                          {item.name}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                )
-              })}
+                  )
+                })}
+
+              </Grid>
+            </Grid>
+
+
 
           </Grid>
-
 
           {/* lbs başlığı ve altındaki mahaller */}
           {
@@ -177,13 +198,14 @@ export default function P_Mahallistesi() {
 
 
               <Box key={lbsOne._id.toString()}>
+                
 
                 {/* lbs başlığı ve altındaki mahaller */}
                 <Grid
                   key={lbsOne._id.toString()}
                   container spacing={0}
                   sx={{
-                    display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_mahal_width + " " + _1_bosluk_width + " " + (pozlar.length * one_poz_width) + "rem",
+                    display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_mahal_width + "rem " + one_bosluk_width + "rem " + (pozlar.length * one_poz_width) + "rem",
                     fontWeight: "600", alignItems: "center", mt: "1rem"
                   }}
 
@@ -278,7 +300,7 @@ export default function P_Mahallistesi() {
 
                       <Grid key={index} onClick={() => handleSelectMahal(item)} sx={{
                         cursor: "pointer",
-                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width + " " + _1_bosluk_width + " " + "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
+                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem " + "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
                         "&:hover .hoverTheLbs": {
                           // display: "inline"
                           visibility: "visible"
@@ -330,7 +352,7 @@ export default function P_Mahallistesi() {
                         </Grid>
 
 
-                        {/* _1_bosluk_width --> boşluk*/}
+                        {/* one_bosluk_width --> boşluk*/}
                         <Grid>
                           {/* boş */}
                         </Grid>
@@ -359,6 +381,8 @@ export default function P_Mahallistesi() {
 
             ))
           }
+
+
 
         </Stack>
       }
