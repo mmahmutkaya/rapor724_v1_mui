@@ -5,7 +5,7 @@ import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
 import FormMahalCreate from '../../components/FormMahalCreate'
-import MahalHeader from '../../components/MahalHeader'
+import MahalListesiHeader from '../../components/MahalListesiHeader'
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
@@ -98,7 +98,7 @@ export default function P_Mahallistesi() {
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
-        <MahalHeader setShow={setShow} />
+        <MahalListesiHeader setShow={setShow} />
       </Grid>
 
       {show == "FormMahalCreate" &&
