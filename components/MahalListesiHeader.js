@@ -94,7 +94,7 @@ export default function MahalListesiHeader({ setShow }) {
 
 
   return (
-    <Paper sx={{ position: "relative" }}>
+    <Paper sx={{}}>
 
       {showDialog &&
         <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
@@ -104,7 +104,7 @@ export default function MahalListesiHeader({ setShow }) {
         container
         justifyContent="space-between"
         alignItems="center"
-        sx={{ padding: "0.5rem 1rem", maxHeight: "5rem" }}
+        sx={{ position: "fixed", top: "3rem", left: "30rem", padding: "0.5rem 1rem", height: "3.5rem" }}
       >
 
         {/* sol kısım (başlık) */}
@@ -155,6 +155,12 @@ export default function MahalListesiHeader({ setShow }) {
         </Grid>
 
       </Grid>
+
+
+      <Grid sx={{ height: "3.5rem" }}>
+
+      </Grid>
+
 
 
     </Paper>

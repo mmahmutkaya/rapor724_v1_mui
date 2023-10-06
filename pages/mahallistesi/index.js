@@ -294,11 +294,128 @@ export default function P_Mahallistesi() {
 
 
                   {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
-                  <Grid item sx={{ overflow: "hidden", border: "1px solid black", backgroundColor: "#FAEBD7", color: "blue" }}>
+                  <Grid item sx={{ overflow: "hidden", border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
                     ee
                   </Grid>
 
                 </Grid>
+
+
+
+                {/* lbs başlığı altındaki mahaller */}
+                < Box sx={{ display: "none" }}>
+                  {cOunt = mahaller.filter(item => item._lbsId.toString() == lbsOne._id.toString()).length}
+                </Box>
+
+                {
+                  mahaller?.filter(item => item._lbsId.toString() == lbsOne._id.toString()).map((item, index) => {
+
+                    return (
+
+                      <Grid
+                        key={item._id.toString()}
+                        sx={{
+                          display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+
+                        }}
+
+                      >
+
+                        <Grid item>
+
+                          <Grid key={index} onClick={() => handleSelectMahal(item)} sx={{
+                            cursor: "pointer",
+                            position: "fixed", display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem",
+                            "&:hover .hoverTheLbs": {
+                              // display: "inline"
+                              visibility: "visible"
+                            },
+                          }}>
+
+                            <Grid sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", textAlign: "center" }}>
+                              <Typography>
+                                xx
+                              </Typography>
+                            </Grid>
+
+                            <Grid sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0" }}>
+
+                              <Grid container >
+
+                                <Grid item>
+                                  <Typography sx={{ ml: "0.2rem" }}>
+                                    {item.name}
+                                  </Typography>
+                                </Grid>
+
+                                <Grid item className='hoverTheLbs'
+                                  sx={{
+                                    ml: "0.5rem",
+                                    visibility: selectedMahal?._id.toString() === item._id.toString() ? "visible" : "hidden",
+                                  }}>
+                                  <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                                    <Grid item >
+                                      <Box sx={{
+                                        backgroundColor: "red",
+                                        borderRadius: "0.5rem",
+                                        height: "0.5rem",
+                                        width: "0.5rem",
+                                      }}>
+                                      </Box>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+
+                              </Grid>
+
+                            </Grid>
+
+                            <Grid sx={{ backgroundColor: "white", border: "1px solid black", textAlign: "center" }}>
+                              <Typography >
+                                {item.unit}
+                              </Typography>
+                            </Grid>
+
+                            {/* one_bosluk_width --> boşluk*/}
+                            <Grid item sx={{ backgroundColor: "white", color: "white", width: "100%" }}>
+                              .
+                            </Grid>
+
+                          </Grid>
+
+                        </Grid>
+
+                        <Grid item>
+
+                          <Grid sx={{
+                            display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
+                          }}>
+
+                            {/* sadece cOunt tespiti için görünmez bir componenet */}
+                            <Box sx={{ display: "none" }}>
+                              {pozCount = pozlar.length}
+                            </Box>
+
+                            {pozlar.map((item, index) => {
+                              return (
+                                <Grid key={index} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center" }}>
+                                  {item.id}
+                                </Grid>
+                              )
+                            })}
+
+
+                          </Grid>
+
+                        </Grid>
+
+                      </Grid>
+
+                    )
+
+                  })
+                }
+
 
 
 
