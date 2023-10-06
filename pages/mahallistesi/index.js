@@ -19,6 +19,8 @@ import InfoIcon from '@mui/icons-material/Info';
 
 export default function P_Mahallistesi() {
 
+  const { drawerWidth, topBarHeight } = useContext(StoreContext)
+
   const { isProject } = useContext(StoreContext)
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
 
@@ -108,7 +110,7 @@ export default function P_Mahallistesi() {
       }
 
       {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length == 0 &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
+        <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
           </Alert>
@@ -116,7 +118,7 @@ export default function P_Mahallistesi() {
       }
 
       {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length > 0 &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
+        <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={0}>
 
 
           {/* Grid - En üst başlık */}
