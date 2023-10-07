@@ -97,7 +97,7 @@ export default function P_Mahallistesi() {
 
 
   return (
-    <Grid container direction="column" spacing={1}>
+    <Grid container direction="column" spacing={0}>
 
       <Grid item >
         <MahalListesiHeader setShow={setShow} />
@@ -120,32 +120,32 @@ export default function P_Mahallistesi() {
       {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length > 0 &&
         <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={0}>
 
-
           {/* Grid - En üst başlık */}
           <Grid sx={{
             display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+            // gridTemplateRows:"3rem"
           }}>
 
 
             {/* 1/2 - (total_mahal_width + one_bosluk_width)*/}
-            <Grid item sx={{}}>
+            <Grid item sx={{height: "100%"}}>
 
               {/* total_mahal_width */}
               {/* en üst başlık */}
               <Grid sx={{
-                position: "fixed", height: "100%", display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem "
+                position: "fixed", display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem "
               }} >
 
                 {/* _3_mahal_width_rem -- 1 */}
-                <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
-                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%" }}>
+                  <Grid sx={{ display: "grid", width: "100%", justifyContent: "center", alignItems: "center" }}>
                     <InfoIcon sx={{}} />
                   </Grid>
                 </Grid>
 
                 {/* _3_mahal_width_rem -- 2 */}
-                <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center", width: "100%", maxHeight: "4rem" }}>
-                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center", width: "100%" }}>
+                  <Grid sx={{ display: "grid", width: "100%", justifyContent: "center", alignItems: "center" }}>
                     <Typography sx={{}}>
                       Mahal Tanımı
                     </Typography>
@@ -153,8 +153,8 @@ export default function P_Mahallistesi() {
                 </Grid>
 
                 {/* _3_mahal_width_rem -- 3 */}
-                <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
-                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%" }}>
+                  <Grid sx={{ display: "grid", width: "100%", justifyContent: "center", alignItems: "center" }}>
                     <Typography sx={{}}>
                       Birim
                     </Typography>
@@ -163,7 +163,7 @@ export default function P_Mahallistesi() {
 
 
                 {/* one_bosluk_width */}
-                <Grid item sx={{ border: "1px solid white", padding: "0.5rem 0rem", backgroundColor: "white", color: "white", width: "100%", maxHeight: "4rem" }}>
+                <Grid item sx={{ border: "1px solid white", padding: "0.5rem 0rem", backgroundColor: "white", color: "white", width: "100%" }}>
                   .
                 </Grid>
 
@@ -178,15 +178,17 @@ export default function P_Mahallistesi() {
               {pozCount = pozlar.length}
             </Box>
 
+
+            {/* poz isimleri */}
             {/* 2/2 - (poz_width) */}
-            <Grid item>
+            <Grid item sx={{}}>
               <Grid sx={{ display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)" }}>
 
                 {pozlar.map((item, index) => {
                   return (
-                    <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", maxHeight: "4rem" }}>
-                      <Grid sx={{ overflow: "hidden", display: "grid", width: "100%", height: "100%" }}>
-                        <Typography >
+                    <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%" }}>
+                      <Grid sx={{ display: "grid", width: "100%" }}>
+                        <Typography sx={{ maxHeight: "5rem", overflow: "hidden", fontSize:"0.8rem" }} >
                           {item.name}
                         </Typography>
                       </Grid>
