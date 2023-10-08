@@ -172,108 +172,94 @@ export default function P_Mahallistesi() {
       }
 
       {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length > 0 && pozlar?.length > 0 &&
-        <Stack sx={{ mt: topBarHeight, width: '100%' }} spacing={0}>
+        <Stack sx={{ backgroundColor: "yellow", mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={0}>
 
-
+          {/* Grid - En üst başlık */}
           <Grid sx={{
-            display: "grid", gridAutoFlow: "row", gridTemplateRows: "1rem 3rem 1rem",
-            backgroundColor: "yellow",
-            position: "sticky", top: "7rem",
-            zIndex: "10"
+            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar?.length * one_poz_width) + "rem",
+            gridTemplateRows: "3rem",
+            position: "sticky", top: "8rem",
+            zIndex: "10",
           }}>
 
-            <Box>
-              
-            </Box>
 
+            {/* 1/2 - (total_mahal_width + one_bosluk_width)*/}
+            <Grid item sx={{ position: "sticky", left: (drawerWidth + 16) + "px" }}>
+              {/* <Grid item sx={{}}> */}
 
-            {/* Grid - En üst başlık */}
-            <Grid sx={{
-              display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar?.length * one_poz_width) + "rem",
-            }}>
+              {/* total_mahal_width */}
+              {/* en üst başlık */}
+              <Grid sx={{
+                // position: "fixed", display: "grid", gridAutoFlow: "column", gridTemplateRows: "3.2rem", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem "
+                display: "grid", gridAutoFlow: "column", gridTemplateRows: "3.2rem", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem "
+              }} >
 
-
-              {/* 1/2 - (total_mahal_width + one_bosluk_width)*/}
-              <Grid item sx={{ position: "sticky", left: (drawerWidth) + "px" }}>
-                {/* <Grid item sx={{}}> */}
-
-                {/* total_mahal_width */}
-                {/* en üst başlık */}
-                <Grid sx={{
-                  // position: "fixed", display: "grid", gridAutoFlow: "column", gridTemplateRows: "3.2rem", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem "
-                  display: "grid", gridAutoFlow: "column", gridTemplateRows: "3.2rem", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem "
-                }} >
-
-                  {/* _3_mahal_width_rem -- 1 */}
-                  <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%" }}>
-                    <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
-                      <InfoIcon sx={{}} />
-                    </Grid>
+                {/* _3_mahal_width_rem -- 1 */}
+                <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%" }}>
+                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                    <InfoIcon sx={{}} />
                   </Grid>
-
-                  {/* _3_mahal_width_rem -- 2 */}
-                  <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center", width: "100%" }}>
-                    <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
-                      <Typography sx={{}}>
-                        Mahal Tanımı
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
-                  {/* _3_mahal_width_rem -- 3 */}
-                  <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%" }}>
-                    <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
-                      <Typography sx={{}}>
-                        Birim
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
-
-                  {/* one_bosluk_width */}
-                  <Grid item sx={{ border: "1px solid white", padding: "0.5rem 0rem", backgroundColor: "white", color: "white", width: "100%" }}>
-                    
-                  </Grid>
-
                 </Grid>
 
-              </Grid>
-
-
-
-              {/* sadece cOunt tespiti için görünmez bir componenet */}
-              <Box sx={{ display: "none" }}>
-                {pozCount = pozlar?.length}
-              </Box>
-
-
-              {/* poz isimleri */}
-              {/* 2/2 - (poz_width) */}
-              <Grid item sx={{}}>
-                <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + pozlar?.length + ", " + one_poz_width + "rem)" }}>
-
-                  {pozlar?.map((onePoz, index) => {
-                    return (
-                      <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
-                        <Grid sx={{ display: "grid", width: "100%" }}>
-                          <Typography sx={{ maxHeight: "2.2rem", overflow: "hidden", fontSize: "0.8rem" }} >
-                            {onePoz.name}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    )
-                  })}
-
+                {/* _3_mahal_width_rem -- 2 */}
+                <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center", width: "100%" }}>
+                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                    <Typography sx={{}}>
+                      Mahal Tanımı
+                    </Typography>
+                  </Grid>
                 </Grid>
+
+                {/* _3_mahal_width_rem -- 3 */}
+                <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%" }}>
+                  <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                    <Typography sx={{}}>
+                      Birim
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+
+                {/* one_bosluk_width */}
+                <Grid item sx={{ border: "1px solid white", padding: "0.5rem 0rem", backgroundColor: "white", color: "white", width: "100%" }}>
+                  .
+                </Grid>
+
               </Grid>
 
             </Grid>
 
-            <Box>
-              
+
+
+            {/* sadece cOunt tespiti için görünmez bir componenet */}
+            <Box sx={{ display: "none" }}>
+              {pozCount = pozlar?.length}
             </Box>
 
+
+            {/* poz isimleri */}
+            {/* 2/2 - (poz_width) */}
+            <Grid item sx={{}}>
+              <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + pozlar?.length + ", " + one_poz_width + "rem)" }}>
+
+                {pozlar?.map((onePoz, index) => {
+                  return (
+                    <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
+                      <Grid sx={{ display: "grid", width: "100%" }}>
+                        <Typography sx={{ maxHeight: "2.2rem", overflow: "hidden", fontSize: "0.8rem" }} >
+                          {onePoz.name}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  )
+                })}
+
+              </Grid>
+            </Grid>
+
           </Grid>
+
+
 
 
           {/* lbs başlığı ve altındaki mahaller */}

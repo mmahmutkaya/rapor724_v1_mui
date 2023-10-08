@@ -16,6 +16,7 @@ export default ({ children }) => {
   const [selectedPoz, setSelectedPoz] = useState()
   const [selectedMahal, setSelectedMahal] = useState()
   const [isProject, setIsProject] = useState()
+  const [pozlar, setPozlar] = useState()
   const [isContext] = useState(true)
 
   const store = {
@@ -30,6 +31,7 @@ export default ({ children }) => {
     selectedWbs, setSelectedWbs,
     selectedPoz, setSelectedPoz,
     isProject, setIsProject,
+    pozlar, setPozlar,
     isContext
   }
 
