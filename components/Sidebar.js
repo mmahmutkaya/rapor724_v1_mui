@@ -126,6 +126,13 @@ export default function Sidebar({ setMobileOpen }) {
               <ListItemText primary="Mahal Listesi" />
             </ListItemButton>
 
+            <ListItemButton onClick={() => router.push('/metraj')}>
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Metraj" />
+            </ListItemButton>
+
             {/* <ListItemButton>
               <ListItemIcon>
                 <DraftsIcon />

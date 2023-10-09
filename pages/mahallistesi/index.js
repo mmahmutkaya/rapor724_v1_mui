@@ -37,7 +37,7 @@ export default function P_Mahallistesi() {
   }
   mahaller_fecth()
 
-  
+
 
   const pozlar_fecth = async () => {
     if (!pozlar) {
@@ -46,6 +46,15 @@ export default function P_Mahallistesi() {
     }
   }
   pozlar_fecth()
+
+
+  const openForMetraj = async ({ mahalId, pozId }) => {
+    console.log("mahalId", mahalId)
+    console.log("pozId", pozId)
+    const result = await RealmApp?.currentUser.callFunction("createMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
+    console.log("result", result)
+    // setPozlar(result)
+  }
 
 
 
@@ -78,10 +87,12 @@ export default function P_Mahallistesi() {
         <MahalListesiHeader setShow={setShow} />
       </Grid>
 
-      {show == "FormMahalCreate" &&
-        <Grid item >
-          <FormMahalCreate isProject={isProject} setShow={setShow} />
-        </Grid>
+      {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0) && (
+        <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={2}>
+          <Alert severity="info">
+            Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
+          </Alert>
+        </Stack>)
       }
 
       {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0 || !pozlar) && (
@@ -396,7 +407,6 @@ export default function P_Mahallistesi() {
 
                             <Grid sx={{
                               display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
-
                             }}>
 
                               {/* sadece cOunt tespiti için görünmez bir componenet */}
@@ -406,7 +416,7 @@ export default function P_Mahallistesi() {
 
                               {pozlar.map((pozOne, index) => {
                                 return (
-                                  <Grid key={index} onClick={() => console.log(mahalOne._id, pozOne._id)} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
+                                  <Grid key={index} onClick={() => openForMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
                                     <Typography sx={{ height: "1.5rem", overflow: "hidden" }} >
                                       {pozOne.name}
                                     </Typography>
