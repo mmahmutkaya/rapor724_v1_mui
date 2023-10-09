@@ -126,26 +126,26 @@ export default function Sidebar({ setMobileOpen }) {
               <ListItemText primary="Mahal Listesi" />
             </ListItemButton>
 
-            <ListItemButton>
+            {/* <ListItemButton>
               <ListItemIcon>
                 <DraftsIcon />
               </ListItemIcon>
               <ListItemText primary="Yetkiler" />
-            </ListItemButton>
+            </ListItemButton> */}
 
-            <ListItemButton onClick={() => router.push('/records')}>
+            {/* <ListItemButton onClick={() => router.push('/records')}>
               <ListItemIcon>
                 <DraftsIcon />
               </ListItemIcon>
-              <ListItemText primary="Yayın/Bildirim/Duyuru" />
-            </ListItemButton>
+              <ListItemText primary="Duyuru" />
+            </ListItemButton> */}
 
-            <ListItemButton onClick={() => router.push('/mongo')}>
+            {/* <ListItemButton onClick={() => router.push('/mongo')}>
               <ListItemIcon>
                 <DraftsIcon />
               </ListItemIcon>
               <ListItemText primary="Mongo" />
-            </ListItemButton>
+            </ListItemButton> */}
 
             {/* <ListItemButton onClick={handleClick}>
               <ListItemIcon>

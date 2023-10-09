@@ -32,6 +32,7 @@ export default function FormPozCreate({ setShow }) {
   // console.log("FormPozCreate-->isProject",isProject)
 
   const { isProject, setIsProject } = useContext(StoreContext)
+  const { pozlar, setPozlar } = useContext(StoreContext)
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
@@ -65,56 +66,6 @@ export default function FormPozCreate({ setShow }) {
       const newPozName = deleteLastSpace(data.get('newPozName'))
       const newPozUnit = deleteLastSpace(data.get('newPozUnit'))
 
-
-      // // useContext de proje ve _id si yoksa poz oluşturma formunu göstermenin bir anlamı yok, hata vererek durduruyoruz
-      // if (!isProject?._id) {
-      //   throw new Error("Poz oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
-      // } else {
-      //   console.log("isProject?._id", isProject?._id)
-      // }
-
-
-      // // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır
-      // if (!wbsId_for_Poz) {
-      //   setError_for_wbs(true);
-      //   setErrorText_for_wbs("Zorunlu")
-      //   isError = true
-      //   console.log("wbsId_for_Poz", "yok -- error")
-      // } else {
-      //   console.log("wbsId_for_Poz", wbsId_for_Poz)
-      // }
-
-      // if (!newPozName) {
-      //   setError_for_name(true);
-      //   setErrorText_for_name("Zorunlu")
-      //   isError = true
-      //   console.log("newPozName", "yok -- error")
-      // }
-
-      // if (newPozName.length > 0 && newPozName.length < 3) {
-      //   setError_for_name(true)
-      //   setErrorText_for_name("3 haneden az")
-      //   isError = true
-      //   console.log("newPozName", "3 haneden az -- error")
-      // }
-
-      // if (!newPozUnit) {
-      //   setError_for_unit(true);
-      //   setErrorText_for_unit("Zorunlu")
-      //   isError = true
-      //   console.log("newPozUnit", "yok -- error")
-      // } else {
-      //   console.log("newPozUnit", newPozUnit)
-      // }
-
-      // // ilgili hatalar yukarıda ilgili form alanlarına yazılmış olmalı
-      // // db ye sorgu yapılıp db meşgul edilmesin diye burada durduruyoruz
-      // // frontendden geçse bile db den errorFormObject kontrolü yapılıyor aşağıda
-      // if (isError) {
-      //   console.log("return (fonksiyon durdurma) satırı bu mesaj satırının altında idi")
-      //   // throw new Error("db ye gönderilmek istenen verilerde hata var")
-      //   return
-      // }
 
       const newPoz = {
         projectId: isProject._id,
@@ -163,17 +114,9 @@ export default function FormPozCreate({ setShow }) {
         throw new Error("db den -newProject- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
       }
 
-      // refetch_pozlar()
-      // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_pozlar() yapıp db yi yormaya gerek yok
-      // useQuery ile oluşturduğumuz pozlar cash datamızı güncelliyoruz
-      const oldPozlar = queryClient.getQueryData(["pozlar"])
-      const newPozlar = ([...oldPozlar, result.newPoz])
-      queryClient.setQueryData(["pozlar"], newPozlar)
-
-      const newProject = result.newProject
-      setIsProject(newProject)
-
-      setShow("PozMain")
+      setPozlar(oldPozlar => [...oldPozlar, result.newPoz])
+      setIsProject(result.newProject)
+      setShow("Main")
 
     } catch (err) {
 
@@ -216,7 +159,7 @@ export default function FormPozCreate({ setShow }) {
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}
         open={true}
-        onClose={() => setShow("PozMain")} >
+        onClose={() => setShow("Main")} >
         {/* <DialogTitle>Subscribe</DialogTitle> */}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
@@ -375,7 +318,7 @@ export default function FormPozCreate({ setShow }) {
           </DialogContent>
 
           <DialogActions sx={{ padding: "1.5rem" }}>
-            <Button onClick={() => setShow("PozMain")}>İptal</Button>
+            <Button onClick={() => setShow("PMain")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>
 

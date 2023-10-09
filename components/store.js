@@ -17,6 +17,7 @@ export default ({ children }) => {
   const [selectedMahal, setSelectedMahal] = useState()
   const [isProject, setIsProject] = useState()
   const [pozlar, setPozlar] = useState()
+  const [mahaller, setMahaller] = useState()
   const [isContext] = useState(true)
 
   const store = {
@@ -32,6 +33,7 @@ export default ({ children }) => {
     selectedPoz, setSelectedPoz,
     isProject, setIsProject,
     pozlar, setPozlar,
+    mahaller, setMahaller,
     isContext
   }
 

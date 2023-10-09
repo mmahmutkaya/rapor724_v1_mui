@@ -24,12 +24,14 @@ export default function PozHeader({ setShow }) {
   const queryClient = useQueryClient()
 
   const { isProject, setIsProject } = useContext(StoreContext)
+  const { setPozlar } = useContext(StoreContext)
   const RealmApp = useApp();
 
   const { selectedPoz, setSelectedPoz } = useContext(StoreContext)
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
+
 
   async function handlePozDelete(poz) {
 
@@ -49,9 +51,11 @@ export default function PozHeader({ setShow }) {
 
       if (result.deletedCount) {
 
-        const oldPozlar = queryClient.getQueryData(["pozlar"])
-        const newPozlar = oldPozlar.filter(item => item._id.toString() !== poz._id.toString())
-        queryClient.setQueryData(["pozlar"], newPozlar)
+        // const oldPozlar = queryClient.getQueryData(["pozlar"])
+        // const newPozlar = oldPozlar.filter(item => item._id.toString() !== poz._id.toString())
+        // queryClient.setQueryData(["pozlar"], newPozlar)
+
+        setPozlar(oldPozlar => oldPozlar.filter(item => item._id.toString() !== poz._id.toString()))
 
       }
 
@@ -89,18 +93,6 @@ export default function PozHeader({ setShow }) {
 
 
   let header = "Pozlar"
-  // isProject?.name ? header = isProject?.name : null
-
-
-
-  // const Item = styled(Paper)(({ theme }) => ({
-  //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  //   ...theme.typography.body2,
-  //   padding: theme.spacing(1),
-  //   textAlign: 'center',
-  //   color: theme.palette.text.secondary,
-  // }));
-
 
 
   return (

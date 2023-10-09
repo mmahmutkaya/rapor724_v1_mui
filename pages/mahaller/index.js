@@ -21,8 +21,9 @@ export default function P_Mahaller() {
 
   const { isProject } = useContext(StoreContext)
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
+  const { mahaller, setMahaller } = useContext(StoreContext)
 
-  const [show, setShow] = useState("MahalMain")
+  const [show, setShow] = useState("Main")
 
   const router = useRouter();
   // !isProject ? router.push('/projects') : null
@@ -30,18 +31,27 @@ export default function P_Mahaller() {
 
   const RealmApp = useApp();
 
-  const { isLoading, isError, data: mahaller, error, refetch: refetch_mahaller } = useQuery({
-    queryKey: ['mahaller'],
-    // queryFn: deneme,
-    queryFn: async () => await RealmApp.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id })),
-    refetchOnWindowFocus: false,
-    enabled: !!RealmApp?.currentUser,
-    // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
-  })
+  // const { isLoading, isError, data: mahaller, error, refetch: refetch_mahaller } = useQuery({
+  //   queryKey: ['mahaller'],
+  //   // queryFn: deneme,
+  //   queryFn: async () => await RealmApp.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id })),
+  //   refetchOnWindowFocus: false,
+  //   enabled: !!RealmApp?.currentUser,
+  //   // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
+  // })
 
-  if (isLoading) return "Loading...";
+  // if (isLoading) return "Loading...";
 
-  if (error) return "An error has occurred: " + error.message;
+  // if (error) return "An error has occurred: " + error.message;
+
+
+  const mahaller_fecth = async () => {
+    if (!mahaller) {
+      const result = await RealmApp?.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id }));
+      setMahaller(result)
+    }
+  }
+  mahaller_fecth()
 
 
   const handleSelectMahal = (mahal) => {
@@ -69,7 +79,7 @@ export default function P_Mahaller() {
         </Grid>
       }
 
-      {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length == 0 &&
+      {show == "Main" && isProject?.lbs.filter(item => item.openForMahal).length == 0 &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
@@ -77,7 +87,7 @@ export default function P_Mahaller() {
         </Stack>
       }
 
-      {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length > 0 &&
+      {show == "Main" && isProject?.lbs.filter(item => item.openForMahal).length > 0 && mahaller?.length > 0 &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           <Grid sx={{
@@ -113,7 +123,7 @@ export default function P_Mahaller() {
               >
 
                 {/* mahal için lbs başlıkları */}
-                <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black", borderBottom: lbsOne.includesMahal ? "0" : null }}>
+                <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black" }}>
 
                   <Box sx={{ display: "none" }}>
                     {cOunt = lbsOne.code.split(".").length}
@@ -126,7 +136,7 @@ export default function P_Mahaller() {
                       // console.log(index + 1)
                       // console.log("---")
 
-                      if  (index == 0 && cOunt == 1) {
+                      if (index == 0 && cOunt == 1) {
                         lbsCode = codePart
                         lbsName = isProject.lbs.find(item => item.code == lbsCode).name
                       }
@@ -134,7 +144,7 @@ export default function P_Mahaller() {
                       if (index == 0 && cOunt !== 1) {
                         lbsCode = codePart
                         lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
-                      }  
+                      }
 
                       if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
                         lbsCode = lbsCode + "." + codePart
@@ -159,7 +169,7 @@ export default function P_Mahaller() {
                     <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
                       {item}
                       {index + 1 !== cOunt &&
-                        <Typography component={"span"} sx={{ fontWeight:"600", color: "darkred" }}>{">"}</Typography>
+                        <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
                       }
                     </Typography>
 
@@ -174,190 +184,63 @@ export default function P_Mahaller() {
                 {
                   mahaller?.filter(item => item._lbsId.toString() == lbsOne._id.toString()).map((item, index) => {
 
-                    // 1 -- 1 den fazla mahal varsa son mahal hariç
-                    if (cOunt !== 1 && index + 1 !== cOunt) {
-                      return (
+                    return (
 
-                        <Grid key={index} onClick={() => handleSelectMahal(item)} sx={{
-                          cursor: "pointer",
-                          display: "grid", gridTemplateColumns: gridTemplateColumns_Mahal,
-                          "&:hover .hoverTheLbs": {
-                            // display: "inline"
-                            visibility: "visible"
-                          },
-                        }}>
+                      <Grid key={index} onClick={() => handleSelectMahal(item)} sx={{
+                        cursor: "pointer",
+                        display: "grid", gridTemplateColumns: gridTemplateColumns_Mahal,
+                        "&:hover .hoverTheLbs": {
+                          // display: "inline"
+                          visibility: "visible"
+                        },
+                      }}>
 
-                          <Grid sx={{ border: "1px solid black", borderRight: "0", borderBottom: "0", textAlign: "center" }}>
-                            <Typography>
-                              xx
-                            </Typography>
-                          </Grid>
+                        <Grid sx={{ border: "1px solid black", borderTop: "0", borderRight: "0", textAlign: "center" }}>
+                          <Typography>
+                            xx
+                          </Typography>
+                        </Grid>
 
-                          <Grid sx={{ border: "1px solid black" }}>
+                        <Grid sx={{ border: "1px solid black", borderTop: "0", borderRight: "0", }}>
 
-                            <Grid container >
+                          <Grid container >
 
-                              <Grid item>
-                                <Typography sx={{ ml: "0.2rem" }}>
-                                  {item.name}
-                                </Typography>
-                              </Grid>
+                            <Grid item>
+                              <Typography sx={{ ml: "0.2rem" }}>
+                                {item.name}
+                              </Typography>
+                            </Grid>
 
-                              <Grid item className='hoverTheLbs'
-                                sx={{
-                                  ml: "0.5rem",
-                                  visibility: selectedMahal?._id.toString() === item._id.toString() ? "visible" : "hidden",
-                                }}>
-                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                  <Grid item >
-                                    <Box sx={{
-                                      backgroundColor: "red",
-                                      borderRadius: "0.5rem",
-                                      height: "0.5rem",
-                                      width: "0.5rem",
-                                    }}>
-                                    </Box>
-                                  </Grid>
+                            <Grid item className='hoverTheLbs'
+                              sx={{
+                                ml: "0.5rem",
+                                visibility: selectedMahal?._id.toString() === item._id.toString() ? "visible" : "hidden",
+                              }}>
+                              <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                                <Grid item >
+                                  <Box sx={{
+                                    backgroundColor: "red",
+                                    borderRadius: "0.5rem",
+                                    height: "0.5rem",
+                                    width: "0.5rem",
+                                  }}>
+                                  </Box>
                                 </Grid>
                               </Grid>
-
                             </Grid>
 
                           </Grid>
 
-                          <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
-                            <Typography >
-                              {item.unit}
-                            </Typography>
-                          </Grid>
-
                         </Grid>
-                      )
-                    }
 
-                    // 2 -- 1 den fazla mahal varsa son mahal
-                    if (cOunt !== 1 && index + 1 == cOunt) {
-                      return (
-
-                        <Grid key={index} onClick={() => handleSelectMahal(item)} sx={{
-                          cursor: "pointer",
-                          display: "grid", gridTemplateColumns: gridTemplateColumns_Mahal,
-                          "&:hover .hoverTheLbs": {
-                            // display: "inline"
-                            visibility: "visible"
-                          },
-                        }}>
-
-                          <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
-                            <Typography >
-                              xx
-                            </Typography>
-                          </Grid>
-
-                          <Grid sx={{ border: "1px solid black", borderTop: "0" }}>
-
-                            <Grid container >
-
-                              <Grid item>
-                                <Typography component={"span"} sx={{ ml: "0.2rem" }}>
-                                  {item.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item className='hoverTheLbs'
-                                sx={{
-                                  ml: "0.5rem",
-                                  visibility: selectedMahal?._id.toString() === item._id.toString() ? "visible" : "hidden",
-                                }}>
-                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                  <Grid item >
-                                    <Box sx={{
-                                      backgroundColor: "red",
-                                      borderRadius: "0.5rem",
-                                      height: "0.5rem",
-                                      width: "0.5rem",
-                                    }}>
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </Grid>
-
-                            </Grid>
-
-                          </Grid>
-
-                          <Grid sx={{ border: "1px solid black", borderLeft: "0", borderTop: "0", textAlign: "center" }}>
-                            <Typography >
-                              {item.unit}
-                            </Typography>
-                          </Grid>
-
+                        <Grid sx={{ border: "1px solid black", borderTop: "0", textAlign: "center" }}>
+                          <Typography >
+                            {item.unit}
+                          </Typography>
                         </Grid>
-                      )
-                    }
 
-                    // 3 -- 1 mahal varsa
-                    if (cOunt == 1) {
-                      return (
-
-                        <Grid key={index} onClick={() => handleSelectMahal(item)} sx={{
-                          cursor: "pointer",
-                          display: "grid", gridTemplateColumns: gridTemplateColumns_Mahal,
-                          "&:hover .hoverTheLbs": {
-                            // display: "inline"
-                            visibility: "visible"
-                          },
-                        }}>
-
-
-                          <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
-                            <Typography >
-                              xx
-                            </Typography>
-                          </Grid>
-
-                          <Grid sx={{ border: "1px solid black" }}>
-
-                            <Grid container >
-
-                              <Grid >
-                                <Typography sx={{ ml: "0.2rem" }}>
-                                  {item.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item className='hoverTheLbs'
-                                sx={{
-                                  ml: "0.5rem",
-                                  visibility: selectedMahal?._id.toString() === item._id.toString() ? "visible" : "hidden",
-                                }}>
-                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                  <Grid item >
-                                    <Box sx={{
-                                      backgroundColor: "red",
-                                      borderRadius: "0.5rem",
-                                      height: "0.5rem",
-                                      width: "0.5rem",
-                                    }}>
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </Grid>
-
-                            </Grid>
-
-                          </Grid>
-
-                          <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
-                            <Typography >
-                              {item.unit}
-                            </Typography>
-                          </Grid>
-
-                        </Grid>
-                      )
-                    }
-
+                      </Grid>
+                    )
 
 
                   })

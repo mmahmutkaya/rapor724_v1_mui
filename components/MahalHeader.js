@@ -24,6 +24,8 @@ export default function MahalHeader({ setShow }) {
   const queryClient = useQueryClient()
 
   const { isProject, setIsProject } = useContext(StoreContext)
+  const { setMahaller } = useContext(StoreContext)
+
   const RealmApp = useApp();
 
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
@@ -49,9 +51,11 @@ export default function MahalHeader({ setShow }) {
 
       if (result.deletedCount) {
 
-        const oldMahaller = queryClient.getQueryData(["mahaller"])
-        const newMahaller = oldMahaller.filter(item => item._id.toString() !== mahal._id.toString())
-        queryClient.setQueryData(["mahaller"], newMahaller)
+        // const oldMahaller = queryClient.getQueryData(["mahaller"])
+        // const newMahaller = oldMahaller.filter(item => item._id.toString() !== mahal._id.toString())
+        // queryClient.setQueryData(["mahaller"], newMahaller)
+
+        setMahaller(oldMahaller => oldMahaller.filter(item => item._id.toString() !== mahal._id.toString()))
 
       }
 

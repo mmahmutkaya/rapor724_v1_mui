@@ -21,8 +21,9 @@ export default function P_Pozlar() {
 
   const { isProject } = useContext(StoreContext)
   const { selectedPoz, setSelectedPoz } = useContext(StoreContext)
+  const { pozlar, setPozlar } = useContext(StoreContext)
 
-  const [show, setShow] = useState("PozMain")
+  const [show, setShow] = useState("Main")
 
   const router = useRouter();
   // !isProject ? router.push('/projects') : null
@@ -30,18 +31,14 @@ export default function P_Pozlar() {
 
   const RealmApp = useApp();
 
-  const { isLoading, isError, data: pozlar, error, refetch: refetch_pozlar } = useQuery({
-    queryKey: ['pozlar'],
-    // queryFn: deneme,
-    queryFn: async () => await RealmApp.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id })),
-    refetchOnWindowFocus: false,
-    enabled: !!RealmApp?.currentUser,
-    // staleTime: 5 * 1000, // 1000 milisecond --> 1 second
-  })
 
-  if (isLoading) return "Loading...";
-
-  if (error) return "An error has occurred: " + error.message;
+  const pozlar_fecth = async () => {
+    if (!pozlar) {
+      const result = await RealmApp?.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id }));
+      setPozlar(result)
+    }
+  }
+  pozlar_fecth()
 
 
   const handleSelectPoz = (poz) => {
@@ -69,7 +66,7 @@ export default function P_Pozlar() {
         </Grid>
       }
 
-      {show == "PozMain" && isProject?.wbs.filter(item => item.openForPoz).length == 0 &&
+      {show == "Main" && isProject?.wbs.filter(item => item.openForPoz).length == 0 &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir poz başlığını poz eklemeye açmamış görünüyorsunumuz. "Poz Başlıkları" menüsünden işlem yapabilirsiniz.
@@ -77,7 +74,7 @@ export default function P_Pozlar() {
         </Stack>
       }
 
-      {show == "PozMain" && isProject?.wbs.filter(item => item.openForPoz).length > 0 &&
+      {show == "Main" && isProject?.wbs.filter(item => item.openForPoz).length > 0 && pozlar?.length > 0 &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
           <Grid sx={{
@@ -113,7 +110,7 @@ export default function P_Pozlar() {
               >
 
                 {/* poz için wbs başlıkları */}
-                <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black", borderBottom: wbsOne.includesPoz ? "0" : null }}>
+                <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black" }}>
 
                   <Box sx={{ display: "none" }}>
                     {cOunt = wbsOne.code.split(".").length}
@@ -126,7 +123,7 @@ export default function P_Pozlar() {
                       // console.log(index + 1)
                       // console.log("---")
 
-                      if  (index == 0 && cOunt == 1) {
+                      if (index == 0 && cOunt == 1) {
                         wbsCode = codePart
                         wbsName = isProject.wbs.find(item => item.code == wbsCode).name
                       }
@@ -134,7 +131,7 @@ export default function P_Pozlar() {
                       if (index == 0 && cOunt !== 1) {
                         wbsCode = codePart
                         wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
-                      }  
+                      }
 
                       if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
                         wbsCode = wbsCode + "." + codePart
@@ -159,7 +156,7 @@ export default function P_Pozlar() {
                     <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
                       {item}
                       {index + 1 !== cOunt &&
-                        <Typography component={"span"} sx={{ fontWeight:"600", color: "darkred" }}>{">"}</Typography>
+                        <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
                       }
                     </Typography>
 
@@ -174,191 +171,63 @@ export default function P_Pozlar() {
                 {
                   pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((item, index) => {
 
-                    // 1 -- 1 den fazla poz varsa son poz hariç
-                    if (cOunt !== 1 && index + 1 !== cOunt) {
-                      return (
+                    return (
 
-                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{
-                          cursor: "pointer",
-                          display: "grid", gridTemplateColumns: gridTemplateColumns_Poz,
-                          "&:hover .hoverTheWbs": {
-                            // display: "inline"
-                            visibility: "visible"
-                          },
-                        }}>
+                      <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{
+                        cursor: "pointer",
+                        display: "grid", gridTemplateColumns: gridTemplateColumns_Poz,
+                        "&:hover .hoverTheWbs": {
+                          // display: "inline"
+                          visibility: "visible"
+                        },
+                      }}>
 
-                          <Grid sx={{ border: "1px solid black", borderRight: "0", borderBottom: "0", textAlign: "center" }}>
-                            <Typography>
-                              xx
-                            </Typography>
-                          </Grid>
+                        <Grid sx={{ border: "1px solid black", borderTop: "0", borderRight: "0", textAlign: "center" }}>
+                          <Typography>
+                            xx
+                          </Typography>
+                        </Grid>
 
-                          <Grid sx={{ border: "1px solid black" }}>
+                        <Grid sx={{ border: "1px solid black", borderTop: "0", borderRight: "0", }}>
 
-                            <Grid container >
+                          <Grid container >
 
-                              <Grid item>
-                                <Typography sx={{ ml: "0.2rem" }}>
-                                  {item.name}
-                                </Typography>
-                              </Grid>
+                            <Grid item>
+                              <Typography sx={{ ml: "0.2rem" }}>
+                                {item.name}
+                              </Typography>
+                            </Grid>
 
-                              <Grid item className='hoverTheWbs'
-                                sx={{
-                                  ml: "0.5rem",
-                                  visibility: selectedPoz?._id.toString() === item._id.toString() ? "visible" : "hidden",
-                                }}>
-                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                  <Grid item >
-                                    <Box sx={{
-                                      backgroundColor: "red",
-                                      borderRadius: "0.5rem",
-                                      height: "0.5rem",
-                                      width: "0.5rem",
-                                    }}>
-                                    </Box>
-                                  </Grid>
+                            <Grid item className='hoverTheWbs'
+                              sx={{
+                                ml: "0.5rem",
+                                visibility: selectedPoz?._id.toString() === item._id.toString() ? "visible" : "hidden",
+                              }}>
+                              <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                                <Grid item >
+                                  <Box sx={{
+                                    backgroundColor: "red",
+                                    borderRadius: "0.5rem",
+                                    height: "0.5rem",
+                                    width: "0.5rem",
+                                  }}>
+                                  </Box>
                                 </Grid>
                               </Grid>
-
                             </Grid>
 
                           </Grid>
 
-                          <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
-                            <Typography >
-                              {item.unit}
-                            </Typography>
-                          </Grid>
-
                         </Grid>
-                      )
-                    }
 
-                    // 2 -- 1 den fazla poz varsa son poz
-                    if (cOunt !== 1 && index + 1 == cOunt) {
-                      return (
-
-                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{
-                          cursor: "pointer",
-                          display: "grid", gridTemplateColumns: gridTemplateColumns_Poz,
-                          "&:hover .hoverTheWbs": {
-                            // display: "inline"
-                            visibility: "visible"
-                          },
-                        }}>
-
-                          <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
-                            <Typography >
-                              xx
-                            </Typography>
-                          </Grid>
-
-                          <Grid sx={{ border: "1px solid black", borderTop: "0" }}>
-
-                            <Grid container >
-
-                              <Grid item>
-                                <Typography component={"span"} sx={{ ml: "0.2rem" }}>
-                                  {item.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item className='hoverTheWbs'
-                                sx={{
-                                  ml: "0.5rem",
-                                  visibility: selectedPoz?._id.toString() === item._id.toString() ? "visible" : "hidden",
-                                }}>
-                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                  <Grid item >
-                                    <Box sx={{
-                                      backgroundColor: "red",
-                                      borderRadius: "0.5rem",
-                                      height: "0.5rem",
-                                      width: "0.5rem",
-                                    }}>
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </Grid>
-
-                            </Grid>
-
-                          </Grid>
-
-                          <Grid sx={{ border: "1px solid black", borderLeft: "0", borderTop: "0", textAlign: "center" }}>
-                            <Typography >
-                              {item.unit}
-                            </Typography>
-                          </Grid>
-
+                        <Grid sx={{ border: "1px solid black", borderTop: "0", textAlign: "center" }}>
+                          <Typography >
+                            {item.unit}
+                          </Typography>
                         </Grid>
-                      )
-                    }
 
-                    // 3 -- 1 poz varsa
-                    if (cOunt == 1) {
-                      return (
-
-                        <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{
-                          cursor: "pointer",
-                          display: "grid", gridTemplateColumns: gridTemplateColumns_Poz,
-                          "&:hover .hoverTheWbs": {
-                            // display: "inline"
-                            visibility: "visible"
-                          },
-                        }}>
-
-
-                          <Grid sx={{ border: "1px solid black", borderRight: "0", textAlign: "center" }}>
-                            <Typography >
-                              xx
-                            </Typography>
-                          </Grid>
-
-                          <Grid sx={{ border: "1px solid black" }}>
-
-                            <Grid container >
-
-                              <Grid >
-                                <Typography sx={{ ml: "0.2rem" }}>
-                                  {item.name}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item className='hoverTheWbs'
-                                sx={{
-                                  ml: "0.5rem",
-                                  visibility: selectedPoz?._id.toString() === item._id.toString() ? "visible" : "hidden",
-                                }}>
-                                <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                  <Grid item >
-                                    <Box sx={{
-                                      backgroundColor: "red",
-                                      borderRadius: "0.5rem",
-                                      height: "0.5rem",
-                                      width: "0.5rem",
-                                    }}>
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </Grid>
-
-                            </Grid>
-
-                          </Grid>
-
-                          <Grid sx={{ border: "1px solid black", borderLeft: "0", textAlign: "center" }}>
-                            <Typography >
-                              {item.unit}
-                            </Typography>
-                          </Grid>
-
-                        </Grid>
-                      )
-                    }
-
-
+                      </Grid>
+                    )
 
                   })
                 }

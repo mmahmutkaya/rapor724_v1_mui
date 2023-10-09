@@ -28,6 +28,7 @@ export default function FormMahalCreate({ setShow }) {
   // console.log("FormMahalCreate-->isProject",isProject)
 
   const { isProject, setIsProject } = useContext(StoreContext)
+  const { mahaller, setMahaller } = useContext(StoreContext)
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
@@ -159,17 +160,9 @@ export default function FormMahalCreate({ setShow }) {
         throw new Error("db den -newProject- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
       }
 
-      // refetch_mahaller()
-      // yukarıdaki yapılan _id kontrolü tamamsa bu veri db de kaydolmuş demektir, refetch_mahaller() yapıp db yi yormaya gerek yok
-      // useQuery ile oluşturduğumuz mahaller cash datamızı güncelliyoruz
-      const oldMahaller = queryClient.getQueryData(["mahaller"])
-      const newMahaller = ([...oldMahaller, result.newMahal])
-      queryClient.setQueryData(["mahaller"], newMahaller)
-
-      const newProject = result.newProject
-      setIsProject(newProject)
-
-      setShow("MahalMain")
+      setMahaller(oldMahaller => [...oldMahaller, result.newMahal])
+      setIsProject(result.newProject)
+      setShow("Main")
 
     } catch (err) {
 
@@ -212,7 +205,7 @@ export default function FormMahalCreate({ setShow }) {
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}
         open={true}
-        onClose={() => setShow("MahalMain")} >
+        onClose={() => setShow("Main")} >
         {/* <DialogTitle>Subscribe</DialogTitle> */}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
@@ -275,21 +268,21 @@ export default function FormMahalCreate({ setShow }) {
                           // console.log(index + 1)
                           // console.log("---")
 
-                          if  (index == 0 && cOunt == 1) {
+                          if (index == 0 && cOunt == 1) {
                             lbsCode = codePart
                             lbsName = isProject.lbs.find(item => item.code == lbsCode).name
                           }
-    
+
                           if (index == 0 && cOunt !== 1) {
                             lbsCode = codePart
                             lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
-                          }  
-    
+                          }
+
                           if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
                             lbsCode = lbsCode + "." + codePart
                             lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
                           }
-    
+
                           if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
                             lbsCode = lbsCode + "." + codePart
                             lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
@@ -375,7 +368,7 @@ export default function FormMahalCreate({ setShow }) {
           </DialogContent>
 
           <DialogActions sx={{ padding: "1.5rem" }}>
-            <Button onClick={() => setShow("MahalMain")}>İptal</Button>
+            <Button onClick={() => setShow("Main")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>
 
