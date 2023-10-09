@@ -163,33 +163,33 @@ export default function P_Mahallistesi() {
         </Grid>
       }
 
-      {show == "MahalMain" && (isProject?.lbs.filter(item => item.openForMahal).length == 0 || !pozlar) &&
+      {show == "MahalMain" && (isProject?.lbs.filter(item => item.openForMahal).length == 0 || !pozlar) && (
         <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
           </Alert>
-        </Stack>
+        </Stack>)
       }
 
-      {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length > 0 && pozlar?.length > 0 &&
+      {show == "MahalMain" && isProject?.lbs.filter(item => item.openForMahal).length > 0 && pozlar.length > 0 &&
         <Stack sx={{ mt: topBarHeight, width: '100%' }} spacing={0}>
 
 
           <Grid sx={{
             display: "grid", gridAutoFlow: "row", gridTemplateRows: "1rem 3rem 1rem",
-            backgroundColor: "yellow",
             position: "sticky", top: "7rem",
             zIndex: "10"
           }}>
 
+            {/* padding yerine üstteki 1rem lik dolu alan, yoksa sticky transparan problemi */}
             <Box>
-              
+
             </Box>
 
 
             {/* Grid - En üst başlık */}
             <Grid sx={{
-              display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar?.length * one_poz_width) + "rem",
+              display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
             }}>
 
 
@@ -232,7 +232,7 @@ export default function P_Mahallistesi() {
 
                   {/* one_bosluk_width */}
                   <Grid item sx={{ border: "1px solid white", padding: "0.5rem 0rem", backgroundColor: "white", color: "white", width: "100%" }}>
-                    
+
                   </Grid>
 
                 </Grid>
@@ -243,16 +243,16 @@ export default function P_Mahallistesi() {
 
               {/* sadece cOunt tespiti için görünmez bir componenet */}
               <Box sx={{ display: "none" }}>
-                {pozCount = pozlar?.length}
+                {pozCount = pozlar.length}
               </Box>
 
 
               {/* poz isimleri */}
               {/* 2/2 - (poz_width) */}
               <Grid item sx={{}}>
-                <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + pozlar?.length + ", " + one_poz_width + "rem)" }}>
+                <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)" }}>
 
-                  {pozlar?.map((onePoz, index) => {
+                  {pozlar.map((onePoz, index) => {
                     return (
                       <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
                         <Grid sx={{ display: "grid", width: "100%" }}>
@@ -270,7 +270,7 @@ export default function P_Mahallistesi() {
             </Grid>
 
             <Box>
-              
+
             </Box>
 
           </Grid>
@@ -287,13 +287,13 @@ export default function P_Mahallistesi() {
                 <Grid
                   key={lbsOne._id.toString()}
                   sx={{
-                    display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar?.length * one_poz_width) + "rem",
+                    display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
                   }}
 
                 >
 
                   {/* 1/2 - (total_mahal_width + one_bosluk_width) - sabit kısım*/}
-                  <Grid item sx={{ position: "sticky", left: (drawerWidth + 16) + "px" }}>
+                  <Grid item sx={{ position: "sticky", left: (drawerWidth) + "px" }}>
 
                     {/* Grid - lbs başlığı ve varsa altındaki mahaller */}
                     <Grid sx={{
@@ -368,7 +368,7 @@ export default function P_Mahallistesi() {
 
 
 
-                  {/* 2/2 - (pozlar?.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
+                  {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
                   <Grid item sx={{ overflow: "hidden", border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
                     ee
                   </Grid>
@@ -390,13 +390,13 @@ export default function P_Mahallistesi() {
                       <Grid
                         key={item._id.toString()}
                         sx={{
-                          display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar?.length * one_poz_width) + "rem",
+                          display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
 
                         }}
 
                       >
 
-                        <Grid item sx={{ position: "sticky", left: (drawerWidth + 16) + "px" }}>
+                        <Grid item sx={{ position: "sticky", left: (drawerWidth) + "px" }}>
 
                           <Grid key={index} onClick={() => handleSelectMahal(item)} sx={{
                             cursor: "pointer",
@@ -463,16 +463,16 @@ export default function P_Mahallistesi() {
                         <Grid item>
 
                           <Grid sx={{
-                            display: "grid", gridTemplateColumns: "repeat(" + pozlar?.length + ", " + one_poz_width + "rem)",
+                            display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
 
                           }}>
 
                             {/* sadece cOunt tespiti için görünmez bir componenet */}
                             <Box sx={{ display: "none" }}>
-                              {pozCount = pozlar?.length}
+                              {pozCount = pozlar.length}
                             </Box>
 
-                            {pozlar?.map((item, index) => {
+                            {pozlar.map((item, index) => {
                               return (
                                 <Grid key={index} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center" }}>
                                   <Typography sx={{ height: "1.5rem", overflow: "hidden" }} >
