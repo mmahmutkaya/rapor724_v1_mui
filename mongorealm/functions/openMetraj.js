@@ -65,17 +65,6 @@ exports = async function ({ projectId, mahalId, pozId }) {
   // poz create
   const currentTime = new Date()
 
-  // let newMetraj
-  // newMetraj = {
-  //   _projectId,
-  //   _mahalId,
-  //   _pozId,
-  //   open: true,
-  //   createdBy: _userId,
-  //   createdAt: currentTime,
-  //   isDeleted: false
-  // }
-
   const collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
 
   const result = await collection_Metrajlar.updateOne(
@@ -90,7 +79,14 @@ exports = async function ({ projectId, mahalId, pozId }) {
     { upsert: true }
   );
 
-  return (result)
+  let openedMetraj = {
+    _mahalId,
+    _pozId,
+    open: true,
+  }
+
+
+  return (openedMetraj)
 
 };
 
