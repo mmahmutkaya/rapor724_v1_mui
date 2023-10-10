@@ -51,7 +51,7 @@ export default function P_Mahallistesi() {
   const openForMetraj = async ({ mahalId, pozId }) => {
     console.log("mahalId", mahalId)
     console.log("pozId", pozId)
-    const result = await RealmApp?.currentUser.callFunction("createMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
+    const result = await RealmApp?.currentUser.callFunction("openForMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
     console.log("result", result)
     // setPozlar(result)
   }
