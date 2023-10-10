@@ -60,16 +60,17 @@ export default function P_Mahallistesi() {
 
 
   const openMetraj = async ({ mahalId, pozId }) => {
-    await RealmApp?.currentUser.callFunction("openMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
-    setMahalListesi(oldMahalListesi => oldMahalListesi.map(item => {
-      if (item._mahalId.toString() === mahalId.toString() && item._pozId.toString() === pozId.toString()) {
-        console.log("trueItem", item)
-        return { ...item, open: true }
-      } else {
-        console.log("elseItem", item)
-        return item
-      }
-    }))
+    const openedMetraj = await RealmApp?.currentUser.callFunction("openMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
+    // setMahalListesi(oldMahalListesi => oldMahalListesi.map(item => {
+    //   if (item._mahalId.toString() === mahalId.toString() && item._pozId.toString() === pozId.toString()) {
+    //     console.log("trueItem", item)
+    //     return { ...item, open: true }
+    //   } else {
+    //     console.log("elseItem", item)
+    //     return item
+    //   }
+    // }))
+    setMahalListesi(oldMahalListesi => [...oldMahalListesi, openedMetraj])
   }
 
   // console.log("mahalListesi", mahalListesi)
