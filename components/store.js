@@ -18,6 +18,7 @@ export default ({ children }) => {
   const [isProject, setIsProject] = useState()
   const [pozlar, setPozlar] = useState()
   const [mahaller, setMahaller] = useState()
+  const [mahalListesi, setMahalListesi] = useState()
   const [isContext] = useState(true)
 
   const store = {
@@ -34,6 +35,7 @@ export default ({ children }) => {
     isProject, setIsProject,
     pozlar, setPozlar,
     mahaller, setMahaller,
+    mahalListesi, setMahalListesi,
     isContext
   }
 

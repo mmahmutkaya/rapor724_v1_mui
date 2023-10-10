@@ -22,6 +22,7 @@ export default function P_Mahallistesi() {
   const { isProject } = useContext(StoreContext)
   const { pozlar, setPozlar } = useContext(StoreContext)
   const { mahaller, setMahaller } = useContext(StoreContext)
+  const { mahalListesi, setMahalListesi } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
 
@@ -46,6 +47,15 @@ export default function P_Mahallistesi() {
     }
   }
   pozlar_fecth()
+
+
+  const mahalListesi_fecth = async () => {
+    if (!mahalListesi) {
+      const result = await RealmApp?.currentUser.callFunction("getMahalListesi", ({ projectId: isProject?._id }));
+      setPozlar(result)
+    }
+  }
+  mahalListesi_fecth()
 
 
   const openMetraj = async ({ mahalId, pozId }) => {
