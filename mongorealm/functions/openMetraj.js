@@ -7,7 +7,7 @@ exports = async function ({ projectId, mahalId, pozId }) {
 
   // 2 - yukarıda açıklandı
 
-  if (!projectId) throw new Error("MONGO // createPoz // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  if (!projectId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
 
   let _projectId
   try {
@@ -17,13 +17,13 @@ exports = async function ({ projectId, mahalId, pozId }) {
       _projectId = projectId
     }
   } catch (err) {
-    throw new Error("MONGO // createPoz --  " + "MONGO // createPoz -- sorguya gönderilen --projectId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
+    throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --projectId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
   }
-  if (typeof _projectId != "object") throw new Error("MONGO // createPoz --  " + "MONGO // createPoz -- sorguya gönderilen --projectId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  if (typeof _projectId != "object") throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --projectId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
 
 
 
-  if (!mahalId) throw new Error("MONGO // createPoz // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  if (!mahalId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
 
   let _mahalId
   try {
@@ -33,13 +33,13 @@ exports = async function ({ projectId, mahalId, pozId }) {
       _mahalId = mahalId
     }
   } catch (err) {
-    throw new Error("MONGO // createPoz --  " + "MONGO // createPoz -- sorguya gönderilen --mahalId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
+    throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --mahalId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
   }
-  if (typeof _mahalId != "object") throw new Error("MONGO // createPoz --  " + "MONGO // createPoz -- sorguya gönderilen --mahalId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  if (typeof _mahalId != "object") throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --mahalId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
 
 
 
-  if (!pozId) throw new Error("MONGO // createPoz // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  if (!pozId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
 
   let _pozId
   try {
@@ -49,9 +49,9 @@ exports = async function ({ projectId, mahalId, pozId }) {
       _pozId = pozId
     }
   } catch (err) {
-    throw new Error("MONGO // createPoz --  " + "MONGO // createPoz -- sorguya gönderilen --pozId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
+    throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --pozId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
   }
-  if (typeof _pozId != "object") throw new Error("MONGO // createPoz --  " + "MONGO // createPoz -- sorguya gönderilen --pozId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  if (typeof _pozId != "object") throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --pozId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
 
 
 
@@ -59,7 +59,7 @@ exports = async function ({ projectId, mahalId, pozId }) {
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
   const mailTeyit = user.custom_data.mailTeyit
-  if (!mailTeyit) throw new Error("MONGO // createPoz --  Öncelikle üyeliğinize ait mail adresinin size ait olduğunu doğrulamalısınız, tekrar giriş yapmayı deneyiniz veya bizimle iletişime geçiniz.")
+  if (!mailTeyit) throw new Error("MONGO // openMetraj --  Öncelikle üyeliğinize ait mail adresinin size ait olduğunu doğrulamalısınız, tekrar giriş yapmayı deneyiniz veya bizimle iletişime geçiniz.")
 
 
   // poz create

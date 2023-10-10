@@ -48,10 +48,10 @@ export default function P_Mahallistesi() {
   pozlar_fecth()
 
 
-  const openForMetraj = async ({ mahalId, pozId }) => {
+  const openMetraj = async ({ mahalId, pozId }) => {
     console.log("mahalId", mahalId)
     console.log("pozId", pozId)
-    const result = await RealmApp?.currentUser.callFunction("openForMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
+    const result = await RealmApp?.currentUser.callFunction("openMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
     console.log("result", result)
     // setPozlar(result)
   }
@@ -416,7 +416,7 @@ export default function P_Mahallistesi() {
 
                               {pozlar.map((pozOne, index) => {
                                 return (
-                                  <Grid key={index} onClick={() => openForMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
+                                  <Grid key={index} onClick={() => openMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
                                     <Typography sx={{ height: "1.5rem", overflow: "hidden" }} >
                                       {pozOne.name}
                                     </Typography>
