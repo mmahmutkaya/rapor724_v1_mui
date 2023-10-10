@@ -57,15 +57,18 @@ export default function P_Mahallistesi() {
   }
   mahalListesi_fecth()
 
-  console.log("mahalListesi",mahalListesi)
+  console.log("mahalListesi", mahalListesi)
 
 
   const openMetraj = async ({ mahalId, pozId }) => {
-    console.log("mahalId", mahalId)
-    console.log("pozId", pozId)
-    const result = await RealmApp?.currentUser.callFunction("openMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
-    console.log("result", result)
-    // setPozlar(result)
+    await RealmApp?.currentUser.callFunction("openMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
+    setMahalListesi(oldMahalListesi => oldMahalListesi.map(item => {
+      if (item._mahalId.toString() === mahalId.toString() && item._pozId.toString() === pozId.toString()) {
+        return { ...item, open: true }
+      } else {
+        return item
+      }
+    }))
   }
 
 
@@ -430,7 +433,17 @@ export default function P_Mahallistesi() {
                                 return (
                                   <Grid key={index} onClick={() => openMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
                                     <Typography sx={{ height: "1.5rem", overflow: "hidden" }} >
-                                      {pozOne.name}
+                                      {mahalListesi.find(item => item._mahalId.toString() === mahalOne._id.toString() && item._pozId.toString() === pozOne._id.toString()) ?
+                                        "açık"
+                                        : "kapalı"
+
+
+                                        // if (pozlar.find(item=> item._mahalId.toString() === mahalOne.toString() && item._pozId.toString() === pozOne.toString())) {
+                                        //   return "open"
+                                        // } else {
+                                        //   return "kapalı"
+                                        // }
+                                      }
                                     </Typography>
                                   </Grid>
                                 )

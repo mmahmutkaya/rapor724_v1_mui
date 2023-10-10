@@ -90,9 +90,7 @@ exports = async function ({ projectId, mahalId, pozId }) {
     { upsert: true }
   );
 
-  newMetraj._id = result.insertedId
-
-  return ({ newMetraj })
+  return (result)
 
 };
 
