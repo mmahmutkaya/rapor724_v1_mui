@@ -21,18 +21,13 @@ exports = async function ({ projectId }) {
   if (typeof _projectId != "object") throw new Error("MONGO // getProjectPozlar -->  " + "MONGO // getProjectPozlar --> sorguya gönderilen \"projectId\" türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
 
 
-  try {
+  const collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
 
-    const collection_Pozlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
+  const result = await collection_Metrajlar.find({ _projectId, open: true }, { _mahalId: 1, _pozId: 1, open: 1 }).toArray()
 
-    const metrajlar = await collection_Pozlar.find({ _projectId, open: true }, { _mahalId: 1, _pozId: 1, open: 1 }).toArray()
+  return result
 
-    return metrajlar
 
-  } catch (err) {
-
-    throw new Error("MONGO // getMahalListesi // " + err.message)
-  }
 
 };
 

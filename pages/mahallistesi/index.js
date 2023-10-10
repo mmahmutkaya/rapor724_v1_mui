@@ -52,10 +52,12 @@ export default function P_Mahallistesi() {
   const mahalListesi_fecth = async () => {
     if (!mahalListesi) {
       const result = await RealmApp?.currentUser.callFunction("getMahalListesi", ({ projectId: isProject?._id }));
-      setPozlar(result)
+      setMahalListesi(result)
     }
   }
   mahalListesi_fecth()
+
+  console.log("mahalListesi",mahalListesi)
 
 
   const openMetraj = async ({ mahalId, pozId }) => {
