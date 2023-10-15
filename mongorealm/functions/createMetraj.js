@@ -27,7 +27,7 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   const errorFormObj = {}
 
 
-  if (typeof newMetrajName != "string") errorFormObj.newMetrajName === null ? errorFormObj.newMetrajName = "MONGO // createMetraj --  newMetrajName -- sorguya, string formatında gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. " : null
+  if (typeof newMetrajName != "string") !errorFormObj.newMetrajName ? errorFormObj.newMetrajName = "MONGO // createMetraj --  newMetrajName -- sorguya, string formatında gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. " : null
   newMetrajName = await context.functions.execute("functions_deleteLastSpace", newMetrajName)
   // if(!newMetrajName.length) throw new Error("MONGO // createMetraj --  newMetrajName sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
   if (!newMetrajName.length) !errorFormObj.newMetrajName ? errorFormObj.newMetrajName = "MONGO // createMetraj --  newMetrajName -- sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz." : null
