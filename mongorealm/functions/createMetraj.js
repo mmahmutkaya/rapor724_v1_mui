@@ -68,6 +68,7 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
 
   let newMetraj = {
     _id: BSON.ObjectId(),
+    _projectId,
     name: newMetrajName,
     unit: newMetrajUnit,
   }
