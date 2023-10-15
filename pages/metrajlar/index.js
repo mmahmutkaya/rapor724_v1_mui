@@ -4,6 +4,7 @@ import { useState, useContext } from 'react';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import MetrajHeader from '../../components/MetrajHeader'
+import FormMetrajCreate from '../../components/FormMetrajCreate'
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
@@ -22,7 +23,6 @@ export default function P_Metraj() {
   const { isProject } = useContext(StoreContext)
   const { metrajlar, setMetrajlar } = useContext(StoreContext)
   const { mahaller, setMahaller } = useContext(StoreContext)
-  const { mahalListesi, setMahalListesi } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
   const [deger, setDeger] = useState(0)
@@ -43,20 +43,12 @@ export default function P_Metraj() {
 
   const metrajlar_fecth = async () => {
     if (!metrajlar) {
-      const result = await RealmApp?.currentUser.callFunction("getProjectMetrajlar", ({ projectId: isProject?._id }));
-      setMetrajlar(result)
+      const resultMetrajlar = await RealmApp?.currentUser.callFunction("getProjectMetrajlar", ({ projectId: isProject?._id }));
+      setMetrajlar(resultMetrajlar)
+      console.log("resultMetrajlar",resultMetrajlar)
     }
   }
   metrajlar_fecth()
-
-
-  const mahalListesi_fecth = async () => {
-    if (!mahalListesi) {
-      const result = await RealmApp?.currentUser.callFunction("getMahalListesi", ({ projectId: isProject?._id }));
-      setMahalListesi(result)
-    }
-  }
-  mahalListesi_fecth()
 
 
 
@@ -215,6 +207,12 @@ export default function P_Metraj() {
         <MetrajHeader setShow={setShow} />
       </Grid>
 
+      {show == "FormMetrajCreate" &&
+        <Grid item >
+          <FormMetrajCreate setShow={setShow} />
+        </Grid>
+      }
+
       {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0) && (
         <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
@@ -251,7 +249,7 @@ export default function P_Metraj() {
             <Grid item sx={{}}>
               {/* Grid - En üst başlık */}
               <Grid sx={{
-                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar.length * one_poz_width) + "rem",
+                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar?.length * one_poz_width) + "rem",
 
               }}>
 
@@ -305,16 +303,16 @@ export default function P_Metraj() {
 
                 {/* sadece cOunt tespiti için görünmez bir componenet */}
                 <Box sx={{ display: "none" }}>
-                  {pozCount = metrajlar.length}
+                  {pozCount = metrajlar?.length}
                 </Box>
 
 
                 {/* poz isimleri */}
                 {/* 2/2 - (poz_width) */}
                 <Grid item sx={{}}>
-                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + metrajlar.length + ", " + one_poz_width + "rem)" }}>
+                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + metrajlar?.length + ", " + one_poz_width + "rem)" }}>
 
-                    {metrajlar.map((onePoz, index) => {
+                    {metrajlar?.map((onePoz, index) => {
                       return (
                         <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
                           <Grid sx={{ display: "grid", width: "100%" }}>
@@ -355,7 +353,7 @@ export default function P_Metraj() {
                   <Grid
 
                     sx={{
-                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar.length * one_poz_width) + "rem",
+                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar?.length * one_poz_width) + "rem",
                       width: "100%"
                     }}
 
@@ -439,7 +437,7 @@ export default function P_Metraj() {
 
 
                     {/* 2/2 - (metrajlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
-                    <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
+                    <Grid item sx={{ display: metrajlar?.length > 0 ? "block" : "none", border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
                       ee
                     </Grid>
 
@@ -462,7 +460,7 @@ export default function P_Metraj() {
                         <Grid
 
                           sx={{
-                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar.length * one_poz_width) + "rem",
+                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar?.length * one_poz_width) + "rem",
                           }}
 
                         >
@@ -534,15 +532,15 @@ export default function P_Metraj() {
                           <Grid item>
 
                             <Grid sx={{
-                              display: "grid", gridTemplateColumns: "repeat(" + metrajlar.length + ", " + one_poz_width + "rem)",
+                              display: "grid", gridTemplateColumns: "repeat(" + metrajlar?.length + ", " + one_poz_width + "rem)",
                             }}>
 
                               {/* sadece cOunt tespiti için görünmez bir componenet */}
                               <Box sx={{ display: "none" }}>
-                                {pozCount = metrajlar.length}
+                                {pozCount = metrajlar?.length}
                               </Box>
 
-                              {metrajlar.map((pozOne, index) => {
+                              {metrajlar?.map((pozOne, index) => {
 
                                 return (
                                   <Grid key={index} onClick={() => openMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>

@@ -52,7 +52,7 @@ export default function MetrajHeader({ setShow }) {
         newPozUnit
       }
 
-      const result = await RealmApp?.currentUser?.callFunction("createPoz", newPoz);
+      const result = await RealmApp?.currentUser?.callFunction("createMetraj", newPoz);
 
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
@@ -161,7 +161,7 @@ export default function MetrajHeader({ setShow }) {
             <Grid container spacing={1}>
 
               <Grid item>
-                <IconButton onClick={createMetraj} aria-label="addLbs" disabled={false}>
+                <IconButton onClick={() => setShow("FormMetrajCreate")} aria-label="addLbs" disabled={false}>
                   <AddCircleOutlineIcon variant="contained" color={true ? "success" : " lightgray"} />
                 </IconButton>
               </Grid>
