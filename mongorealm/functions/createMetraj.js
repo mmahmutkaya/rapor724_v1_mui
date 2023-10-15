@@ -74,6 +74,9 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   }
 
   let metrajlar = project.metrajlar
+  
+  return metrajlar
+  
   let metrajlar2 = [...metrajlar, newMetraj]
 
   return "buraya22"
