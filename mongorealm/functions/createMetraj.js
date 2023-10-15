@@ -59,8 +59,8 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
     if (project.metrajlar.length > 0) {
       if (project.metrajlar.find(metraj => metraj.name === newMetrajName)) {
         
+        return typeof errorFormObj.newMetrajName
         errorFormObj.newMetrajName === null ? errorFormObj.newMetrajName = "Bu metraj ismi sistemde kayıtlı" : null
-        return {errorFormObj}
       }
     }
   }
