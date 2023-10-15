@@ -75,9 +75,7 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
 
   let metrajlar = project.metrajlar
   
-  return metrajlar
-  
-  let metrajlar2 = [...metrajlar, newMetraj]
+  let metrajlar2 = metrajlar ? [...metrajlar, newMetraj] : [newMetraj]
 
   return "buraya22"
   await collection_Projects.updateOne(
