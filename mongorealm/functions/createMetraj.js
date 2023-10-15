@@ -64,7 +64,6 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   }
   if (Object.keys(errorFormObj).length) return ({ errorFormObj })
 
-  return "buraya"
 
   // metraj create
 
@@ -77,6 +76,7 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   let metrajlar = project.metrajlar
   let metrajlar2 = [...metrajlar, newMetraj]
 
+  return "buraya22"
   await collection_Projects.updateOne(
     { _id: _projectId }, // Query for the user object of the logged in user
     { $set: { metrajlar: metrajlar2 } },
