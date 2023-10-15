@@ -58,13 +58,13 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   if (Object.keys(project).find(key => key === "metrajlar")) {
     if (project.metrajlar.length > 0) {
       if (project.metrajlar.find(metraj => metraj.name === newMetrajName)) {
-        return "buraya da"
         errorFormObj.newMetrajName === null ? errorFormObj.newMetrajName = "Bu metraj ismi sistemde kayıtlı" : null
       }
     }
   }
   if (Object.keys(errorFormObj).length) return ({ errorFormObj })
 
+  return "buraya da"
 
   // metraj create
 
