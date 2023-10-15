@@ -77,7 +77,6 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   
   let metrajlar2 = metrajlar ? [...metrajlar, newMetraj] : [newMetraj]
 
-  return "buraya22"
   await collection_Projects.updateOne(
     { _id: _projectId }, // Query for the user object of the logged in user
     { $set: { metrajlar: metrajlar2 } },
