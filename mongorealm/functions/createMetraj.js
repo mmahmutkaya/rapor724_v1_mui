@@ -64,8 +64,6 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   }
   if (Object.keys(errorFormObj).length) return ({ errorFormObj })
 
-  return "buraya da"
-
   // metraj create
 
   let newMetraj = {
