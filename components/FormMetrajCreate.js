@@ -69,6 +69,10 @@ export default function FormMetrajCreate({ setShow }) {
 
       const result = await RealmApp?.currentUser?.callFunction("createMetraj", newMetraj);
 
+      console.log("result",result)
+
+      return
+
 
       // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
       // yukarıda da frontend kontrolü yapılmıştı
