@@ -1,7 +1,5 @@
 exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
 
-  return { projectId, newMetrajName, newMetrajUnit }
-
   // gelen verileri ikiye ayırabiliriz, 1-form verisinden önceki ana veriler  2-form verileri
 
 
@@ -54,6 +52,8 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   let project = await collection_Projects.findOne({ _id: _projectId, members: _userId, isDeleted: false })
   if (!project) throw new Error("MONGO // createMetraj // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
+
+  return "buraya"
 
   // isim benzerliği kontrolü
   if (Object.keys(project).find(key => key === "metrajlar")) {
