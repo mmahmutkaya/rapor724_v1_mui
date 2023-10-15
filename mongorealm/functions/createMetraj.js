@@ -53,7 +53,6 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   if (!project) throw new Error("MONGO // createMetraj // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
 
-  return "buraya"
 
   // isim benzerliği kontrolü
   if (Object.keys(project).find(key => key === "metrajlar")) {
@@ -65,6 +64,7 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   }
   if (Object.keys(errorFormObj).length) return ({ errorFormObj })
 
+  return "buraya"
 
   // metraj create
 
