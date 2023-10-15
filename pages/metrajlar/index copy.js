@@ -1,17 +1,52 @@
 
+import * as React from 'react';
 import { useState, useContext } from 'react';
-import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
-import FormMahalCreate from '../../components/FormMahalCreate'
-import MahalListesiHeader from '../../components/MahalListesiHeader'
+import MetrajHeader from '../../components/MetrajHeader'
+
+import { NumericFormat } from 'react-number-format';
+import PropTypes from 'prop-types';
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import InfoIcon from '@mui/icons-material/Info';
+
+
+
+const NumericFormatCustom = React.forwardRef(function NumericFormatCustom(
+  props,
+  ref,
+) {
+  const { onChange, ...other } = props;
+
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      valueIsNumericString
+      prefix="$"
+    />
+  );
+});
+
+NumericFormatCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 
 
@@ -108,11 +143,24 @@ export default function P_Mahallistesi() {
   const one_poz_width = 5
 
 
+  const [values, setValues] = React.useState({
+    textmask: '(100) 000-0000',
+    numberformat: '1320',
+  });
+
+  const handleChange = (event) => {
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+
   return (
     <Grid container direction="column" spacing={0}>
 
       <Grid item >
-        <MahalListesiHeader setShow={setShow} />
+        <MetrajHeader setShow={setShow} />
       </Grid>
 
       {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0) && (
@@ -445,12 +493,18 @@ export default function P_Mahallistesi() {
                               {pozlar.map((pozOne, index) => {
                                 return (
                                   <Grid key={index} onClick={() => openMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
-                                    <Typography sx={{ height: "1.5rem", overflow: "hidden" }} >
-                                      {mahalListesi?.find(item => item._mahalId.toString() === mahalOne._id.toString() && item._pozId.toString() === pozOne._id.toString()) ?
-                                        "açık"
-                                        : "kapalı"
-                                      }
-                                    </Typography>
+
+                                    <TextField
+                                      value={values.numberformat}
+                                      onChange={handleChange}
+                                      name="numberformat"
+                                      id="formatted-numberformat-input"
+                                      InputProps={{
+                                        inputComponent: NumericFormatCustom,
+                                      }}
+                                      variant="standard"
+                                    />
+
                                   </Grid>
                                 )
                               })}
@@ -487,3 +541,6 @@ export default function P_Mahallistesi() {
   )
 
 }
+
+
+

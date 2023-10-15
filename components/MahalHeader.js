@@ -9,7 +9,6 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,8 +20,6 @@ import ClearOutlined from '@mui/icons-material/ClearOutlined';
 
 export default function MahalHeader({ setShow }) {
 
-  const queryClient = useQueryClient()
-
   const { isProject, setIsProject } = useContext(StoreContext)
   const { setMahaller } = useContext(StoreContext)
 
@@ -33,6 +30,7 @@ export default function MahalHeader({ setShow }) {
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
 
+  
   async function handleMahalDelete(mahal) {
 
     // seçili lbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
@@ -92,7 +90,7 @@ export default function MahalHeader({ setShow }) {
 
 
 
-  let header = "Mahal Listesi"
+  let header = "Mahaller"
   // isProject?.name ? header = isProject?.name : null
 
 

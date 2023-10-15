@@ -1,30 +1,31 @@
 
+import * as React from 'react';
 import { useState, useContext } from 'react';
-import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
-import FormMahalCreate from '../../components/FormMahalCreate'
-import MahalListesiHeader from '../../components/MahalListesiHeader'
+import MetrajHeader from '../../components/MetrajHeader'
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import InfoIcon from '@mui/icons-material/Info';
 
 
 
-export default function P_Mahallistesi() {
+export default function P_Metraj() {
 
   const { drawerWidth, topBarHeight } = useContext(StoreContext)
 
   const { isProject } = useContext(StoreContext)
-  const { pozlar, setPozlar } = useContext(StoreContext)
+  const { metrajlar, setMetrajlar } = useContext(StoreContext)
   const { mahaller, setMahaller } = useContext(StoreContext)
   const { mahalListesi, setMahalListesi } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
+  const [deger, setDeger] = useState(0)
 
   !isProject ? window.location.href = "/projects" : null
 
@@ -40,13 +41,13 @@ export default function P_Mahallistesi() {
 
 
 
-  const pozlar_fecth = async () => {
-    if (!pozlar) {
-      const result = await RealmApp?.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id }));
-      setPozlar(result)
+  const metrajlar_fecth = async () => {
+    if (!metrajlar) {
+      const result = await RealmApp?.currentUser.callFunction("getProjectMetrajlar", ({ projectId: isProject?._id }));
+      setMetrajlar(result)
     }
   }
-  pozlar_fecth()
+  metrajlar_fecth()
 
 
   const mahalListesi_fecth = async () => {
@@ -59,31 +60,123 @@ export default function P_Mahallistesi() {
 
 
 
-  const openMetraj = async ({ mahalId, pozId }) => {
-    const openedMetraj = await RealmApp?.currentUser.callFunction("openMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
-    setMahalListesi(oldMahalListesi => [...oldMahalListesi, openedMetraj])
-  }
+  // const openMetraj = async ({ mahalId, pozId }) => {
+  //   const openedMetraj = await RealmApp?.currentUser.callFunction("openMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
+  //   setMahalListesi(oldMahalListesi => [...oldMahalListesi, openedMetraj])
+  // }
 
-  const closeMetraj = async ({ mahalId, pozId }) => {
-    await RealmApp?.currentUser.callFunction("closeMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
-    // hata olmadı db den çıktı - o zaman çıkarıyoruz
-    setMahalListesi(oldMahalListesi => oldMahalListesi.map(item => {
-      if (item._mahalId.toString() === mahalId.toString() && item._pozId.toString() === pozId.toString()) {
-        return { ...item, open: false }
-      } else {
-        return item
+  // const closeMetraj = async ({ mahalId, pozId }) => {
+  //   await RealmApp?.currentUser.callFunction("closeMetraj", ({ projectId: isProject?._id, mahalId, pozId }));
+  //   // hata olmadı db den çıktı - o zaman çıkarıyoruz
+  //   setMahalListesi(oldMahalListesi => oldMahalListesi.map(item => {
+  //     if (item._mahalId.toString() === mahalId.toString() && item._pozId.toString() === pozId.toString()) {
+  //       return { ...item, open: false }
+  //     } else {
+  //       return item
+  //     }
+  //   }))
+  //   // setMahalListesi(oldMahalListesi => oldMahalListesi.map(item => {
+  //   //   if (item._mahalId.toString() === mahalId.toString() && item._pozId.toString() === pozId.toString()) {
+  //   //     return { ...item, open: false }
+  //   //   } else {
+  //   //     return item
+  //   //   }
+  //   // }))
+  // }
+
+
+
+  // metraj oluşturma fonksiyonu
+  async function handleSubmit(event) {
+
+    console.log("submit")
+
+    event.preventDefault();
+
+    try {
+      // isError = false
+
+      //verileri tanımlama
+      const data = new FormData(event.currentTarget);
+      const newValue1 = deleteLastSpace(data.get('newValue1'))
+
+      console.log("newValue1", newValue1)
+
+      return
+
+
+      const newPoz = {
+        projectId: isProject._id,
+        wbsId: wbsId_for_Poz,
+        newPozName,
+        newPozUnit
       }
-    }))
-    // setMahalListesi(oldMahalListesi => oldMahalListesi.map(item => {
-    //   if (item._mahalId.toString() === mahalId.toString() && item._pozId.toString() === pozId.toString()) {
-    //     return { ...item, open: false }
-    //   } else {
-    //     return item
-    //   }
-    // }))
+
+      const result = await RealmApp?.currentUser?.callFunction("createPoz", newPoz);
+
+
+      // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
+      // yukarıda da frontend kontrolü yapılmıştı
+      if (result.errorFormObj) {
+
+        const errorFormObj = result.errorFormObj
+
+        console.log("errorFormObj", errorFormObj)
+
+        if (errorFormObj.wbsId) {
+          setError_for_wbs(true);
+          setErrorText_for_wbs(errorFormObj.wbsId)
+          isError = true
+        }
+
+        if (errorFormObj.newPozName) {
+          setError_for_name(true);
+          setErrorText_for_name(errorFormObj.newPozName)
+          isError = true
+        }
+
+        if (errorFormObj.newPozUnit) {
+          setError_for_unit(true);
+          setErrorText_for_unit(errorFormObj.newPozUnit)
+          isError = true
+        }
+
+        return
+      }
+
+      if (!result.newPoz?._id) {
+        throw new Error("db den -newPoz- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
+      }
+
+      if (!result.newProject?._id) {
+        throw new Error("db den -newProject- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
+      }
+
+      setMetrajlar(oldPozlar => [...oldPozlar, result.newPoz])
+      setIsProject(result.newProject)
+      setShow("Main")
+
+    } catch (err) {
+
+      console.log(err)
+      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+
+      // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
+      if (hataMesaj_.includes("duplicate key error")) {
+        setError_for_name(true);
+        setErrorText_for_name("Bu poz ismi bu projede mevcut")
+        console.log("Bu poz ismi bu projede mevcut")
+        return
+      }
+
+      // setDialogCase("error")
+      // setShowDialog(hataMesaj_)
+
+    }
+
   }
 
-  // console.log("mahalListesi", mahalListesi)
+
 
 
   // aşağıda kullanılıyor
@@ -108,11 +201,18 @@ export default function P_Mahallistesi() {
   const one_poz_width = 5
 
 
+  const handleUpdate = (event) => {
+    setDeger(event.target.value);
+    console.log("event.target.value", event.target.value)
+  };
+
+
+
   return (
     <Grid container direction="column" spacing={0}>
 
       <Grid item >
-        <MahalListesiHeader setShow={setShow} />
+        <MetrajHeader setShow={setShow} />
       </Grid>
 
       {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0) && (
@@ -123,7 +223,7 @@ export default function P_Mahallistesi() {
         </Stack>)
       }
 
-      {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0 || !pozlar) && (
+      {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0) && (
         <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
@@ -131,7 +231,7 @@ export default function P_Mahallistesi() {
         </Stack>)
       }
 
-      {show == "Main" && isProject?.lbs.filter(item => item.openForMahal).length > 0 && pozlar?.length > 0 && mahaller?.length > 0 &&
+      {show == "Main" && isProject?.lbs.filter(item => item.openForMahal).length > 0 && mahaller?.length > 0 &&
         <Stack sx={{ mt: topBarHeight, width: '100%', pl: "1rem" }} spacing={0}>
 
 
@@ -151,7 +251,7 @@ export default function P_Mahallistesi() {
             <Grid item sx={{}}>
               {/* Grid - En üst başlık */}
               <Grid sx={{
-                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar.length * one_poz_width) + "rem",
 
               }}>
 
@@ -205,16 +305,16 @@ export default function P_Mahallistesi() {
 
                 {/* sadece cOunt tespiti için görünmez bir componenet */}
                 <Box sx={{ display: "none" }}>
-                  {pozCount = pozlar.length}
+                  {pozCount = metrajlar.length}
                 </Box>
 
 
                 {/* poz isimleri */}
                 {/* 2/2 - (poz_width) */}
                 <Grid item sx={{}}>
-                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)" }}>
+                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + metrajlar.length + ", " + one_poz_width + "rem)" }}>
 
-                    {pozlar.map((onePoz, index) => {
+                    {metrajlar.map((onePoz, index) => {
                       return (
                         <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
                           <Grid sx={{ display: "grid", width: "100%" }}>
@@ -255,7 +355,7 @@ export default function P_Mahallistesi() {
                   <Grid
 
                     sx={{
-                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar.length * one_poz_width) + "rem",
                       width: "100%"
                     }}
 
@@ -338,7 +438,7 @@ export default function P_Mahallistesi() {
 
 
 
-                    {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
+                    {/* 2/2 - (metrajlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
                     <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
                       ee
                     </Grid>
@@ -362,7 +462,7 @@ export default function P_Mahallistesi() {
                         <Grid
 
                           sx={{
-                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar.length * one_poz_width) + "rem",
                           }}
 
                         >
@@ -434,25 +534,38 @@ export default function P_Mahallistesi() {
                           <Grid item>
 
                             <Grid sx={{
-                              display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
+                              display: "grid", gridTemplateColumns: "repeat(" + metrajlar.length + ", " + one_poz_width + "rem)",
                             }}>
 
                               {/* sadece cOunt tespiti için görünmez bir componenet */}
                               <Box sx={{ display: "none" }}>
-                                {pozCount = pozlar.length}
+                                {pozCount = metrajlar.length}
                               </Box>
 
-                              {pozlar.map((pozOne, index) => {
+                              {metrajlar.map((pozOne, index) => {
+
                                 return (
                                   <Grid key={index} onClick={() => openMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
-                                    <Typography sx={{ height: "1.5rem", overflow: "hidden" }} >
-                                      {mahalListesi?.find(item => item._mahalId.toString() === mahalOne._id.toString() && item._pozId.toString() === pozOne._id.toString()) ?
-                                        "açık"
-                                        : "kapalı"
-                                      }
-                                    </Typography>
+
+                                    <Box component="form" onSubmit={handleSubmit}  >
+                                      <TextField
+                                        variant="standard"
+                                        // value={(1234).toLocaleString()}
+                                        value={deger == 0 ? "" : deger?.toLocaleString()}
+                                        // onChange={handleUpdate}
+                                        name="newValue1"
+                                        id="newValue1"
+                                        sx={{
+                                          "& .MuiInputBase-input": {
+                                            p: "0.1rem"
+                                          }
+                                        }}
+                                      />
+                                    </Box>
+
                                   </Grid>
                                 )
+
                               })}
 
 
@@ -487,3 +600,6 @@ export default function P_Mahallistesi() {
   )
 
 }
+
+
+
