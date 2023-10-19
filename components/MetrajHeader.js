@@ -14,6 +14,7 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import EditIcon from '@mui/icons-material/Edit';
 import ClearOutlined from '@mui/icons-material/ClearOutlined';
 
 
@@ -29,93 +30,6 @@ export default function MetrajHeader({ setShow }) {
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
-
-
-
-  async function createMetraj(event) {
-
-    event.preventDefault();
-
-    try {
-      isError = false
-
-      //verileri tanımlama
-      const data = new FormData(event.currentTarget);
-      const newPozName = deleteLastSpace(data.get('newPozName'))
-      const newPozUnit = deleteLastSpace(data.get('newPozUnit'))
-
-
-      const newPoz = {
-        projectId: isProject._id,
-        wbsId: wbsId_for_Poz,
-        newPozName,
-        newPozUnit
-      }
-
-      const result = await RealmApp?.currentUser?.callFunction("createMetraj", newPoz);
-
-
-      // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
-      // yukarıda da frontend kontrolü yapılmıştı
-      if (result.errorFormObj) {
-
-        const errorFormObj = result.errorFormObj
-
-        console.log("errorFormObj", errorFormObj)
-
-        if (errorFormObj.wbsId) {
-          setError_for_wbs(true);
-          setErrorText_for_wbs(errorFormObj.wbsId)
-          isError = true
-        }
-
-        if (errorFormObj.newPozName) {
-          setError_for_name(true);
-          setErrorText_for_name(errorFormObj.newPozName)
-          isError = true
-        }
-
-        if (errorFormObj.newPozUnit) {
-          setError_for_unit(true);
-          setErrorText_for_unit(errorFormObj.newPozUnit)
-          isError = true
-        }
-
-        return
-      }
-
-      if (!result.newPoz?._id) {
-        throw new Error("db den -newPoz- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
-      }
-
-      if (!result.newProject?._id) {
-        throw new Error("db den -newProject- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
-      }
-
-      setPozlar(oldPozlar => [...oldPozlar, result.newPoz])
-      setIsProject(result.newProject)
-      setShow("Main")
-
-    } catch (err) {
-
-      console.log(err)
-      let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
-
-      // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
-      if (hataMesaj_.includes("duplicate key error")) {
-        setError_for_name(true);
-        setErrorText_for_name("Bu poz ismi bu projede mevcut")
-        console.log("Bu poz ismi bu projede mevcut")
-        return
-      }
-
-      setDialogCase("error")
-      setShowDialog(hataMesaj_)
-
-    }
-
-  }
-
 
 
 
@@ -159,6 +73,12 @@ export default function MetrajHeader({ setShow }) {
           {/* sağ kısım - (tuşlar)*/}
           <Grid item xs="auto">
             <Grid container spacing={1}>
+
+              <Grid item>
+                <IconButton onClick={() => setShow("FormMetrajCreate")} aria-label="addLbs" disabled={false}>
+                  <EditIcon variant="contained" color={true ? "success" : " lightgray"} />
+                </IconButton>
+              </Grid>
 
               <Grid item>
                 <IconButton onClick={() => setShow("FormMetrajCreate")} aria-label="addLbs" disabled={false}>

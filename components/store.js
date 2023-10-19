@@ -17,7 +17,7 @@ export default ({ children }) => {
   const [selectedMahal, setSelectedMahal] = useState()
   const [isProject, setIsProject] = useState()
   const [pozlar, setPozlar] = useState()
-  const [metrajlar, setMetrajlar] = useState()
+  const [mahalMetrajlar, setMahalMetrajlar] = useState()
   const [mahaller, setMahaller] = useState()
   const [mahalListesi, setMahalListesi] = useState()
   const [isContext] = useState(true)
@@ -36,7 +36,7 @@ export default ({ children }) => {
     isProject, setIsProject,
     pozlar, setPozlar,
     mahaller, setMahaller,
-    metrajlar, setMetrajlar,
+    mahalMetrajlar, setMahalMetrajlar,
     mahalListesi, setMahalListesi,
     isContext
   }

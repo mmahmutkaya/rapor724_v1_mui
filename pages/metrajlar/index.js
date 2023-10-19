@@ -21,7 +21,7 @@ export default function P_Metraj() {
   const { drawerWidth, topBarHeight } = useContext(StoreContext)
 
   const { isProject } = useContext(StoreContext)
-  const { metrajlar, setMetrajlar } = useContext(StoreContext)
+  const { mahalMetrajlar, setMahalMetrajlar } = useContext(StoreContext)
   const { mahaller, setMahaller } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
@@ -40,15 +40,14 @@ export default function P_Metraj() {
   mahaller_fecth()
 
 
-
-  const metrajlar_fecth = async () => {
-    if (!metrajlar) {
-      const resultMetrajlar = await RealmApp?.currentUser.callFunction("getProjectMetrajlar", ({ projectId: isProject?._id }));
-      setMetrajlar(resultMetrajlar)
-      console.log("resultMetrajlar",resultMetrajlar)
-    }
-  }
-  metrajlar_fecth()
+  // const mahalMetrajlar_fecth = async () => {
+  //   if (!mahalMetrajlar) {
+  //     const result = await RealmApp?.currentUser.callFunction("getProjectMahalMetrajlar", ({ projectId: isProject?._id }));
+  //     setMahalMetrajlar(result)
+  //     console.log("resultMahalMetrajlar", result)
+  //   }
+  // }
+  // mahalMetrajlar_fecth()
 
 
 
@@ -249,7 +248,7 @@ export default function P_Metraj() {
             <Grid item sx={{}}>
               {/* Grid - En üst başlık */}
               <Grid sx={{
-                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar?.length * one_poz_width) + "rem",
+                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (isProject.metrajlar?.length * one_poz_width) + "rem",
 
               }}>
 
@@ -303,16 +302,16 @@ export default function P_Metraj() {
 
                 {/* sadece cOunt tespiti için görünmez bir componenet */}
                 <Box sx={{ display: "none" }}>
-                  {pozCount = metrajlar?.length}
+                  {pozCount = isProject.metrajlar?.length}
                 </Box>
 
 
                 {/* poz isimleri */}
                 {/* 2/2 - (poz_width) */}
                 <Grid item sx={{}}>
-                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + metrajlar?.length + ", " + one_poz_width + "rem)" }}>
+                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + isProject.metrajlar?.length + ", " + one_poz_width + "rem)" }}>
 
-                    {metrajlar?.map((onePoz, index) => {
+                    {isProject.metrajlar?.map((onePoz, index) => {
                       return (
                         <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
                           <Grid sx={{ display: "grid", width: "100%" }}>
@@ -353,7 +352,7 @@ export default function P_Metraj() {
                   <Grid
 
                     sx={{
-                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar?.length * one_poz_width) + "rem",
+                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (isProject.metrajlar?.length * one_poz_width) + "rem",
                       width: "100%"
                     }}
 
@@ -436,8 +435,8 @@ export default function P_Metraj() {
 
 
 
-                    {/* 2/2 - (metrajlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
-                    <Grid item sx={{ display: metrajlar?.length > 0 ? "block" : "none", border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
+                    {/* 2/2 - (isProject.metrajlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
+                    <Grid item sx={{ display: isProject.metrajlar?.length > 0 ? "block" : "none", border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
                       ee
                     </Grid>
 
@@ -460,7 +459,7 @@ export default function P_Metraj() {
                         <Grid
 
                           sx={{
-                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (metrajlar?.length * one_poz_width) + "rem",
+                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (isProject.metrajlar?.length * one_poz_width) + "rem",
                           }}
 
                         >
@@ -532,20 +531,24 @@ export default function P_Metraj() {
                           <Grid item>
 
                             <Grid sx={{
-                              display: "grid", gridTemplateColumns: "repeat(" + metrajlar?.length + ", " + one_poz_width + "rem)",
+                              display: "grid", gridTemplateColumns: "repeat(" + isProject.metrajlar?.length + ", " + one_poz_width + "rem)",
                             }}>
 
                               {/* sadece cOunt tespiti için görünmez bir componenet */}
                               <Box sx={{ display: "none" }}>
-                                {pozCount = metrajlar?.length}
+                                {pozCount = isProject.metrajlar?.length}
                               </Box>
 
-                              {metrajlar?.map((pozOne, index) => {
+                              {isProject.metrajlar?.map((pozOne, index) => {
 
                                 return (
-                                  <Grid key={index} onClick={() => openMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
+                                  <Grid key={index} onClick={() => console.log("denemeee")} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
 
-                                    <Box component="form" onSubmit={handleSubmit}  >
+                                    <Typography>
+                                      ee
+                                    </Typography>
+
+                                    {/* <Box component="form" onSubmit={handleSubmit}  >
                                       <TextField
                                         variant="standard"
                                         // value={(1234).toLocaleString()}
@@ -559,7 +562,7 @@ export default function P_Metraj() {
                                           }
                                         }}
                                       />
-                                    </Box>
+                                    </Box> */}
 
                                   </Grid>
                                 )
