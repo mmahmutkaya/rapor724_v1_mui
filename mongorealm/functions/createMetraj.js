@@ -27,7 +27,7 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   const errorFormObj = {}
 
 
-  if (typeof newMetrajName != "string") errorFormObj.newMetrajName === null ? errorFormObj.newMetrajName = "MONGO // createMetraj --  newMetrajName -- sorguya, string formatında gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. " : null
+  if (typeof newMetrajName != "string") !errorFormObj.newMetrajName ? errorFormObj.newMetrajName = "MONGO // createMetraj --  newMetrajName -- sorguya, string formatında gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. " : null
   newMetrajName = await context.functions.execute("functions_deleteLastSpace", newMetrajName)
   // if(!newMetrajName.length) throw new Error("MONGO // createMetraj --  newMetrajName sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
   if (!newMetrajName.length) !errorFormObj.newMetrajName ? errorFormObj.newMetrajName = "MONGO // createMetraj --  newMetrajName -- sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz." : null
@@ -58,17 +58,17 @@ exports = async function ({ projectId, newMetrajName, newMetrajUnit }) {
   if (Object.keys(project).find(key => key === "metrajlar")) {
     if (project.metrajlar.length > 0) {
       if (project.metrajlar.find(metraj => metraj.name === newMetrajName)) {
-        errorFormObj.newMetrajName === null ? errorFormObj.newMetrajName = "Bu metraj ismi sistemde kayıtlı" : null
+        !errorFormObj.newMetrajName ? errorFormObj.newMetrajName = "Bu metraj ismi sistemde kayıtlı" : null
       }
     }
   }
   if (Object.keys(errorFormObj).length) return ({ errorFormObj })
 
-
   // metraj create
 
   let newMetraj = {
     _id: BSON.ObjectId(),
+    _projectId,
     name: newMetrajName,
     unit: newMetrajUnit,
   }
