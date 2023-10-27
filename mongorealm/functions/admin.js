@@ -1,33 +1,33 @@
 
-exports = async function({subFunction,projectId}){
+exports = async function(){
   
   
-  if(subFunction === "wbs_upload") {
+  // if(subFunction === "wbs_upload") {
   
-    const project = await context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects").findOne({_id:projectId})
+  //   const project = await context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects").findOne({_id:projectId})
     
-    const result = await context.services.get("mongodb-atlas").db("rapor724_v2").collection("deneme").updateOne(
-      {name:"wbs1"},
-      {$set:{data:project.wbs}},
-      {upsert:true}
-    )
-    return result
-  }
+  //   const result = await context.services.get("mongodb-atlas").db("rapor724_v2").collection("deneme").updateOne(
+  //     {name:"wbs1"},
+  //     {$set:{data:project.wbs}},
+  //     {upsert:true}
+  //   )
+  //   return result
+  // }
   
   
-  if(subFunction === "wbs_download") {
+  // if(subFunction === "wbs_download") {
     
-    const item = await context.services.get("mongodb-atlas").db("rapor724_v2").collection("deneme").findOne({"name":"wbs1"})
+  //   const item = await context.services.get("mongodb-atlas").db("rapor724_v2").collection("deneme").findOne({"name":"wbs1"})
     
-    const _wbs = item.data
+  //   const _wbs = item.data
     
-    const result = await context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects").updateOne(
-      {_id:projectId},
-      {$set:{wbs:_wbs}},
-    )
-    return _wbs
+  //   const result = await context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects").updateOne(
+  //     {_id:projectId},
+  //     {$set:{wbs:_wbs}},
+  //   )
+  //   return _wbs
     
-  }
+  // }
 
   
   
@@ -75,11 +75,11 @@ exports = async function({subFunction,projectId}){
   
 
   
-  // const collection = context.services.get("mongodb-atlas").db("rapor724_v2").collection("groups")
-  // collection.updateMany(
-  //   {},
-  //   { $set: {isDeleted:false}}
-  // );
+  const collection = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
+  collection.updateMany(
+    {},
+    { $set: { pozTipleri: ["standart", "pencere", "kapi", "insaatDemiri"] } }
+  );
 
 
 
