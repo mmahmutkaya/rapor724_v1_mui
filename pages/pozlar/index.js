@@ -22,6 +22,7 @@ export default function P_Pozlar() {
   const { isProject } = useContext(StoreContext)
   const { selectedPoz, setSelectedPoz } = useContext(StoreContext)
   const { pozlar, setPozlar } = useContext(StoreContext)
+  const { drawerWidth, topBarHeight } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
 
@@ -50,10 +51,24 @@ export default function P_Pozlar() {
   let wbsCode = ""
   let wbsName = ""
   let cOunt = 0
+  let toplam = 0
+  let pozCount
 
-  const gridTemplateColumns_Poz = "2rem 1fr 5rem"
+  const _3_fixed_width_rem = "2rem 25rem 5rem"
+  toplam = 0
+  _3_fixed_width_rem.split(" ").map(item => {
+    let gecici = Number(item.replace("rem", ""))
+    toplam = toplam + gecici
+  })
+  const total_fixed_width = toplam
+
+  const one_bosluk_width = 2
+
+  const one_poz_width = 5
+
 
   return (
+
     <Grid container direction="column" spacing={1}>
 
       <Grid item >
@@ -75,216 +90,325 @@ export default function P_Pozlar() {
       }
 
       {show == "Main" && isProject?.wbs.filter(item => item.openForPoz).length > 0 && pozlar?.length > 0 &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={0}>
 
+        <Stack sx={{ mt: topBarHeight, width: '100%', pl: "1rem" }} spacing={0}>
+
+          {/* gridTemplateRows - baştaki ve sondaki "1rem"  padding yerine üstte ve altta dolu alan, yoksa sticky transparan problemi  */}
           <Grid sx={{
-            display: "grid", gridAutoFlow: "column", gridTemplateColumns: gridTemplateColumns_Poz,
-            backgroundColor: "lightgray", fontWeight: "600", height: "2rem", alignItems: "center"
-          }} >
+            display: "grid", gridTemplateRows: "1rem 3rem 1rem",
+            position: "sticky", top: "7rem",
+            zIndex: "10",
+            backgroundColor: "white",
+          }}>
 
-            <Grid item >
-              <Grid sx={{ display: "grid", justifyContent: "center", width: "100%", height: "100%" }}>
-                <InfoIcon sx={{ fontSize: "1.2rem" }} />
+            {/* padding yerine üstteki 1rem lik dolu alan, yoksa sticky transparan problemi */}
+            <Box sx={{ backgroundColor: "white" }}>
+
+            </Box>
+
+            <Grid item sx={{}}>
+              {/* Grid - En üst başlık */}
+              <Grid sx={{
+                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+              }}>
+
+                {/* 1/2 - (total_fixed_width + one_bosluk_width)*/}
+                <Grid item sx={{ position: "sticky", left: { xs: 0, md: "240px" } }}>
+                  {/* <Grid item sx={{}}> */}
+
+                  {/* total_fixed_width */}
+                  {/* en üst başlık */}
+                  <Grid sx={{
+                    // position: "fixed", display: "grid", gridAutoFlow: "column", gridTemplateRows: "3.2rem", gridTemplateColumns: _3_fixed_width_rem + " " + one_bosluk_width + "rem "
+                    display: "grid", gridAutoFlow: "column", gridTemplateRows: "3.2rem", gridTemplateColumns: _3_fixed_width_rem + " " + one_bosluk_width + "rem "
+                  }} >
+
+                    {/* _3_fixed_width_rem -- 1 */}
+                    <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%" }}>
+                      <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                        <InfoIcon sx={{}} />
+                      </Grid>
+                    </Grid>
+
+                    {/* _3_fixed_width_rem -- 2 */}
+                    <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center", width: "100%" }}>
+                      <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                        <Typography sx={{}}>
+                          Mahal Tanımı
+                        </Typography>
+                      </Grid>
+                    </Grid>
+
+                    {/* _3_fixed_width_rem -- 3 */}
+                    <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0rem", backgroundColor: "lightgray", width: "100%" }}>
+                      <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                        <Typography sx={{}}>
+                          Birim
+                        </Typography>
+                      </Grid>
+                    </Grid>
+
+
+                    {/* one_bosluk_width */}
+                    <Grid item sx={{ border: "1px solid white", padding: "0.5rem 0rem", backgroundColor: "white", color: "white", width: "100%" }}>
+
+                    </Grid>
+
+                  </Grid>
+
+                </Grid>
+
+
+
+                {/* sadece cOunt tespiti için görünmez bir componenet */}
+                <Box sx={{ display: "none" }}>
+                  {pozCount = pozlar.length}
+                </Box>
+
+
+                {/* poz isimleri */}
+                {/* 2/2 - (poz_width) */}
+                <Grid item sx={{}}>
+                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)" }}>
+
+                    {pozlar.map((onePoz, index) => {
+                      return (
+                        <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
+                          <Grid sx={{ display: "grid", width: "100%" }}>
+                            <Typography sx={{ maxHeight: "2.2rem", overflow: "hidden", fontSize: "0.8rem" }} >
+                              {onePoz.name}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      )
+                    })}
+
+                  </Grid>
+                </Grid>
+
               </Grid>
+
             </Grid>
 
-            <Grid item>
-              Poz Tanımı
-            </Grid>
 
-            <Grid item sx={{ textAlign: "center" }}>
-              Birim
-            </Grid>
+            {/* padding yerine alttaki 1rem dolu alan, yoksa sticky transparan problemi */}
+            <Box sx={{ mt: "3px", backgroundColor: "white" }}>
+              .
+            </Box>
 
           </Grid>
 
 
+          {/* wbs başlığı ve altındaki pozlar */}
           {
             isProject.wbs.filter(item => item.openForPoz === true).map(wbsOne => (
 
-              <Grid
-                key={wbsOne._id}
-                direction="column"
-                container spacing={0}
-                sx={{ mt: "1rem" }}
-              >
+              // wbs başlığını ve altında varsa pozları bir component içine almak için
+              <Grid key={wbsOne._id.toString()} sx={{ display: "grid", pb: "1rem", width: "100%" }}>
 
-                {/* poz için wbs başlıkları */}
-                <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black" }}>
+                <Grid item key={wbsOne._id.toString()}>
 
-                  <Box sx={{ display: "none" }}>
-                    {cOunt = wbsOne.code.split(".").length}
-                  </Box>
+                  {/* Grid - wbs başlığı ve boş poz başlığı uzantısı  */}
+                  <Grid
 
-                  {
-                    wbsOne.code.split(".").map((codePart, index) => {
+                    sx={{
+                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                      width: "100%"
+                    }}
 
-                      // console.log(cOunt)
-                      // console.log(index + 1)
-                      // console.log("---")
+                  >
 
-                      if (index == 0 && cOunt == 1) {
-                        wbsCode = codePart
-                        wbsName = isProject.wbs.find(item => item.code == wbsCode).name
-                      }
+                    {/* 1/2 - (total_fixed_width + one_bosluk_width) - sabit kısım*/}
+                    <Grid sx={{ position: "sticky", left: { xs: 0, md: drawerWidth + "px" } }}>
 
-                      if (index == 0 && cOunt !== 1) {
-                        wbsCode = codePart
-                        wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
-                      }
+                      {/* Grid - wbs başlığı ve varsa altındaki pozlar */}
+                      <Grid sx={{
+                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_fixed_width + "rem " + one_bosluk_width + "rem",
 
-                      if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
-                        wbsCode = wbsCode + "." + codePart
-                        wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
-                      }
+                      }}>
 
-                      if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
-                        wbsCode = wbsCode + "." + codePart
-                        wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
-                      }
+                        {/* 1/2 - total_fixed_width - wbs başlığı */}
+                        <Grid item sx={{ width: "100%", backgroundColor: "#FAEBD7", border: "1px solid black" }}>
 
-                    })
-                  }
+                          {/* sadece cOunt tespiti için görünmez bir componenet */}
+                          <Box sx={{ display: "none" }}>
+                            {cOunt = wbsOne.code.split(".").length}
+                          </Box>
 
-                  <Box sx={{ display: "none" }}>
-                    {cOunt = wbsName.split(">").length}
-                  </Box>
+                          {
+                            wbsOne.code.split(".").map((codePart, index) => {
 
-                  {/* wbs başlığpın yazdığı yer */}
-                  {wbsName.split(">").map((item, index) => (
+                              if (index == 0 && cOunt == 1) {
+                                wbsCode = codePart
+                                wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                              }
 
-                    <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
-                      {item}
-                      {index + 1 !== cOunt &&
-                        <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
-                      }
-                    </Typography>
+                              if (index == 0 && cOunt !== 1) {
+                                wbsCode = codePart
+                                wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
+                              }
 
-                  ))}
+                              if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
+                                wbsCode = wbsCode + "." + codePart
+                                wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
+                              }
+
+                              if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
+                                wbsCode = wbsCode + "." + codePart
+                                wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
+                              }
+
+                            })
+                          }
+
+
+
+                          {/* sadece cOunt tespiti için görünmez bir componenet */}
+                          <Box sx={{ display: "none" }}>
+                            {cOunt = wbsName.split(">").length}
+                          </Box>
+
+                          {/* bu seviyede tek görünür grid item bu --> wbs başlığının yazdığı yer */}
+                          {wbsName.split(">").map((item, index) => (
+
+                            <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
+                              {item}
+                              {index + 1 !== cOunt &&
+                                <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
+                              }
+                            </Typography>
+
+                          ))}
+
+                        </Grid>
+
+
+                        {/* 2/2 - one_bosluk_width - 2rem boşluk*/}
+                        <Grid item sx={{ backgroundColor: "white", color: "white", width: "100%" }}>
+                          .
+                        </Grid>
+
+
+                      </Grid>
+
+                    </Grid>
+
+
+
+                    {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
+                    <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
+                      ee
+                    </Grid>
+
+                  </Grid>
 
                 </Grid>
 
-                <Box sx={{ display: "none" }}>
+                {/* hayalet component - wbs başlığı altındaki pozlar */}
+                < Box sx={{ display: "none" }}>
                   {cOunt = pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString()).length}
                 </Box>
 
                 {
-                  pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((item, index) => {
+                  pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((pozOne, index) => (
 
-                    return (
+                    <Grid item key={pozOne._id.toString()}>
 
-                      <Grid key={index} onClick={() => handleSelectPoz(item)} sx={{
-                        cursor: "pointer",
-                        display: "grid", gridTemplateColumns: gridTemplateColumns_Poz,
-                        "&:hover .hoverTheWbs": {
-                          // display: "inline"
-                          visibility: "visible"
-                        },
-                      }}>
+                      <Grid
+                        sx={{
+                          display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                        }}
+                      >
 
-                        <Grid sx={{ border: "1px solid black", borderTop: "0", borderRight: "0", textAlign: "center" }}>
-                          <Typography>
-                            xx
-                          </Typography>
-                        </Grid>
+                        <Grid item sx={{ position: "sticky", left: { xs: 0, md: "240px" }, width: "100%" }}>
 
-                        <Grid sx={{ border: "1px solid black", borderTop: "0", borderRight: "0", }}>
+                          <Grid key={index} sx={{
+                            cursor: "pointer",
+                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_fixed_width_rem + " " + one_bosluk_width + "rem",
+                            "&:hover .hoverTheWbs": {
+                              // display: "inline"
+                              visibility: "visible"
+                            },
+                          }}>
 
-                          <Grid container >
 
-                            <Grid item>
-                              <Typography sx={{ ml: "0.2rem" }}>
-                                {item.name}
-                              </Typography>
+                            <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0", textAlign: "center" }}>
+                              <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center" }}>
+                                <Typography sx={{ overflow: "hidden" }} >
+                                  xx
+                                </Typography>
+                              </Grid>
                             </Grid>
 
-                            <Grid item className='hoverTheWbs'
-                              sx={{
-                                ml: "0.5rem",
-                                visibility: selectedPoz?._id.toString() === item._id.toString() ? "visible" : "hidden",
-                              }}>
-                              <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                <Grid item >
-                                  <Box sx={{
-                                    backgroundColor: "red",
-                                    borderRadius: "0.5rem",
-                                    height: "0.5rem",
-                                    width: "0.5rem",
-                                  }}>
-                                  </Box>
-                                </Grid>
+
+                            <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0" }}>
+                              <Grid sx={{ height: "100%", display: "grid", justifyContent: "left", alignItems: "center", p: "0.1rem 0.5rem" }}>
+                                <Typography sx={{ overflow: "hidden" }} >
+                                  {pozOne.name}
+                                </Typography>
                               </Grid>
+                            </Grid>
+
+                            <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderTop: "0", textAlign: "center" }}>
+                              <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center" }}>
+                                <Typography sx={{ overflow: "hidden" }} >
+                                  {pozOne.unit}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+
+                            {/* one_bosluk_width --> boşluk*/}
+                            <Grid item sx={{ backgroundColor: "white", color: "white", width: "100%" }}>
+                              .
                             </Grid>
 
                           </Grid>
 
                         </Grid>
 
-                        <Grid sx={{ border: "1px solid black", borderTop: "0", textAlign: "center" }}>
-                          <Typography >
-                            {item.unit}
-                          </Typography>
+                        {/* <Grid item sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", }}> */}
+                        <Grid item sx={{ height: "100%" }}>
+
+                          <Grid sx={{
+                            height: "100%",
+                            display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
+                          }}>
+
+                            {/* hayalet component - sadece cOunt tespiti için görünmez bir componenet */}
+                            <Box sx={{ display: "none" }}>
+                              {pozCount = pozlar.length}
+                            </Box>
+
+                            {pozlar.map((pozOne, index) => (
+                              <Grid item key={index} onClick={() => console.log("deneme")}
+                                sx={{
+                                  border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0",
+                                  // textAlign: "center",
+                                  cursor: "pointer"
+                                }}>
+
+                                <Grid sx={{ height: "100%", display: "grid", justifyContent: "end", alignItems: "center", pr: "0.5rem" }}>
+                                  <Typography sx={{ overflow: "hidden" }} >
+                                    1.00
+                                  </Typography>
+                                </Grid>
+
+
+
+                              </Grid>
+                            ))}
+
+
+                          </Grid>
+
                         </Grid>
 
                       </Grid>
-                    )
 
-                  })
+                    </Grid>
+
+                  ))
                 }
-
-
-                {/* {
-                  pozlar.find(item => item._wbsId.toString() == wbsOne._id.toString()) &&
-                  <Grid item marginBottom={1}>
-                    <Box >
-                      <DataGrid
-                        rows={pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString())}
-                        columns={columns}
-                        getRowId={(row) => row._id.toString()}
-                        hideFooter={true}
-                        density="compact"
-                        initialState={{
-                          // pagination: {
-                          //   paginationModel: {
-                          //     pageSize: 5,
-                          //   },
-                          // },
-                        }}
-                        onCellClick={handleOnCellClick}
-                        onRowClick={(row) => { console.log(row.id) }}
-                        // pageSizeOptions={[5]}
-                        // checkboxSelection
-                        // disableRowSelectionOnClick
-                        sx={{
-                          // '.MuiDataGrid-columnHeader': {
-                          //   backgroundColor: 'lightgray',
-                          //   borderLeft: 1,
-                          // },
-                          // '.MuiDataGrid-columnHeader:last-child': {
-                          //   borderRight: 1,
-                          // },
-                          '.MuiDataGrid-columnHeaders': {
-                            backgroundColor: 'lightgray',
-                            borderRight: 1,
-                            display: "none"
-                          },
-                          // '.MuiDataGrid-columnHeaderTitle': {
-                          //   fontSize: "1rem",
-                          //   fontWeight: "700",
-                          // },
-                          "& .MuiDataGrid-cell": {
-                            borderLeft: 1,
-                            borderLeft: 1,
-                          },
-                          "& .MuiDataGrid-cell:last-child": {
-                            borderRight: 1,
-                          },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                } */}
-
 
               </Grid>
 
@@ -292,8 +416,8 @@ export default function P_Pozlar() {
           }
 
 
-        </Stack>
-      }
+
+        </Stack >}
 
     </Grid >
 

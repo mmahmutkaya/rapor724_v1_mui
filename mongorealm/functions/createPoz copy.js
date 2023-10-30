@@ -1,60 +1,30 @@
-exports = async function (newPoz) {
+exports = async function ({ projectId, wbsId, newPozName, newPozUnit }) {
+
+  // gelen verileri ikiye ayırabiliriz, 1-form verisinden önceki ana veriler  2-form verileri
+
+
+  // 1 de hata varsa hata ile durdurulur
+  // 1 tamam - 2 de hata varsa - form hata objesi gönderilir, formun ilgili alanlarında hata gösterilebilir
+
+  // 2 - yukarıda açıklandı
+
+  if (!projectId) throw new Error("MONGO // createPoz // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
+
+  let _projectId
+  try {
+    if (typeof projectId == "string") {
+      _projectId = new BSON.ObjectId(projectId)
+    } else {
+      _projectId = projectId
+    }
+  } catch (err) {
+    throw new Error("MONGO // createPoz --  " + "MONGO // createPoz -- sorguya gönderilen --projectId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
+  }
+  if (typeof _projectId != "object") throw new Error("MONGO // createPoz --  " + "MONGO // createPoz -- sorguya gönderilen --projectId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
+
 
 
   const errorFormObj = {}
-
-  // form validation - backend
-  // hata varsa "isFormError" true olacak ve form verileri işlemi duracak
-  let isFormError = false
-
-  // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
-  if (typeof newPoz.projectId !== "object") {
-    throw new Error("Poz kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
-  }
-
-  // form alanına uyarı veren hatalar
-
-  if (typeof newPoz.wbsId !== "object") {
-    errorFormObj.newPoz.wbsId = "Zorunlu"
-  }
-
-
-  if (typeof newPoz.pozName !== "string") {
-    errorFormObj.newPoz.pozName = "Zorunlu"
-  }
-
-  if (typeof newPoz.pozName === "string") {
-    if (newPoz.pozName.length === 0) {
-      errorFormObj.newPoz.pozName = "Zorunlu"
-    }
-  }
-
-  if (typeof newPoz.pozName === "string") {
-    let minimumHaneSayisi = 3
-    if (newPoz.pozName.length > 0 && newPoz.pozName.length < minimumHaneSayisi) {
-      errorFormObj.newPoz.pozName =`${minimumHaneSayisi} haneden az olamaz`
-    }
-  }
-
-
-  if (typeof newPoz.pozTipId !== "string") {
-    errorFormObj.newPoz.pozTipId = "Zorunlu"
-  }
-
-  if (typeof newPoz.pozBirimId !== "string") {
-    errorFormObj.newPoz.pozBirimId = "Zorunlu"
-  }
-
-
-  // form alanına uyarı veren hatalar olmuşsa burda durduralım
-  if (isFormError) {
-    console.log("poz oluşturma verilerinde hata olduğu için bu satırın altında durduruldu")
-    return
-  }
-
-  if (Object.keys(errorFormObj).length) return ({ errorFormObj })
-
-  return "ok"
 
 
   !wbsId && !errorFormObj.wbsId ? errorFormObj.wbsId = "Zorunlu" : null
@@ -115,7 +85,7 @@ exports = async function (newPoz) {
     createdAt: currentTime,
     isDeleted: false
   }
-
+  
   const collection_Pozlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("pozlar")
   const result = await collection_Pozlar.insertOne(newPoz)
 

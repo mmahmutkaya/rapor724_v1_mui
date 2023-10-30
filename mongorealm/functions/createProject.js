@@ -14,12 +14,38 @@ exports = async function({name}){
   
   if(name.length < 3) throw new Error("MONGO // createProject // Proje adı çok kısa")
   
+
+  const pozTipleri = [
+    { id: "direktMahalListesi", name: "Mahal Listesi Üzerinden (Direkt)", birimId: "" },
+    { id: "standartMetrajSayfasi", name: "Standart Metraj Sayfası", birimId: "" },
+    { id: "pencere", name: "Pencere", birimId: "ad" },
+    { id: "kapi", name: "Kapı", birimId: "ad" },
+    { id: "insaatDemiri", name: "İnşaat Demiri", birimId: "ton" },
+  ]
+
+  const pozBirimleri = [
+    { id: "mt", name: "mt" },
+    { id: "m2", name: "m2" },
+    { id: "m3", name: "m3" },
+    { id: "kg", name: "kg" },
+    { id: "ton", name: "ton" },
+    { id: "ad", name: "ad" },
+    { id: "sa", name: "sa" },
+    { id: "gun", name: "gün" },
+    { id: "hafta", name: "hafta" },
+    { id: "ay", name: "ay" },
+    { id: "yil", name: "yıl" },
+  ]
+
+
   
   const project = {
     name,
     wbs:[], // henüz herhangi bir başlık yok fakat yok ama bu property şimdi olmazsa ilk wbs kaydında bir hata yaşıyoruz
     members:[_userId],
     membersA:[_userId],
+    pozTipleri,
+    pozBirimleri,
     createdBy:_userId,
     createdAt:currentTime,
     isDeleted:false

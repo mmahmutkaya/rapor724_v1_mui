@@ -7,6 +7,7 @@ import { DialogWindow } from './general/DialogWindow';
 import { useApp } from "../components/useApp";
 import { useQueryClient } from '@tanstack/react-query'
 
+import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -21,7 +22,7 @@ import ClearOutlined from '@mui/icons-material/ClearOutlined';
 
 export default function PozHeader({ setShow }) {
 
-  const queryClient = useQueryClient()
+  const { drawerWidth, topBarHeight } = useContext(StoreContext)
 
   const { isProject, setIsProject } = useContext(StoreContext)
   const { setPozlar } = useContext(StoreContext)
@@ -102,66 +103,74 @@ export default function PozHeader({ setShow }) {
         <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
       }
 
-
-
-      <Grid
-        container
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ padding: "0.5rem 1rem", maxHeight: "5rem" }}
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: "white", color: "black",
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+          mt: topBarHeight,
+          ml: { md: `${drawerWidth}px` }
+        }}
       >
 
-
-
-        {/* sol kısım (başlık) */}
-        <Grid item xs>
-          <Typography
-            onClick={() => handleTry()}
-            // nowrap={true}
-            variant="h6"
-            fontWeight="bold"
-          >
-            {header}
-          </Typography>
-        </Grid>
-
-
-        {/* sağ kısım - (tuşlar)*/}
-        <Grid item xs="auto">
-          <Grid container spacing={1}>
-
-            <Grid item >
-              <IconButton onClick={() => setSelectedPoz()} aria-label="wbsUncliced">
-                <ClearOutlined variant="contained" sx={{
-                  color: selectedPoz ? "red" : "lightgray",
-                }} />
-              </IconButton>
-            </Grid>
-
-
-            <Grid item onClick={() => handlePozDelete(selectedPoz)} sx={{ cursor: "pointer" }}>
-              <IconButton aria-label="addPoz" disabled>
-                <DeleteIcon
-                  // sx={{display: isProject_display}}
-                  variant="contained" sx={{
-                    color: selectedPoz ? "darkred" : "lightgray",
-                  }} />
-              </IconButton>
-            </Grid>
+        <Grid
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ padding: "0.5rem 1rem", maxHeight: "5rem" }}
+        >
 
 
 
-            <Grid item>
-              <IconButton onClick={() => setShow("FormPozCreate")} aria-label="addWbs" disabled={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? true : false}>
-                <AddCircleOutlineIcon variant="contained" color={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? " lightgray" : "success"} />
-              </IconButton>
-            </Grid>
-
+          {/* sol kısım (başlık) */}
+          <Grid item xs>
+            <Typography
+              onClick={() => handleTry()}
+              // nowrap={true}
+              variant="h6"
+              fontWeight="bold"
+            >
+              {header}
+            </Typography>
           </Grid>
+
+
+          {/* sağ kısım - (tuşlar)*/}
+          <Grid item xs="auto">
+            <Grid container spacing={1}>
+
+              <Grid item >
+                <IconButton onClick={() => setSelectedPoz()} aria-label="wbsUncliced">
+                  <ClearOutlined variant="contained" sx={{
+                    color: selectedPoz ? "red" : "lightgray",
+                  }} />
+                </IconButton>
+              </Grid>
+
+
+              <Grid item onClick={() => handlePozDelete(selectedPoz)} sx={{ cursor: "pointer" }}>
+                <IconButton aria-label="addPoz" disabled>
+                  <DeleteIcon
+                    // sx={{display: isProject_display}}
+                    variant="contained" sx={{
+                      color: selectedPoz ? "darkred" : "lightgray",
+                    }} />
+                </IconButton>
+              </Grid>
+
+
+
+              <Grid item>
+                <IconButton onClick={() => setShow("FormPozCreate")} aria-label="addWbs" disabled={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? true : false}>
+                  <AddCircleOutlineIcon variant="contained" color={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? " lightgray" : "success"} />
+                </IconButton>
+              </Grid>
+
+            </Grid>
+          </Grid>
+
         </Grid>
-
-      </Grid>
-
+      </AppBar>
 
     </Paper>
   )
