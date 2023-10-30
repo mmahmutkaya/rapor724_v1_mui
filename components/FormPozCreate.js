@@ -85,75 +85,76 @@ export default function FormPozCreate({ setShow }) {
       console.log("newPoz", newPoz)
 
 
-      // form validation - frontend
-      // hata varsa "isFormError" true olacak ve form verileri işlemi duracak
-      let isFormError = false
+      // // form validation - frontend
+      // // hata varsa "isFormError" true olacak ve form verileri işlemi duracak
+      // let isFormError = false
 
-      // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
-      if (typeof newPoz.projectId !== "object") {
-        setDialogCase("error")
-        setShowDialog("Poz kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
-        console.log("kayıt için gerekli olan 'projectId' verisinde hata olduğu için bu satırın altında durduruldu")
-        return
-      }
+      // // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
+      // if (typeof newPoz.projectId !== "object") {
+      //   setDialogCase("error")
+      //   setShowDialog("Poz kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+      //   console.log("kayıt için gerekli olan 'projectId' verisinde hata olduğu için bu satırın altında durduruldu")
+      //   return
+      // }
 
-      // form alanına uyarı veren hatalar
+      // // form alanına uyarı veren hatalar
 
-      if (typeof newPoz.wbsId !== "object") {
-        setError_for_wbs(true);
-        setErrorText_for_wbs("Zorunlu")
-        isFormError = true
-      }
-
-
-      if (typeof newPoz.pozName !== "string") {
-        setError_for_name(true);
-        setErrorText_for_name("Zorunlu")
-        isFormError = true
-      }
-
-      if (typeof newPoz.pozName === "string") {
-        if (newPoz.pozName.length === 0) {
-          setError_for_name(true);
-          setErrorText_for_name(`Zorunlu`)
-          isFormError = true
-        }
-      }
-
-      if (typeof newPoz.pozName === "string") {
-        let minimumHaneSayisi = 3
-        if (newPoz.pozName.length > 0 && newPoz.pozName.length < minimumHaneSayisi) {
-          setError_for_name(true);
-          setErrorText_for_name(`${minimumHaneSayisi} haneden az olamaz`)
-          isFormError = true
-        }
-      }
+      // if (typeof newPoz.wbsId !== "object") {
+      //   setError_for_wbs(true);
+      //   setErrorText_for_wbs("Zorunlu")
+      //   isFormError = true
+      // }
 
 
-      if (typeof newPoz.pozTipId !== "string") {
-        setError_for_pozTipi(true);
-        setErrorText_for_pozTipi("Zorunlu")
-        isFormError = true
-      }
+      // if (typeof newPoz.pozName !== "string") {
+      //   setError_for_name(true);
+      //   setErrorText_for_name("Zorunlu")
+      //   isFormError = true
+      // }
 
-      if (typeof newPoz.pozBirimId !== "string") {
-        setError_for_birim(true);
-        setErrorText_for_birim("Zorunlu")
-        isFormError = true
-      }
+      // if (typeof newPoz.pozName === "string") {
+      //   if (newPoz.pozName.length === 0) {
+      //     setError_for_name(true);
+      //     setErrorText_for_name(`Zorunlu`)
+      //     isFormError = true
+      //   }
+      // }
+
+      // if (typeof newPoz.pozName === "string") {
+      //   let minimumHaneSayisi = 3
+      //   if (newPoz.pozName.length > 0 && newPoz.pozName.length < minimumHaneSayisi) {
+      //     setError_for_name(true);
+      //     setErrorText_for_name(`${minimumHaneSayisi} haneden az olamaz`)
+      //     isFormError = true
+      //   }
+      // }
 
 
-      // form alanına uyarı veren hatalar olmuşsa burda durduralım
-      if (isFormError) {
-        console.log("poz oluşturma verilerinde hata olduğu için bu satırın altında durduruldu")
-        return
-      }
+      // if (typeof newPoz.pozTipId !== "string") {
+      //   setError_for_pozTipi(true);
+      //   setErrorText_for_pozTipi("Zorunlu")
+      //   isFormError = true
+      // }
+
+      // if (typeof newPoz.pozBirimId !== "string") {
+      //   setError_for_birim(true);
+      //   setErrorText_for_birim("Zorunlu")
+      //   isFormError = true
+      // }
+
+
+      // // form alanına uyarı veren hatalar olmuşsa burda durduralım
+      // if (isFormError) {
+      //   console.log("poz oluşturma verilerinde hata olduğu için bu satırın altında durduruldu")
+      //   return
+      // }
 
 
 
-      return
       // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
       const result = await RealmApp?.currentUser?.callFunction("createPoz", newPoz);
+      console.log("result",result)
+      return
 
 
       // eğer db ye gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
