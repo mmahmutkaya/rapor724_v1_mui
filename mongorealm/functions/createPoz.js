@@ -50,36 +50,6 @@ exports = async function (newPoz) {
 
   return "ok"
 
-
-  // !wbsId && !errorFormObj.wbsId ? errorFormObj.wbsId = "Zorunlu" : null
-
-  // let _wbsId
-  // try {
-  //   if (typeof wbsId == "string") {
-  //     _wbsId = new BSON.ObjectId(wbsId)
-  //   } else {
-  //     _wbsId = wbsId
-  //   }
-  // } catch (err) {
-  //   throw new Error("MONGO // createPoz -- sorguya gönderilen --wbsId--  türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
-  // }
-
-  // if (typeof _wbsId !== "object") throw new Error("MONGO // createPoz -- sorguya gönderilen --wbsId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
-
-  // if (typeof newPozName != "string") errorFormObj.newPozName === null ? errorFormObj.newPozName = "MONGO // createPoz --  newPozName -- sorguya, string formatında gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. " : null
-  // newPozName = await context.functions.execute("functions_deleteLastSpace", newPozName)
-  // // if(!newPozName.length) throw new Error("MONGO // createPoz --  newPozName sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
-  // if (!newPozName.length) !errorFormObj.newPozName ? errorFormObj.newPozName = "MONGO // createPoz --  newPozName -- sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz." : null
-  // if (newPozName.length && newPozName.length < 3) !errorFormObj.newPozName ? errorFormObj.newPozName = "MONGO // createPoz --  newPozName -- 3 haneden az" : null
-
-  // if (typeof newPozUnit != "string") !errorFormObj.newPozUnit ? errorFormObj.newPozUnit = "MONGO // createPoz -- newPozUnit -- sorguya, string formatında gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. " : null
-  // newPozUnit = await context.functions.execute("functions_deleteLastSpace", newPozUnit)
-  // // if(!newPozUnit.length) throw new Error("MONGO // createPoz -- newPozUnit sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
-  // if (!newPozUnit.length) !errorFormObj.newPozUnit ? errorFormObj.newPozUnit = "MONGO // createPoz -- newPozUnit -- sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz." : null
-
-  // if (Object.keys(errorFormObj).length) return ({ errorFormObj })
-
-
   // const user = context.user
   // const _userId = new BSON.ObjectId(user.id)
   // const mailTeyit = user.custom_data.mailTeyit

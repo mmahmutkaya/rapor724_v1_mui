@@ -35,22 +35,7 @@ export default function FormPozCreate({ setShow }) {
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
 
-
-
-  // form validation - çoktan seçmelilerin değerleri hiç kullanılmadığı için sönük
-  const [error_for_wbs, setError_for_wbs] = useState(false)
-  const [errorText_for_wbs, setErrorText_for_wbs] = useState()
-
-  const [error_for_name, setError_for_name] = useState(false)
-  const [errorText_for_name, setErrorText_for_name] = useState()
-
-  const [error_for_pozTipi, setError_for_pozTipi] = useState(false)
-  const [errorText_for_pozTipi, setErrorText_for_pozTipi] = useState()
-
-  const [error_for_birim, setError_for_birim] = useState(false)
-  const [errorText_for_birim, setErrorText_for_birim] = useState()
-
-
+  const [newPozError, setNewPozError] = useState(false)
 
   // form verilerinde kullanmak için oluşturulan useState() verileri
   // form ilk açıldığında önceden belirlenen birşeyin seçilmiş olması için alttaki satırdaki gibi yapılabiliyor
@@ -60,6 +45,7 @@ export default function FormPozCreate({ setShow }) {
   const [pozBirimId, setPozBirimId] = useState();
 
   const RealmApp = useApp();
+  
 
   // poz oluşturma fonksiyonu
   async function handleSubmit(event) {
@@ -71,9 +57,6 @@ export default function FormPozCreate({ setShow }) {
       // formdan gelen text verilerini alma - (çoktan seçmeliler seçildiği anda useState() kısmında güncelleniyor)
       const data = new FormData(event.currentTarget);
       const pozName = deleteLastSpace(data.get('pozName'))
-      // const wbsId = deleteLastSpace(data.get('wbsId'))
-      // const pozTipId = deleteLastSpace(data.get('pozTipId'))
-      // const pozBirimId = deleteLastSpace(data.get('pozBirimId'))
 
       const newPoz = {
         projectId: isProject?._id,
@@ -85,10 +68,9 @@ export default function FormPozCreate({ setShow }) {
       console.log("newPoz", newPoz)
 
 
-      // // form validation - frontend
-      // // hata varsa "isFormError" true olacak ve form verileri işlemi duracak
-      // let isFormError = false
+      ////// form validation - frontend
 
+      // let isFormError = false
       // // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
       // if (typeof newPoz.projectId !== "object") {
       //   setDialogCase("error")
@@ -100,22 +82,19 @@ export default function FormPozCreate({ setShow }) {
       // // form alanına uyarı veren hatalar
 
       // if (typeof newPoz.wbsId !== "object") {
-      //   setError_for_wbs(true);
-      //   setErrorText_for_wbs("Zorunlu")
+      //   setNewPozError(prev => ({ ...prev, wbsId: "Zorunlu" }))
       //   isFormError = true
       // }
 
 
       // if (typeof newPoz.pozName !== "string") {
-      //   setError_for_name(true);
-      //   setErrorText_for_name("Zorunlu")
+      //   setNewPozError(prev => ({ ...prev, pozName: "Zorunlu" }))
       //   isFormError = true
       // }
 
       // if (typeof newPoz.pozName === "string") {
       //   if (newPoz.pozName.length === 0) {
-      //     setError_for_name(true);
-      //     setErrorText_for_name(`Zorunlu`)
+      //     setNewPozError(prev => ({ ...prev, pozName: "Zorunlu" }))
       //     isFormError = true
       //   }
       // }
@@ -123,68 +102,42 @@ export default function FormPozCreate({ setShow }) {
       // if (typeof newPoz.pozName === "string") {
       //   let minimumHaneSayisi = 3
       //   if (newPoz.pozName.length > 0 && newPoz.pozName.length < minimumHaneSayisi) {
-      //     setError_for_name(true);
-      //     setErrorText_for_name(`${minimumHaneSayisi} haneden az olamaz`)
+      //     setNewPozError(prev => ({ ...prev, pozName: `${minimumHaneSayisi} haneden az olamaz` }))
       //     isFormError = true
       //   }
       // }
 
 
       // if (typeof newPoz.pozTipId !== "string") {
-      //   setError_for_pozTipi(true);
-      //   setErrorText_for_pozTipi("Zorunlu")
+      //   setNewPozError(prev => ({ ...prev, pozTipId: "Zorunlu" }))
       //   isFormError = true
       // }
 
       // if (typeof newPoz.pozBirimId !== "string") {
-      //   setError_for_birim(true);
-      //   setErrorText_for_birim("Zorunlu")
+      //   setNewPozError(prev => ({ ...prev, pozBirimId: "Zorunlu" }))
       //   isFormError = true
       // }
 
 
-      // // form alanına uyarı veren hatalar olmuşsa burda durduralım
+      // form alanına uyarı veren hatalar olmuşsa burda durduralım
       // if (isFormError) {
-      //   console.log("poz oluşturma verilerinde hata olduğu için bu satırın altında durduruldu")
+      //   console.log("form verilerinde hata olduğu için durduruldu")
       //   return
-      // }
-
+      // } 
 
 
       // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
       const result = await RealmApp?.currentUser?.callFunction("createPoz", newPoz);
-      console.log("result",result)
-      return
+      console.log("result", result)
 
-
-      // eğer db ye gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
-      // yukarıda da frontend kontrolü yapılmıştı
-      if (result.errorFormObj) {
-
-        const errorFormObj = result.errorFormObj
-
-        console.log("errorFormObj", errorFormObj)
-
-        if (errorFormObj.wbsId) {
-          setError_for_wbs(true);
-          setErrorText_for_wbs(errorFormObj.wbsId)
-          isFormError = true
-        }
-
-        if (errorFormObj.newPozName) {
-          setError_for_name(true);
-          setErrorText_for_name(errorFormObj.newPozName)
-          isFormError = true
-        }
-
-        if (errorFormObj.newPozBirim) {
-          setError_for_birim(true);
-          setErrorText_for_birim(errorFormObj.newPozBirim)
-          isFormError = true
-        }
-
+      // form validation - backend
+      if (result.newPozError) {
+        setNewPozError(result.newPozError)
+        console.log("result.newPozError", result.newPozError)
         return
       }
+      console.log("devam edecek")
+      return
 
       if (!result.newPoz?._id) {
         throw new Error("db den -newPoz- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
@@ -263,10 +216,17 @@ export default function FormPozCreate({ setShow }) {
 
 
             {/* wbs adı seçme - çoktan seçmeli - poz başlığı için*/}
-            <Box onClick={() => setError_for_wbs(false)} sx={{ minWidth: 120, marginBottom: "0rem" }}>
+            <Box
+              onClick={() => setNewPozError(prevData => {
+                const newData = { ...prevData }
+                delete newData["wbsId"]
+                return newData
+              })}
+              sx={{ minWidth: 120, marginBottom: "0rem" }}
+            >
 
               <InputLabel
-                error={error_for_wbs}
+                error={newPozError.wbsId ? true : false}
                 id="select-wbs-label"
               >
                 <Grid container justifyContent="space-between">
@@ -283,7 +243,7 @@ export default function FormPozCreate({ setShow }) {
               </InputLabel>
 
               <Select
-                error={error_for_wbs}
+                error={newPozError.wbsId ? true : false}
                 variant="standard"
                 fullWidth
                 labelId="select-wbs-label"
@@ -355,7 +315,14 @@ export default function FormPozCreate({ setShow }) {
 
             {/* poz isminin yazıldığı alan */}
             {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
-            <Box onClick={() => setError_for_name(false)} sx={{ marginBottom: "2rem" }}>
+            <Box
+              onClick={() => setNewPozError(prevData => {
+                const newData = { ...prevData }
+                delete newData["pozName"]
+                return newData
+              })}
+              sx={{ minWidth: 120, marginBottom: "2rem" }}
+            >
               <TextField
                 sx={{
                   "& input:-webkit-autofill:focus": {
@@ -371,8 +338,8 @@ export default function FormPozCreate({ setShow }) {
                 id="pozName"
                 name="pozName"
                 // autoFocus
-                error={error_for_name}
-                helperText={error_for_name ? errorText_for_name : null}
+                error={newPozError.pozName ? true : false}
+                helperText={newPozError.pozName}
                 // margin="dense"
                 label="Poz Adi"
                 type="text"
@@ -387,10 +354,16 @@ export default function FormPozCreate({ setShow }) {
 
 
             {/* poz Tip seçme - çoktan seçmeli*/}
-            <Box onClick={() => setError_for_pozTipi(false)} sx={{ minWidth: 120, marginBottom: "2rem" }}>
-
+            <Box
+              onClick={() => setNewPozError(prevData => {
+                const newData = { ...prevData }
+                delete newData["pozTipId"]
+                return newData
+              })}
+              sx={{ minWidth: 120, marginBottom: "2rem" }}
+            >
               <InputLabel
-                error={error_for_pozTipi}
+                error={newPozError.pozTipId ? true : false}
                 id="select-pozTip-label"
               >
                 <Grid container justifyContent="space-between">
@@ -399,7 +372,7 @@ export default function FormPozCreate({ setShow }) {
               </InputLabel>
 
               <Select
-                error={error_for_pozTipi}
+                error={newPozError.pozTipId ? true : false}
                 variant="standard"
                 fullWidth
                 labelId="select-pozTip-label"
@@ -429,10 +402,16 @@ export default function FormPozCreate({ setShow }) {
 
 
             {/* poz biriminin seçildiği alan */}
-            <Box onClick={() => setError_for_birim(false)} sx={{ minWidth: 120, marginBottom: "0rem" }}>
-
+            <Box
+              onClick={() => setNewPozError(prevData => {
+                const newData = { ...prevData }
+                delete newData["pozBirimId"]
+                return newData
+              })}
+              sx={{ minWidth: 120, marginBottom: "0rem" }}
+            >
               <InputLabel
-                error={error_for_birim}
+                error={newPozError.pozBirimId ? true : false}
                 id="select-newPozBirim-label"
               >
                 <Grid container justifyContent="space-between">
@@ -441,7 +420,7 @@ export default function FormPozCreate({ setShow }) {
               </InputLabel>
 
               <Select
-                error={error_for_birim}
+                error={newPozError.pozBirimId ? true : false}
                 variant="standard"
                 fullWidth
                 labelId="select-newPozBirim-label"
