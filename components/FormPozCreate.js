@@ -68,10 +68,6 @@ export default function FormPozCreate({ setShow }) {
       }
       console.log("newPoz", newPoz)
 
-      if (newPoz.pozTipId === "insaatDemiri") {
-        newPoz.pozBirimId = "ton"
-      }
-
 
       ////// form validation - frontend
 
@@ -121,6 +117,12 @@ export default function FormPozCreate({ setShow }) {
       if (typeof newPoz.pozBirimId !== "string") {
         setNewPozError(prev => ({ ...prev, pozBirimId: "Zorunlu" }))
         isFormError = true
+      }
+
+
+      // veri düzeltme
+      if (newPoz.pozTipId === "insaatDemiri") {
+        newPoz.pozBirimId = "ton"
       }
 
 
