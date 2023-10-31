@@ -75,12 +75,13 @@ exports = async function (newPoz) {
   // poz create
   const currentTime = new Date()
 
-  let newPoz
+  // let newPoz
   newPoz = {
     _projectId,
     _wbsId,
-    name: newPozName,
-    unit: newPozUnit,
+    name: pozName,
+    tip: pozTipId,
+    birim: pozBirimId,
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false
@@ -93,34 +94,41 @@ exports = async function (newPoz) {
 
   // wbs / poz başlığı "includesPoz:true" key.value değerine sahip değilse gerekli işlemi yapıyoruz
 
-  let newProject = project
+  // let newProject = project
+
+  // if (!theWbs.includesPoz) {
+
+  //   let newWbsArray = project.wbs.map(item => {
+
+  //     if (item._id.toString() === _wbsId.toString()) {
+  //       return { ...item, includesPoz: true }
+  //     } else {
+  //       return item
+  //     }
+
+  //   })
+
+  //   newProject = { ...project, wbs: newWbsArray }
+
+  //   await collection_Projects.updateOne(
+  //     { _id: _projectId, "wbs._id": _wbsId }, // Query for the user object of the logged in user
+  //     { $set: { "wbs.$.includesPoz": true } },
+  //   );
+
+  //   // await collection_Projects.updateOne(
+  //   //   { _id:_projectId }, // Query for the user object of the logged in user
+  //   //   { $set: {"wbs.$[elem].includesPoz":true} },
+  //   //   { arrayFilters: [ { "elem.wbs": _wbsId } ] , upsert:true }
+  //   // );
+
+  // }
+
 
   if (!theWbs.includesPoz) {
-
-    let newWbsArray = project.wbs.map(item => {
-
-      if (item._id.toString() === _wbsId.toString()) {
-        return { ...item, includesPoz: true }
-      } else {
-        return item
-      }
-
-    })
-
-    newProject = { ...project, wbs: newWbsArray }
-
     await collection_Projects.updateOne(
-      { _id: _projectId }, // Query for the user object of the logged in user
-      { $set: { wbs: newWbsArray } },
+      { _id: _projectId, "wbs._id": _wbsId }, // Query for the user object of the logged in user
+      { $set: { "wbs.$.includesPoz": true } },
     );
-
-    // await collection_Projects.updateOne(
-    //   { _id:_projectId }, // Query for the user object of the logged in user
-    //   { $set: {"wbs.$[elem].includesPoz":true} },
-    //   { arrayFilters: [ { "elem.wbs": _wbsId } ] , upsert:true }
-    // );
-
-
   }
 
   return ({ newPoz, newProject })
