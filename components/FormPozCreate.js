@@ -166,8 +166,8 @@ export default function FormPozCreate({ setShow }) {
 
       // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
-        setError_for_name(true);
-        setErrorText_for_name("Bu poz ismi bu projede mevcut")
+        // setError_for_name(true);
+        // setErrorText_for_name("Bu poz ismi bu projede mevcut")
         console.log("Bu poz ismi bu projede mevcut")
         return
       }
