@@ -43,9 +43,10 @@ export default function FormPozCreate({ setShow }) {
   const [wbsId, setWbsId] = useState();
   const [pozTipId, setPozTipId] = useState();
   const [pozBirimId, setPozBirimId] = useState();
+  const [pozBirimDisabled, setPozBirimDisabled] = useState(false);
 
   const RealmApp = useApp();
-  
+
 
   // poz oluşturma fonksiyonu
   async function handleSubmit(event) {
@@ -67,63 +68,67 @@ export default function FormPozCreate({ setShow }) {
       }
       console.log("newPoz", newPoz)
 
+      if (newPoz.pozTipId === "insaatDemiri") {
+        newPoz.pozBirimId = "ton"
+      }
+
 
       ////// form validation - frontend
 
-      // let isFormError = false
-      // // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
-      // if (typeof newPoz.projectId !== "object") {
-      //   setDialogCase("error")
-      //   setShowDialog("Poz kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
-      //   console.log("kayıt için gerekli olan 'projectId' verisinde hata olduğu için bu satırın altında durduruldu")
-      //   return
-      // }
+      let isFormError = false
+      // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
+      if (typeof newPoz.projectId !== "object") {
+        setDialogCase("error")
+        setShowDialog("Poz kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+        console.log("kayıt için gerekli olan 'projectId' verisinde hata olduğu için bu satırın altında durduruldu")
+        return
+      }
 
-      // // form alanına uyarı veren hatalar
+      // form alanına uyarı veren hatalar
 
-      // if (typeof newPoz.wbsId !== "object") {
-      //   setNewPozError(prev => ({ ...prev, wbsId: "Zorunlu" }))
-      //   isFormError = true
-      // }
-
-
-      // if (typeof newPoz.pozName !== "string") {
-      //   setNewPozError(prev => ({ ...prev, pozName: "Zorunlu" }))
-      //   isFormError = true
-      // }
-
-      // if (typeof newPoz.pozName === "string") {
-      //   if (newPoz.pozName.length === 0) {
-      //     setNewPozError(prev => ({ ...prev, pozName: "Zorunlu" }))
-      //     isFormError = true
-      //   }
-      // }
-
-      // if (typeof newPoz.pozName === "string") {
-      //   let minimumHaneSayisi = 3
-      //   if (newPoz.pozName.length > 0 && newPoz.pozName.length < minimumHaneSayisi) {
-      //     setNewPozError(prev => ({ ...prev, pozName: `${minimumHaneSayisi} haneden az olamaz` }))
-      //     isFormError = true
-      //   }
-      // }
+      if (typeof newPoz.wbsId !== "object") {
+        setNewPozError(prev => ({ ...prev, wbsId: "Zorunlu" }))
+        isFormError = true
+      }
 
 
-      // if (typeof newPoz.pozTipId !== "string") {
-      //   setNewPozError(prev => ({ ...prev, pozTipId: "Zorunlu" }))
-      //   isFormError = true
-      // }
+      if (typeof newPoz.pozName !== "string") {
+        setNewPozError(prev => ({ ...prev, pozName: "Zorunlu" }))
+        isFormError = true
+      }
 
-      // if (typeof newPoz.pozBirimId !== "string") {
-      //   setNewPozError(prev => ({ ...prev, pozBirimId: "Zorunlu" }))
-      //   isFormError = true
-      // }
+      if (typeof newPoz.pozName === "string") {
+        if (newPoz.pozName.length === 0) {
+          setNewPozError(prev => ({ ...prev, pozName: "Zorunlu" }))
+          isFormError = true
+        }
+      }
+
+      if (typeof newPoz.pozName === "string") {
+        let minimumHaneSayisi = 3
+        if (newPoz.pozName.length > 0 && newPoz.pozName.length < minimumHaneSayisi) {
+          setNewPozError(prev => ({ ...prev, pozName: `${minimumHaneSayisi} haneden az olamaz` }))
+          isFormError = true
+        }
+      }
+
+
+      if (typeof newPoz.pozTipId !== "string") {
+        setNewPozError(prev => ({ ...prev, pozTipId: "Zorunlu" }))
+        isFormError = true
+      }
+
+      if (typeof newPoz.pozBirimId !== "string") {
+        setNewPozError(prev => ({ ...prev, pozBirimId: "Zorunlu" }))
+        isFormError = true
+      }
 
 
       // form alanına uyarı veren hatalar olmuşsa burda durduralım
-      // if (isFormError) {
-      //   console.log("form verilerinde hata olduğu için durduruldu")
-      //   return
-      // } 
+      if (isFormError) {
+        console.log("form validation - hata - frontend")
+        return
+      }
 
 
       // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
@@ -134,9 +139,10 @@ export default function FormPozCreate({ setShow }) {
       if (result.newPozError) {
         setNewPozError(result.newPozError)
         console.log("result.newPozError", result.newPozError)
+        console.log("form validation - hata - backend")
         return
       }
-      console.log("devam edecek")
+      console.log("form validation - hata yok - backend")
       return
 
       if (!result.newPoz?._id) {
@@ -178,7 +184,21 @@ export default function FormPozCreate({ setShow }) {
   };
 
   const handleChange_pozTipId = (event) => {
-    setPozTipId(isProject.pozTipleri.find(item => item.id === event.target.value).id);
+
+    const pozTipId = event.target.value
+    setPozTipId(isProject.pozTipleri.find(item => item.id === pozTipId).id);
+    setPozBirimDisabled(false)
+
+    if (pozTipId === "insaatDemiri") {
+      setPozBirimId("ton")
+      setPozBirimDisabled(true)
+      setNewPozError(prevData => {
+        const newData = { ...prevData }
+        delete newData["pozBirimId"]
+        return newData
+      })
+    }
+
   };
 
   const handleChange_pozBirimId = (event) => {
@@ -189,7 +209,6 @@ export default function FormPozCreate({ setShow }) {
   // aşağıda kullanılıyor
   let wbsCode
   let wbsName
-  let cOunt
 
   return (
     <div>
@@ -348,11 +367,6 @@ export default function FormPozCreate({ setShow }) {
             </Box>
 
 
-
-
-
-
-
             {/* poz Tip seçme - çoktan seçmeli*/}
             <Box
               onClick={() => setNewPozError(prevData => {
@@ -360,7 +374,7 @@ export default function FormPozCreate({ setShow }) {
                 delete newData["pozTipId"]
                 return newData
               })}
-              sx={{ minWidth: 120, marginBottom: "2rem" }}
+              sx={{ minWidth: 120, marginBottom: "0rem" }}
             >
               <InputLabel
                 error={newPozError.pozTipId ? true : false}
@@ -398,9 +412,6 @@ export default function FormPozCreate({ setShow }) {
 
 
 
-
-
-
             {/* poz biriminin seçildiği alan */}
             <Box
               onClick={() => setNewPozError(prevData => {
@@ -408,7 +419,7 @@ export default function FormPozCreate({ setShow }) {
                 delete newData["pozBirimId"]
                 return newData
               })}
-              sx={{ minWidth: 120, marginBottom: "0rem" }}
+              sx={{ minWidth: 120, marginTop: "2rem" }}
             >
               <InputLabel
                 error={newPozError.pozBirimId ? true : false}
@@ -430,6 +441,7 @@ export default function FormPozCreate({ setShow }) {
                 onChange={handleChange_pozBirimId}
                 required
                 name="pozBirimId"
+                disabled={pozBirimDisabled}
               >
                 {
                   isProject?.pozBirimleri.map((onePozBirim, index) => (

@@ -1,6 +1,5 @@
 exports = async function (newPoz) {
 
-
   const newPozError = {}
 
   // form validation - backend
@@ -45,10 +44,13 @@ exports = async function (newPoz) {
     newPozError.pozBirimId = "Zorunlu"
   }
 
+  if (newPoz.pozTipId === "insaatDemiri") {
+    newPoz.pozBirimId = "ton"
+  }
 
   if (Object.keys(newPozError).length) return ({ newPozError })
 
-  return "ok"
+  return newPoz
 
   // const user = context.user
   // const _userId = new BSON.ObjectId(user.id)
