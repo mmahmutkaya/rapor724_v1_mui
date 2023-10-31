@@ -94,45 +94,31 @@ exports = async function (newPoz) {
 
   // wbs / poz başlığı "includesPoz:true" key.value değerine sahip değilse gerekli işlemi yapıyoruz
 
-  // let newProject = project
 
-  // if (!theWbs.includesPoz) {
-
-  //   let newWbsArray = project.wbs.map(item => {
-
-  //     if (item._id.toString() === _wbsId.toString()) {
-  //       return { ...item, includesPoz: true }
-  //     } else {
-  //       return item
-  //     }
-
-  //   })
-
-  //   newProject = { ...project, wbs: newWbsArray }
-
-  //   await collection_Projects.updateOne(
-  //     { _id: projectId, "wbs._id": _wbsId }, // Query for the user object of the logged in user
-  //     { $set: { "wbs.$.includesPoz": true } },
-  //   );
-
-  //   // await collection_Projects.updateOne(
-  //   //   { _id:projectId }, // Query for the user object of the logged in user
-  //   //   { $set: {"wbs.$[elem].includesPoz":true} },
-  //   //   { arrayFilters: [ { "elem.wbs": _wbsId } ] , upsert:true }
-  //   // );
-
-  // }
-
+  let newProject = project
 
   if (!theWbs.includesPoz) {
+
     await collection_Projects.updateOne(
-      { _id: newPoz._projectId, "wbs._id": newPoz._wbsId }, // Query for the user object of the logged in user
+      { _id: newPoz._projectId, "wbs._id": newPoz._wbsId },
       { $set: { "wbs.$.includesPoz": true } },
     );
+    
+    let newWbsArray = project.wbs.map(oneWbs => {
+
+      if (oneWbs._id.toString() === newPoz._wbsId.toString()) {
+        return { ...oneWbs, includesPoz: true }
+      } else {
+        return oneWbs
+      }
+
+    })
+
+    newProject = { ...project, wbs: newWbsArray }
+
   }
 
-  return ({ newPoz })
-
+  return ({ newPoz, newProject })
 
 };
 
