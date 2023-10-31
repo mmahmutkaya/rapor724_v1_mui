@@ -64,7 +64,7 @@ exports = async function (newPoz) {
 
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
 
-  let project = await collection_Projects.findOne({ _id: projectId, members: _userId, isDeleted: false })
+  let project = await collection_Projects.findOne({ _id: newPoz.projectId, members: _userId, isDeleted: false })
   if (!project) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
   let theWbs = project.wbs.find(item => item._id.toString() === _wbsId.toString())
@@ -77,11 +77,11 @@ exports = async function (newPoz) {
 
   // let newPoz
   newPoz = {
-    projectId,
-    wbsId,
-    name: pozName,
-    tip: pozTipId,
-    birim: pozBirimId,
+    projectId:newPoz.projectId,
+    wbsId:newPoz.wbsId,
+    name: newPoz.pozName,
+    tip: newPoz.pozTipId,
+    birim: newPoz.pozBirimId,
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false
