@@ -77,8 +77,8 @@ exports = async function (newPoz) {
 
   // let newPoz
   newPoz = {
-    projectId:newPoz.projectId,
-    wbsId:newPoz.wbsId,
+    _projectId:newPoz.projectId,
+    _wbsId:newPoz.wbsId,
     name: newPoz.pozName,
     tip: newPoz.pozTipId,
     birim: newPoz.pozBirimId,
