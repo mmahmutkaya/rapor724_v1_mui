@@ -131,7 +131,7 @@ exports = async function (newPoz) {
     );
   }
 
-  return ({ newPoz, newProject })
+  return ({ newPoz })
 
 
 };
