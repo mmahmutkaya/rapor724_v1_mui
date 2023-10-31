@@ -126,7 +126,7 @@ exports = async function (newPoz) {
 
   if (!theWbs.includesPoz) {
     await collection_Projects.updateOne(
-      { _id: _projectId, "wbs._id": _wbsId }, // Query for the user object of the logged in user
+      { _id: projectId, "wbs._id": _wbsId }, // Query for the user object of the logged in user
       { $set: { "wbs.$.includesPoz": true } },
     );
   }
