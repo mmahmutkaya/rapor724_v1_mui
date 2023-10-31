@@ -18,8 +18,6 @@ exports = async function({name}){
   const pozTipleri = [
     { id: "direktMahalListesi", name: "Mahal Listesi Üzerinden (Direkt)", birimId: "" },
     { id: "standartMetrajSayfasi", name: "Standart Metraj Sayfası", birimId: "" },
-    { id: "pencere", name: "Pencere", birimId: "ad" },
-    { id: "kapi", name: "Kapı", birimId: "ad" },
     { id: "insaatDemiri", name: "İnşaat Demiri", birimId: "ton" },
   ]
 
