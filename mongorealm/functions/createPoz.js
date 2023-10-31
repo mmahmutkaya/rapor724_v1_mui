@@ -77,8 +77,8 @@ exports = async function (newPoz) {
 
   // let newPoz
   newPoz = {
-    _projectId:newPoz.projectId,
-    _wbsId:newPoz.wbsId,
+    _projectId: newPoz.projectId,
+    _wbsId: newPoz.wbsId,
     name: newPoz.pozName,
     tip: newPoz.pozTipId,
     birim: newPoz.pozBirimId,
@@ -103,7 +103,7 @@ exports = async function (newPoz) {
       { _id: newPoz._projectId, "wbs._id": newPoz._wbsId },
       { $set: { "wbs.$.includesPoz": true } },
     );
-    
+
     let newWbsArray = project.wbs.map(oneWbs => {
 
       if (oneWbs._id.toString() === newPoz._wbsId.toString()) {

@@ -145,7 +145,6 @@ export default function FormPozCreate({ setShow }) {
         return
       }
       console.log("form validation - hata yok - backend")
-      return
 
       if (!result.newPoz?._id) {
         throw new Error("db den -newPoz- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
@@ -166,7 +165,7 @@ export default function FormPozCreate({ setShow }) {
 
       // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
-        // setError_for_name(true);
+        setNewPozError(prev => ({ ...prev, pozName: "Bu poz ismi kullanılmış" }))
         // setErrorText_for_name("Bu poz ismi bu projede mevcut")
         console.log("Bu poz ismi bu projede mevcut")
         return
