@@ -64,7 +64,7 @@ exports = async function (newPoz) {
 
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
 
-  let project = await collection_Projects.findOne({ _id: _projectId, members: _userId, isDeleted: false })
+  let project = await collection_Projects.findOne({ _id: projectId, members: _userId, isDeleted: false })
   if (!project) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
   let theWbs = project.wbs.find(item => item._id.toString() === _wbsId.toString())
@@ -111,12 +111,12 @@ exports = async function (newPoz) {
   //   newProject = { ...project, wbs: newWbsArray }
 
   //   await collection_Projects.updateOne(
-  //     { _id: _projectId, "wbs._id": _wbsId }, // Query for the user object of the logged in user
+  //     { _id: projectId, "wbs._id": _wbsId }, // Query for the user object of the logged in user
   //     { $set: { "wbs.$.includesPoz": true } },
   //   );
 
   //   // await collection_Projects.updateOne(
-  //   //   { _id:_projectId }, // Query for the user object of the logged in user
+  //   //   { _id:projectId }, // Query for the user object of the logged in user
   //   //   { $set: {"wbs.$[elem].includesPoz":true} },
   //   //   { arrayFilters: [ { "elem.wbs": _wbsId } ] , upsert:true }
   //   // );
