@@ -66,6 +66,12 @@ export default function FormPozCreate({ setShow }) {
         pozTipId,
         pozBirimId,
       }
+
+      // veri düzeltme
+      if (newPoz.pozTipId === "insaatDemiri") {
+        newPoz.pozBirimId = "ton"
+      }
+
       console.log("newPoz", newPoz)
 
 
@@ -120,12 +126,6 @@ export default function FormPozCreate({ setShow }) {
       }
 
 
-      // veri düzeltme
-      if (newPoz.pozTipId === "insaatDemiri") {
-        newPoz.pozBirimId = "ton"
-      }
-
-
       // form alanına uyarı veren hatalar olmuşsa burda durduralım
       if (isFormError) {
         console.log("form validation - hata - frontend")
@@ -166,7 +166,6 @@ export default function FormPozCreate({ setShow }) {
       // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
         setNewPozError(prev => ({ ...prev, pozName: "Bu poz ismi kullanılmış" }))
-        // setErrorText_for_name("Bu poz ismi bu projede mevcut")
         console.log("Bu poz ismi bu projede mevcut")
         return
       }

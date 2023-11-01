@@ -64,7 +64,11 @@ export default function P_Pozlar() {
 
   const one_bosluk_width = 2
 
-  const one_poz_width = 5
+  const one_poz_width = 20
+
+  const sutunlar = [
+    { name: "Metraj Tipi" }
+  ]
 
 
   return (
@@ -109,7 +113,7 @@ export default function P_Pozlar() {
             <Grid item sx={{}}>
               {/* Grid - En üst başlık */}
               <Grid sx={{
-                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
               }}>
 
                 {/* 1/2 - (total_fixed_width + one_bosluk_width)*/}
@@ -166,25 +170,49 @@ export default function P_Pozlar() {
                 </Box>
 
 
-                {/* poz isimleri */}
+                {/* yatayda uzayan en üst başlıklar - poz isimleri */}
                 {/* 2/2 - (poz_width) */}
                 <Grid item sx={{}}>
-                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)" }}>
+                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_poz_width + "rem)" }}>
 
-                    {pozlar.map((onePoz, index) => {
+                    {sutunlar.map((oneSutun, index) => {
                       return (
-                        <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == pozCount ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
-                          <Grid sx={{ display: "grid", width: "100%" }}>
-                            <Typography sx={{ maxHeight: "2.2rem", overflow: "hidden", fontSize: "0.8rem" }} >
-                              {onePoz.name}
+                        <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == sutunlar.length ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
+
+                          <Grid sx={{ display: "grid", width: "100%", height: "100%", justifyContent: "center", alignItems: "center" }}>
+                            <Typography sx={{}}>
+                              {oneSutun.name}
                             </Typography>
                           </Grid>
+
+                          {/* <Grid sx={{ display: "grid", width: "100%" }}>
+                            <Typography sx={{ maxHeight: "2.2rem", overflow: "hidden", fontSize: "0.8rem" }} >
+                              {oneSutun.name}
+                            </Typography>
+                          </Grid> */}
+
                         </Grid>
                       )
                     })}
 
                   </Grid>
                 </Grid>
+
+                {/* yatayda uzayan başlıklar - sutunlar */}
+                {/* 2/2 - (poz_width) */}
+                {/* <Grid item sx={{}}>
+                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_poz_width + "rem)" }}>
+
+                    <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", width: "100%", height: "100%" }}>
+                      <Grid sx={{ display: "grid", width: "100%" }}>
+                        <Typography sx={{ maxHeight: "2.2rem", overflow: "hidden", fontSize: "0.8rem" }} >
+                          {"sutunlar"}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+
+                  </Grid>
+                </Grid> */}
 
               </Grid>
 
@@ -212,7 +240,7 @@ export default function P_Pozlar() {
                   <Grid
 
                     sx={{
-                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
                       width: "100%"
                     }}
 
@@ -224,7 +252,6 @@ export default function P_Pozlar() {
                       {/* Grid - wbs başlığı ve varsa altındaki pozlar */}
                       <Grid sx={{
                         display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_fixed_width + "rem " + one_bosluk_width + "rem",
-
                       }}>
 
                         {/* 1/2 - total_fixed_width - wbs başlığı */}
@@ -262,7 +289,6 @@ export default function P_Pozlar() {
                           }
 
 
-
                           {/* sadece cOunt tespiti için görünmez bir componenet */}
                           <Box sx={{ display: "none" }}>
                             {cOunt = wbsName.split(">").length}
@@ -283,6 +309,7 @@ export default function P_Pozlar() {
                         </Grid>
 
 
+                        {/* yatayda uzayan poz başlık satırları */}
                         {/* 2/2 - one_bosluk_width - 2rem boşluk*/}
                         <Grid item sx={{ backgroundColor: "white", color: "white", width: "100%" }}>
                           .
@@ -297,22 +324,22 @@ export default function P_Pozlar() {
 
                     {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
                     <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
-                      ee
+                      .
                     </Grid>
 
                   </Grid>
 
                 </Grid>
 
-                {/* hayalet component - wbs başlığı altındaki pozlar */}
+                {/* hayalet component - wbs başlığı altındaki pozların sayısını tespit etmek için */}
                 < Box sx={{ display: "none" }}>
                   {cOunt = pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString()).length}
                 </Box>
 
                 {
-                  pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((pozOne, index) => (
+                  pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((onePoz, index) => (
 
-                    <Grid item key={pozOne._id.toString()}>
+                    <Grid item key={onePoz._id.toString()}>
 
                       <Grid
                         sx={{
@@ -344,7 +371,7 @@ export default function P_Pozlar() {
                             <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0" }}>
                               <Grid sx={{ height: "100%", display: "grid", justifyContent: "left", alignItems: "center", p: "0.1rem 0.5rem" }}>
                                 <Typography sx={{ overflow: "hidden" }} >
-                                  {pozOne.name}
+                                  {onePoz.name}
                                 </Typography>
                               </Grid>
                             </Grid>
@@ -352,7 +379,7 @@ export default function P_Pozlar() {
                             <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderTop: "0", textAlign: "center" }}>
                               <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center" }}>
                                 <Typography sx={{ overflow: "hidden" }} >
-                                  {pozOne.unit}
+                                  {onePoz.birim}
                                 </Typography>
                               </Grid>
                             </Grid>
@@ -366,20 +393,49 @@ export default function P_Pozlar() {
 
                         </Grid>
 
-                        {/* <Grid item sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", }}> */}
+                        {/* yatayda uzayan poz satırları */}
                         <Grid item sx={{ height: "100%" }}>
+
 
                           <Grid sx={{
                             height: "100%",
-                            display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
+                            display: "grid", gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_poz_width + "rem)",
                           }}>
 
-                            {/* hayalet component - sadece cOunt tespiti için görünmez bir componenet */}
                             <Box sx={{ display: "none" }}>
                               {pozCount = pozlar.length}
                             </Box>
 
-                            {pozlar.map((pozOne, index) => (
+                            <Grid item onClick={() => console.log("deneme")}
+                              sx={{
+                                border: "1px solid black", borderTop: "0",
+                                cursor: "pointer"
+                              }}>
+
+                              <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center", pr: "0.5rem" }}>
+                                <Typography sx={{ overflow: "hidden" }} >
+                                  {isProject.pozTipleri.find(oneTip => oneTip.id === onePoz.tip).name}
+                                </Typography>
+                              </Grid>
+
+                            </Grid>
+
+
+                          </Grid>
+
+
+                          {/* yatayda uzayan poz satırları */}
+                          {/* <Grid sx={{
+                            height: "100%",
+                            display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
+                          }}>
+
+                            hayalet component - sadece cOunt tespiti için görünmez bir componenet
+                            <Box sx={{ display: "none" }}>
+                              {pozCount = pozlar.length}
+                            </Box>
+
+                            {pozlar.map((onePoz, index) => (
                               <Grid item key={index} onClick={() => console.log("deneme")}
                                 sx={{
                                   border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0",
@@ -393,13 +449,11 @@ export default function P_Pozlar() {
                                   </Typography>
                                 </Grid>
 
-
-
                               </Grid>
                             ))}
 
 
-                          </Grid>
+                          </Grid> */}
 
                         </Grid>
 

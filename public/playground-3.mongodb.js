@@ -27,6 +27,7 @@ db.getCollection('projects').updateMany(
         { id: "kg", name: "kg" },
         { id: "ton", name: "ton" },
         { id: "ad", name: "ad" },
+        { id: "set", name: "set" },
         { id: "sa", name: "sa" },
         { id: "gun", name: "gün" },
         { id: "hafta", name: "hafta" },
