@@ -34,7 +34,10 @@ export default function PozHeader({ setShow }) {
   const [dialogCase, setDialogCase] = useState("")
 
 
-  async function handlePozDelete(poz) {
+  async function handlePozDelete() {
+
+    console.log(selectedPoz.name)
+    return
 
     // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
     if (!selectedPoz) {
