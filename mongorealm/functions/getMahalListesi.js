@@ -1,6 +1,6 @@
 exports = async function ({ projectId }) {
   
-  throw new Error("MONGO // getProjectPozlar -->  \"projectId\" sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  throw new Error('MONGO // getProjectPozlar -->  \"projectId" sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ')
 
 
   const user = context.user
