@@ -476,7 +476,7 @@ export default function FormPozCreate({ setShow }) {
           </DialogContent>
 
           <DialogActions sx={{ padding: "1.5rem" }}>
-            <Button onClick={() => setShow("PMain")}>İptal</Button>
+            <Button onClick={() => setShow("Main")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>
 

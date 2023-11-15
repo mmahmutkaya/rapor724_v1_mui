@@ -1,7 +1,6 @@
 import { useApp } from "./useApp.js";
 import { useState, useContext } from 'react';
 import { StoreContext } from './store.js'
-import { useQueryClient } from '@tanstack/react-query'
 import deleteLastSpace from '../functions/deleteLastSpace.js';
 import { DialogWindow } from './general/DialogWindow';
 
@@ -18,11 +17,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import MenuItem from '@mui/material/MenuItem';
-import DialogTitle from '@mui/material/DialogTitle';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Typography } from '@mui/material';
 
 
 // export default function FormMahalCreate({ setShow, isProject, refetch_mahaller }) {
@@ -41,8 +36,6 @@ export default function FormMahalCreate({ setShow }) {
   // form ilk açıldığında önceden belirlenen birşeyin seçilmiş olması için alttaki satırdaki gibi yapılabiliyor
   // const [mahalTipi, setMahalTipi] = useState(isProject ? isProject.mahalTipleri.find(item => item.id === "direktMahalListesi") : "");
   const [lbsId, setLbsId] = useState();
-  const [mahalTipId, setMahalTipId] = useState();
-  const [mahalBirimId, setMahalBirimId] = useState();
   const [mahalBirimDisabled, setMahalBirimDisabled] = useState(false);
 
   const RealmApp = useApp();
@@ -63,17 +56,10 @@ export default function FormMahalCreate({ setShow }) {
         projectId: isProject?._id,
         lbsId,
         mahalName,
-        mahalTipId,
-        mahalBirimId,
       }
 
       // veri düzeltme
-      if (newMahal.mahalTipId === "insaatDemiri") {
-        newMahal.mahalBirimId = "ton"
-      }
-
       console.log("newMahal", newMahal)
-
 
       ////// form validation - frontend
 
@@ -112,17 +98,6 @@ export default function FormMahalCreate({ setShow }) {
           setNewMahalError(prev => ({ ...prev, mahalName: `${minimumHaneSayisi} haneden az olamaz` }))
           isFormError = true
         }
-      }
-
-
-      if (typeof newMahal.mahalTipId !== "string") {
-        setNewMahalError(prev => ({ ...prev, mahalTipId: "Zorunlu" }))
-        isFormError = true
-      }
-
-      if (typeof newMahal.mahalBirimId !== "string") {
-        setNewMahalError(prev => ({ ...prev, mahalBirimId: "Zorunlu" }))
-        isFormError = true
       }
 
 
@@ -181,28 +156,6 @@ export default function FormMahalCreate({ setShow }) {
   // form verilerini kullanıcıdan alıp react hafızasına yüklemek - onChange - sadece seçmeliler - yazma gibi şeyler formun submit olduğu anda yakalanıyor
   const handleChange_lbs = (event) => {
     setLbsId(isProject.lbs.find(item => item._id.toString() === event.target.value.toString())._id);
-  };
-
-  const handleChange_mahalTipId = (event) => {
-
-    const mahalTipId = event.target.value
-    setMahalTipId(isProject.mahalTipleri.find(item => item.id === mahalTipId).id);
-    setMahalBirimDisabled(false)
-
-    if (mahalTipId === "insaatDemiri") {
-      setMahalBirimId("ton")
-      setMahalBirimDisabled(true)
-      setNewMahalError(prevData => {
-        const newData = { ...prevData }
-        delete newData["mahalBirimId"]
-        return newData
-      })
-    }
-
-  };
-
-  const handleChange_mahalBirimId = (event) => {
-    setMahalBirimId(isProject.mahalBirimleri.find(item => item.id === event.target.value).id);
   };
 
 
@@ -387,7 +340,7 @@ export default function FormMahalCreate({ setShow }) {
           </DialogContent>
 
           <DialogActions sx={{ padding: "1.5rem" }}>
-            <Button onClick={() => setShow("PMain")}>İptal</Button>
+            <Button onClick={() => setShow("Main")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>
 
