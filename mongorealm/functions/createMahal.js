@@ -6,6 +6,8 @@ exports = async function (newMahal) {
     newMahal.mahalBirimId = "ton"
   }
 
+  
+
 
   const newMahalError = {}
 
