@@ -2,11 +2,6 @@ exports = async function (newMahal) {
 
 
   // veri düzeltme
-  if (newMahal.mahalTipId === "insaatDemiri") {
-    newMahal.mahalBirimId = "ton"
-  }
-
-  
 
 
   const newMahalError = {}
@@ -45,14 +40,6 @@ exports = async function (newMahal) {
   }
 
 
-  if (typeof newMahal.mahalTipId !== "string") {
-    newMahalError.mahalTipId = "Zorunlu"
-  }
-
-  if (typeof newMahal.mahalBirimId !== "string") {
-    newMahalError.mahalBirimId = "Zorunlu"
-  }
-
   // verilerde hata varsa
   if (Object.keys(newMahalError).length) return ({ newMahalError })
 
@@ -82,8 +69,6 @@ exports = async function (newMahal) {
     _projectId: newMahal.projectId,
     _lbsId: newMahal.lbsId,
     name: newMahal.mahalName,
-    tip: newMahal.mahalTipId,
-    birim: newMahal.mahalBirimId,
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false
