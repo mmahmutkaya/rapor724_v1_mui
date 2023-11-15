@@ -34,6 +34,7 @@ export default function P_Mahaller() {
 
 
   const mahaller_fecth = async () => {
+    console.log('Realm callFunction "getProjectMahaller" from Page "mahaller"')
     if (!mahaller) {
       const result = await RealmApp?.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id }));
       console.log("result",result)
