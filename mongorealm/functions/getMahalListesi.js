@@ -1,8 +1,5 @@
 exports = async function ({ projectId }) {
   
-  throw new Error('MONGO // getMahalListesi //  \"projectId" sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ')
-
-
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
   const mailTeyit = user.custom_data.mailTeyit
