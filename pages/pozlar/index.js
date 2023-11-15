@@ -229,234 +229,251 @@ export default function P_Pozlar() {
 
           {/* wbs başlığı ve altındaki pozlar */}
           {
-            isProject.wbs.filter(item => item.openForPoz === true).map(wbsOne => (
+            isProject.wbs
+              .filter(item => item.openForPoz === true)
+              .sort(function (a, b) {
+                var nums1 = a.code.split(".");
+                var nums2 = b.code.split(".");
 
-              // wbs başlığını ve altında varsa pozları bir component içine almak için
-              <Grid key={wbsOne._id.toString()} sx={{ display: "grid", pb: "1rem" }}>
+                for (var i = 0; i < nums1.length; i++) {
+                  if (nums2[i]) { // assuming 5..2 is invalid
+                    if (nums1[i] !== nums2[i]) {
+                      return nums1[i] - nums2[i];
+                    } // else continue
+                  } else {
+                    return 1; // no second number in b
+                  }
+                }
+                return -1; // was missing case b.len > a.len
+              })
+              .map(wbsOne => (
 
-                <Grid item key={wbsOne._id.toString()}>
+                // wbs başlığını ve altında varsa pozları bir component içine almak için
+                <Grid key={wbsOne._id.toString()} sx={{ display: "grid", pb: "1rem" }}>
 
-                  {/* Grid - wbs başlığı ve boş poz başlığı uzantısı  */}
-                  <Grid
+                  <Grid item key={wbsOne._id.toString()}>
 
-                    sx={{
-                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
-                    }}
+                    {/* Grid - wbs başlığı ve boş poz başlığı uzantısı  */}
+                    <Grid
 
-                  >
+                      sx={{
+                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
+                      }}
 
-                    {/* 1/2 - (total_fixed_width + one_bosluk_width) - sabit kısım*/}
-                    <Grid sx={{ position: "sticky", left: { xs: 0, md: drawerWidth + "px" } }}>
+                    >
 
-                      {/* Grid - wbs başlığı ve varsa altındaki pozlar */}
-                      <Grid sx={{
-                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_fixed_width + "rem " + one_bosluk_width + "rem",
-                      }}>
+                      {/* 1/2 - (total_fixed_width + one_bosluk_width) - sabit kısım*/}
+                      <Grid sx={{ position: "sticky", left: { xs: 0, md: drawerWidth + "px" } }}>
 
-                        {/* 1/2 - total_fixed_width - wbs başlığı */}
-                        <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black" }}>
+                        {/* Grid - wbs başlığı ve varsa altındaki pozlar */}
+                        <Grid sx={{
+                          display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_fixed_width + "rem " + one_bosluk_width + "rem",
+                        }}>
 
-                          {/* sadece cOunt tespiti için görünmez bir componenet */}
-                          <Box sx={{ display: "none" }}>
-                            {cOunt = wbsOne.code.split(".").length}
-                          </Box>
+                          {/* 1/2 - total_fixed_width - wbs başlığı */}
+                          <Grid item sx={{ backgroundColor: "#FAEBD7", border: "1px solid black" }}>
 
-                          {
-                            wbsOne.code.split(".").map((codePart, index) => {
+                            {/* sadece cOunt tespiti için görünmez bir componenet */}
+                            <Box sx={{ display: "none" }}>
+                              {cOunt = wbsOne.code.split(".").length}
+                            </Box>
 
-                              if (index == 0 && cOunt == 1) {
-                                wbsCode = codePart
-                                wbsName = isProject.wbs.find(item => item.code == wbsCode).name
-                              }
+                            {
+                              wbsOne.code.split(".").map((codePart, index) => {
 
-                              if (index == 0 && cOunt !== 1) {
-                                wbsCode = codePart
-                                wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
-                              }
+                                if (index == 0 && cOunt == 1) {
+                                  wbsCode = codePart
+                                  wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                                }
 
-                              if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
-                                wbsCode = wbsCode + "." + codePart
-                                wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
-                              }
+                                if (index == 0 && cOunt !== 1) {
+                                  wbsCode = codePart
+                                  wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
+                                }
 
-                              if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
-                                wbsCode = wbsCode + "." + codePart
-                                wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
-                              }
+                                if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
+                                  wbsCode = wbsCode + "." + codePart
+                                  wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
+                                }
 
-                            })
-                          }
+                                if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
+                                  wbsCode = wbsCode + "." + codePart
+                                  wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
+                                }
+
+                              })
+                            }
 
 
-                          {/* sadece cOunt tespiti için görünmez bir componenet */}
-                          <Box sx={{ display: "none" }}>
-                            {cOunt = wbsName.split(">").length}
-                          </Box>
+                            {/* sadece cOunt tespiti için görünmez bir componenet */}
+                            <Box sx={{ display: "none" }}>
+                              {cOunt = wbsName.split(">").length}
+                            </Box>
 
-                          {/* bu seviyede tek görünür grid item bu --> wbs başlığının yazdığı yer */}
-                          {wbsName.split(">").map((item, index) => (
+                            {/* bu seviyede tek görünür grid item bu --> wbs başlığının yazdığı yer */}
+                            {wbsName.split(">").map((item, index) => (
 
-                            <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
-                              {item}
-                              {index + 1 !== cOunt &&
-                                <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
-                              }
-                            </Typography>
+                              <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
+                                {item}
+                                {index + 1 !== cOunt &&
+                                  <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
+                                }
+                              </Typography>
 
-                          ))}
+                            ))}
+
+                          </Grid>
+
+
+                          {/* yatayda uzayan poz başlık satırları */}
+                          {/* 2/2 - one_bosluk_width - 2rem boşluk*/}
+                          <Grid item sx={{ backgroundColor: "white", color: "white" }}>
+                            .
+                          </Grid>
+
 
                         </Grid>
 
-
-                        {/* yatayda uzayan poz başlık satırları */}
-                        {/* 2/2 - one_bosluk_width - 2rem boşluk*/}
-                        <Grid item sx={{ backgroundColor: "white", color: "white" }}>
-                          .
-                        </Grid>
+                      </Grid>
 
 
+
+                      {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
+                      <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
+                        .
                       </Grid>
 
                     </Grid>
 
-
-
-                    {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
-                    <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
-                      .
-                    </Grid>
-
                   </Grid>
 
-                </Grid>
-
-                {/* hayalet component - wbs başlığı altındaki pozların sayısını tespit etmek için */}
-                {/* < Box sx={{ display: "none" }}>
+                  {/* hayalet component - wbs başlığı altındaki pozların sayısını tespit etmek için */}
+                  {/* < Box sx={{ display: "none" }}>
                   {cOunt = pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString()).length}
                 </Box> */}
 
-                {
-                  pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((onePoz, index) => (
+                  {
+                    pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((onePoz, index) => (
 
-                    <Grid item key={onePoz._id.toString()}>
+                      <Grid item key={onePoz._id.toString()}>
 
-                      <Grid
-                        sx={{
-                          display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
-                        }}
-                      >
+                        <Grid
+                          sx={{
+                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
+                          }}
+                        >
 
-                        <Grid item sx={{ position: "sticky", left: { xs: 0, md: "240px" } }}>
+                          <Grid item sx={{ position: "sticky", left: { xs: 0, md: "240px" } }}>
 
-                          <Grid
-                            key={index}
-                            onClick={() => handleSelectPoz(onePoz)}
-                            sx={{
-                              cursor: "pointer",
-                              display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_fixed_width_rem + " " + one_bosluk_width + "rem",
-                              "&:hover .hoverTheWbs": {
-                                // display: "inline"
-                                visibility: "visible"
-                              },
-                            }}>
-
-
-                            <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0", textAlign: "center" }}>
-                              <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center" }}>
-                                <Typography sx={{ overflow: "hidden" }} >
-                                  xx
-                                </Typography>
-                              </Grid>
-                            </Grid>
+                            <Grid
+                              key={index}
+                              onClick={() => handleSelectPoz(onePoz)}
+                              sx={{
+                                cursor: "pointer",
+                                display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_fixed_width_rem + " " + one_bosluk_width + "rem",
+                                "&:hover .hoverTheWbs": {
+                                  // display: "inline"
+                                  visibility: "visible"
+                                },
+                              }}>
 
 
-                            <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0" }}>
-
-                              <Grid sx={{ display: "grid", gridTemplateColumns: "1fr 2rem" }}>
-
-                                <Grid item>
-                                  <Grid sx={{ height: "100%", display: "grid", justifyContent: "left", alignItems: "center", p: "0.1rem 0.5rem" }}>
-                                    <Typography sx={{ overflow: "hidden" }} >
-                                      {onePoz.name}
-                                    </Typography>
-                                  </Grid>
+                              <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0", textAlign: "center" }}>
+                                <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center" }}>
+                                  <Typography sx={{ overflow: "hidden" }} >
+                                    xx
+                                  </Typography>
                                 </Grid>
+                              </Grid>
 
-                                <Grid item className='hoverTheWbs'
-                                  sx={{
-                                    ml: "0.5rem",
-                                    visibility: selectedPoz?._id.toString() === onePoz._id.toString() ? "visible" : "hidden",
-                                  }}>
-                                  <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-                                    <Grid item >
-                                      <Box sx={{
-                                        backgroundColor: "red",
-                                        borderRadius: "0.5rem",
-                                        height: "0.5rem",
-                                        width: "0.5rem",
-                                      }}>
-                                      </Box>
+
+                              <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0" }}>
+
+                                <Grid sx={{ display: "grid", gridTemplateColumns: "1fr 2rem" }}>
+
+                                  <Grid item>
+                                    <Grid sx={{ height: "100%", display: "grid", justifyContent: "left", alignItems: "center", p: "0.1rem 0.5rem" }}>
+                                      <Typography sx={{ overflow: "hidden" }} >
+                                        {onePoz.name}
+                                      </Typography>
                                     </Grid>
                                   </Grid>
 
+                                  <Grid item className='hoverTheWbs'
+                                    sx={{
+                                      ml: "0.5rem",
+                                      visibility: selectedPoz?._id.toString() === onePoz._id.toString() ? "visible" : "hidden",
+                                    }}>
+                                    <Grid container sx={{ alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                                      <Grid item >
+                                        <Box sx={{
+                                          backgroundColor: "red",
+                                          borderRadius: "0.5rem",
+                                          height: "0.5rem",
+                                          width: "0.5rem",
+                                        }}>
+                                        </Box>
+                                      </Grid>
+                                    </Grid>
+
+                                  </Grid>
+
+
                                 </Grid>
 
 
                               </Grid>
 
-
-                            </Grid>
-
-                            <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderTop: "0", textAlign: "center" }}>
-                              <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center" }}>
-                                <Typography sx={{ overflow: "hidden" }} >
-                                  {onePoz.birim}
-                                </Typography>
+                              <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderTop: "0", textAlign: "center" }}>
+                                <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center" }}>
+                                  <Typography sx={{ overflow: "hidden" }} >
+                                    {onePoz.birim}
+                                  </Typography>
+                                </Grid>
                               </Grid>
-                            </Grid>
 
-                            {/* one_bosluk_width --> boşluk*/}
-                            <Grid item sx={{ backgroundColor: "white", color: "white" }}>
-                              .
+                              {/* one_bosluk_width --> boşluk*/}
+                              <Grid item sx={{ backgroundColor: "white", color: "white" }}>
+                                .
+                              </Grid>
+
                             </Grid>
 
                           </Grid>
 
-                        </Grid>
-
-                        {/* yatayda uzayan poz satırları */}
-                        <Grid item sx={{ height: "100%" }}>
+                          {/* yatayda uzayan poz satırları */}
+                          <Grid item sx={{ height: "100%" }}>
 
 
-                          <Grid sx={{
-                            height: "100%",
-                            display: "grid", gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_poz_width + "rem)",
-                          }}>
+                            <Grid sx={{
+                              height: "100%",
+                              display: "grid", gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_poz_width + "rem)",
+                            }}>
 
-                            {/* <Box sx={{ display: "none" }}>
+                              {/* <Box sx={{ display: "none" }}>
                               {pozCount = pozlar.length}
                             </Box> */}
 
-                            <Grid item onClick={() => console.log("deneme")}
-                              sx={{
-                                border: "1px solid black", borderTop: "0",
-                                cursor: "pointer"
-                              }}>
+                              <Grid item onClick={() => console.log("deneme")}
+                                sx={{
+                                  border: "1px solid black", borderTop: "0",
+                                  cursor: "pointer"
+                                }}>
 
-                              <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center", pr: "0.5rem" }}>
-                                <Typography sx={{ overflow: "hidden" }} >
-                                  {isProject.pozTipleri.find(oneTip => oneTip.id === onePoz.tip).name}
-                                </Typography>
+                                <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center", pr: "0.5rem" }}>
+                                  <Typography sx={{ overflow: "hidden" }} >
+                                    {isProject.pozTipleri.find(oneTip => oneTip.id === onePoz.tip).name}
+                                  </Typography>
+                                </Grid>
+
                               </Grid>
+
 
                             </Grid>
 
 
-                          </Grid>
-
-
-                          {/* yatayda uzayan poz satırları */}
-                          {/* <Grid sx={{
+                            {/* yatayda uzayan poz satırları */}
+                            {/* <Grid sx={{
                             height: "100%",
                             display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
                           }}>
@@ -486,18 +503,18 @@ export default function P_Pozlar() {
 
                           </Grid> */}
 
+                          </Grid>
+
                         </Grid>
 
                       </Grid>
 
-                    </Grid>
+                    ))
+                  }
 
-                  ))
-                }
+                </Grid>
 
-              </Grid>
-
-            ))
+              ))
           }
 
 

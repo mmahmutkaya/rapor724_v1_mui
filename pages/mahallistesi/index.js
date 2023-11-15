@@ -244,157 +244,174 @@ export default function P_Mahallistesi() {
 
           {/* lbs başlığı ve altındaki mahaller */}
           {
-            isProject.lbs.filter(item => item.openForMahal === true).map(lbsOne => (
+            isProject.lbs
+              .filter(item => item.openForMahal === true)
+              .sort(function (a, b) {
+                var nums1 = a.code.split(".");
+                var nums2 = b.code.split(".");
 
-              // lbs başlığını ve altında varsa mahalleri bir component içine almak için
-              <Grid key={lbsOne._id.toString()} sx={{ display: "grid", pb: "1rem", width: "100%" }}>
+                for (var i = 0; i < nums1.length; i++) {
+                  if (nums2[i]) { // assuming 5..2 is invalid
+                    if (nums1[i] !== nums2[i]) {
+                      return nums1[i] - nums2[i];
+                    } // else continue
+                  } else {
+                    return 1; // no second number in b
+                  }
+                }
+                return -1; // was missing case b.len > a.len
+              })
+              .map(lbsOne => (
 
-                <Grid item key={lbsOne._id.toString()}>
+                // lbs başlığını ve altında varsa mahalleri bir component içine almak için
+                <Grid key={lbsOne._id.toString()} sx={{ display: "grid", pb: "1rem", width: "100%" }}>
 
-                  {/* Grid - lbs başlığı ve boş mahal başlığı uzantısı  */}
-                  <Grid
+                  <Grid item key={lbsOne._id.toString()}>
 
-                    sx={{
-                      display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
-                      width: "100%"
-                    }}
+                    {/* Grid - lbs başlığı ve boş mahal başlığı uzantısı  */}
+                    <Grid
 
-                  >
+                      sx={{
+                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                        width: "100%"
+                      }}
 
-                    {/* 1/2 - (total_mahal_width + one_bosluk_width) - sabit kısım*/}
-                    <Grid sx={{ position: "sticky", left: { xs: 0, md: drawerWidth + "px" } }}>
+                    >
 
-                      {/* Grid - lbs başlığı ve varsa altındaki mahaller */}
-                      <Grid sx={{
-                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_mahal_width + "rem " + one_bosluk_width + "rem",
+                      {/* 1/2 - (total_mahal_width + one_bosluk_width) - sabit kısım*/}
+                      <Grid sx={{ position: "sticky", left: { xs: 0, md: drawerWidth + "px" } }}>
 
-                      }}>
+                        {/* Grid - lbs başlığı ve varsa altındaki mahaller */}
+                        <Grid sx={{
+                          display: "grid", gridAutoFlow: "column", gridTemplateColumns: total_mahal_width + "rem " + one_bosluk_width + "rem",
 
-                        {/* 1/2 - total_mahal_width - lbs başlığı */}
-                        <Grid item sx={{ width: "100%", backgroundColor: "#FAEBD7", border: "1px solid black" }}>
+                        }}>
 
-                          {/* sadece cOunt tespiti için görünmez bir componenet */}
-                          <Box sx={{ display: "none" }}>
-                            {cOunt = lbsOne.code.split(".").length}
-                          </Box>
+                          {/* 1/2 - total_mahal_width - lbs başlığı */}
+                          <Grid item sx={{ width: "100%", backgroundColor: "#FAEBD7", border: "1px solid black" }}>
 
-                          {
-                            lbsOne.code.split(".").map((codePart, index) => {
+                            {/* sadece cOunt tespiti için görünmez bir componenet */}
+                            <Box sx={{ display: "none" }}>
+                              {cOunt = lbsOne.code.split(".").length}
+                            </Box>
 
-                              if (index == 0 && cOunt == 1) {
-                                lbsCode = codePart
-                                lbsName = isProject.lbs.find(item => item.code == lbsCode).name
-                              }
+                            {
+                              lbsOne.code.split(".").map((codePart, index) => {
 
-                              if (index == 0 && cOunt !== 1) {
-                                lbsCode = codePart
-                                lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
-                              }
+                                if (index == 0 && cOunt == 1) {
+                                  lbsCode = codePart
+                                  lbsName = isProject.lbs.find(item => item.code == lbsCode).name
+                                }
 
-                              if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
-                                lbsCode = lbsCode + "." + codePart
-                                lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
-                              }
+                                if (index == 0 && cOunt !== 1) {
+                                  lbsCode = codePart
+                                  lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
+                                }
 
-                              if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
-                                lbsCode = lbsCode + "." + codePart
-                                lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
-                              }
+                                if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
+                                  lbsCode = lbsCode + "." + codePart
+                                  lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
+                                }
 
-                            })
-                          }
+                                if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
+                                  lbsCode = lbsCode + "." + codePart
+                                  lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
+                                }
+
+                              })
+                            }
 
 
 
-                          {/* sadece cOunt tespiti için görünmez bir componenet */}
-                          <Box sx={{ display: "none" }}>
-                            {cOunt = lbsName.split(">").length}
-                          </Box>
+                            {/* sadece cOunt tespiti için görünmez bir componenet */}
+                            <Box sx={{ display: "none" }}>
+                              {cOunt = lbsName.split(">").length}
+                            </Box>
 
-                          {/* bu seviyede tek görünür grid item bu --> lbs başlığının yazdığı yer */}
-                          {lbsName.split(">").map((item, index) => (
+                            {/* bu seviyede tek görünür grid item bu --> lbs başlığının yazdığı yer */}
+                            {lbsName.split(">").map((item, index) => (
 
-                            <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
-                              {item}
-                              {index + 1 !== cOunt &&
-                                <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
-                              }
-                            </Typography>
+                              <Typography key={index} component={"span"} sx={{ ml: "0.3rem", fontWeight: "normal" }} >
+                                {item}
+                                {index + 1 !== cOunt &&
+                                  <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
+                                }
+                              </Typography>
 
-                          ))}
+                            ))}
+
+                          </Grid>
+
+
+                          {/* 2/2 - one_bosluk_width - 2rem boşluk*/}
+                          <Grid item sx={{ backgroundColor: "white", color: "white", width: "100%" }}>
+                            .
+                          </Grid>
+
 
                         </Grid>
 
-
-                        {/* 2/2 - one_bosluk_width - 2rem boşluk*/}
-                        <Grid item sx={{ backgroundColor: "white", color: "white", width: "100%" }}>
-                          .
-                        </Grid>
+                      </Grid>
 
 
+
+                      {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
+                      <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
+                        ee
                       </Grid>
 
                     </Grid>
 
-
-
-                    {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
-                    <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
-                      ee
-                    </Grid>
-
                   </Grid>
 
-                </Grid>
+                  {/* lbs başlığı altındaki mahaller */}
+                  < Box sx={{ display: "none" }}>
+                    {cOunt = mahaller.filter(item => item._lbsId.toString() == lbsOne._id.toString()).length}
+                  </Box>
 
-                {/* lbs başlığı altındaki mahaller */}
-                < Box sx={{ display: "none" }}>
-                  {cOunt = mahaller.filter(item => item._lbsId.toString() == lbsOne._id.toString()).length}
-                </Box>
+                  {
+                    mahaller?.filter(item => item._lbsId.toString() == lbsOne._id.toString()).map((mahalOne, index) => {
 
-                {
-                  mahaller?.filter(item => item._lbsId.toString() == lbsOne._id.toString()).map((mahalOne, index) => {
+                      return (
 
-                    return (
+                        <Grid item key={mahalOne._id.toString()}>
 
-                      <Grid item key={mahalOne._id.toString()}>
+                          <Grid
 
-                        <Grid
+                            sx={{
+                              display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
+                            }}
 
-                          sx={{
-                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_mahal_width + one_bosluk_width) + "rem " + (pozlar.length * one_poz_width) + "rem",
-                          }}
+                          >
 
-                        >
+                            <Grid item sx={{ position: "sticky", left: { xs: 0, md: "240px" }, width: "100%" }}>
 
-                          <Grid item sx={{ position: "sticky", left: { xs: 0, md: "240px" }, width: "100%" }}>
+                              <Grid key={index} sx={{
+                                cursor: "pointer",
+                                display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem",
+                                "&:hover .hoverTheLbs": {
+                                  // display: "inline"
+                                  visibility: "visible"
+                                },
+                              }}>
 
-                            <Grid key={index} sx={{
-                              cursor: "pointer",
-                              display: "grid", gridAutoFlow: "column", gridTemplateColumns: _3_mahal_width_rem + " " + one_bosluk_width + "rem",
-                              "&:hover .hoverTheLbs": {
-                                // display: "inline"
-                                visibility: "visible"
-                              },
-                            }}>
+                                <Grid sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0", textAlign: "center" }}>
+                                  <Typography>
+                                    xx
+                                  </Typography>
+                                </Grid>
 
-                              <Grid sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0", textAlign: "center" }}>
-                                <Typography>
-                                  xx
-                                </Typography>
-                              </Grid>
+                                <Grid sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0" }}>
 
-                              <Grid sx={{ backgroundColor: "white", border: "1px solid black", borderRight: "0", borderTop: "0" }}>
+                                  <Grid container >
 
-                                <Grid container >
+                                    <Grid item>
+                                      <Typography sx={{ ml: "0.2rem" }}>
+                                        {mahalOne.name}
+                                      </Typography>
+                                    </Grid>
 
-                                  <Grid item>
-                                    <Typography sx={{ ml: "0.2rem" }}>
-                                      {mahalOne.name}
-                                    </Typography>
-                                  </Grid>
-
-                                  {/* <Grid item className='hoverTheLbs'
+                                    {/* <Grid item className='hoverTheLbs'
                                     sx={{
                                       ml: "0.5rem",
                                       visibility: selectedMahal?._id.toString() === item._id.toString() ? "visible" : "hidden",
@@ -412,49 +429,51 @@ export default function P_Mahallistesi() {
                                     </Grid>
                                   </Grid> */}
 
+                                  </Grid>
+
+                                </Grid>
+
+                                <Grid sx={{ backgroundColor: "white", border: "1px solid black", borderTop: "0", textAlign: "center" }}>
+                                  <Typography >
+                                    {mahalOne.unit}
+                                  </Typography>
+                                </Grid>
+
+                                {/* one_bosluk_width --> boşluk*/}
+                                <Grid item sx={{ backgroundColor: "white", color: "white", width: "100%" }}>
+                                  .
                                 </Grid>
 
                               </Grid>
 
-                              <Grid sx={{ backgroundColor: "white", border: "1px solid black", borderTop: "0", textAlign: "center" }}>
-                                <Typography >
-                                  {mahalOne.unit}
-                                </Typography>
-                              </Grid>
-
-                              {/* one_bosluk_width --> boşluk*/}
-                              <Grid item sx={{ backgroundColor: "white", color: "white", width: "100%" }}>
-                                .
-                              </Grid>
-
                             </Grid>
 
-                          </Grid>
+                            <Grid item>
 
-                          <Grid item>
+                              <Grid sx={{
+                                display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
+                              }}>
 
-                            <Grid sx={{
-                              display: "grid", gridTemplateColumns: "repeat(" + pozlar.length + ", " + one_poz_width + "rem)",
-                            }}>
+                                {/* sadece cOunt tespiti için görünmez bir componenet */}
+                                <Box sx={{ display: "none" }}>
+                                  {pozCount = pozlar.length}
+                                </Box>
 
-                              {/* sadece cOunt tespiti için görünmez bir componenet */}
-                              <Box sx={{ display: "none" }}>
-                                {pozCount = pozlar.length}
-                              </Box>
+                                {pozlar.map((pozOne, index) => {
+                                  return (
+                                    <Grid key={index} onClick={() => openMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
+                                      <Typography sx={{ height: "1.5rem", overflow: "hidden" }} >
+                                        {mahalListesi?.find(item => item._mahalId.toString() === mahalOne._id.toString() && item._pozId.toString() === pozOne._id.toString()) ?
+                                          "açık"
+                                          : "kapalı"
+                                        }
+                                      </Typography>
+                                    </Grid>
+                                  )
+                                })}
 
-                              {pozlar.map((pozOne, index) => {
-                                return (
-                                  <Grid key={index} onClick={() => openMetraj({ "mahalId": mahalOne._id, "pozId": pozOne._id })} sx={{ border: "1px solid black", borderTop: "0", borderRight: (index + 1) == pozCount ? null : "0", textAlign: "center", cursor: "pointer" }}>
-                                    <Typography sx={{ height: "1.5rem", overflow: "hidden" }} >
-                                      {mahalListesi?.find(item => item._mahalId.toString() === mahalOne._id.toString() && item._pozId.toString() === pozOne._id.toString()) ?
-                                        "açık"
-                                        : "kapalı"
-                                      }
-                                    </Typography>
-                                  </Grid>
-                                )
-                              })}
 
+                              </Grid>
 
                             </Grid>
 
@@ -462,19 +481,17 @@ export default function P_Mahallistesi() {
 
                         </Grid>
 
-                      </Grid>
+                      )
 
-                    )
-
-                  })
-                }
+                    })
+                  }
 
 
 
 
-              </Grid>
+                </Grid>
 
-            ))
+              ))
           }
 
 

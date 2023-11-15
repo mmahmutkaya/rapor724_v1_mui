@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { StoreContext } from './store.js'
 import { useQueryClient } from '@tanstack/react-query'
 import deleteLastSpace from '../functions/deleteLastSpace.js';
-import { DialogWindow } from './general/DialogWindow.js';
+import { DialogWindow } from './general/DialogWindow';
 
 
 //mui
@@ -18,14 +18,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import MenuItem from '@mui/material/MenuItem';
+import DialogTitle from '@mui/material/DialogTitle';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Typography } from '@mui/material';
 
 
-// export default function FormMahalCreate({ setShow, isProject, refetch_mahallar }) {
+// export default function FormMahalCreate({ setShow, isProject, refetch_mahaller }) {
 export default function FormMahalCreate({ setShow }) {
 
-
-  // console.log("FormMahalCreate-->isProject",isProject)
 
   const { isProject, setIsProject } = useContext(StoreContext)
   const { mahaller, setMahaller } = useContext(StoreContext)
@@ -33,21 +35,18 @@ export default function FormMahalCreate({ setShow }) {
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
 
-  const [error_for_lbs, setError_for_lbs] = useState(false)
-  const [errorText_for_lbs, setErrorText_for_lbs] = useState()
+  const [newMahalError, setNewMahalError] = useState(false)
 
-  const [error_for_name, setError_for_name] = useState(false)
-  const [errorText_for_name, setErrorText_for_name] = useState()
-
-  const [error_for_unit, setError_for_unit] = useState(false)
-  const [errorText_for_unit, setErrorText_for_unit] = useState()
-
-  const [lbsId_for_Mahal, setLbsId_for_Mahal] = useState("");
+  // form verilerinde kullanmak için oluşturulan useState() verileri
+  // form ilk açıldığında önceden belirlenen birşeyin seçilmiş olması için alttaki satırdaki gibi yapılabiliyor
+  // const [mahalTipi, setMahalTipi] = useState(isProject ? isProject.mahalTipleri.find(item => item.id === "direktMahalListesi") : "");
+  const [lbsId, setLbsId] = useState();
+  const [mahalTipId, setMahalTipId] = useState();
+  const [mahalBirimId, setMahalBirimId] = useState();
+  const [mahalBirimDisabled, setMahalBirimDisabled] = useState(false);
 
   const RealmApp = useApp();
-  const queryClient = useQueryClient()
 
-  let isError = false
 
   // mahal oluşturma fonksiyonu
   async function handleSubmit(event) {
@@ -55,102 +54,97 @@ export default function FormMahalCreate({ setShow }) {
     event.preventDefault();
 
     try {
-      isError = false
 
-      //verileri tanımlama
+      // formdan gelen text verilerini alma - (çoktan seçmeliler seçildiği anda useState() kısmında güncelleniyor)
       const data = new FormData(event.currentTarget);
-      const newMahalName = deleteLastSpace(data.get('newMahalName'))
-      const newMahalUnit = deleteLastSpace(data.get('newMahalUnit'))
-
-
-      // // useContext de proje ve _id si yoksa mahal oluşturma formunu göstermenin bir anlamı yok, hata vererek durduruyoruz
-      // if (!isProject?._id) {
-      //   throw new Error("Mahal oluşturulacak projenin database kaydı için ProjeId belirtilmemiş, sayfayı yeniden yükleyin, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
-      // } else {
-      //   console.log("isProject?._id", isProject?._id)
-      // }
-
-
-      // // bu kısımda frontend kısmında form validation hatalarını ilgili alanlarda gösterme işlemleri yapılır
-      // if (!lbsId_for_Mahal) {
-      //   setError_for_lbs(true);
-      //   setErrorText_for_lbs("Zorunlu")
-      //   isError = true
-      //   console.log("lbsId_for_Mahal", "yok -- error")
-      // } else {
-      //   console.log("lbsId_for_Mahal", lbsId_for_Mahal)
-      // }
-
-      // if (!newMahalName) {
-      //   setError_for_name(true);
-      //   setErrorText_for_name("Zorunlu")
-      //   isError = true
-      //   console.log("newMahalName", "yok -- error")
-      // }
-
-      // if (newMahalName.length > 0 && newMahalName.length < 3) {
-      //   setError_for_name(true)
-      //   setErrorText_for_name("3 haneden az")
-      //   isError = true
-      //   console.log("newMahalName", "3 haneden az -- error")
-      // }
-
-      // if (!newMahalUnit) {
-      //   setError_for_unit(true);
-      //   setErrorText_for_unit("Zorunlu")
-      //   isError = true
-      //   console.log("newMahalUnit", "yok -- error")
-      // } else {
-      //   console.log("newMahalUnit", newMahalUnit)
-      // }
-
-      // // ilgili hatalar yukarıda ilgili form alanlarına yazılmış olmalı
-      // // db ye sorgu yapılıp db meşgul edilmesin diye burada durduruyoruz
-      // // frontendden geçse bile db den errorFormObject kontrolü yapılıyor aşağıda
-      // if (isError) {
-      //   console.log("return (fonksiyon durdurma) satırı bu mesaj satırının altında idi")
-      //   // throw new Error("db ye gönderilmek istenen verilerde hata var")
-      //   return
-      // }
+      const mahalName = deleteLastSpace(data.get('mahalName'))
 
       const newMahal = {
-        projectId: isProject._id,
-        lbsId: lbsId_for_Mahal,
-        newMahalName,
-        newMahalUnit
+        projectId: isProject?._id,
+        lbsId,
+        mahalName,
+        mahalTipId,
+        mahalBirimId,
       }
 
-      const result = await RealmApp?.currentUser?.callFunction("createMahal", newMahal);
+      // veri düzeltme
+      if (newMahal.mahalTipId === "insaatDemiri") {
+        newMahal.mahalBirimId = "ton"
+      }
+
+      console.log("newMahal", newMahal)
 
 
-      // eğer gönderilen form verilerinde hata varsa db den gelen form validation mesajları form içindeki ilgili alanlarda gösterilir ve fonksiyon durdurulur
-      // yukarıda da frontend kontrolü yapılmıştı
-      if (result.errorFormObj) {
+      ////// form validation - frontend
 
-        const errorFormObj = result.errorFormObj
-
-        console.log("errorFormObj", errorFormObj)
-
-        if (errorFormObj.lbsId) {
-          setError_for_lbs(true);
-          setErrorText_for_lbs(errorFormObj.lbsId)
-          isError = true
-        }
-
-        if (errorFormObj.newMahalName) {
-          setError_for_name(true);
-          setErrorText_for_name(errorFormObj.newMahalName)
-          isError = true
-        }
-
-        if (errorFormObj.newMahalUnit) {
-          setError_for_unit(true);
-          setErrorText_for_unit(errorFormObj.newMahalUnit)
-          isError = true
-        }
-
+      let isFormError = false
+      // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
+      if (typeof newMahal.projectId !== "object") {
+        setDialogCase("error")
+        setShowDialog("Mahal kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+        console.log("kayıt için gerekli olan 'projectId' verisinde hata olduğu için bu satırın altında durduruldu")
         return
       }
+
+      // form alanına uyarı veren hatalar
+
+      if (typeof newMahal.lbsId !== "object") {
+        setNewMahalError(prev => ({ ...prev, lbsId: "Zorunlu" }))
+        isFormError = true
+      }
+
+
+      if (typeof newMahal.mahalName !== "string") {
+        setNewMahalError(prev => ({ ...prev, mahalName: "Zorunlu" }))
+        isFormError = true
+      }
+
+      if (typeof newMahal.mahalName === "string") {
+        if (newMahal.mahalName.length === 0) {
+          setNewMahalError(prev => ({ ...prev, mahalName: "Zorunlu" }))
+          isFormError = true
+        }
+      }
+
+      if (typeof newMahal.mahalName === "string") {
+        let minimumHaneSayisi = 3
+        if (newMahal.mahalName.length > 0 && newMahal.mahalName.length < minimumHaneSayisi) {
+          setNewMahalError(prev => ({ ...prev, mahalName: `${minimumHaneSayisi} haneden az olamaz` }))
+          isFormError = true
+        }
+      }
+
+
+      if (typeof newMahal.mahalTipId !== "string") {
+        setNewMahalError(prev => ({ ...prev, mahalTipId: "Zorunlu" }))
+        isFormError = true
+      }
+
+      if (typeof newMahal.mahalBirimId !== "string") {
+        setNewMahalError(prev => ({ ...prev, mahalBirimId: "Zorunlu" }))
+        isFormError = true
+      }
+
+
+      // form alanına uyarı veren hatalar olmuşsa burda durduralım
+      if (isFormError) {
+        console.log("form validation - hata - frontend")
+        return
+      }
+
+
+      // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
+      const result = await RealmApp?.currentUser?.callFunction("createMahal", newMahal);
+      console.log("result", result)
+
+      // form validation - backend
+      if (result.newMahalError) {
+        setNewMahalError(result.newMahalError)
+        console.log("result.newMahalError", result.newMahalError)
+        console.log("form validation - hata - backend")
+        return
+      }
+      console.log("form validation - hata yok - backend")
 
       if (!result.newMahal?._id) {
         throw new Error("db den -newMahal- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
@@ -171,8 +165,7 @@ export default function FormMahalCreate({ setShow }) {
 
       // eğer çifte kayıt oluyorsa form içindeki mahal ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
-        setError_for_name(true);
-        setErrorText_for_name("Bu mahal ismi bu projede mevcut")
+        setNewMahalError(prev => ({ ...prev, mahalName: "Bu mahal ismi kullanılmış" }))
         console.log("Bu mahal ismi bu projede mevcut")
         return
       }
@@ -185,15 +178,37 @@ export default function FormMahalCreate({ setShow }) {
   }
 
 
-  const handleChange_newLbsName = (event) => {
-    setLbsId_for_Mahal(event.target.value);
+  // form verilerini kullanıcıdan alıp react hafızasına yüklemek - onChange - sadece seçmeliler - yazma gibi şeyler formun submit olduğu anda yakalanıyor
+  const handleChange_lbs = (event) => {
+    setLbsId(isProject.lbs.find(item => item._id.toString() === event.target.value.toString())._id);
+  };
+
+  const handleChange_mahalTipId = (event) => {
+
+    const mahalTipId = event.target.value
+    setMahalTipId(isProject.mahalTipleri.find(item => item.id === mahalTipId).id);
+    setMahalBirimDisabled(false)
+
+    if (mahalTipId === "insaatDemiri") {
+      setMahalBirimId("ton")
+      setMahalBirimDisabled(true)
+      setNewMahalError(prevData => {
+        const newData = { ...prevData }
+        delete newData["mahalBirimId"]
+        return newData
+      })
+    }
+
+  };
+
+  const handleChange_mahalBirimId = (event) => {
+    setMahalBirimId(isProject.mahalBirimleri.find(item => item.id === event.target.value).id);
   };
 
 
   // aşağıda kullanılıyor
   let lbsCode
   let lbsName
-  let cOunt
 
   return (
     <div>
@@ -205,29 +220,38 @@ export default function FormMahalCreate({ setShow }) {
       <Dialog
         PaperProps={{ sx: { width: "80%", position: "fixed", top: "10rem" } }}
         open={true}
-        onClose={() => setShow("Main")} >
+        onClose={() => setShow("Main")}
+      >
         {/* <DialogTitle>Subscribe</DialogTitle> */}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
           <DialogContent>
 
-            <DialogContentText sx={{ fontWeight: "bold", marginBottom: "2.5rem" }}>
+            <DialogContentText sx={{ fontWeight: "bold", marginBottom: "2rem" }}>
               {/* <Typography sx> */}
               Mahal Oluştur
               {/* </Typography> */}
             </DialogContentText>
 
 
+
             {/* lbs adı seçme - çoktan seçmeli - mahal başlığı için*/}
-            <Box onClick={() => setError_for_lbs(false)} sx={{ minWidth: 120, marginBottom: "1.5rem" }}>
+            <Box
+              onClick={() => setNewMahalError(prevData => {
+                const newData = { ...prevData }
+                delete newData["lbsId"]
+                return newData
+              })}
+              sx={{ minWidth: 120, marginBottom: "0rem" }}
+            >
 
               <InputLabel
-                error={error_for_lbs}
+                error={newMahalError.lbsId ? true : false}
                 id="select-lbs-label"
               >
                 <Grid container justifyContent="space-between">
 
-                  <Grid item>Başlık seçiniz</Grid>
+                  <Grid item>Mahal Başlığı Seçiniz</Grid>
 
                   <Grid item onClick={() => console.log("mahal create component lbs tıklandı")} >
                     lbs
@@ -239,80 +263,103 @@ export default function FormMahalCreate({ setShow }) {
               </InputLabel>
 
               <Select
-                error={error_for_lbs}
+                error={newMahalError.lbsId ? true : false}
                 variant="standard"
                 fullWidth
                 labelId="select-lbs-label"
                 id="select-lbs"
-                value={lbsId_for_Mahal}
+                value={lbsId ? lbsId : ""}
                 // label="Mahal için başlık seçiniz"
                 // label="Mahal"
-                onChange={handleChange_newLbsName}
+                onChange={handleChange_lbs}
                 required
+                name="lbsId"
               >
                 {
-                  isProject?.lbs.filter(item => item.openForMahal).map(lbsOne => (
-                    // console.log(lbs)
-                    <MenuItem key={lbsOne._id} value={lbsOne._id}>
+                  isProject?.lbs
+                    .filter(item => item.openForMahal)
+                    .sort(function (a, b) {
+                      var nums1 = a.code.split(".");
+                      var nums2 = b.code.split(".");
 
-                      {
-                        lbsOne.code.split(".").map((codePart, index) => {
-
-                          // console.log(cOunt)
-                          // console.log(index + 1)
-                          // console.log("---")
-
-                          let cOunt = lbsOne.code.split(".").length
-
-                          // console.log(cOunt)
-                          // console.log(index + 1)
-                          // console.log("---")
-
-                          if (index == 0 && cOunt == 1) {
-                            lbsCode = codePart
-                            lbsName = isProject.lbs.find(item => item.code == lbsCode).name
-                          }
-
-                          if (index == 0 && cOunt !== 1) {
-                            lbsCode = codePart
-                            lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
-                            lbsCode = lbsCode + "." + codePart
-                            lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
-                            lbsCode = lbsCode + "." + codePart
-                            lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
-                          }
-
-                        })
+                      for (var i = 0; i < nums1.length; i++) {
+                        if (nums2[i]) { // assuming 5..2 is invalid
+                          if (nums1[i] !== nums2[i]) {
+                            return nums1[i] - nums2[i];
+                          } // else continue
+                        } else {
+                          return 1; // no second number in b
+                        }
                       }
+                      return -1; // was missing case b.len > a.len
+                    })
+                    .map(lbsOne => (
+                      // console.log(lbs)
+                      <MenuItem key={lbsOne._id} value={lbsOne._id}>
 
-                      {lbsName.split(">").map((item, index) => (
+                        {
+                          lbsOne.code.split(".").map((codePart, index) => {
 
-                        <Box key={index} component={"span"} >
-                          {item}
-                          {index + 1 !== lbsName.split(">").length &&
-                            <Box component={"span"} ml={0.1} mr={0.3}>{"--"}</Box>
-                          }
-                        </Box>
+                            let cOunt = lbsOne.code.split(".").length
 
-                      ))}
+                            // console.log(cOunt)
+                            // console.log(index + 1)
+                            // console.log("---")
 
-                    </MenuItem>
-                  ))
+                            if (index == 0 && cOunt == 1) {
+                              lbsCode = codePart
+                              lbsName = isProject.lbs.find(item => item.code == lbsCode).name
+                            }
+
+                            if (index == 0 && cOunt !== 1) {
+                              lbsCode = codePart
+                              lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
+                            }
+
+                            if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
+                              lbsCode = lbsCode + "." + codePart
+                              lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
+                            }
+
+                            if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
+                              lbsCode = lbsCode + "." + codePart
+                              lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
+                            }
+
+                          })
+                        }
+
+                        {lbsName.split(">").map((item, index) => (
+
+                          <Box key={index} component={"span"} >
+                            {item}
+                            {index + 1 !== lbsName.split(">").length &&
+                              <Box component={"span"} ml={0.1} mr={0.3}>{"--"}</Box>
+                            }
+                          </Box>
+
+                        ))}
+
+                      </MenuItem>
+                    ))
                 }
 
               </Select>
 
             </Box>
 
+
+
             {/* mahal isminin yazıldığı alan */}
             {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
-            <Box onClick={() => setError_for_name(false)} sx={{ marginBottom: "1.5rem" }}>
+            <Box
+              onClick={() => setNewMahalError(prevData => {
+                const newData = { ...prevData }
+                delete newData["mahalName"]
+                return newData
+              })}
+              sx={{ minWidth: 120, marginBottom: "2rem" }}
+            >
               <TextField
                 sx={{
                   "& input:-webkit-autofill:focus": {
@@ -325,41 +372,13 @@ export default function FormMahalCreate({ setShow }) {
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
                 margin="normal"
-                id="newMahalName"
-                name="newMahalName"
+                id="mahalName"
+                name="mahalName"
                 // autoFocus
-                error={error_for_name}
-                helperText={error_for_name ? errorText_for_name : null}
+                error={newMahalError.mahalName ? true : false}
+                helperText={newMahalError.mahalName}
                 // margin="dense"
                 label="Mahal Adi"
-                type="text"
-                fullWidth
-              />
-            </Box>
-
-
-            {/* mahal biriminin yazıldığı alan */}
-            {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
-            <Box onClick={() => setError_for_unit(false)} sx={{ marginBottom: "1.5rem" }}>
-              <TextField
-                sx={{
-                  "& input:-webkit-autofill:focus": {
-                    transition: "background-color 600000s 0s, color 600000s 0s"
-                  },
-                  "& input:-webkit-autofill": {
-                    transition: "background-color 600000s 0s, color 600000s 0s"
-                  },
-                }}
-                variant="standard"
-                // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
-                margin="normal"
-                id="newMahalUnit"
-                name="newMahalUnit"
-                // autoFocus
-                error={error_for_unit}
-                helperText={error_for_unit ? errorText_for_unit : null}
-                // margin="dense"
-                label="Mahal Birim"
                 type="text"
                 fullWidth
               />
@@ -368,7 +387,7 @@ export default function FormMahalCreate({ setShow }) {
           </DialogContent>
 
           <DialogActions sx={{ padding: "1.5rem" }}>
-            <Button onClick={() => setShow("Main")}>İptal</Button>
+            <Button onClick={() => setShow("PMain")}>İptal</Button>
             <Button type="submit">Oluştur</Button>
           </DialogActions>
 
@@ -380,29 +399,3 @@ export default function FormMahalCreate({ setShow }) {
 
 
 }
-
-
-
-
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-    name: "ahmed"
-  },
-  {
-    value: 'EUR',
-    label: '€',
-    name: "mahmut"
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-    name: "muhammed"
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-    name: "mustafa"
-  },
-];

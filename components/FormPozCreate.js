@@ -275,55 +275,72 @@ export default function FormPozCreate({ setShow }) {
                 name="wbsId"
               >
                 {
-                  isProject?.wbs.filter(item => item.openForPoz).map(wbsOne => (
-                    // console.log(wbs)
-                    <MenuItem key={wbsOne._id} value={wbsOne._id}>
+                  isProject?.wbs
+                    .filter(item => item.openForPoz)
+                    .sort(function (a, b) {
+                      var nums1 = a.code.split(".");
+                      var nums2 = b.code.split(".");
 
-                      {
-                        wbsOne.code.split(".").map((codePart, index) => {
-
-                          let cOunt = wbsOne.code.split(".").length
-
-                          // console.log(cOunt)
-                          // console.log(index + 1)
-                          // console.log("---")
-
-                          if (index == 0 && cOunt == 1) {
-                            wbsCode = codePart
-                            wbsName = isProject.wbs.find(item => item.code == wbsCode).name
-                          }
-
-                          if (index == 0 && cOunt !== 1) {
-                            wbsCode = codePart
-                            wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
-                            wbsCode = wbsCode + "." + codePart
-                            wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
-                            wbsCode = wbsCode + "." + codePart
-                            wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
-                          }
-
-                        })
+                      for (var i = 0; i < nums1.length; i++) {
+                        if (nums2[i]) { // assuming 5..2 is invalid
+                          if (nums1[i] !== nums2[i]) {
+                            return nums1[i] - nums2[i];
+                          } // else continue
+                        } else {
+                          return 1; // no second number in b
+                        }
                       }
+                      return -1; // was missing case b.len > a.len
+                    })
+                    .map(wbsOne => (
+                      // console.log(wbs)
+                      <MenuItem key={wbsOne._id} value={wbsOne._id}>
 
-                      {wbsName.split(">").map((item, index) => (
+                        {
+                          wbsOne.code.split(".").map((codePart, index) => {
 
-                        <Box key={index} component={"span"} >
-                          {item}
-                          {index + 1 !== wbsName.split(">").length &&
-                            <Box component={"span"} ml={0.1} mr={0.3}>{"--"}</Box>
-                          }
-                        </Box>
+                            let cOunt = wbsOne.code.split(".").length
 
-                      ))}
+                            // console.log(cOunt)
+                            // console.log(index + 1)
+                            // console.log("---")
 
-                    </MenuItem>
-                  ))
+                            if (index == 0 && cOunt == 1) {
+                              wbsCode = codePart
+                              wbsName = isProject.wbs.find(item => item.code == wbsCode).name
+                            }
+
+                            if (index == 0 && cOunt !== 1) {
+                              wbsCode = codePart
+                              wbsName = isProject.wbs.find(item => item.code == wbsCode).codeName
+                            }
+
+                            if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
+                              wbsCode = wbsCode + "." + codePart
+                              wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).codeName
+                            }
+
+                            if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
+                              wbsCode = wbsCode + "." + codePart
+                              wbsName = wbsName + " > " + isProject.wbs.find(item => item.code == wbsCode).name
+                            }
+
+                          })
+                        }
+
+                        {wbsName.split(">").map((item, index) => (
+
+                          <Box key={index} component={"span"} >
+                            {item}
+                            {index + 1 !== wbsName.split(">").length &&
+                              <Box component={"span"} ml={0.1} mr={0.3}>{"--"}</Box>
+                            }
+                          </Box>
+
+                        ))}
+
+                      </MenuItem>
+                    ))
                 }
 
               </Select>

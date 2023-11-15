@@ -36,9 +36,6 @@ export default function PozHeader({ setShow }) {
 
   async function handlePozDelete() {
 
-    console.log(selectedPoz.name)
-    return
-
     // seçili wbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
     if (!selectedPoz) {
       console.log("alttaki satırda --return-- oldu")

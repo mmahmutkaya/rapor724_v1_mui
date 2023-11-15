@@ -69,7 +69,9 @@ exports = async function({projectId, upLbsId, newLbsName, newLbsCodeName}){
       _id:BSON.ObjectId(),
       code:"1",
       name:newLbsName,
-      codeName:newLbsCodeName
+      codeName:newLbsCodeName,
+      openForMahal:false,
+      includesMahal:false
     }
   
     try {
@@ -126,7 +128,9 @@ exports = async function({projectId, upLbsId, newLbsName, newLbsCodeName}){
       _id:BSON.ObjectId(),
       code:newNumber.toString(),
       name:newLbsName,
-      codeName:newLbsCodeName
+      codeName:newLbsCodeName,
+      openForMahal:false,
+      includesMahal:false
     }
     
     
@@ -198,7 +202,9 @@ exports = async function({projectId, upLbsId, newLbsName, newLbsCodeName}){
     _id:BSON.ObjectId(),
     code:text + newNumber,
     name:newLbsName,
-    codeName:newLbsCodeName
+    codeName:newLbsCodeName,
+    openForMahal:false,
+    includesMahal:false
   }
 
   try {

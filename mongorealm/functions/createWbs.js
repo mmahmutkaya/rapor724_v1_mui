@@ -62,6 +62,9 @@ exports = async function ({ projectId, upWbsId, newWbsName, newWbsCodeName }) {
   if (!project) throw new Error("MONGO // createWbs // ProjectId bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
 
 
+
+
+  // 1/4.seçenek - yukarıda bitmemiş
   //ilk defa wbs kaydı yapılacaksa, yani henüz "project.wbs" yoksa
   if (!project.wbs || project.wbs.length === 0) {
 
@@ -69,7 +72,9 @@ exports = async function ({ projectId, upWbsId, newWbsName, newWbsCodeName }) {
       _id: BSON.ObjectId(),
       code: "1",
       name: newWbsName,
-      codeName: newWbsCodeName
+      codeName: newWbsCodeName,
+      includesPoz: false,
+      openForPoz: false
     }
 
     try {
@@ -97,7 +102,7 @@ exports = async function ({ projectId, upWbsId, newWbsName, newWbsCodeName }) {
 
 
 
-  // fonksiyon yukarıda bitmediğine göre - demekki ilk wbs değilmiş
+  // 2/4.seçenek - yukarıda bitmemiş
   // en üst düzeye kayıt yapılacaksa - aşağıdaki fonksiyonlar en üst seviyeye göre hazırlanmış 
   if (upWbsId === "0") {
 
@@ -154,8 +159,8 @@ exports = async function ({ projectId, upWbsId, newWbsName, newWbsCodeName }) {
 
 
 
-
-  //en üst düzey olmayıp mevcut wbs kaydına ekleme yapılacaksa
+  // 3/4.seçenek - yukarıda bitmemiş
+  // en üst düzey olmayıp mevcut wbs kaydına ekleme yapılacaksa
 
   let upWbs = project.wbs.find(item => item._id.toString() == upWbsId.toString())
   if (!upWbs) {
@@ -192,7 +197,7 @@ exports = async function ({ projectId, upWbsId, newWbsName, newWbsCodeName }) {
 
 
 
-  // açıklamalar yukarıda
+  // errorFormObj ile ilgili açıklamalar yukarıda - açıklamalar yukarıda (form validation)
   if (Object.keys(errorFormObj).length) return ({ errorFormObj })
 
 
@@ -200,7 +205,9 @@ exports = async function ({ projectId, upWbsId, newWbsName, newWbsCodeName }) {
     _id: BSON.ObjectId(),
     code: text + newNumber,
     name: newWbsName,
-    codeName: newWbsCodeName
+    codeName: newWbsCodeName,
+    includesPoz: false,
+    openForPoz: false
   }
 
   try {
