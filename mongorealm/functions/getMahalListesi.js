@@ -1,15 +1,15 @@
 exports = async function ({ projectId }) {
   
-  throw new Error('MONGO // getProjectPozlar -->  \"projectId" sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ')
+  throw new Error('MONGO // getMahalListesi //  \"projectId" sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ')
 
 
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
   const mailTeyit = user.custom_data.mailTeyit
-  if (!mailTeyit) throw new Error("MONGO // getProjectPozlar -->  Öncelikle üyeliğinize ait mail adresinin size ait olduğunu doğrulamalısınız, tekrar giriş yapmayı deneyiniz veya bizimle iletişime geçiniz.")
+  if (!mailTeyit) throw new Error("MONGO // getMahalListesi //  Öncelikle üyeliğinize ait mail adresinin size ait olduğunu doğrulamalısınız, tekrar giriş yapmayı deneyiniz veya bizimle iletişime geçiniz.")
 
 
-  if (!projectId) throw new Error("MONGO // getProjectPozlar -->  \"projectId\" sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  if (!projectId) throw new Error("MONGO // getMahalListesi //  \"projectId\" sorguya, gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
   let _projectId
   try {
     if (typeof projectId == "string") {
@@ -18,9 +18,9 @@ exports = async function ({ projectId }) {
       _projectId = projectId
     }
   } catch (err) {
-    throw new Error("MONGO // getProjectPozlar -->  " + "MONGO // getProjectPozlar --> sorguya gönderilen \"projectId\" türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
+    throw new Error("MONGO // getMahalListesi //  " + "MONGO // getMahalListesi // sorguya gönderilen \"projectId\" türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
   }
-  if (typeof _projectId != "object") throw new Error("MONGO // getProjectPozlar -->  " + "MONGO // getProjectPozlar --> sorguya gönderilen \"projectId\" türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
+  if (typeof _projectId != "object") throw new Error("MONGO // getMahalListesi //  " + "MONGO // getMahalListesi // sorguya gönderilen \"projectId\" türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz. ")
 
 
   const collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
