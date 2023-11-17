@@ -31,7 +31,6 @@ export default function P_Mahallistesi() {
   const RealmApp = useApp();
 
   const mahaller_fecth = async () => {
-    console.log('Realm callFunction "getProjectMahaller" from Page "mahallistesi"')
     if (!mahaller) {
       const result = await RealmApp?.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id }));
       setMahaller(result)
@@ -42,7 +41,6 @@ export default function P_Mahallistesi() {
 
 
   const pozlar_fecth = async () => {
-    console.log('Realm callFunction "getProjectPozlar" from Page "mahallistesi"')
     if (!pozlar) {
       const result = await RealmApp?.currentUser.callFunction("getProjectPozlar", ({ projectId: isProject?._id }));
       setPozlar(result)

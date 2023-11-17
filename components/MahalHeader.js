@@ -171,6 +171,12 @@ export default function MahalHeader({ setShow }) {
               </Grid>
 
 
+              <Grid item>
+                <IconButton onClick={() => setShow("FormMahalBilgiCreate")} aria-label="addMahalBilgi" disabled={isProject?.lbs.filter(item => item.openForMahal).length == 0 ? true : false}>
+                  <AddCircleOutlineIcon variant="contained" color={isProject?.lbs.filter(item => item.openForMahal).length == 0 ? " lightgray" : "error"} />
+                </IconButton>
+              </Grid>
+              
 
               <Grid item>
                 <IconButton onClick={() => setShow("FormMahalCreate")} aria-label="addLbs" disabled={isProject?.lbs.filter(item => item.openForMahal).length == 0 ? true : false}>

@@ -1,10 +1,11 @@
 
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import { useQuery } from '@tanstack/react-query'
 import FormMahalCreate from '../../components/FormMahalCreate'
+import FormMahalBilgiCreate from '../../components/FormMahalBilgiCreate'
 import MahalHeader from '../../components/MahalHeader'
 
 import Grid from '@mui/material/Grid';
@@ -34,10 +35,9 @@ export default function P_Mahaller() {
 
 
   const mahaller_fecth = async () => {
-    console.log('Realm callFunction "getProjectMahaller" from Page "mahaller"')
     if (!mahaller) {
       const result = await RealmApp?.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id }));
-      console.log("result",result)
+      console.log("result", result)
       setMahaller(result)
     }
   }
@@ -87,6 +87,12 @@ export default function P_Mahaller() {
         </Grid>
       }
 
+      {show == "FormMahalBilgiCreate" &&
+        <Grid item >
+          <FormMahalBilgiCreate setShow={setShow} />
+        </Grid>
+      }
+
       {show == "Main" && isProject?.lbs.filter(item => item.openForMahal).length == 0 &&
         <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
@@ -99,7 +105,10 @@ export default function P_Mahaller() {
 
         <Stack sx={{ mt: topBarHeight, pl: "1rem" }} spacing={0}>
 
-          {/* gridTemplateRows - baştaki ve sondaki "1rem"  padding yerine üstte ve altta dolu alan, yoksa sticky transparan problemi  */}
+          {/* bu sayfa satırlardan oluşmakta  */}
+
+          {/* satır 1/2 -  gri başlık */}
+          {/* gridTemplateRows: "1rem 3rem 1rem" - baştaki ve sondaki "1rem"  padding yerine üstte ve altta dolu alan, yoksa sticky transparan problemi  */}
           <Grid sx={{
             display: "grid", gridTemplateRows: "1rem 3rem 1rem",
             position: "sticky", top: "7rem",
@@ -115,7 +124,9 @@ export default function P_Mahaller() {
             <Grid item sx={{}}>
               {/* Grid - En üst başlık */}
               <Grid sx={{
-                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_mahal_width) + "rem",
+                display: "grid",
+                gridAutoFlow: "column",
+                gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_mahal_width) + "rem",
               }}>
 
                 {/* 1/2 - (total_fixed_width + one_bosluk_width)*/}
@@ -229,7 +240,7 @@ export default function P_Mahaller() {
           </Grid>
 
 
-          {/* lbs başlığı ve altındaki mahaller */}
+          {/* satır 2/2 -  lbs başlığı ve varsa altındaki mahaller  */}
           {
             isProject.lbs
               .filter(item => item.openForMahal === true)
@@ -259,7 +270,9 @@ export default function P_Mahaller() {
                     <Grid
 
                       sx={{
-                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_mahal_width) + "rem",
+                        display: "grid",
+                        gridAutoFlow: "column",
+                        gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + ((sutunlar.length * one_mahal_width) + "rem"),
                       }}
 
                     >
@@ -327,7 +340,6 @@ export default function P_Mahaller() {
                           </Grid>
 
 
-                          {/* yatayda uzayan mahal başlık satırları */}
                           {/* 2/2 - one_bosluk_width - 2rem boşluk*/}
                           <Grid item sx={{ backgroundColor: "white", color: "white" }}>
                             .
@@ -339,9 +351,9 @@ export default function P_Mahaller() {
                       </Grid>
 
 
-
+                      {/* yatayda uzayan mahal başlık satırları */}
                       {/* 2/2 - (mahaller.length * one_mahal_width) + "rem" - mahal alanı genişliğinde dolgu boşluk*/}
-                      <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
+                      <Grid item sx={{ display: (!sutunlar.length ? "none" : null), border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
                         .
                       </Grid>
 
@@ -444,7 +456,7 @@ export default function P_Mahaller() {
                           </Grid>
 
                           {/* yatayda uzayan mahal satırları */}
-                          <Grid item sx={{ height: "100%" }}>
+                          <Grid item sx={{ display: (!sutunlar.length ? "none" : null), height: "100%" }}>
 
 
                             <Grid sx={{

@@ -97,7 +97,10 @@ export default function P_Pozlar() {
 
         <Stack sx={{ mt: topBarHeight, pl: "1rem" }} spacing={0}>
 
-          {/* gridTemplateRows - baştaki ve sondaki "1rem"  padding yerine üstte ve altta dolu alan, yoksa sticky transparan problemi  */}
+          {/* bu sayfa satırlardan oluşmakta  */}
+
+          {/* satır 1/2 -  gri başlık */}
+          {/* gridTemplateRows: "1rem 3rem 1rem" - baştaki ve sondaki "1rem"  padding yerine üstte ve altta dolu alan, yoksa sticky transparan problemi  */}
           <Grid sx={{
             display: "grid", gridTemplateRows: "1rem 3rem 1rem",
             position: "sticky", top: "7rem",
@@ -113,7 +116,7 @@ export default function P_Pozlar() {
             <Grid item sx={{}}>
               {/* Grid - En üst başlık */}
               <Grid sx={{
-                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
+                display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + ((sutunlar.length * one_poz_width) + "rem"),
               }}>
 
                 {/* 1/2 - (total_fixed_width + one_bosluk_width)*/}
@@ -162,12 +165,6 @@ export default function P_Pozlar() {
 
                 </Grid>
 
-
-
-                {/* sadece cOunt tespiti için görünmez bir componenet */}
-                {/* <Box sx={{ display: "none" }}>
-                  {pozCount = pozlar.length}
-                </Box> */}
 
 
                 {/* yatayda uzayan en üst başlıklar - poz isimleri */}
@@ -227,7 +224,7 @@ export default function P_Pozlar() {
           </Grid>
 
 
-          {/* wbs başlığı ve altındaki pozlar */}
+          {/* satır 2/2 -  wbs başlığı ve varsa altındaki pozlar  */}
           {
             isProject.wbs
               .filter(item => item.openForPoz === true)
@@ -257,7 +254,9 @@ export default function P_Pozlar() {
                     <Grid
 
                       sx={{
-                        display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
+                        display: "grid",
+                        gridAutoFlow: "column",
+                        gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_poz_width) + "rem",
                       }}
 
                     >
@@ -325,7 +324,6 @@ export default function P_Pozlar() {
                           </Grid>
 
 
-                          {/* yatayda uzayan poz başlık satırları */}
                           {/* 2/2 - one_bosluk_width - 2rem boşluk*/}
                           <Grid item sx={{ backgroundColor: "white", color: "white" }}>
                             .
@@ -338,8 +336,9 @@ export default function P_Pozlar() {
 
 
 
+                      {/* yatayda uzayan poz başlık satırları */}
                       {/* 2/2 - (pozlar.length * one_poz_width) + "rem" - poz alanı genişliğinde dolgu boşluk*/}
-                      <Grid item sx={{ border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
+                      <Grid item sx={{ display: (!sutunlar.length ? "none" : null), border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
                         .
                       </Grid>
 
@@ -347,10 +346,6 @@ export default function P_Pozlar() {
 
                   </Grid>
 
-                  {/* hayalet component - wbs başlığı altındaki pozların sayısını tespit etmek için */}
-                  {/* < Box sx={{ display: "none" }}>
-                  {cOunt = pozlar.filter(item => item._wbsId.toString() == wbsOne._id.toString()).length}
-                </Box> */}
 
                   {
                     pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((onePoz, index) => (
@@ -442,7 +437,7 @@ export default function P_Pozlar() {
                           </Grid>
 
                           {/* yatayda uzayan poz satırları */}
-                          <Grid item sx={{ height: "100%" }}>
+                          <Grid item sx={{ display: (!sutunlar.length ? "none" : null), height: "100%" }}>
 
 
                             <Grid sx={{

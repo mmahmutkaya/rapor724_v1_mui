@@ -56,9 +56,9 @@ exports = async function (newMahal) {
   let project = await collection_Projects.findOne({ _id: newMahal.projectId, members: _userId, isDeleted: false })
   if (!project) throw new Error("MONGO // createMahal // Mahal eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
-  let theWbs = project.lbs.find(item => item._id.toString() === newMahal.lbsId.toString())
-  if (!theWbs) throw new Error("MONGO // createMahal // Mahal eklemek istediğiniz mahal başlığı sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
-  if (!theWbs.openForMahal) throw new Error("MONGO // createMahal // Mahal eklemek istediğiniz mahal başlığı mahal eklemeye açık değil, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
+  let theLbs = project.lbs.find(item => item._id.toString() === newMahal.lbsId.toString())
+  if (!theLbs) throw new Error("MONGO // createMahal // Mahal eklemek istediğiniz mahal başlığı sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
+  if (!theLbs.openForMahal) throw new Error("MONGO // createMahal // Mahal eklemek istediğiniz mahal başlığı mahal eklemeye açık değil, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
 
   // mahal create
@@ -84,7 +84,7 @@ exports = async function (newMahal) {
 
   let newProject = project
 
-  if (!theWbs.includesMahal) {
+  if (!theLbs.includesMahal) {
 
     await collection_Projects.updateOne(
       { _id: newMahal._projectId, "lbs._id": newMahal._lbsId },
