@@ -4,7 +4,7 @@ exports = async function (newMahalBilgi) {
   // veri düzeltme
 
 
-  const newMahalBilgiError = {}
+  const errorObj = {}
 
   // form validation - backend
   // hata varsa "isFormError" true olacak ve form verileri işlemi duracak
@@ -17,26 +17,26 @@ exports = async function (newMahalBilgi) {
 
   // form alanına uyarı veren hatalar
 
-  if (typeof newMahalBilgi.mahalBilgiName !== "string") {
-    newMahalBilgiError.mahalBilgiName = "Zorunlu"
+  if (typeof newMahalBilgi.name !== "string") {
+    errorObj.name = "Zorunlu"
   }
 
-  if (typeof newMahalBilgi.mahalBilgiName === "string") {
-    if (newMahalBilgi.mahalBilgiName.length === 0) {
-      newMahalBilgiError.mahalBilgiName = "Zorunlu"
+  if (typeof newMahalBilgi.name === "string") {
+    if (newMahalBilgi.name.length === 0) {
+      errorObj.name = "Zorunlu"
     }
   }
 
-  if (typeof newMahalBilgi.mahalBilgiName === "string") {
+  if (typeof newMahalBilgi.name === "string") {
     let minimumHaneSayisi = 3
-    if (newMahalBilgi.mahalBilgiName.length > 0 && newMahalBilgi.mahalBilgiName.length < minimumHaneSayisi) {
-      newMahalBilgiError.mahalBilgiName = `${minimumHaneSayisi} haneden az olamaz`
+    if (newMahalBilgi.name.length > 0 && newMahalBilgi.name.length < minimumHaneSayisi) {
+      errorObj.name = `${minimumHaneSayisi} haneden az olamaz`
     }
   }
 
 
   // verilerde hata varsa
-  if (Object.keys(newMahalBilgiError).length) return ({ newMahalBilgiError })
+  if (Object.keys(errorObj).length) return ({ errorObj })
 
 
 
@@ -57,7 +57,7 @@ exports = async function (newMahalBilgi) {
   // let newMahalBilgi
   newMahalBilgi = {
     _projectId: newMahalBilgi.projectId,
-    name: newMahalBilgi.mahalBilgiName,
+    name: newMahalBilgi.name,
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false

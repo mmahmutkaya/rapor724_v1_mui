@@ -30,7 +30,7 @@ export default function FormMahalCreate({ setShow }) {
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
 
-  const [newMahalBilgiError, setNewMahalBilgiError] = useState(false)
+  const [errorObj, seterrorObj] = useState(false)
 
   const [mahalBilgiBirimId, setMahalBilgiBirimId] = useState();
 
@@ -74,13 +74,13 @@ export default function FormMahalCreate({ setShow }) {
       // form alanına uyarı veren hatalar
 
       if (typeof newMahalBilgi.mahalBilgisiName !== "string") {
-        setNewMahalBilgiError(prev => ({ ...prev, mahalBilgisiName: "Zorunlu" }))
+        seterrorObj(prev => ({ ...prev, mahalBilgisiName: "Zorunlu" }))
         isFormError = true
       }
 
       if (typeof newMahalBilgi.mahalBilgisiName === "string") {
         if (newMahalBilgi.mahalBilgisiName.length === 0) {
-          setNewMahalBilgiError(prev => ({ ...prev, mahalBilgisiName: "Zorunlu" }))
+          seterrorObj(prev => ({ ...prev, mahalBilgisiName: "Zorunlu" }))
           isFormError = true
         }
       }
@@ -88,7 +88,7 @@ export default function FormMahalCreate({ setShow }) {
       if (typeof newMahalBilgi.mahalBilgisiName === "string") {
         let minimumHaneSayisi = 3
         if (newMahalBilgi.mahalBilgisiName.length > 0 && newMahalBilgi.mahalBilgisiName.length < minimumHaneSayisi) {
-          setNewMahalBilgiError(prev => ({ ...prev, mahalBilgisiName: `${minimumHaneSayisi} haneden az olamaz` }))
+          seterrorObj(prev => ({ ...prev, mahalBilgisiName: `${minimumHaneSayisi} haneden az olamaz` }))
           isFormError = true
         }
       }
@@ -96,7 +96,7 @@ export default function FormMahalCreate({ setShow }) {
 
       // form alanına uyarı veren hatalar olmuşsa burda durduralım
       if (isFormError) {
-        console.log("newMahalBilgiError", newMahalBilgiError)
+        console.log("errorObj", errorObj)
         console.log("form validation - hata - frontend")
         return
       }
@@ -110,9 +110,9 @@ export default function FormMahalCreate({ setShow }) {
       console.log("result", result)
 
       // form validation - backend
-      if (result.newMahalBilgiError) {
-        setNewMahalBilgiError(result.newMahalBilgiError)
-        console.log("result.newMahalBilgiError", result.newMahalBilgiError)
+      if (result.errorObj) {
+        seterrorObj(result.errorObj)
+        console.log("result.errorObj", result.errorObj)
         console.log("form validation - hata - backend")
         return
       }
@@ -137,7 +137,7 @@ export default function FormMahalCreate({ setShow }) {
 
       // eğer çifte kayıt oluyorsa form içindeki mahal ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
-        setNewMahalBilgiError(prev => ({ ...prev, mahalBilgisiName: "Bu mahal bilgisi ismi kullanılmış" }))
+        seterrorObj(prev => ({ ...prev, mahalBilgisiName: "Bu mahal bilgisi ismi kullanılmış" }))
         console.log("Bu mahal ismi bu projede mevcut")
         return
       }
@@ -185,7 +185,7 @@ export default function FormMahalCreate({ setShow }) {
             {/* mahal bilgisi isminin yazıldığı alan */}
             {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
             <Box
-              onClick={() => setNewMahalBilgiError(prevData => {
+              onClick={() => seterrorObj(prevData => {
                 const newData = { ...prevData }
                 delete newData["mahalBilgisiName"]
                 return newData
@@ -207,8 +207,8 @@ export default function FormMahalCreate({ setShow }) {
                 id="mahalBilgisiName"
                 name="mahalBilgisiName"
                 // autoFocus
-                error={newMahalBilgiError.mahalBilgisiName ? true : false}
-                helperText={newMahalBilgiError.mahalBilgisiName ? newMahalBilgiError.mahalBilgisiName : 'Örn: "Mahal Kodu" veya "Zemin Alanı"'}
+                error={errorObj.mahalBilgisiName ? true : false}
+                helperText={errorObj.mahalBilgisiName ? errorObj.mahalBilgisiName : 'Örn: "Mahal Kodu" veya "Zemin Alanı"'}
                 // margin="dense"
                 label="Bilgi Türü"
                 type="text"
@@ -219,15 +219,15 @@ export default function FormMahalCreate({ setShow }) {
 
             {/* varsa birim yazılabilir */}
             <Box
-              onClick={() => setNewMahalBilgiError(prevData => {
-                const newMahalBilgiError = { ...prevData }
-                delete newMahalBilgiError["mahalBilgiBirimId"]
-                return newMahalBilgiError
+              onClick={() => seterrorObj(prevData => {
+                const errorObj = { ...prevData }
+                delete errorObj["mahalBilgiBirimId"]
+                return errorObj
               })}
               sx={{ minWidth: 120, marginTop: "2rem" }}
             >
               <InputLabel
-                error={newMahalBilgiError.mahalBilgiBirimId ? true : false}
+                error={errorObj.mahalBilgiBirimId ? true : false}
                 id="select-newMahalBirimId-label"
               >
                 <Grid container justifyContent="space-between">
@@ -236,7 +236,7 @@ export default function FormMahalCreate({ setShow }) {
               </InputLabel>
 
               <Select
-                error={newMahalBilgiError.mahalBilgiBirimId ? true : false}
+                error={errorObj.mahalBilgiBirimId ? true : false}
                 variant="standard"
                 fullWidth
                 labelId="select-newMahalBirimId-label"
