@@ -95,11 +95,11 @@ export default function FormMahalCreate({ setShow }) {
 
 
       // form alanına uyarı veren hatalar olmuşsa burda durduralım
-      if (isFormError) {
-        console.log("errorObj", errorObj)
-        console.log("form validation - hata - frontend")
-        return
-      }
+      // if (isFormError) {
+      //   console.log("errorObj", errorObj)
+      //   console.log("form validation - hata - frontend")
+      //   return
+      // }
 
 
       console.log("sorun yok devam edecek")
@@ -113,7 +113,7 @@ export default function FormMahalCreate({ setShow }) {
       if (result.errorObj) {
         seterrorObj(result.errorObj)
         console.log("result.errorObj", result.errorObj)
-        console.log("form validation - hata - backend")
+        console.log("form validation - hata var - backend")
         return
       }
       console.log("form validation - hata yok - backend")
