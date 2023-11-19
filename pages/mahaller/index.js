@@ -66,11 +66,12 @@ export default function P_Mahaller() {
 
   const one_bosluk_width = 2
 
-  const one_mahal_width = 20
+  const one_mahal_width = 10
 
   const sutunlar = [
-    { name: "Mahal Tipi" }
-  ]
+    { id: 1, sira: 2, name: "Mahal Tipi" },
+    { id: 2, sira: 1, name: "Zemin Alanı" }
+  ].sort((a, b) => a.sira - b.sira)
 
 
   return (
@@ -345,7 +346,6 @@ export default function P_Mahaller() {
                             .
                           </Grid>
 
-
                         </Grid>
 
                       </Grid>
@@ -353,9 +353,20 @@ export default function P_Mahaller() {
 
                       {/* yatayda uzayan mahal başlık satırları */}
                       {/* 2/2 - (mahaller.length * one_mahal_width) + "rem" - mahal alanı genişliğinde dolgu boşluk*/}
-                      <Grid item sx={{ display: (!sutunlar.length ? "none" : null), border: "1px solid black", backgroundColor: "#FAEBD7", color: "#FAEBD7" }}>
-                        .
+                      <Grid item sx={{ display: (!sutunlar.length ? "none" : null), border: "1px solid black", backgroundColor: "#FAEBD7" }}>
+
+                        <Grid sx={{
+                          display: "grid",
+                          justifyItems:"end",
+                          gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_mahal_width + "rem)",
+                          backgroundColor: "lightblue"
+                        }}>
+                          <Grid item sx={{ backgroundColor: "yellowgreen" }}>xxx</Grid>
+                          <Grid item sx={{ justifySelf: "end", backgroundColor: "yellowgreen" }}>yyy</Grid>
+                        </Grid>
+
                       </Grid>
+
 
                     </Grid>
 
