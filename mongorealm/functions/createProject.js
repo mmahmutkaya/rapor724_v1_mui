@@ -47,6 +47,7 @@ exports = async function ({ name }) {
     { id: "tl", name: "TL" },
     { id: "usd", name: "USD" },
     { id: "eur", name: "EUR" },
+    { id: "tarih", name: "TARİH" },
   ]
 
 

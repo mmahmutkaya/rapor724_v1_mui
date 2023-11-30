@@ -35,7 +35,7 @@ exports = async function (newMahalBilgi) {
   }
 
 
-  // verilerde hata varsa
+  // gelen form verilerinde hata varsa durdur ve error object gönder - frontend tarafında formun ilgili alanında hata göstermek için
   if (Object.keys(errorObj).length) return ({ errorObj })
 
 

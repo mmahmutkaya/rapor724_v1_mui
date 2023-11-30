@@ -3,17 +3,16 @@ import { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
-import { useQuery } from '@tanstack/react-query'
 import FormMahalCreate from '../../components/FormMahalCreate'
 import FormMahalBilgiCreate from '../../components/FormMahalBilgiCreate'
 import MahalHeader from '../../components/MahalHeader'
+
 
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
 import InfoIcon from '@mui/icons-material/Info';
 
 
@@ -68,10 +67,23 @@ export default function P_Mahaller() {
 
   const one_mahal_width = 10
 
-  const sutunlar = [
-    { id: 1, sira: 2, name: "Mahal Tipi" },
-    { id: 2, sira: 1, name: "Zemin Alanı" }
+
+  /* padding - top | right | bottom | left */
+  const mahalBilgileri = [
+    { id: 1, sira: 2, genislik: 10, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal Tipi", dataType: "number" },
+    { id: 2, sira: 1, genislik: 14, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Zemin Alanı", dataType: "string" },
+    { id: 3, sira: 3, genislik: 10, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Bağımsız Bölüm", dataType: "date" },
   ].sort((a, b) => a.sira - b.sira)
+
+  const total_mahals_width = mahalBilgileri.reduce(
+    (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
+    0
+  )
+
+  const mahalWidths = mahalBilgileri.reduce(
+    (ilkString, oneBilgi, index) => index != mahalBilgileri.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
+    ""
+  )
 
 
   return (
@@ -127,7 +139,7 @@ export default function P_Mahaller() {
               <Grid sx={{
                 display: "grid",
                 gridAutoFlow: "column",
-                gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_mahal_width) + "rem",
+                gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (total_mahals_width) + "rem",
               }}>
 
                 {/* 1/2 - (total_fixed_width + one_bosluk_width)*/}
@@ -187,12 +199,19 @@ export default function P_Mahaller() {
                 {/* yatayda uzayan en üst başlıklar - mahal isimleri */}
                 {/* 2/2 - (mahal_width) */}
                 <Grid item sx={{}}>
-                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_mahal_width + "rem)" }}>
 
-                    {sutunlar.map((oneSutun, index) => {
+                  <Grid sx={{
+                    display: "grid",
+                    gridTemplateRows: "3.2rem",
+                    // gridTemplateColumns: "repeat(" + mahalBilgileri.length + ", " + one_mahal_width + "rem)"
+                    gridTemplateColumns: mahalWidths
+                  }}>
+
+                    {mahalBilgileri.map((oneSutun, index) => {
                       return (
-                        <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == sutunlar.length ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", height: "100%" }}>
+                        <Grid key={index} item sx={{ border: "1px solid black", borderRight: index + 1 == mahalBilgileri.length ? null : "0", padding: "0.5rem 0.5rem", backgroundColor: "lightgray", height: "100%" }}>
 
+                          {/* <Grid sx={{ display: "grid", height: "100%", justifyContent: "center", alignItems: "center" }}> */}
                           <Grid sx={{ display: "grid", height: "100%", justifyContent: "center", alignItems: "center" }}>
                             <Typography sx={{}}>
                               {oneSutun.name}
@@ -210,17 +229,18 @@ export default function P_Mahaller() {
                     })}
 
                   </Grid>
+
                 </Grid>
 
-                {/* yatayda uzayan başlıklar - sutunlar */}
+                {/* yatayda uzayan başlıklar - mahalBilgileri */}
                 {/* 2/2 - (mahal_width) */}
                 {/* <Grid item sx={{}}>
-                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_mahal_width + "rem)" }}>
+                  <Grid sx={{ display: "grid", gridTemplateRows: "3.2rem", gridTemplateColumns: "repeat(" + mahalBilgileri.length + ", " + one_mahal_width + "rem)" }}>
 
                     <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0.5rem", backgroundColor: "lightgray",  height: "100%" }}>
                       <Grid sx={{ display: "grid" }}>
                         <Typography sx={{ maxHeight: "2.2rem", overflow: "hidden", fontSize: "0.8rem" }} >
-                          {"sutunlar"}
+                          {"mahalBilgileri"}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -269,13 +289,11 @@ export default function P_Mahaller() {
 
                     {/* Grid - lbs başlığı ve boş mahal başlığı uzantısı  */}
                     <Grid
-
                       sx={{
                         display: "grid",
                         gridAutoFlow: "column",
-                        gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + ((sutunlar.length * one_mahal_width) + "rem"),
+                        gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (total_mahals_width + "rem"),
                       }}
-
                     >
 
                       {/* 1/2 - (total_fixed_width + one_bosluk_width) - sabit kısım*/}
@@ -353,16 +371,36 @@ export default function P_Mahaller() {
 
                       {/* yatayda uzayan mahal başlık satırları */}
                       {/* 2/2 - (mahaller.length * one_mahal_width) + "rem" - mahal alanı genişliğinde dolgu boşluk*/}
-                      <Grid item sx={{ display: (!sutunlar.length ? "none" : null), border: "1px solid black", backgroundColor: "#FAEBD7" }}>
+                      <Grid item sx={{ display: (!mahalBilgileri.length ? "none" : null) }}>
+
 
                         <Grid sx={{
                           display: "grid",
-                          justifyItems:"end",
-                          gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_mahal_width + "rem)",
-                          backgroundColor: "lightblue"
+                          gridTemplateColumns: mahalWidths,
                         }}>
-                          <Grid item sx={{ backgroundColor: "yellowgreen" }}>xxx</Grid>
-                          <Grid item sx={{ justifySelf: "end", backgroundColor: "yellowgreen" }}>yyy</Grid>
+
+                          {mahalBilgileri.map((oneBilgi, index) =>
+                            <Grid item key={index} sx={{
+                              border: "1px solid black",
+                              borderRight: mahalBilgileri.length !== index + 1 ? 0 : null,
+                              backgroundColor: "#FAEBD7",
+                            }}>
+
+                              <Grid sx={{
+                                display: "grid",
+                              }}>
+                                <Grid item sx={{
+                                  justifySelf: oneBilgi.yatayHiza,
+                                  padding: oneBilgi.padding_M,
+                                }}>
+                                  {oneBilgi.name}
+                                </Grid>
+
+                              </Grid>
+
+                            </Grid>
+                          )}
+
                         </Grid>
 
                       </Grid>
@@ -384,7 +422,7 @@ export default function P_Mahaller() {
 
                         <Grid
                           sx={{
-                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (sutunlar.length * one_mahal_width) + "rem",
+                            display: "grid", gridAutoFlow: "column", gridTemplateColumns: (total_fixed_width + one_bosluk_width) + "rem " + (mahalBilgileri.length * one_mahal_width) + "rem",
                           }}
                         >
 
@@ -467,12 +505,11 @@ export default function P_Mahaller() {
                           </Grid>
 
                           {/* yatayda uzayan mahal satırları */}
-                          <Grid item sx={{ display: (!sutunlar.length ? "none" : null), height: "100%" }}>
-
+                          <Grid item sx={{ display: (!mahalBilgileri.length ? "none" : null), height: "100%" }}>
 
                             <Grid sx={{
                               height: "100%",
-                              display: "grid", gridTemplateColumns: "repeat(" + sutunlar.length + ", " + one_mahal_width + "rem)",
+                              display: "grid", gridTemplateColumns: "repeat(" + mahalBilgileri.length + ", " + one_mahal_width + "rem)",
                             }}>
 
                               {/* <Box sx={{ display: "none" }}>
@@ -492,7 +529,6 @@ export default function P_Mahaller() {
                                 </Grid>
 
                               </Grid>
-
 
                             </Grid>
 

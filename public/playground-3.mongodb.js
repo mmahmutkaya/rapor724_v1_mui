@@ -37,6 +37,7 @@ db.getCollection('projects').updateMany(
         { id: "tl", name: "TL" },
         { id: "usd", name: "USD" },
         { id: "eur", name: "EUR" },
+        { id: "tarih", name: "TARİH" },
       ],
     }
   }
