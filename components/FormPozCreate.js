@@ -63,7 +63,7 @@ export default function FormPozCreate({ setShow }) {
         projectId: isProject?._id,
         wbsId,
         pozName,
-        pozTipId,
+        // pozTipId,
         pozBirimId,
       }
 
