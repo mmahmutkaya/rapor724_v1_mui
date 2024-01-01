@@ -15,7 +15,7 @@ exports = async function ({ name }) {
   if (name.length < 3) throw new Error("MONGO // createProject // Proje adı çok kısa")
 
 
-  const pozTipleri = [
+  const pozMetrajTipleri = [
     { id: "direktMahalListesi", name: "Mahal Listesi Üzerinden (Direkt)", birimId: "" },
     { id: "standartMetrajSayfasi", name: "Standart Metraj Sayfası", birimId: "" },
     { id: "insaatDemiri", name: "İnşaat Demiri", birimId: "ton" },
@@ -57,7 +57,7 @@ exports = async function ({ name }) {
     wbs: [], // henüz herhangi bir başlık yok fakat yok ama bu property şimdi olmazsa ilk wbs kaydında bir hata yaşıyoruz
     members: [_userId],
     membersA: [_userId],
-    pozTipleri,
+    pozMetrajTipleri,
     pozBirimleri,
     mahalBilgiBirimleri,
     createdBy: _userId,

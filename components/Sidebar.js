@@ -28,7 +28,6 @@ export default function Sidebar({ setMobileOpen }) {
   const { isProject } = useContext(StoreContext)
   const { persons } = useContext(StoreContext)
 
-
   return (
     <Grid container direction="column">
 
@@ -45,33 +44,42 @@ export default function Sidebar({ setMobileOpen }) {
           <List
             component="nav"
             aria-labelledby="nested-list-subheader"
-            // subheader={
-            //   <ListSubheader component="div" id="nested-list-subheader">
-            //     Başlık
-            //   </ListSubheader>
-            // }
           >
 
-            <ListItemButton onClick={() => router.push('/projects')}>
-              <ListItemIcon>
+            <ListItemButton
+              onClick={(() => router.push('/projects'))}
+              sx={{ backgroundColor: router?.asPath == "/projects" ? "#f0f0f1" : null }}
+            >
+              <ListItemIcon  >
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Projeler" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/persons')}>
+
+
+            <ListItemButton
+              onClick={() => router.push('/people')}
+              sx={{ backgroundColor: router?.asPath == "/people" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Kişiler" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/companies')}>
+
+
+            <ListItemButton
+              onClick={() => router.push('/companies')}
+              sx={{ backgroundColor: router?.asPath == "/companies" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Firmalar" />
             </ListItemButton>
+
 
           </List>
         </Grid>
@@ -84,56 +92,87 @@ export default function Sidebar({ setMobileOpen }) {
         <Grid item onClick={(() => setMobileOpen(false))}>
           <List>
 
-            <ListItemButton onClick={() => router.push('/dashboard')}>
+            <ListItemButton
+              onClick={() => router.push('/dashboard')}
+              sx={{ backgroundColor: router?.asPath == "/dashboard" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/wbs')}>
+
+            <ListItemButton
+              onClick={() => router.push('/wbs')}
+              sx={{ backgroundColor: router?.asPath == "/wbs" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Poz Başlıkları" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/pozlar')}>
+
+            <ListItemButton
+              onClick={() => router.push('/pozlar')}
+              sx={{ backgroundColor: router?.asPath == "/pozlar" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Pozlar" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/lbs')}>
+
+            <ListItemButton
+              onClick={() => router.push('/lbs')}
+              sx={{ backgroundColor: router?.asPath == "/lbs" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Mahal Başlıkları" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/mahaller')}>
+
+            <ListItemButton
+              onClick={() => router.push('/mahaller')}
+              sx={{ backgroundColor: router?.asPath == "/mahaller" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Mahaller" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/mahallistesi')}>
+
+            <ListItemButton
+              onClick={() => router.push('/mahallistesi')}
+              sx={{ backgroundColor: router?.asPath == "/mahallistesi" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Mahal Listesi" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/metrajlar')}>
+
+            <ListItemButton
+              onClick={() => router.push('/metrajlar')}
+              sx={{ backgroundColor: router?.asPath == "/metrajlar" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Metrajlar" />
             </ListItemButton>
 
-            <ListItemButton onClick={() => router.push('/raporlar')}>
+
+            <ListItemButton
+              onClick={() => router.push('/raporlar')}
+              sx={{ backgroundColor: router?.asPath == "/raporlar" ? "#f0f0f1" : null }}
+            >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>

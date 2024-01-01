@@ -1,7 +1,6 @@
 import { useApp } from "./useApp.js";
 import { useState, useContext } from 'react';
 import { StoreContext } from './store.js'
-import { useQueryClient } from '@tanstack/react-query'
 import deleteLastSpace from '../functions/deleteLastSpace.js';
 import { DialogWindow } from './general/DialogWindow';
 
@@ -18,11 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import MenuItem from '@mui/material/MenuItem';
-import DialogTitle from '@mui/material/DialogTitle';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Typography } from '@mui/material';
+
 
 
 // export default function FormPozCreate({ setShow, isProject, refetch_pozlar }) {
@@ -67,10 +63,10 @@ export default function FormPozCreate({ setShow }) {
         pozBirimId,
       }
 
-      // veri düzeltme
-      if (newPoz.pozTipId === "insaatDemiri") {
-        newPoz.pozBirimId = "ton"
-      }
+      // // veri düzeltme
+      // if (newPoz.pozTipId === "insaatDemiri") {
+      //   newPoz.pozBirimId = "ton"
+      // }
 
       console.log("newPoz", newPoz)
 
@@ -114,11 +110,10 @@ export default function FormPozCreate({ setShow }) {
         }
       }
 
-
-      if (typeof newPoz.pozTipId !== "string") {
-        setNewPozError(prev => ({ ...prev, pozTipId: "Zorunlu" }))
-        isFormError = true
-      }
+      // if (typeof newPoz.pozTipId !== "string") {
+      //   setNewPozError(prev => ({ ...prev, pozTipId: "Zorunlu" }))
+      //   isFormError = true
+      // }
 
       if (typeof newPoz.pozBirimId !== "string") {
         setNewPozError(prev => ({ ...prev, pozBirimId: "Zorunlu" }))
@@ -183,23 +178,23 @@ export default function FormPozCreate({ setShow }) {
     setWbsId(isProject.wbs.find(item => item._id.toString() === event.target.value.toString())._id);
   };
 
-  const handleChange_pozTipId = (event) => {
+  // const handleChange_pozTipId = (event) => {
 
-    const pozTipId = event.target.value
-    setPozTipId(isProject.pozTipleri.find(item => item.id === pozTipId).id);
-    setPozBirimDisabled(false)
+  //   const pozTipId = event.target.value
+  //   setPozTipId(isProject.pozTipleri.find(item => item.id === pozTipId).id);
+  //   setPozBirimDisabled(false)
 
-    if (pozTipId === "insaatDemiri") {
-      setPozBirimId("ton")
-      setPozBirimDisabled(true)
-      setNewPozError(prevData => {
-        const newData = { ...prevData }
-        delete newData["pozBirimId"]
-        return newData
-      })
-    }
+  //   if (pozTipId === "insaatDemiri") {
+  //     setPozBirimId("ton")
+  //     setPozBirimDisabled(true)
+  //     setNewPozError(prevData => {
+  //       const newData = { ...prevData }
+  //       delete newData["pozBirimId"]
+  //       return newData
+  //     })
+  //   }
 
-  };
+  // };
 
   const handleChange_pozBirimId = (event) => {
     setPozBirimId(isProject.pozBirimleri.find(item => item.id === event.target.value).id);
@@ -385,7 +380,7 @@ export default function FormPozCreate({ setShow }) {
 
 
             {/* poz Tip seçme - çoktan seçmeli*/}
-            <Box
+            {/* <Box
               onClick={() => setNewPozError(prevData => {
                 const newData = { ...prevData }
                 delete newData["pozTipId"]
@@ -425,7 +420,7 @@ export default function FormPozCreate({ setShow }) {
 
               </Select>
 
-            </Box>
+            </Box> */}
 
 
 

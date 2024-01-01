@@ -1,12 +1,10 @@
 exports = async function (newPoz) {
 
 
-  // veri düzeltme
-  if (newPoz.pozTipId === "insaatDemiri") {
-    newPoz.pozBirimId = "ton"
-  }
+  // artık poz oluştururken seçmiyoruz bunu
+  newPoz.pozMetrajTipId = "direktMahalListesi"
 
-
+  
   const newPozError = {}
 
   // form validation - backend
@@ -42,9 +40,8 @@ exports = async function (newPoz) {
     }
   }
 
-
-  if (typeof newPoz.pozTipId !== "string") {
-    newPozError.pozTipId = "Zorunlu"
+  if (typeof newPoz.pozMetrajTipId !== "string") {
+    newPozError.pozMetrajTipId = "Zorunlu"
   }
 
   if (typeof newPoz.pozBirimId !== "string") {
@@ -80,8 +77,8 @@ exports = async function (newPoz) {
     _projectId: newPoz.projectId,
     _wbsId: newPoz.wbsId,
     name: newPoz.pozName,
-    tip: newPoz.pozTipId,
-    birim: newPoz.pozBirimId,
+    metrajTipId: newPoz.pozMetrajTipId,
+    birimId: newPoz.pozBirimId,
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false
