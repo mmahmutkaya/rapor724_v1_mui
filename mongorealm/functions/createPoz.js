@@ -68,7 +68,7 @@ exports = async function (newPoz) {
   newPozError.pozMetrajTipId == "Geçerli Değil"
   project.pozMetrajTipleri.map(oneMetrajTip => {
     if (newPoz.pozMetrajTipId == oneMetrajTip.id) {
-      delete newPozError.pozMetrajTipId
+      // delete newPozError.pozMetrajTipId
       return
     }
   })
