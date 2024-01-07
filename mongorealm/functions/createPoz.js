@@ -65,7 +65,8 @@ exports = async function (newPoz) {
   if (!project) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
 
-
+  return project
+  
   if (!project.pozMetrajTipleri.find(newPoz.pozMetrajTipId)) {
     newPozError.pozMetrajTipId = "Geçerli Değil"
   }
