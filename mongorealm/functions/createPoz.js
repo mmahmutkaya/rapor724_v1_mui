@@ -2,7 +2,7 @@ exports = async function (newPoz) {
 
 
   // artık poz oluştururken seçmiyoruz bunu
-  newPoz.pozMetrajTipId = "standartMetrajSayfasi"
+  newPoz.pozMetrajTipId = "standartMetrajSayfasi2"
 
   
   const newPozError = {}
