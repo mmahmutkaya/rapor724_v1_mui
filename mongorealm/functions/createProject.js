@@ -37,7 +37,7 @@ exports = async function ({ name }) {
 
 
 
-  const mahalBilgiBirimleri = [
+  const mahalBirimleri = [
     { id: "mt", name: "mt" },
     { id: "m2", name: "m2" },
     { id: "m3", name: "m3" },
@@ -58,7 +58,7 @@ exports = async function ({ name }) {
     membersA: [_userId],
     pozMetrajTipleri,
     pozBirimleri,
-    mahalBilgiBirimleri,
+    mahalBirimleri,
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false
