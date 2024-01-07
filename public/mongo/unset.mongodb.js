@@ -4,16 +4,31 @@
 use('rapor724_v2');
 
 
-// db.getCollection('projects').updateMany(
-//   {},
-//   { $unset: { pozTipleri: "" } }
-// );
-
-
-db.getCollection('pozlar').updateMany(
+db.getCollection('projects').updateMany(
   {},
-  { $unset: { tip: "" } }
+  { $unset: { mahalBilgiBirimleri: "" } }
 );
+
+
+const mahalBirimleri = [
+  { id: "mt", name: "mt" },
+  { id: "m2", name: "m2" },
+  { id: "m3", name: "m3" },
+  { id: "ad", name: "ad" },
+  { id: "set", name: "set" },
+  { id: "tl", name: "TL" },
+  { id: "usd", name: "USD" },
+  { id: "eur", name: "EUR" },
+  { id: "tarih", name: "TARİH" },
+]
+
+
+db.getCollection('projects').updateMany(
+  {},
+  { $set: { mahalBirimleri } }
+);
+
+
 
 
 

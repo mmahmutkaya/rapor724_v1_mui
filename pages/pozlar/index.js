@@ -150,7 +150,7 @@ export default function P_Pozlar() {
                     <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0rem", backgroundColor: "lightgray" }}>
                       <Grid sx={{ display: "grid", height: "100%", justifyContent: "center", alignItems: "center" }}>
                         <Typography sx={{}}>
-                          Birim
+                          {isProject.mahal.find(oneTip => oneTip.id === onePoz.metrajTipId).name}
                         </Typography>
                       </Grid>
                     </Grid>
