@@ -64,6 +64,15 @@ exports = async function (newPoz) {
   let project = await collection_Projects.findOne({ _id: newPoz.projectId, members: _userId, isDeleted: false })
   if (!project) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
+
+
+  if (!project.pozMetrajTipleri.find(newPoz.pozMetrajTipId)) {
+    newPozError.pozMetrajTipId = "Geçerli Değil"
+  }
+  if (Object.keys(newPozError).length) return ({ newPozError })
+
+
+
   let theWbs = project.wbs.find(item => item._id.toString() === newPoz.wbsId.toString())
   if (!theWbs) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz poz başlığı sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
   if (!theWbs.openForPoz) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz poz başlığı poz eklemeye açık değil, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")

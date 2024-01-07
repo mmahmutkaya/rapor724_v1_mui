@@ -37,7 +37,7 @@ export default function FormPozCreate({ setShow }) {
   // form ilk açıldığında önceden belirlenen birşeyin seçilmiş olması için alttaki satırdaki gibi yapılabiliyor
   // const [pozTipi, setPozTipi] = useState(isProject ? isProject.pozTipleri.find(item => item.id === "direktMahalListesi") : "");
   const [wbsId, setWbsId] = useState();
-  const [pozTipId, setPozTipId] = useState();
+  // const [pozTipId, setPozTipId] = useState();
   const [pozBirimId, setPozBirimId] = useState();
   const [pozBirimDisabled, setPozBirimDisabled] = useState(false);
 
