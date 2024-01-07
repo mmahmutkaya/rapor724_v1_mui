@@ -2,7 +2,7 @@ exports = async function (newPoz) {
 
 
   // artık poz oluştururken seçmiyoruz bunu
-  newPoz.pozMetrajTipId = "direktMahalListesi"
+  newPoz.pozMetrajTipId = "standartMetrajSayfasi"
 
   
   const newPozError = {}

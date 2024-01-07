@@ -457,7 +457,7 @@ export default function P_Pozlar() {
 
                                 <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center", pr: "0.5rem" }}>
                                   <Typography sx={{ overflow: "hidden" }} >
-                                    {isProject.pozTipleri.find(oneTip => oneTip.id === onePoz.tip).name}
+                                    {isProject.pozMetrajTipleri.find(oneTip => oneTip.id === onePoz.metrajTipId).name}
                                   </Typography>
                                 </Grid>
 
