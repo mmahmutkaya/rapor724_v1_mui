@@ -142,6 +142,7 @@ export default function FormPozCreate({ setShow }) {
       console.log("form validation - hata yok - backend")
 
       if (!result.newPoz?._id) {
+        console.log("result",result)
         throw new Error("db den -newPoz- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
       }
 
