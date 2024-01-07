@@ -65,10 +65,10 @@ exports = async function (newPoz) {
   if (!project) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
 
-  newPozError.pozMetrajTipId == "Geçerli Değil"
+  newPozError.pozMetrajTipId = "Geçerli Değil"
   project.pozMetrajTipleri.map(oneMetrajTip => {
     if (newPoz.pozMetrajTipId == oneMetrajTip.id) {
-      // delete newPozError.pozMetrajTipId
+      delete newPozError.pozMetrajTipId
       return
     }
   })
