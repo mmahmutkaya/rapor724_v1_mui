@@ -5,27 +5,27 @@ use('rapor724_v2');
 
 
 
-db.getCollection('projects').updateMany(
-  {},
-  {
-    $set: {
-      pozMetrajTipleri: [
-        { id: "standartMetrajSayfasi", name: "Standart Metraj Sayfası", birimId: "" },
-        { id: "insaatDemiri", name: "İnşaat Demiri", birimId: "ton" },
-      ],
-    }
-  }
-);
-
-
-// db.getCollection('pozlar').updateMany(
+// db.getCollection('projects').updateMany(
 //   {},
 //   {
 //     $set: {
-//       metrajTipId: "standartMetrajSayfasi"
+//       pozMetrajTipleri: [
+//         { id: "standartMetrajSayfasi", name: "Standart Metraj Sayfası", birimId: "" },
+//         { id: "insaatDemiri", name: "İnşaat Demiri", birimId: "ton" },
+//       ],
 //     }
 //   }
 // );
+
+
+db.getCollection('pozlar').updateMany(
+  {},
+  {
+    $set: {
+      metrajTipId: "standartMetrajSayfasi"
+    }
+  }
+);
 
 
 
