@@ -141,7 +141,7 @@ export default function P_Pozlar() {
                     <Grid item sx={{ border: "1px solid black", borderRight: "0", padding: "0.5rem 0rem", backgroundColor: "lightgray", textAlign: "center" }}>
                       <Grid sx={{ display: "grid", height: "100%", justifyContent: "center", alignItems: "center" }}>
                         <Typography sx={{}}>
-                          Mahal Tanımı
+                          Poz Tanımı
                         </Typography>
                       </Grid>
                     </Grid>
@@ -150,7 +150,7 @@ export default function P_Pozlar() {
                     <Grid item sx={{ border: "1px solid black", padding: "0.5rem 0rem", backgroundColor: "lightgray" }}>
                       <Grid sx={{ display: "grid", height: "100%", justifyContent: "center", alignItems: "center" }}>
                         <Typography sx={{}}>
-                          {isProject.mahalBirimleri.find(oneTip => oneTip.id === onePoz.birimId).name}
+                          Birim
                         </Typography>
                       </Grid>
                     </Grid>
@@ -346,7 +346,7 @@ export default function P_Pozlar() {
 
                   </Grid>
 
-
+                  {/* {console.log("pozlar",pozlar)} */}
                   {
                     pozlar?.filter(item => item._wbsId.toString() == wbsOne._id.toString()).map((onePoz, index) => (
 
@@ -422,7 +422,10 @@ export default function P_Pozlar() {
                               <Grid item sx={{ backgroundColor: "white", border: "1px solid black", borderTop: "0", textAlign: "center" }}>
                                 <Grid sx={{ height: "100%", display: "grid", justifyContent: "center", alignItems: "center" }}>
                                   <Typography sx={{ overflow: "hidden" }} >
-                                    {onePoz.birim}
+                                    {/* {console.log("pozBirimleri", isProject.pozBirimleri)} */}
+                                    {/* {console.log("onePoz", onePoz)} */}
+                                    {isProject.pozBirimleri.find(oneTip => oneTip.id === onePoz.birimId).name}
+                                    {/* bbb */}
                                   </Typography>
                                 </Grid>
                               </Grid>
