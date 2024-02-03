@@ -158,7 +158,7 @@ export default function P_Pozlar() {
 
                     {/* one_bosluk_width */}
                     <Grid item sx={{ border: "1px solid white", padding: "0.5rem 0rem", backgroundColor: "white", color: "white" }}>
-
+                      
                     </Grid>
 
                   </Grid>
