@@ -212,7 +212,7 @@ export default function P_Metraj() {
         </Grid>
       }
 
-      {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0) && (
+      {show == "Main" && (isProject?.lbs?.filter(item => item.openForMahal).length == 0) && (
         <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
@@ -220,7 +220,7 @@ export default function P_Metraj() {
         </Stack>)
       }
 
-      {show == "Main" && (isProject?.lbs.filter(item => item.openForMahal).length == 0) && (
+      {show == "Main" && (isProject?.lbs?.filter(item => item.openForMahal).length == 0) && (
         <Stack sx={{ mt: topBarHeight, width: '100%', padding: "1rem" }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
@@ -228,7 +228,7 @@ export default function P_Metraj() {
         </Stack>)
       }
 
-      {show == "Main" && isProject?.lbs.filter(item => item.openForMahal).length > 0 && mahaller?.length > 0 &&
+      {show == "Main" && isProject?.lbs?.filter(item => item.openForMahal).length > 0 && mahaller?.length > 0 &&
         <Stack sx={{ mt: topBarHeight, width: '100%', pl: "1rem" }} spacing={0}>
 
 

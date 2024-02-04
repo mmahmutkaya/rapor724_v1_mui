@@ -229,8 +229,7 @@ export default function FormMahalCreate({ setShow }) {
                 name="lbsId"
               >
                 {
-                  isProject?.lbs
-                    .filter(item => item.openForMahal)
+                  isProject?.lbs?.filter(item => item.openForMahal)
                     .sort(function (a, b) {
                       var nums1 = a.code.split(".");
                       var nums2 = b.code.split(".");

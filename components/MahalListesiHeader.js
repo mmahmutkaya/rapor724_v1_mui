@@ -76,8 +76,8 @@ export default function MahalListesiHeader({ setShow }) {
             <Grid container spacing={1}>
 
               <Grid item>
-                <IconButton onClick={() => console.log("öylesine")} aria-label="addLbs" disabled={isProject?.lbs.filter(item => item.openForMahal).length == 0 ? true : false}>
-                  <AddCircleOutlineIcon variant="contained" color={isProject?.lbs.filter(item => item.openForMahal).length == 0 ? " lightgray" : "success"} />
+                <IconButton onClick={() => console.log("öylesine")} aria-label="addLbs" disabled={isProject?.lbs?.filter(item => item.openForMahal).length == 0 ? true : false}>
+                  <AddCircleOutlineIcon variant="contained" color={isProject?.lbs?.filter(item => item.openForMahal).length == 0 ? " lightgray" : "success"} />
                 </IconButton>
               </Grid>
 

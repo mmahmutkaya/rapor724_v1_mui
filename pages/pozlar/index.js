@@ -85,7 +85,7 @@ export default function P_Pozlar() {
         </Grid>
       }
 
-      {show == "Main" && (isProject?.wbs?.filter(item => item.openForMahal).length == 0 || !isProject?.wbs) &&
+      {show == "Main" && (isProject?.wbs?.filter(item => item.openForPoz).length == 0 || !isProject?.wbs) &&
         <Stack sx={{ width: '100%', pl: "1rem", pr: "0.5rem", pt: "1rem", mt: subHeaderHeight }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir poz başlığını poz eklemeye açmamış görünüyorsunumuz. "Poz Başlıkları" menüsünden işlem yapabilirsiniz.
@@ -93,7 +93,7 @@ export default function P_Pozlar() {
         </Stack>
       }
 
-      {show == "Main" && isProject?.wbs.filter(item => item.openForPoz).length > 0 &&
+      {show == "Main" && isProject?.wbs?.filter(item => item.openForPoz).length > 0 &&
 
         <Stack sx={{ mt: topBarHeight, pl: "1rem" }} spacing={0}>
 

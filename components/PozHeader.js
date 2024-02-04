@@ -161,8 +161,8 @@ export default function PozHeader({ setShow }) {
 
 
               <Grid item>
-                <IconButton onClick={() => setShow("FormPozCreate")} aria-label="addWbs" disabled={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? true : false}>
-                  <AddCircleOutlineIcon variant="contained" color={isProject?.wbs.filter(item => item.openForPoz).length == 0 ? " lightgray" : "success"} />
+                <IconButton onClick={() => setShow("FormPozCreate")} aria-label="addWbs" disabled={(isProject?.wbs?.filter(item => item.openForPoz).length == 0 || !isProject?.wbs) ? true : false}>
+                  <AddCircleOutlineIcon variant="contained" color={(isProject?.wbs?.filter(item => item.openForPoz).length == 0 || !isProject?.wbs) ? " lightgray" : "success"} />
                 </IconButton>
               </Grid>
 

@@ -271,8 +271,7 @@ export default function FormPozCreate({ setShow }) {
                 name="wbsId"
               >
                 {
-                  isProject?.wbs
-                    .filter(item => item.openForPoz)
+                  isProject?.wbs?.filter(item => item.openForPoz)
                     .sort(function (a, b) {
                       var nums1 = a.code.split(".");
                       var nums2 = b.code.split(".");

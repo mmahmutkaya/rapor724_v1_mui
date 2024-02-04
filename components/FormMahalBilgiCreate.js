@@ -152,7 +152,7 @@ export default function FormMahalCreate({ setShow }) {
 
   const handleChange_mahalBilgiBirimId = (event) => {
     console.log("event.target.value", event.target.value)
-    setMahalBilgiBirimId(isProject.mahalBilgiBirimleri.find(item => item.id === event.target.value).id);
+    setMahalBilgiBirimId(isProject.mahalBilgiBirimleri?.find(item => item.id === event.target.value).id);
   };
 
 
@@ -231,7 +231,7 @@ export default function FormMahalCreate({ setShow }) {
                 id="select-newMahalBirimId-label"
               >
                 <Grid container justifyContent="space-between">
-                  <Grid item>Mahal Birim Seçiniz (isteğe bağlı) </Grid>
+                  <Grid item> Birim </Grid>
                 </Grid>
               </InputLabel>
 
@@ -250,11 +250,11 @@ export default function FormMahalCreate({ setShow }) {
               >
 
                 <MenuItem value={"hicbiri"}>
-                  Hiçbiri
+                  Birim Yok
                 </MenuItem>
                 
                 {
-                  isProject?.mahalBilgiBirimleri.map((oneMahalBilgi, index) => (
+                  isProject?.mahalBilgiBirimleri?.map((oneMahalBilgi, index) => (
                     <MenuItem key={index} value={oneMahalBilgi.id}>
                       {/* {console.log(oneMahalBilgi)} */}
                       {oneMahalBilgi.name}
