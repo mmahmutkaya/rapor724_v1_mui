@@ -70,7 +70,7 @@ export default function P_Wbs() {
       {!isProject?.wbs?.length &&
         <Stack sx={{ width: '100%', padding: "0.5rem" }} spacing={2}>
           <Alert severity="info">
-            "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
+            Menüler yardımı ile "Poz Başlığı" ekleyebilirsiniz.
           </Alert>
         </Stack>
       }

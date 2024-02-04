@@ -66,7 +66,7 @@ export default function P_Lbs() {
       {!isProject?.lbs?.length &&
         <Stack sx={{ width: '100%', padding: "0.5rem" }} spacing={2}>
           <Alert severity="info">
-            "{isProject?.name}" isimli projeye ait herhangi WBS kaydı bulunamadı, menüler yardımı ile oluşturmaya başlayabilirsiniz.
+            Menüler yardımı ile "Mahal Başlığı" ekleyebilirsiniz.
           </Alert>
         </Stack>
       }

@@ -22,7 +22,7 @@ export default function P_Pozlar() {
   const { isProject } = useContext(StoreContext)
   const { selectedPoz, setSelectedPoz } = useContext(StoreContext)
   const { pozlar, setPozlar } = useContext(StoreContext)
-  const { drawerWidth, topBarHeight } = useContext(StoreContext)
+  const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
 
@@ -85,8 +85,8 @@ export default function P_Pozlar() {
         </Grid>
       }
 
-      {show == "Main" && isProject?.wbs.filter(item => item.openForPoz).length == 0 &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
+      {show == "Main" && (isProject?.wbs?.filter(item => item.openForMahal).length == 0 || !isProject?.wbs) &&
+        <Stack sx={{ width: '100%', pl: "1rem", pr: "0.5rem", pt: "1rem", mt: subHeaderHeight }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir poz başlığını poz eklemeye açmamış görünüyorsunumuz. "Poz Başlıkları" menüsünden işlem yapabilirsiniz.
           </Alert>
@@ -158,7 +158,7 @@ export default function P_Pozlar() {
 
                     {/* one_bosluk_width */}
                     <Grid item sx={{ border: "1px solid white", padding: "0.5rem 0rem", backgroundColor: "white", color: "white" }}>
-                      
+
                     </Grid>
 
                   </Grid>

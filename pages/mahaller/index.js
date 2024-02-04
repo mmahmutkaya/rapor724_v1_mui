@@ -22,7 +22,7 @@ export default function P_Mahaller() {
   const { isProject } = useContext(StoreContext)
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
   const { mahaller, setMahaller } = useContext(StoreContext)
-  const { drawerWidth, topBarHeight } = useContext(StoreContext)
+  const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
 
@@ -106,15 +106,16 @@ export default function P_Mahaller() {
         </Grid>
       }
 
-      {show == "Main" && isProject?.lbs.filter(item => item.openForMahal).length == 0 &&
-        <Stack sx={{ width: '100%', padding: "1rem" }} spacing={2}>
+      {show == "Main" && (isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) &&
+        <Stack sx={{ width: '100%', pl: "1rem", pr: "0.5rem", pt: "1rem", mt: subHeaderHeight }} spacing={2}>
           <Alert severity="info">
             Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
           </Alert>
         </Stack>
       }
 
-      {show == "Main" && isProject?.lbs.filter(item => item.openForMahal).length > 0 &&
+
+      {show == "Main" && isProject?.lbs?.filter(item => item.openForMahal).length > 0 &&
 
         <Stack sx={{ mt: topBarHeight, pl: "1rem" }} spacing={0}>
 
