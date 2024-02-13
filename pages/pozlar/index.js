@@ -54,7 +54,7 @@ export default function P_Pozlar() {
   let toplam = 0
   let pozCount
 
-  const _3_fixed_width_rem = "2rem 25rem 5rem"
+  const _3_fixed_width_rem = "5rem 25rem 5rem"
   toplam = 0
   _3_fixed_width_rem.split(" ").map(item => {
     let gecici = Number(item.replace("rem", ""))

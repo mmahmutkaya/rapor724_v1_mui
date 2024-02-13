@@ -32,7 +32,7 @@ export default function FormMahalCreate({ setShow }) {
 
   const [errorObj, seterrorObj] = useState(false)
 
-  const [mahalBilgiBirimId, setMahalBilgiBirimId] = useState();
+  const [mahalBilgiBirimId, setMahalBilgiBirimId] = useState("hicbiri");
 
   // form verilerinde kullanmak için oluşturulan useState() verileri
   // form ilk açıldığında önceden belirlenen birşeyin seçilmiş olması için alttaki satırdaki gibi yapılabiliyor
@@ -208,7 +208,7 @@ export default function FormMahalCreate({ setShow }) {
                 name="mahalBilgisiName"
                 // autoFocus
                 error={errorObj.mahalBilgisiName ? true : false}
-                helperText={errorObj.mahalBilgisiName ? errorObj.mahalBilgisiName : 'Örn: "Mahal Kodu" veya "Zemin Alanı"'}
+                helperText={errorObj.mahalBilgisiName ? errorObj.mahalBilgisiName : 'Örn: "Mahal Tipi" veya "Zemin Alanı"'}
                 // margin="dense"
                 label="Bilgi Türü"
                 type="text"

@@ -118,9 +118,11 @@ export default function MahalHeader({ setShow }) {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: "white", color: "black",
+          backgroundColor: "white",
+          color: "black",
           width: { md: `calc(100% - ${drawerWidth}px)` },
           mt: topBarHeight,
+          // pt:"3rem",
           ml: { md: `${drawerWidth}px` }
         }}
       >

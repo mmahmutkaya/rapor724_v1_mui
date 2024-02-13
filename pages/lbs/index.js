@@ -183,7 +183,7 @@ export default function P_Lbs() {
 
                               {nameMode === null &&
                                 <Grid item sx={{ ml: "0.3rem" }}>
-                                  {theLbs.name + " - (" + theLbs.codeName + ")"}
+                                {"(" + theLbs.codeName + ")" + " - " + theLbs.name}
                                 </Grid>
                               }
 

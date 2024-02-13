@@ -74,7 +74,7 @@ export default function P_Wbs() {
           </Alert>
         </Stack>
       }
-
+ 
       {isProject?.wbs?.length > 0 &&
         < Stack sx={{ width: '100%', padding: "0.5rem" }} spacing={0}>
 
@@ -185,7 +185,7 @@ export default function P_Wbs() {
 
                             {nameMode === null &&
                               <Grid item sx={{ ml: "0.3rem" }}>
-                                {theWbs.name + " - (" + theWbs.codeName + ")"}
+                                {"(" + theWbs.codeName + ")" + " - " + theWbs.name}
                               </Grid>
                             }
 
