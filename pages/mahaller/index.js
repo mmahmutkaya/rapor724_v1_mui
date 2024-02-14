@@ -53,6 +53,7 @@ export default function P_Mahaller() {
   let lbsCode = ""
   let lbsName = ""
   let cOunt = 0
+  let count_
   let toplam = 0
   let mahalCount
 
@@ -69,53 +70,88 @@ export default function P_Mahaller() {
   const one_mahal_width = 10
 
 
-  let basliklar = [
-    { id: 1, isim: "No" },
-    { id: 2, isim: "İsim" },
-    { id: 3, isim: "bosluk" },
-    { id: 3, isim: "Tarif" },
-    { id: 4, isim: "Ölçü" },
-  ]
+  // let basliklar = [
+  //   { id: 1, isim: "No" },
+  //   { id: 2, isim: "İsim" },
+  //   { id: 3, isim: "bosluk" },
+  //   { id: 3, isim: "Tarif" },
+  //   { id: 4, isim: "Ölçü" },
+  // ]
 
   /* padding - top | right | bottom | left */
-  const [mahalBilgileri, setMahalBilgileri] = useState([
-    // { id: 1, sira: 2, genislik: 8, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal Tipi", dataType: "number" },
-    { id: 2, sira: 1, genislik: 10, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Zemin Alanı", dataType: "string" },
-    // { id: 3, sira: 3, genislik: 10, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Bağımsız Bölüm", dataType: "date" },
-    // { id: 3, sira: 3, genislik: 20, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Bağımsız Bölüm", dataType: "date" },
+  const [basliklar, setBasliklar] = useState([
+    { id: 1, sira: 1, referans: "name", goster: true, sabit: true, genislik: 7, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal No", dataType: "number" },
+    { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", dataType: "string" },
+    { id: 3, sira: 3, referans: "name", goster: true, sabit: false, genislik: 15, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Zemin Alan", dataType: "date" },
+    { id: 4, sira: 4, referans: "name", goster: true, sabit: false, genislik: 20, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Fonksiyon", dataType: "date" },
   ].sort((a, b) => a.sira - b.sira))
 
-  const total_mahals_width = mahalBilgileri.reduce(
+
+  let totalWidthSabit = basliklar.filter(item => item.sabit).reduce(
     (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
     0
   )
-  console.log("total_mahals_width", total_mahals_width)
+  totalWidthSabit = totalWidthSabit + 'rem'
+  console.log("totalWidthSabit", totalWidthSabit)
 
 
-  const mahalWidths = mahalBilgileri.reduce(
-    (ilkString, oneBilgi, index) => index != mahalBilgileri.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
+  let totalWidthDegisken = basliklar.filter(item => !item.sabit).reduce(
+    (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
+    0
+  )
+  totalWidthDegisken = totalWidthDegisken + 'rem'
+  console.log("totalWidthDegisken", totalWidthDegisken)
+
+
+  let totalWidth = basliklar.reduce(
+    (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
+    0
+  )
+  totalWidth = (totalWidth + 2) + 'rem'
+  console.log("totalWidth", totalWidth)
+
+
+  let gridTemplateColumnsSabit = basliklar.filter(item => item.sabit).reduce(
+    (ilkString, oneBilgi, index) => index != basliklar.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
     ""
   )
-  console.log("mahalWidths", mahalWidths)
+  console.log("gridTemplateColumnsSabit", gridTemplateColumnsSabit)
+
+
+  let gridTemplateColumnsDegisken = basliklar.filter(item => !item.sabit).reduce(
+    (ilkString, oneBilgi, index) => index != basliklar.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
+    ""
+  )
+  console.log("gridTemplateColumnsDegisken", gridTemplateColumnsDegisken)
+
+
+  let gridTemplateColumns_ = gridTemplateColumnsSabit + " 2rem " + gridTemplateColumnsDegisken
+  console.log("gridTemplateColumns_", gridTemplateColumns_)
 
 
 
-  let count_
-
-  const TableHeader = styled('div')(({ index, count_ }) => ({
+  const TableHeader = styled('div')(({ index }) => ({
     marginTop: "1rem",
-    fontWeight: "bold",
-    backgroundColor: "rgba(255, 165, 0, 0.18)",
-    border: "solid black 1px"
+    // fontWeight: "bold",
+    backgroundColor: "#FAEBD7",
+    borderLeft: index == 0 ? "solid black 1px" : null,
+    borderRight: "solid black 1px",
+    borderTop: "solid black 1px",
+    borderBottom: "solid black 1px"
   }));
 
-  const TableItem = styled('div')(({ index, count_ }) => ({
+  const TableItem = styled('div')(({ index }) => ({
+    borderLeft: index == 0 ? "solid black 1px" : null,
     borderRight: "solid black 1px",
     borderBottom: "solid black 1px"
   }));
 
-  let gridTemplateColumns_ = "5rem 15rem 1rem 30rem 25rem"
-  const totalWidth = "76rem"
+  const Bosluk = styled('div')(() => ({
+    // backgroundColor: "yellow"
+    // borderLeft: index == 0 ? "solid black 1px" : null,
+    // borderRight: "solid black 1px",
+    // borderBottom: "solid black 1px"
+  }));
 
 
   return (
@@ -159,17 +195,35 @@ export default function P_Mahaller() {
               gridTemplateColumns: gridTemplateColumns_,
             }}
           >
-            {basliklar.map((oneBaslik, index) => {
+            {/* HAYALET */}
+            <Box sx={{ display: "none" }}>
+              {count_ = basliklar.filter(item => item.sabit).length}
+            </Box>
+            {basliklar.filter(item => item.sabit).map((oneBaslik, index) => {
               return (
-                <Box key={index} sx={{ backgroundColor: "lightgrey", fontWeight: "bold", border: "solid black 1px", borderRight: index + 1 == basliklar.length ? "solid black 1px" : "0px" }}>
-                  {oneBaslik.isim}
+                <Box key={index} sx={{ backgroundColor: "lightgrey", fontWeight: "bold", border: "solid black 1px", borderRight: index + 1 == count_ ? "solid black 1px" : "0px" }}>
+                  {oneBaslik.name}
+                </Box>
+              )
+            })}
+            <Bosluk>
+
+            </Bosluk>
+            {/* HAYALET */}
+            <Box sx={{ display: "none" }}>
+              {count_ = basliklar.filter(item => !item.sabit).length}
+            </Box>
+            {basliklar.filter(item => !item.sabit).map((oneBaslik, index) => {
+              return (
+                <Box key={index} sx={{ backgroundColor: "lightgrey", fontWeight: "bold", border: "solid black 1px", borderRight: index + 1 == count_ ? "solid black 1px" : "0px" }}>
+                  {oneBaslik.name}
                 </Box>
               )
             })}
           </Grid>
 
 
-          {/* ALT BAŞLIKLAR ve MAHALLER */}
+          {/* MAHAL BAŞLIKLARI ve MAHALLER */}
           {
             isProject.lbs
               .filter(item => item.openForMahal === true)
@@ -194,12 +248,12 @@ export default function P_Mahaller() {
                     key={index}
                     sx={{
                       display: "grid",
-                      gridTemplateColumns: totalWidth,
+                      gridTemplateColumns: totalWidthSabit + " 2rem " + gridTemplateColumnsDegisken,
                     }}
                   >
-                    <TableHeader >
+                    <TableHeader>
 
-                      {/* sadece cOunt tespiti için görünmez bir componenet */}
+                      {/* HAYALET */}
                       <Box sx={{ display: "none" }}>
                         {cOunt = oneLbs.code.split(".").length}
                       </Box>
@@ -231,7 +285,7 @@ export default function P_Mahaller() {
                       }
 
 
-                      {/* sadece cOunt tespiti için görünmez bir componenet */}
+                      {/* HAYALET */}
                       <Box sx={{ display: "none" }}>
                         {cOunt = lbsName.split(">").length}
                       </Box>
@@ -239,7 +293,7 @@ export default function P_Mahaller() {
                       {/* bu seviyede tek görünür grid item bu --> lbs başlığının yazdığı yer */}
                       {lbsName.split(">").map((item, index) => (
 
-                        <Typography key={index} component={"span"} sx={{ fontWeight: "normal" }} >
+                        <Typography key={index} component={"span"} >
                           {item}
                           {index + 1 !== cOunt &&
                             <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
@@ -249,6 +303,11 @@ export default function P_Mahaller() {
                       ))}
 
                     </TableHeader>
+
+                    <TableHeader sx={{ backgroundColor: "white", borderTop: "0px", borderBottom: "0px" }}></TableHeader>
+
+                    <TableHeader>aa</TableHeader>
+                    <TableHeader>aa</TableHeader>
 
 
                     {/* HAYALET */}
@@ -266,21 +325,32 @@ export default function P_Mahaller() {
                             gridTemplateColumns: gridTemplateColumns_,
                           }}
                         >
-                          <TableItem index={index} count_={count_} sx={{ borderLeft: "solid black 1px" }}>
-                            xxx
-                          </TableItem>
-                          <TableItem index={index} count_={count_}>
-                            {oneMahal.name}
-                          </TableItem>
-                          <Box index={index} count_={count_}>
-                            {oneMahal.birim}
-                          </Box>
-                          <TableItem index={index} count_={count_}>
-                            {oneMahal.birim}
-                          </TableItem>
-                          <TableItem index={index} count_={count_}>
-                            {oneMahal.name}
-                          </TableItem >
+
+
+                          {
+                            basliklar.filter(item => item.sabit).map((item, index) => {
+                              return (
+                                <TableItem index={index} count_={count_}>
+                                  {oneMahal[item.referans]}
+                                </TableItem>
+                              )
+                            })
+                          }
+
+                          <Bosluk>
+
+                          </Bosluk>
+
+                          {
+                            basliklar.filter(item => !item.sabit).map((item, index) => {
+                              return (
+                                <TableItem index={index} count_={count_}>
+                                  {oneMahal[item.referans]}
+                                </TableItem>
+                              )
+                            })
+                          }
+
                         </Grid>
                       )
                     })}
