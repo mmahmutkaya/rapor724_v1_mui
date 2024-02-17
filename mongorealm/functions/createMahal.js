@@ -91,12 +91,12 @@ exports = async function (newMahal) {
       { $set: { "lbs.$.includesMahal": true } },
     );
 
-    let newWbsArray = project.lbs.map(oneWbs => {
+    let newLbsArray = project.lbs.map(oneLbs => {
 
-      if (oneWbs._id.toString() === newMahal._lbsId.toString()) {
-        return { ...oneWbs, includesMahal: true }
+      if (oneLbs._id.toString() === newMahal._lbsId.toString()) {
+        return { ...oneLbs, includesMahal: true }
       } else {
-        return oneWbs
+        return oneLbs
       }
 
     })
