@@ -69,6 +69,7 @@ exports = async function (newMahal) {
     _projectId: newMahal.projectId,
     _lbsId: newMahal.lbsId,
     name: newMahal.mahalName,
+    kod: newMahal.mahalKod,
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false
