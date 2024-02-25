@@ -86,7 +86,7 @@ exports = async function (newMahalBaslik) {
   }
 
   // validation control - mahal başlık - haneSayisiId
-  if (isProject.haneSayilari.find(item => item.id == newMahalBaslik.haneSayisiId)) {
+  if (!isProject.haneSayilari.find(item => item.id == newMahalBaslik.haneSayisiId)) {
     throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' projede kayıtlı bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
