@@ -18,6 +18,7 @@ exports = async function (newMahalBaslik) {
   if (newMahalBaslik.veriTuruId !== "sayi") {
     delete newMahalBaslik["mahalBilgi_haneSayisiId"]
     delete newMahalBaslik["mahalBilgi_birim"]
+    newMahalBaslik.deneme = 1
   }
 
 
