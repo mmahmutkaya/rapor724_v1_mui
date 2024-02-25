@@ -118,14 +118,34 @@ exports = async function (newMahalBaslik) {
   // mahal create
   const currentTime = new Date()
 
+  let maxId = 0
+  let maxSira = 0
+  isProject.mahalBasliklari.map(item => {
+    item.id > maxId ? maxId = item.id : null
+    item.sira > maxSira ? maxSira = item.sira : null
+  })
+
   // let newMahalBaslik
   newMahalBaslik = {
     ...newMahalBaslik,
+    id: maxId + 1,
+    sira: maxSira + 1,
     createdBy: _userId,
     createdAt: currentTime,
-    isDeleted: false
+    isDeleted: false,
+    goster:false,
+    sabit:false,
+    genislik:20,
+    paddingInfo: "0px 1rem 0px 0px",
+    yatayHiza: "end",
   }
 
+
+
+  // const mahalBasliklari = [
+  //   { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal kod", veriTuruId: "metin" },
+  //   { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", veriTuruId: "metin" },
+  // ]
 
 
   const result = await collection_Projects.updateOne(
@@ -133,15 +153,16 @@ exports = async function (newMahalBaslik) {
     { $push: { mahalBasliklari: newMahalBaslik } }
   )
 
- 
-  return result
-  
+  return newMahalBaslik
+
+
+
   // newMahalBaslik._id = result.insertedId
 
   // // lbs / mahal başlığı "includesMahal:true" key.value değerine sahip değilse gerekli işlemi yapıyoruz
 
 
-  // let newProject = project
+  // let newProject = {...isProject}
 
   // if (!theWbs.includesMahal) {
 
