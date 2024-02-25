@@ -9,15 +9,35 @@
 // For more documentation on playgrounds please refer to
 // https://www.mongodb.com/docs/mongodb-vscode/playgrounds/
 
+// const { BSON, EJSON, ObjectId } = require('bson');
+
 // Select the database to use.
 use('rapor724_v2');
 
 // Insert a few documents into the sales collection.
-db.getCollection('projects').find()
+db.getCollection('mahaller').find()
 
-// // Run a find command to view items sold on April 4th, 2014.
+
+
+// Run a find command to view items sold on April 4th, 2014.
+// db.getCollection('mahaller').find({
+//     "_projectId": ObjectId("65be7f484abff9383f4c5fd6")
+// });
+
+
+// db.getCollection('mahaller').find({
+//     "name": "Z-20 - KASIMPAŞA",
+// });
+
+
+db.getCollection('projects').find({
+    "_id": ObjectId("65d03fc2568b22831def75d4")
+});
+
+
+
 // const salesOnApril4th = db.getCollection('sales').find({
-//   date: { $gte: new Date('2014-04-04'), $lt: new Date('2014-04-05') }
+//     date: { $gte: new Date('2014-04-04'), $lt: new Date('2014-04-05') }
 // }).count();
 
 // // Print a message to the output window.

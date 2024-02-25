@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import FormMahalCreate from '../../components/FormMahalCreate'
-import FormMahalBilgiCreate from '../../components/FormMahalBilgiCreate'
+import FormMahalBaslikCreate from '../../components/FormMahalBaslikCreate'
 import MahalHeader from '../../components/MahalHeader'
 
 
@@ -104,9 +104,9 @@ export default function P_Mahaller() {
         </Grid>
       }
 
-      {show == "FormMahalBilgiCreate" &&
+      {show == "FormMahalBaslikCreate" &&
         <Grid item >
-          <FormMahalBilgiCreate setShow={setShow} />
+          <FormMahalBaslikCreate setShow={setShow} />
         </Grid>
       }
 

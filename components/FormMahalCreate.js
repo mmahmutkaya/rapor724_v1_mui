@@ -36,10 +36,8 @@ export default function FormMahalCreate({ setShow }) {
   // form ilk açıldığında önceden belirlenen birşeyin seçilmiş olması için alttaki satırdaki gibi yapılabiliyor
   // const [mahalTipi, setMahalTipi] = useState(isProject ? isProject.mahalTipleri.find(item => item.id === "direktMahalListesi") : "");
   const [lbsId, setLbsId] = useState();
-  const [mahalBirimDisabled, setMahalBirimDisabled] = useState(false);
 
   const RealmApp = useApp();
-
 
   // mahal oluşturma fonksiyonu
   async function handleSubmit(event) {
@@ -51,10 +49,12 @@ export default function FormMahalCreate({ setShow }) {
       // formdan gelen text verilerini alma - (çoktan seçmeliler seçildiği anda useState() kısmında güncelleniyor)
       const data = new FormData(event.currentTarget);
       const mahalName = deleteLastSpace(data.get('mahalName'))
+      const mahalKod = deleteLastSpace(data.get('mahalKod'))
 
       const newMahal = {
         projectId: isProject?._id,
         lbsId,
+        mahalKod,
         mahalName,
       }
 
@@ -100,6 +100,12 @@ export default function FormMahalCreate({ setShow }) {
         }
       }
 
+      let mahalFinded = mahaller.find(item => item.kod == newMahal.mahalKod)
+      if (mahalFinded) {
+        setNewMahalError(prev => ({ ...prev, mahalKod: `'${mahalFinded.name}' isimli mahalde bu kod kullanılmış` }))
+        isFormError = true
+      }
+      
 
       // form alanına uyarı veren hatalar olmuşsa burda durduralım
       if (isFormError) {
@@ -300,6 +306,41 @@ export default function FormMahalCreate({ setShow }) {
 
             </Box>
 
+
+
+            {/* mahal kodunun yazıldığı alan */}
+            {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
+            <Box
+              onClick={() => setNewMahalError(prevData => {
+                const newData = { ...prevData }
+                delete newData["mahalKod"]
+                return newData
+              })}
+              sx={{ minWidth: 120, marginBottom: "2rem" }}
+            >
+              <TextField
+                sx={{
+                  "& input:-webkit-autofill:focus": {
+                    transition: "background-color 600000s 0s, color 600000s 0s"
+                  },
+                  "& input:-webkit-autofill": {
+                    transition: "background-color 600000s 0s, color 600000s 0s"
+                  },
+                }}
+                variant="standard"
+                // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
+                margin="normal"
+                id="mahalKod"
+                name="mahalKod"
+                // autoFocus
+                error={newMahalError.mahalKod ? true : false}
+                helperText={newMahalError.mahalKod}
+                // margin="dense"
+                label="Mahal Kod"
+                type="text"
+                fullWidth
+              />
+            </Box>
 
 
             {/* mahal isminin yazıldığı alan */}

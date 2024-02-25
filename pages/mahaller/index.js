@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import FormMahalCreate from '../../components/FormMahalCreate'
-import FormMahalBilgiCreate from '../../components/FormMahalBilgiCreate'
+import FormMahalBaslikCreate from '../../components/FormMahalBaslikCreate'
 import MahalHeader from '../../components/MahalHeader'
 
 
@@ -37,7 +37,6 @@ export default function P_Mahaller() {
   const mahaller_fecth = async () => {
     if (!mahaller) {
       const result = await RealmApp?.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id }));
-      console.log("result", result)
       setMahaller(result)
     }
   }
@@ -79,12 +78,14 @@ export default function P_Mahaller() {
   // ]
 
   /* padding - top | right | bottom | left */
-  const [basliklar, setBasliklar] = useState([
-    { id: 1, sira: 1, referans: "name", goster: true, sabit: true, genislik: 7, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal No", dataType: "number" },
-    { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", dataType: "string" },
-    { id: 3, sira: 3, referans: "name", goster: true, sabit: false, genislik: 15, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Zemin Alan", dataType: "date" },
-    { id: 4, sira: 4, referans: "name", goster: true, sabit: false, genislik: 20, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Fonksiyon", dataType: "date" },
-  ].sort((a, b) => a.sira - b.sira))
+  // const [basliklar, setBasliklar] = useState([
+  //   { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal No", dataType: "number" },
+  //   { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", dataType: "string" },
+  //   { id: 3, sira: 3, referans: "name", goster: true, sabit: false, genislik: 15, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Zemin Alan", dataType: "date" },
+  //   { id: 4, sira: 4, referans: "name", goster: true, sabit: false, genislik: 20, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Fonksiyon", dataType: "date" },
+  // ].sort((a, b) => a.sira - b.sira))
+
+  const [basliklar, setBasliklar] = useState(isProject.mahalBasliklari)
 
 
   let totalWidthSabit = basliklar.filter(item => item.sabit).reduce(
@@ -92,7 +93,7 @@ export default function P_Mahaller() {
     0
   )
   totalWidthSabit = totalWidthSabit + 'rem'
-  console.log("totalWidthSabit", totalWidthSabit)
+  // console.log("totalWidthSabit", totalWidthSabit)
 
 
   let totalWidthDegisken = basliklar.filter(item => !item.sabit).reduce(
@@ -100,7 +101,7 @@ export default function P_Mahaller() {
     0
   )
   totalWidthDegisken = totalWidthDegisken + 'rem'
-  console.log("totalWidthDegisken", totalWidthDegisken)
+  // console.log("totalWidthDegisken", totalWidthDegisken)
 
 
   let totalWidth = basliklar.reduce(
@@ -108,33 +109,32 @@ export default function P_Mahaller() {
     0
   )
   totalWidth = (totalWidth + 2) + 'rem'
-  console.log("totalWidth", totalWidth)
+  // console.log("totalWidth", totalWidth)
 
 
   let gridTemplateColumnsSabit = basliklar.filter(item => item.sabit).reduce(
     (ilkString, oneBilgi, index) => index != basliklar.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
     ""
   )
-  console.log("gridTemplateColumnsSabit", gridTemplateColumnsSabit)
+  // console.log("gridTemplateColumnsSabit", gridTemplateColumnsSabit)
 
 
   let gridTemplateColumnsDegisken = basliklar.filter(item => !item.sabit).reduce(
     (ilkString, oneBilgi, index) => index != basliklar.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
     ""
   )
-  console.log("gridTemplateColumnsDegisken", gridTemplateColumnsDegisken)
+  // console.log("gridTemplateColumnsDegisken", gridTemplateColumnsDegisken)
 
 
   let gridTemplateColumns_ = gridTemplateColumnsSabit + " 2rem " + gridTemplateColumnsDegisken
-  console.log("gridTemplateColumns_", gridTemplateColumns_)
-
+  // console.log("gridTemplateColumns_", gridTemplateColumns_)
 
 
   const TableHeader = styled('div')(({ index }) => ({
     marginTop: "1rem",
     // fontWeight: "bold",
     backgroundColor: "#FAEBD7",
-    borderLeft: index == 0 ? "solid black 1px" : null,
+    borderLeft: (index && index !== 0) ? null : "solid black 1px",
     borderRight: "solid black 1px",
     borderTop: "solid black 1px",
     borderBottom: "solid black 1px"
@@ -147,7 +147,7 @@ export default function P_Mahaller() {
   }));
 
   const Bosluk = styled('div')(() => ({
-    // backgroundColor: "yellow"
+    // backgroundColor: "lightblue"
     // borderLeft: index == 0 ? "solid black 1px" : null,
     // borderRight: "solid black 1px",
     // borderBottom: "solid black 1px"
@@ -168,9 +168,9 @@ export default function P_Mahaller() {
         </Grid>
       }
 
-      {show == "FormMahalBilgiCreate" &&
+      {show == "FormMahalBaslikCreate" &&
         <Grid item >
-          <FormMahalBilgiCreate setShow={setShow} />
+          <FormMahalBaslikCreate setShow={setShow} />
         </Grid>
       }
 
@@ -206,7 +206,7 @@ export default function P_Mahaller() {
                 </Box>
               )
             })}
-            <Bosluk>
+            <Bosluk >
 
             </Bosluk>
             {/* HAYALET */}
@@ -304,10 +304,17 @@ export default function P_Mahaller() {
 
                     </TableHeader>
 
-                    <TableHeader sx={{ backgroundColor: "white", borderTop: "0px", borderBottom: "0px" }}></TableHeader>
+                    <Bosluk ></Bosluk>
 
-                    <TableHeader>aa</TableHeader>
-                    <TableHeader>aa</TableHeader>
+                    {
+                      basliklar.filter(item => !item.sabit).map((item, index) => {
+                        return (
+                          <TableHeader key={index} index={index} count_={count_}>
+                            {oneLbs.code}
+                          </TableHeader>
+                        )
+                      })
+                    }
 
 
                     {/* HAYALET */}
@@ -315,45 +322,52 @@ export default function P_Mahaller() {
                       {count_ = mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).length}
                     </Box>}
 
-                    {/* POZLAR - SATIR SATIR */}
-                    {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).map((oneMahal, index) => {
-                      return (
-                        <Grid
-                          key={index}
-                          sx={{
-                            display: "grid",
-                            gridTemplateColumns: gridTemplateColumns_,
-                          }}
-                        >
+                    <Grid
+                      key={index}
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: totalWidth,
+                      }}
+                    >
 
+                      {/* MAHALLER */}
+                      {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).map((oneMahal, index) => {
+                        return (
+                          <Grid
+                            key={index}
+                            sx={{
+                              display: "grid",
+                              gridTemplateColumns: gridTemplateColumns_,
+                            }}
+                          >
 
-                          {
-                            basliklar.filter(item => item.sabit).map((item, index) => {
-                              return (
-                                <TableItem index={index} count_={count_}>
-                                  {oneMahal[item.referans]}
-                                </TableItem>
-                              )
-                            })
-                          }
+                            {
+                              basliklar.filter(item => item.sabit).map((item, index) => {
+                                return (
+                                  <TableItem key={index} index={index} count_={count_}>
+                                    {oneMahal[item.referans]}
+                                  </TableItem>
+                                )
+                              })
+                            }
 
-                          <Bosluk>
+                            <Bosluk>
 
-                          </Bosluk>
+                            </Bosluk>
 
-                          {
-                            basliklar.filter(item => !item.sabit).map((item, index) => {
-                              return (
-                                <TableItem index={index} count_={count_}>
-                                  {oneMahal[item.referans]}
-                                </TableItem>
-                              )
-                            })
-                          }
-
-                        </Grid>
-                      )
-                    })}
+                            {
+                              basliklar.filter(item => !item.sabit).map((item, index) => {
+                                return (
+                                  <TableItem key={index} index={index} count_={count_}>
+                                    {oneMahal[item.referans]}
+                                  </TableItem>
+                                )
+                              })
+                            }
+                          </Grid>
+                        )
+                      })}
+                    </Grid>
 
                   </Grid>
                 )

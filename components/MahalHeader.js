@@ -174,7 +174,7 @@ export default function MahalHeader({ setShow }) {
 
 
               <Grid item>
-                <IconButton onClick={() => setShow("FormMahalBilgiCreate")} aria-label="addMahalBilgi" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
+                <IconButton onClick={() => setShow("FormMahalBaslikCreate")} aria-label="addMahalBilgi" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
                   <AddCircleOutlineIcon variant="contained" sx={{ color: (isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? "lightgray" : "blue" }} />
                 </IconButton>
               </Grid>

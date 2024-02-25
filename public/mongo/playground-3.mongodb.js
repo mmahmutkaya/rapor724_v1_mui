@@ -18,14 +18,14 @@ use('rapor724_v2');
 // );
 
 
-db.getCollection('pozlar').updateMany(
-  {},
-  {
-    $set: {
-      metrajTipId: "standartMetrajSayfasi"
-    }
-  }
-);
+// db.getCollection('pozlar').updateMany(
+//   {},
+//   {
+//     $set: {
+//       metrajTipId: "standartMetrajSayfasi"
+//     }
+//   }
+// );
 
 
 
@@ -37,7 +37,12 @@ db.getCollection('pozlar').updateMany(
 
 
 
-// db.getCollection('pozlar').deleteMany({});
+db.getCollection('pozlar').deleteMany({});
+db.getCollection('projects').deleteMany({});
+db.getCollection('mahaller').deleteMany({});
+db.getCollection('metrajlar').deleteMany({});
+db.getCollection('deneme').deleteMany({});
+
 
 // db.getCollection('projects').updateMany(
 //   {},

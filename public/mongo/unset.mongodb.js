@@ -4,28 +4,35 @@
 use('rapor724_v2');
 
 
-db.getCollection('projects').updateMany(
-  {},
-  { $unset: { mahalBilgiBirimleri: "" } }
-);
+// db.getCollection('projects').updateMany(
+//   {},
+//   { $unset: { bilgiTurleri: "" } }
+// );
 
 
-const mahalBirimleri = [
-  { id: "mt", name: "mt" },
-  { id: "m2", name: "m2" },
-  { id: "m3", name: "m3" },
-  { id: "ad", name: "ad" },
-  { id: "set", name: "set" },
-  { id: "tl", name: "TL" },
-  { id: "usd", name: "USD" },
-  { id: "eur", name: "EUR" },
-  { id: "tarih", name: "TARİH" },
+// const haneSayilari = [
+//   { id: "0", name: "0" },
+//   { id: "0,0", name: "0,0" },
+//   { id: "0,00", name: "0,00" },
+//   { id: "0,000", name: "0,000" },
+//   { id: "0,0000", name: "0,0000" },
+// ]
+
+
+const mahalBasliklari = [
+  { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal kod", dataType: "metin" },
+  { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", dataType: "metin" },
+]
+
+const pozBasliklari = [
+  { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Poz No", dataType: "metin" },
+  { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Poz İsmi", dataType: "metin" },
 ]
 
 
 db.getCollection('projects').updateMany(
   {},
-  { $set: { mahalBirimleri } }
+  { $set: { mahalBasliklari, pozBasliklari } }
 );
 
 
