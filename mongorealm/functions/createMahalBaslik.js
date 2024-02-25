@@ -76,7 +76,7 @@ exports = async function (newMahalBaslik) {
   }
 
 
-
+ return newMahalBaslik
 
   // validation control - mahal başlık - birim
 
@@ -135,7 +135,7 @@ exports = async function (newMahalBaslik) {
   //   { $push: { mahalBasliklari: newMahalBaslik } }
   // )
 
-  return newMahalBaslik
+ 
 
   // newMahalBaslik._id = result.insertedId
 
