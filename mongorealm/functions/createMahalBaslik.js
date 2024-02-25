@@ -59,20 +59,12 @@ exports = async function (newMahalBaslik) {
 
   // validation control - mahal başlık - veriTuruId
   if (typeof newMahalBaslik.veriTuruId !== "string") {
-    errorObj.veriTuruId = "Zorunlu"
+    throw new Error("Mahal başlık kaydı için gerekli olan  veri türünde hata tespit edildi, 'string' değilsayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
-  if (typeof newMahalBaslik.veriTuruId === "string") {
-    if (newMahalBaslik.veriTuruId.length === 0) {
-      errorObj.veriTuruId = "Zorunlu"
-    }
-  }
-
-  if (typeof newMahalBaslik.veriTuruId === "string") {
-    let minimumHaneSayisi = 3
-    if (newMahalBaslik.veriTuruId.length > 0 && newMahalBaslik.veriTuruId.length < minimumHaneSayisi) {
-      errorObj.veriTuruId = `${minimumHaneSayisi} haneden az olamaz`
-    }
+  // validation control - mahal başlık - veriTuruId
+  if (typeof newMahalBaslik.veriTuruId !== "string") {
+    throw new Error("Mahal başlık kaydı için gerekli olan  veri türünde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
 
