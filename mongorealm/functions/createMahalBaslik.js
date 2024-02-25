@@ -130,12 +130,12 @@ exports = async function (newMahalBaslik) {
 
 
 
-  const result = await collection_Projects.updateOne(
-    { _id: newMahalBaslik._projectId },
-    { $push: { mahalBasliklari: newMahalBaslik } }
-  )
+  // const result = await collection_Projects.updateOne(
+  //   { _id: newMahalBaslik._projectId },
+  //   { $push: { mahalBasliklari: newMahalBaslik } }
+  // )
 
-  return result
+  return newMahalBaslik
 
   // newMahalBaslik._id = result.insertedId
 
