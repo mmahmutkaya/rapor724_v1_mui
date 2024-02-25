@@ -1,8 +1,6 @@
 exports = async function (newMahalBaslik) {
   
-  return newMahalBaslik
-
-
+  
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
   const mailTeyit = user.custom_data.mailTeyit
@@ -23,7 +21,8 @@ exports = async function (newMahalBaslik) {
   }
 
 
-
+  return newMahalBaslik
+  
   // form validation - backend
   
   const errorObj = {}
