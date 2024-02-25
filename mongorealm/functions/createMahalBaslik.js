@@ -28,7 +28,7 @@ exports = async function (newMahalBaslik) {
 
   // validation control - mahal başlık - projeId bilgisi
   // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
-  if (typeof newMahalBaslik.projectId !== "object") {
+  if (typeof newMahalBaslik._projectId !== "object") {
     throw new Error("Mahal kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
