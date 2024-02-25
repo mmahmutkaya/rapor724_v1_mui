@@ -55,7 +55,7 @@ exports = async function (newMahalBaslik) {
   }
 
   if (typeof newMahalBaslik.name === "string") {
-    if (isProject.mahalbasliklari.find(item => item.name == newMahalBaslik.name)) {
+    if (isProject.mahalBasliklari.find(item => item.name == newMahalBaslik.name)) {
       errorObj.name = `Bu başlık kullanılmış`
     }
   }
@@ -130,13 +130,14 @@ exports = async function (newMahalBaslik) {
 
 
 
-  // const result = await collection_Projects.updateOne(
-  //   { _id: newMahalBaslik._projectId },
-  //   { $push: { mahalBasliklari: newMahalBaslik } }
-  // )
+  const result = await collection_Projects.updateOne(
+    { _id: newMahalBaslik._projectId },
+    { $push: { mahalBasliklari: newMahalBaslik } }
+  )
 
  
-
+  return result
+  
   // newMahalBaslik._id = result.insertedId
 
   // // lbs / mahal başlığı "includesMahal:true" key.value değerine sahip değilse gerekli işlemi yapıyoruz
