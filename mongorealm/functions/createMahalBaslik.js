@@ -54,13 +54,13 @@ exports = async function (newMahalBaslik) {
   }
 
 
-  
+
 
 
   // validation control - mahal başlık - veriTuruId
 
   if (typeof newMahalBaslik.veriTuruId !== "string") {
-    throw new Error("Mahal başlık kaydı için gerekli olan 'veriTuruId' verisi 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+    throw new Error("Mahal başlık kaydı için gerekli olan 'veriTuruId' 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
   // validation control - mahal başlık - veriTuruId
@@ -74,19 +74,32 @@ exports = async function (newMahalBaslik) {
   // validation control - mahal başlık - birim
 
   if (!(!newMahalBaslik.birim || typeof newMahalBaslik.birim == "string")) {
-    throw new Error("Mahal başlık kaydı için gerekli olan 'birim' verisi 'tanımsız' ('undefined) veya 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+    throw new Error("Mahal başlık kaydı için gerekli olan 'birim' verisi 'tanımsız' ('undefined') veya 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
+  //
+  if (typeof newMahalBaslik.birim === "string") {
+    let maksimumHaneSayisi = 10
+    if (newMahalBaslik.haneSayisiId.length > 0 && newMahalBaslik.haneSayisiId.length > maksimumHaneSayisi) {
+      errorObj.birim = `${maksimumHaneSayisi} haneden fazla olamaz`
+    }
+  }
+
+
 
 
 
   // validation control - mahal başlık - haneSayisiId
 
-  if (typeof newMahalBaslik.haneSayisiId !== "string") {
-    throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' verisi 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+  if (!(!newMahalBaslik.haneSayisiId || typeof newMahalBaslik.haneSayisiId == "string")) {
+    throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' verisi 'tanımsız' ('undefined') olmalı veya 'metin' ('string') olmalı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
-  if (!isProject.haneSayilari.find(item => item.id == newMahalBaslik.haneSayisiId)) {
-    throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' projede kayıtlı bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+  if (typeof newMahalBaslik.haneSayisiId === "string") {
+    if (newMahalBaslik.haneSayisiId.length > 0) {
+      if (!isProject.haneSayilari.find(item => item.id == newMahalBaslik.haneSayisiId)) {
+        throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' projede kayıtlı bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+      }
+    }
   }
 
 
