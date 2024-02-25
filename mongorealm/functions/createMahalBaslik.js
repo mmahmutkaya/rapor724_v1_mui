@@ -65,7 +65,7 @@ exports = async function (newMahalBaslik) {
 
   // validation control - mahal başlık - veriTuruId
   if (isProject.veriTurleri.find(item => item.id == newMahalBaslik.veriTuruId)) {
-    throw new Error("Mahal başlık kaydı için gerekli olan 'veriTuruId' projede kayıtlı bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+    throw new Error(newMahalBaslik.veriTuruId,"Mahal başlık kaydı için gerekli olan 'veriTuruId' projede kayıtlı bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
 
