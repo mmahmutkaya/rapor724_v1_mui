@@ -54,7 +54,7 @@ exports = async function (newMahalBaslik) {
   }
 
 
-
+  
 
 
   // validation control - mahal başlık - veriTuruId
@@ -73,8 +73,8 @@ exports = async function (newMahalBaslik) {
 
   // validation control - mahal başlık - birim
 
-  if (!newMahalBaslik.birim || typeof newMahalBaslik.birim !== "string") {
-    throw new Error("Mahal başlık kaydı için gerekli olan 'birim' verisi null veya 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+  if (!(!newMahalBaslik.birim || typeof newMahalBaslik.birim == "string")) {
+    throw new Error("Mahal başlık kaydı için gerekli olan 'birim' verisi 'tanımsız' ('undefined) veya 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
 
@@ -85,7 +85,6 @@ exports = async function (newMahalBaslik) {
     throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' verisi 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
-  // validation control - mahal başlık - haneSayisiId
   if (!isProject.haneSayilari.find(item => item.id == newMahalBaslik.haneSayisiId)) {
     throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' projede kayıtlı bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
