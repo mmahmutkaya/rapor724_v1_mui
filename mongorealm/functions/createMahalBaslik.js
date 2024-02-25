@@ -76,8 +76,6 @@ exports = async function (newMahalBaslik) {
   }
 
 
- return newMahalBaslik
-
   // validation control - mahal başlık - birim
 
   if (!(!newMahalBaslik.birim || typeof newMahalBaslik.birim == "string")) {
