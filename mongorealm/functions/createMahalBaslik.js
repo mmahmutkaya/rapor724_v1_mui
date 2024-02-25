@@ -128,9 +128,11 @@ exports = async function (newMahalBaslik) {
     isDeleted: false
   }
 
+
+
   const result = await collection_Projects.updateOne(
     { _id: newMahalBaslik._projectId },
-    [{ $set: { mahalbasliklari: { $concatArrays: ["$mahalbasliklari", [newMahalBaslik]] } } }]
+    { $push: { mahalBasliklari: newMahalBaslik } }
   )
 
   return result
