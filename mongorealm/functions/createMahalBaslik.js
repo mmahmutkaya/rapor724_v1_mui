@@ -10,6 +10,7 @@ exports = async function (newMahalBaslik) {
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
 
   let isProject = await collection_Projects.findOne({ _id: newMahalBaslik._projectId, members: _userId, isDeleted: false })
+  isProject = { ...isProject }
   if (!isProject) throw new Error("MONGO // createMahalBaslik // Mahal başlığı eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
 
@@ -50,6 +51,12 @@ exports = async function (newMahalBaslik) {
     let minimumHaneSayisi = 3
     if (newMahalBaslik.name.length > 0 && newMahalBaslik.name.length < minimumHaneSayisi) {
       errorObj.name = `${minimumHaneSayisi} haneden az olamaz`
+    }
+  }
+
+  if (typeof newMahalBaslik.name === "string") {
+    if (isProject.mahalbasliklari.find(item => item.name == newMahalBaslik.name)) {
+      errorObj.name = `Bu başlık kullanılmış`
     }
   }
 
@@ -121,38 +128,40 @@ exports = async function (newMahalBaslik) {
     isDeleted: false
   }
 
-  return newMahalBaslik
+  const result = await collection_Projects.updateOne(
+    { _id: newMahalBaslik._projectId },
+    [{ $set: { mahalbasliklari: { $concatArrays: ["$mahalbasliklari", [newMahalBaslik]] } } }]
+  )
 
-  const collection_Mahaller = context.services.get("mongodb-atlas").db("rapor724_v2").collection("mahaller")
-  const result = await collection_Mahaller.insertOne(newMahalBaslik)
+  return result
 
-  newMahalBaslik._id = result.insertedId
+  // newMahalBaslik._id = result.insertedId
 
-  // lbs / mahal başlığı "includesMahal:true" key.value değerine sahip değilse gerekli işlemi yapıyoruz
+  // // lbs / mahal başlığı "includesMahal:true" key.value değerine sahip değilse gerekli işlemi yapıyoruz
 
 
-  let newProject = project
+  // let newProject = project
 
-  if (!theWbs.includesMahal) {
+  // if (!theWbs.includesMahal) {
 
-    await collection_Projects.updateOne(
-      { _id: newMahalBaslik._projectId, "lbs._id": newMahalBaslik._lbsId },
-      { $set: { "lbs.$.includesMahal": true } },
-    );
+  //   await collection_Projects.updateOne(
+  //     { _id: newMahalBaslik._projectId, "lbs._id": newMahalBaslik._lbsId },
+  //     { $set: { "lbs.$.includesMahal": true } },
+  //   );
 
-    let newWbsArray = project.lbs.map(oneWbs => {
+  //   let newWbsArray = project.lbs.map(oneWbs => {
 
-      if (oneWbs._id.toString() === newMahal._lbsId.toString()) {
-        return { ...oneWbs, includesMahal: true }
-      } else {
-        return oneWbs
-      }
+  //     if (oneWbs._id.toString() === newMahal._lbsId.toString()) {
+  //       return { ...oneWbs, includesMahal: true }
+  //     } else {
+  //       return oneWbs
+  //     }
 
-    })
+  //   })
 
-    newProject = { ...project, lbs: newLbsArray }
+  //   newProject = { ...project, lbs: newLbsArray }
 
-  }
+  // }
 
   return ({ newMahal, newProject })
 
