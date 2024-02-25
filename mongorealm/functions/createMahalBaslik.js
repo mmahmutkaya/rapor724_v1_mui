@@ -1,6 +1,6 @@
 exports = async function (newMahalBaslik) {
-  
-  
+
+
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
   const mailTeyit = user.custom_data.mailTeyit
@@ -9,11 +9,11 @@ exports = async function (newMahalBaslik) {
 
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
 
-  let project = await collection_Projects.findOne({ _id: newMahalBaslik._projectId, members: _userId, isDeleted: false })
-  if (!project) throw new Error("MONGO // createMahalBaslik // Mahal başlığı eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
+  let isProject = await collection_Projects.findOne({ _id: newMahalBaslik._projectId, members: _userId, isDeleted: false })
+  if (!isProject) throw new Error("MONGO // createMahalBaslik // Mahal başlığı eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
 
-  
+
   // veri düzeltme
   if (newMahalBaslik.veriTuruId !== "sayi") {
     delete newMahalBaslik["haneSayisiId"]
@@ -21,13 +21,10 @@ exports = async function (newMahalBaslik) {
   }
 
 
-  return newMahalBaslik
-  
   // form validation - backend
-  
+
   const errorObj = {}
-  
-  
+
 
   // validation control - mahal başlık - projeId bilgisi
   // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
@@ -38,6 +35,7 @@ exports = async function (newMahalBaslik) {
 
 
   // validation control - mahal başlık - isim
+
   if (typeof newMahalBaslik.name !== "string") {
     errorObj.name = "Zorunlu"
   }
@@ -57,16 +55,40 @@ exports = async function (newMahalBaslik) {
 
 
 
+
+
   // validation control - mahal başlık - veriTuruId
+
   if (typeof newMahalBaslik.veriTuruId !== "string") {
-    throw new Error("Mahal başlık kaydı için gerekli olan  veri türünde hata tespit edildi, 'string' değilsayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+    throw new Error("Mahal başlık kaydı için gerekli olan 'veriTuruId' verisi 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
   // validation control - mahal başlık - veriTuruId
-  if (typeof newMahalBaslik.veriTuruId !== "string") {
-    throw new Error("Mahal başlık kaydı için gerekli olan  veri türünde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+  if (isProject.veriTurleri.find(item => item.id == newMahalBaslik.veriTuruId)) {
+    throw new Error("Mahal başlık kaydı için gerekli olan 'veriTuruId' projede kayıtlı bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
+
+
+
+  // validation control - mahal başlık - birim
+
+  if (!newMahalBaslik.birim || typeof newMahalBaslik.birim !== "string") {
+    throw new Error("Mahal başlık kaydı için gerekli olan 'birim' verisi null veya 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+  }
+
+
+
+  // validation control - mahal başlık - haneSayisiId
+
+  if (typeof newMahalBaslik.haneSayisiId !== "string") {
+    throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' verisi 'metin' ('string') değil, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+  }
+
+  // validation control - mahal başlık - haneSayisiId
+  if (isProject.haneSayilari.find(item => item.id == newMahalBaslik.haneSayisiId)) {
+    throw new Error("Mahal başlık kaydı için gerekli olan 'haneSayisiId' projede kayıtlı bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+  }
 
 
 
@@ -81,12 +103,13 @@ exports = async function (newMahalBaslik) {
 
   // let newMahalBaslik
   newMahalBaslik = {
-    _projectId: newMahalBaslik._projectId,
-    name: newMahalBaslik.name,
+    ...newMahalBaslik,
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false
   }
+
+  return newMahalBaslik
 
   const collection_Mahaller = context.services.get("mongodb-atlas").db("rapor724_v2").collection("mahaller")
   const result = await collection_Mahaller.insertOne(newMahalBaslik)
