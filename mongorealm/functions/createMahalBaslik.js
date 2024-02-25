@@ -1,4 +1,6 @@
 exports = async function (newMahalBaslik) {
+  
+  return newMahalBaslik
 
 
   const user = context.user
