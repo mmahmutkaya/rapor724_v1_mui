@@ -70,6 +70,7 @@ exports = async function (newMahal) {
     _lbsId: newMahal.lbsId,
     name: newMahal.mahalName,
     kod: newMahal.mahalKod,
+    ilaveBilgiler: [],
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false
