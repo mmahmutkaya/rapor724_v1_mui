@@ -14,11 +14,16 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ClearOutlined from '@mui/icons-material/ClearOutlined';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import AlignHorizontalLeftOutlinedIcon from '@mui/icons-material/AlignHorizontalLeftOutlined';
+import AlignHorizontalRightOutlinedIcon from '@mui/icons-material/AlignHorizontalRightOutlined';
+import AlignHorizontalCenterOutlinedIcon from '@mui/icons-material/AlignHorizontalCenterOutlined';
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 
-
-
-export default function MahalHeader({ setShow }) {
+export default function MahalHeader({ setShow, editMahal, setEditMahal }) {
 
   const { drawerWidth, topBarHeight } = useContext(StoreContext)
 
@@ -28,6 +33,7 @@ export default function MahalHeader({ setShow }) {
   const RealmApp = useApp();
 
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
+  const { selectedMahalBaslik, setSelectedMahalBaslik } = useContext(StoreContext)
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
@@ -92,6 +98,91 @@ export default function MahalHeader({ setShow }) {
 
 
 
+  async function handleMahalBaslikDelete(mahalBaslik) {
+
+    // seçili lbs yoksa durdurma, inaktif iken tuşlara basılabiliyor mesela, bu fonksiyon çalıştırılıyor, orayı iptal etmekle uğraşmak istemedim
+    if (!selectedMahalBaslik) {
+      console.log("alttaki satırda --return-- oldu")
+      return
+    }
+
+    return { "silinecekMahalBaslik": mahalBaslik }
+
+    try {
+      const result = await RealmApp.currentUser.callFunction("deleteMahalBaslik", { mahalId: mahal._id });
+
+      if (result.deletedCount) {
+
+        // const oldMahaller = queryClient.getQueryData(["mahaller"])
+        // const newMahaller = oldMahaller.filter(item => item._id.toString() !== mahal._id.toString())
+        // queryClient.setQueryData(["mahaller"], newMahaller)
+
+        setMahaller(oldMahaller => oldMahaller.filter(item => item._id.toString() !== mahal._id.toString()))
+
+      }
+
+      if (result.isIncludesMahalFalse) {
+
+        let oldProject = JSON.parse(JSON.stringify(isProject))
+
+        oldProject.lbs.find(item => item._id.toString() === mahal._lbsId.toString()).includesMahal = false
+
+        setIsProject(oldProject)
+
+      }
+
+      setSelectedMahal()
+
+    } catch (err) {
+
+      console.log(err)
+      let hataMesaj_ = err.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
+
+      if (hataMesaj_.includes("Silmek istediğiniz  Lbs'in alt seviyeleri mevcut")) {
+        hataMesaj_ = "Silmek istediğiniz  Lbs'in alt seviyeleri mevcut, öncelikle onları silmelisiniz."
+      }
+
+      if (hataMesaj_.includes("Mahal eklemeye açık başlıklar silinemez")) {
+        hataMesaj_ = "Mahal eklemeye açık başlıklar silinemez, öncelikle mahal eklemeye kapatınız."
+      }
+
+      setSelectedMahal()
+      setDialogCase("error")
+      setShowDialog(hataMesaj_)
+    }
+  }
+
+
+
+  async function handle_BaslikGenislet() {
+    setIsProject(isProject => {
+      const isProject_ = { ...isProject }
+      isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).genislik = isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).genislik + 0.5
+      return isProject_
+    })
+  }
+
+  async function handle_BaslikDaralt() {
+    setIsProject(isProject => {
+      const isProject_ = { ...isProject }
+      isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).genislik = isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).genislik - 0.5
+      return isProject_
+    })
+  }
+
+
+  async function handle_YatayHiza() {
+    setIsProject(isProject => {
+      const isProject_ = { ...isProject }
+      let guncelYatayHiza = isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).yatayHiza
+      guncelYatayHiza == "start" ? isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).yatayHiza = "center" : null
+      guncelYatayHiza == "center" ? isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).yatayHiza = "end" : null
+      guncelYatayHiza == "end" ? isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).yatayHiza = "start" : null
+      return isProject_
+    })
+  }
+
+
   let header = "Mahaller"
   // isProject?.name ? header = isProject?.name : null
 
@@ -113,7 +204,6 @@ export default function MahalHeader({ setShow }) {
       {showDialog &&
         <DialogWindow dialogCase={dialogCase} showDialog={showDialog} setShowDialog={setShowDialog} />
       }
-
 
       <AppBar
         position="fixed"
@@ -139,7 +229,6 @@ export default function MahalHeader({ setShow }) {
           {/* sol kısım (başlık) */}
           <Grid item xs>
             <Typography
-              onClick={() => handleTry()}
               // nowrap={true}
               variant="h6"
               fontWeight="bold"
@@ -153,38 +242,127 @@ export default function MahalHeader({ setShow }) {
           <Grid item xs="auto">
             <Grid container spacing={1}>
 
-              <Grid item >
-                <IconButton onClick={() => setSelectedMahal()} aria-label="lbsUncliced">
-                  <ClearOutlined variant="contained" sx={{
-                    color: selectedMahal ? "red" : "lightgray",
-                  }} />
-                </IconButton>
-              </Grid>
+
+              {/* seçimleri temizle */}
+              {selectedMahal &&
+                <Grid item >
+                  <IconButton onClick={() => setSelectedMahal()} aria-label="lbsUncliced">
+                    <ClearOutlined variant="contained"
+                      sx={{ color: "red" }} />
+                  </IconButton>
+                </Grid>}
+              {selectedMahalBaslik &&
+                <Grid item >
+                  <IconButton onClick={() => setSelectedMahalBaslik()} aria-label="lbsUncliced">
+                    <ClearOutlined variant="contained"
+                      sx={{ color: "green" }} />
+                  </IconButton>
+                </Grid>}
 
 
-              <Grid item onClick={() => handleMahalDelete(selectedMahal)} sx={{ cursor: "pointer" }}>
-                <IconButton aria-label="addMahal" disabled>
-                  <DeleteIcon
-                    // sx={{display: isProject_display}}
-                    variant="contained" sx={{
-                      color: selectedMahal ? "darkred" : "lightgray",
-                    }} />
-                </IconButton>
-              </Grid>
+
+              {/* ne seçili ise silme */}
+              {selectedMahal &&
+                <Grid item onClick={() => handleMahalDelete(selectedMahal)} sx={{ cursor: "pointer" }}>
+                  <IconButton aria-label="addMahal" disabled>
+                    <DeleteIcon
+                      // sx={{display: isProject_display}}
+                      variant="contained"
+                      sx={{ color: "red" }} />
+                  </IconButton>
+                </Grid>}
+              {selectedMahalBaslik &&
+                <Grid item onClick={() => handleMahalBaslikDelete(selectedMahalBaslik)} sx={{ cursor: "pointer" }}>
+                  <IconButton aria-label="addMahal" disabled>
+                    <DeleteIcon
+                      // sx={{display: isProject_display}}
+                      variant="contained"
+                      sx={{ color: "green" }} />
+                  </IconButton>
+                </Grid>}
 
 
-              <Grid item>
-                <IconButton onClick={() => setShow("FormMahalBaslikCreate")} aria-label="addMahalBilgi" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
-                  <AddCircleOutlineIcon variant="contained" sx={{ color: (isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? "lightgray" : "blue" }} />
-                </IconButton>
-              </Grid>
 
 
-              <Grid item>
-                <IconButton onClick={() => setShow("FormMahalCreate")} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
-                  <AddCircleOutlineIcon variant="contained" color={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? " lightgray" : "success"} />
-                </IconButton>
-              </Grid>
+              {/* mahal başlık seçili ise gösterilen fonksiyon - genişletme/daraltma*/}
+              {selectedMahalBaslik &&
+                <Grid item onClick={() => handle_BaslikDaralt()} sx={{ cursor: "pointer" }}>
+                  <IconButton aria-label="addMahal" disabled>
+                    <UnfoldLessIcon
+                      variant="contained"
+                      sx={{ rotate: "90deg", fontSize: "1.4rem", mt: "0.1rem", color: "black" }} />
+                  </IconButton>
+                </Grid>}
+
+
+
+              {/* mahal başlık seçili ise gösterilen fonksiyon */}
+              {selectedMahalBaslik &&
+                <Grid item onClick={() => handle_BaslikGenislet()} sx={{ cursor: "pointer" }}>
+                  <IconButton aria-label="addMahal" disabled>
+                    <UnfoldMoreIcon
+                      variant="contained"
+                      sx={{ rotate: "90deg", fontSize: "1.6rem", color: "black" }} />
+                  </IconButton>
+                </Grid>}
+
+
+
+              {/* mahal başlık seçili ise gösterilen fonksiyon - yatay hiza*/}
+              {selectedMahalBaslik &&
+                <Grid item onClick={() => handle_YatayHiza()} sx={{ cursor: "pointer" }}>
+                  <IconButton aria-label="addMahal" disabled>
+                    {selectedMahalBaslik.yatayHiza == "start" &&
+                      <AlignHorizontalLeftOutlinedIcon
+                        variant="contained"
+                        sx={{ color: "black" }} />
+                    }
+                    {selectedMahalBaslik.yatayHiza == "center" &&
+                      <AlignHorizontalCenterOutlinedIcon
+                        variant="contained"
+                        sx={{ color: "black" }} />
+                    }
+                    {selectedMahalBaslik.yatayHiza == "end" &&
+                      <AlignHorizontalRightOutlinedIcon
+                        variant="contained"
+                        sx={{ color: "black" }} />
+                    }
+                  </IconButton>
+                </Grid>}
+
+
+
+              {editMahal &&
+                <Grid item>
+                  <IconButton onClick={() => setEditMahal(false)} aria-label="addLbs">
+                    <FileDownloadDoneIcon variant="contained" sx={{ color: "black" }} />
+                  </IconButton>
+                </Grid>}
+
+              {(!selectedMahalBaslik && !selectedMahal) &&
+                <Grid item>
+                  <IconButton onClick={() => setShow("SettingsMahalBasliklar")} aria-label="addLbs">
+                    <VisibilityIcon variant="contained" sx={{ color: "black" }} />
+                  </IconButton>
+                </Grid>}
+
+
+              {(!selectedMahalBaslik && !selectedMahal) &&
+                <Grid item>
+                  <IconButton onClick={() => setShow("FormMahalBaslikCreate")} aria-label="addMahalBilgi" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
+                    <AddCircleOutlineIcon variant="contained" sx={{ color: (isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? "lightgray" : "blue" }} />
+                  </IconButton>
+                </Grid>}
+
+
+              {(!selectedMahalBaslik && !selectedMahal) &&
+                <Grid item>
+                  <IconButton onClick={() => setShow("FormMahalCreate")} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
+                    <AddCircleOutlineIcon variant="contained" color={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? " lightgray" : "success"} />
+                  </IconButton>
+                </Grid>}
+
+
 
             </Grid>
           </Grid>

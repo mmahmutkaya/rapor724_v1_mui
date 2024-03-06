@@ -30,8 +30,8 @@ export default function FormMahalCreate({ setShow }) {
 
   const [errorObj, setErrorObj] = useState(false)
 
-  const [mahalBilgi_veriTuruId, setMahalBilgi_veriTuruId] = useState("metin")
-  const [mahalBilgi_haneSayisiId, setMahalBilgi_haneSayisiId] = useState("0,00")
+  const [veriTuruId, setveriTuruId] = useState("metin")
+  const [haneSayisiId, sethaneSayisiId] = useState("0,00")
 
   // form ilk açıldığında önceden belirlenen birşeyin seçilmiş olması için alttaki satırdaki gibi yapılabiliyor
   // const [mahalTipi, setMahalTipi] = useState(isProject ? isProject.mahalTipleri.find(item => item.id === "direktMahalListesi") : "");
@@ -39,7 +39,7 @@ export default function FormMahalCreate({ setShow }) {
   const RealmApp = useApp();
 
 
-  // mahal oluşturma fonksiyonu
+
   async function handleSubmit(event) {
 
     event.preventDefault();
@@ -48,63 +48,77 @@ export default function FormMahalCreate({ setShow }) {
 
       // formdan gelen text verilerini alma - (çoktan seçmeliler seçildiği anda useState() kısmında güncelleniyor)
       const data = new FormData(event.currentTarget);
-      const mahalBilgi_name = deleteLastSpace(data.get('mahalBilgi_name'))
-      const mahalBilgi_veriTuruId = deleteLastSpace(data.get('mahalBilgi_veriTuruId'))
-      const mahalBilgi_birim = deleteLastSpace(data.get('mahalBilgi_birim'))
-      const mahalBilgi_haneSayisiId = deleteLastSpace(data.get('mahalBilgi_haneSayisiId'))
+      const name = deleteLastSpace(data.get('name'))
+      const veriTuruId = deleteLastSpace(data.get('veriTuruId'))
+      const birim = deleteLastSpace(data.get('birim'))
+      const haneSayisiId = deleteLastSpace(data.get('haneSayisiId'))
       const projectId = isProject?._id
 
 
       // form validation - frontend
 
+
       // aşağıda kontroller başlıyor, hata varsa bunu true yapıcaz ve db ye göndermeyi engellicez ve formda uyarıları göstericez
       let isFormError = false
 
 
+      // validation control - mahal başlık - projeId bilgisi
       if (typeof projectId !== "object") {
         setDialogCase("error")
-        setShowDialog("Mahal kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+        setShowDialog("Mahal başlığı kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
         console.log("kayıt için gerekli olan 'projectId' verisinde hata olduğu için bu satırın altında durduruldu")
         return
       }
 
 
 
-      // validation control - mahal bilgi ismi
-      if (typeof mahalBilgi_name !== "string") {
-        setErrorObj(prev => ({ ...prev, mahalBilgi_name: "Zorunlu" }))
+      // validation control - mahal başlık - isim
+      if (typeof name !== "string") {
+        setErrorObj(prev => ({ ...prev, name: "Zorunlu" }))
         isFormError = true
+        console.log(1)
       }
 
-      if (typeof mahalBilgi_name === "string") {
-        if (mahalBilgi_name.length === 0) {
-          setErrorObj(prev => ({ ...prev, mahalBilgi_name: "Zorunlu" }))
+      if (typeof name === "string") {
+        if (name.length === 0) {
+          setErrorObj(prev => ({ ...prev, name: "Zorunlu" }))
           isFormError = true
+          console.log(2)
         }
       }
 
-      if (typeof mahalBilgi_name === "string") {
+      if (typeof name === "string") {
         let minimumHaneSayisi = 3
-        if (mahalBilgi_name.length > 0 && mahalBilgi_name.length < minimumHaneSayisi) {
-          setErrorObj(prev => ({ ...prev, mahalBilgi_name: `${minimumHaneSayisi} haneden az olamaz` }))
+        if (name.length > 0 && name.length < minimumHaneSayisi) {
+          setErrorObj(prev => ({ ...prev, name: `${minimumHaneSayisi} haneden az olamaz` }))
           isFormError = true
+          console.log(3)
+        }
+      }
+
+      if (typeof name === "string") {
+        if (isProject.mahalBasliklari.find(item => item.name == name)) {
+          setErrorObj(prev => ({ ...prev, name: `Bu başlık kullanılmış` }))
+          isFormError = true
+          console.log(3)
         }
       }
 
 
 
-      // validation control - mahal bilgi ismi
-      if (typeof mahalBilgi_birim !== "string") {
+      // validation control - mahal başlık - birim
+      if (typeof birim !== "string") {
         setDialogCase("error")
-        setShowDialog("Beklenmedik bir hata oluştu, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
-        console.log("kayıt için gerekli olan 'mahalBilgi_birim' veri türü string olmadığı için bu satırın altında durduruldu")
+        setShowDialog("Mahal başlığı kaydı için gerekli olan  'birim' verisinin metin olmadığı tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+        console.log("kayıt için gerekli olan 'birim' verisinde hata olduğu için fonksiyon bu satırın altında durduruldu")
         return
       }
 
-      if (typeof mahalBilgi_birim === "string") {
+
+      if (typeof birim === "string") {
         let maximumHaneSayisi = 10
-        if (mahalBilgi_birim.length > 0 && mahalBilgi_birim.length > maximumHaneSayisi) {
-          setErrorObj(prev => ({ ...prev, mahalBilgi_birim: `${maximumHaneSayisi} haneden fazla olamaz` }))
+        if (birim.length > 0 && birim.length > maximumHaneSayisi) {
+          setErrorObj(prev => ({ ...prev, birim: `${maximumHaneSayisi} haneden fazla olamaz` }))
           isFormError = true
         }
       }
@@ -119,12 +133,16 @@ export default function FormMahalCreate({ setShow }) {
 
 
       const mahalBilgi = {
-        projectId: isProject?._id,
-        name: mahalBilgi_name,
-        veriTuruId: mahalBilgi_veriTuruId,
-        birim: mahalBilgi_birim,
-        haneSayisiId: mahalBilgi_haneSayisiId,
+        _projectId: isProject?._id,
+        name: name,
+        veriTuruId: veriTuruId,
+        birim: birim,
+        haneSayisiId: haneSayisiId,
       }
+
+      console.log("typeof mahalBilgi.birim", typeof mahalBilgi.birim)
+      console.log("mahalBilgi", mahalBilgi)
+
 
 
       // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
@@ -175,15 +193,15 @@ export default function FormMahalCreate({ setShow }) {
   }
 
 
-  const handleChange_mahalBilgi_veriTuruId = (event) => {
+  const handleChange_veriTuruId = (event) => {
     console.log("event.target.value", event.target.value)
-    setMahalBilgi_veriTuruId(isProject.veriTurleri?.find(item => item.id === event.target.value).id);
+    setveriTuruId(isProject.veriTurleri?.find(item => item.id === event.target.value).id);
   };
 
 
-  const handleChange_mahalBilgi_haneSayisiId = (event) => {
+  const handleChange_haneSayisiId = (event) => {
     console.log("event.target.value", event.target.value)
-    setMahalBilgi_haneSayisiId(isProject.haneSayilari?.find(item => item.id === event.target.value).id);
+    sethaneSayisiId(isProject.haneSayilari?.find(item => item.id === event.target.value).id);
   };
 
   console.log("isProject", isProject)
@@ -216,7 +234,7 @@ export default function FormMahalCreate({ setShow }) {
             <Box
               onClick={() => setErrorObj(prevData => {
                 const newData = { ...prevData }
-                delete newData["mahalBilgi_name"]
+                delete newData["name"]
                 return newData
               })}
               sx={{ minWidth: 120, marginBottom: "2rem" }}
@@ -233,11 +251,12 @@ export default function FormMahalCreate({ setShow }) {
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
                 margin="normal"
-                id="mahalBilgi_name"
-                name="mahalBilgi_name"
+                id="name"
+                name="name"
+                autoComplete="off"
                 // autoFocus
-                error={errorObj.mahalBilgi_name ? true : false}
-                helperText={errorObj.mahalBilgi_name ? errorObj.mahalBilgi_name : 'Örn: "Mahal Tipi" veya "Zemin Alanı"'}
+                error={errorObj.name ? true : false}
+                helperText={errorObj.name ? errorObj.name : 'Örn: "Mahal Tipi" veya "Zemin Alanı"'}
                 // margin="dense"
                 label="Başlık"
                 type="text"
@@ -250,15 +269,15 @@ export default function FormMahalCreate({ setShow }) {
             <Box
               onClick={() => setErrorObj(prevData => {
                 const errorObj = { ...prevData }
-                delete errorObj["mahalBilgi_veriTuruId"]
+                delete errorObj["veriTuruId"]
                 return errorObj
               })}
               sx={{ minWidth: 120, marginTop: "2rem", marginBottom: "1rem" }}
             >
 
               <InputLabel
-                error={errorObj.mahalBilgi_veriTuruId ? true : false}
-                id="mahalBilgi_veriTuruId"
+                error={errorObj.veriTuruId ? true : false}
+                id="veriTuruId"
               >
                 <Grid container justifyContent="space-between">
                   <Grid item> Veri Türü </Grid>
@@ -266,16 +285,16 @@ export default function FormMahalCreate({ setShow }) {
               </InputLabel>
 
               <Select
-                error={errorObj.mahalBilgi_veriTuruId ? true : false}
+                error={errorObj.veriTuruId ? true : false}
                 variant="standard"
                 fullWidth
-                labelId="mahalBilgi_veriTuruId"
+                labelId="veriTuruId"
                 id="select-verıTuruId"
-                value={mahalBilgi_veriTuruId ? mahalBilgi_veriTuruId : ""}
+                value={veriTuruId ? veriTuruId : ""}
                 label="Poz için tip seçiniz"
-                onChange={handleChange_mahalBilgi_veriTuruId}
+                onChange={handleChange_veriTuruId}
                 required
-                name="mahalBilgi_veriTuruId"
+                name="veriTuruId"
               // disabled={true}
               >
                 {
@@ -296,10 +315,10 @@ export default function FormMahalCreate({ setShow }) {
             <Box
               onClick={() => setErrorObj(prevData => {
                 const newData = { ...prevData }
-                delete newData["mahalBilgi_birim"]
+                delete newData["birim"]
                 return newData
               })}
-              sx={{ display: mahalBilgi_veriTuruId == "sayi" ? "block" : "none", minWidth: 120 }}
+              sx={{ display: veriTuruId == "sayi" ? "block" : "none", minWidth: 120 }}
             >
               <TextField
                 sx={{
@@ -313,11 +332,12 @@ export default function FormMahalCreate({ setShow }) {
                 variant="standard"
                 // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
                 margin="normal"
-                id="mahalBilgi_birim"
-                name="mahalBilgi_birim"
+                id="birim"
+                name="birim"
+                autoComplete="off"
                 // autoFocus
-                error={errorObj.mahalBilgi_birim ? true : false}
-                helperText={errorObj.mahalBilgi_birim ? errorObj.mahalBilgi_birim : 'Örn:  m2 - TL - Gün - Ad.'}
+                error={errorObj.birim ? true : false}
+                helperText={errorObj.birim ? errorObj.birim : 'Örn:  m2 - TL - Gün - Ad.'}
                 // margin="dense"
                 label="Birim"
                 type="text"
@@ -331,15 +351,15 @@ export default function FormMahalCreate({ setShow }) {
             <Box
               onClick={() => setErrorObj(prevData => {
                 const errorObj = { ...prevData }
-                delete errorObj["mahalBilgi_haneSayisiId"]
+                delete errorObj["haneSayisiId"]
                 return errorObj
               })}
-              sx={{ display: mahalBilgi_veriTuruId == "sayi" ? "block" : "none", minWidth: 120, marginTop: "2rem", marginBottom: "1rem" }}
+              sx={{ display: veriTuruId == "sayi" ? "block" : "none", minWidth: 120, marginTop: "2rem", marginBottom: "1rem" }}
             >
 
               <InputLabel
-                error={errorObj.mahalBilgi_haneSayisiId ? true : false}
-                id="mahalBilgi_haneSayisiId"
+                error={errorObj.haneSayisiId ? true : false}
+                id="haneSayisiId"
               >
                 <Grid container justifyContent="space-between">
                   <Grid item> Hane Sayısı </Grid>
@@ -347,16 +367,16 @@ export default function FormMahalCreate({ setShow }) {
               </InputLabel>
 
               <Select
-                error={errorObj.mahalBilgi_haneSayisiId ? true : false}
+                error={errorObj.haneSayisiId ? true : false}
                 variant="standard"
                 fullWidth
-                labelId="mahalBilgi_haneSayisiId"
+                labelId="haneSayisiId"
                 id="select-hanesayisiId"
-                value={mahalBilgi_haneSayisiId ? mahalBilgi_haneSayisiId : ""}
+                value={haneSayisiId ? haneSayisiId : ""}
                 label="Gösterilecek hane sayısını seçiniz"
-                onChange={handleChange_mahalBilgi_haneSayisiId}
+                onChange={handleChange_haneSayisiId}
                 required
-                name="mahalBilgi_haneSayisiId"
+                name="haneSayisiId"
               // disabled={true}
               >
                 {

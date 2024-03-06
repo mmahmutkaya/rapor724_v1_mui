@@ -4,15 +4,17 @@ import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import FormMahalCreate from '../../components/FormMahalCreate'
+import SettingsMahalBasliklar from '../../components/SettingsMahalBasliklar'
 import FormMahalBaslikCreate from '../../components/FormMahalBaslikCreate'
 import MahalHeader from '../../components/MahalHeader'
 
 
 import { styled } from '@mui/system';
 import Grid from '@mui/material/Grid';
+import Input from '@mui/material/Input';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { Typography } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import InfoIcon from '@mui/icons-material/Info';
 
@@ -20,8 +22,9 @@ import InfoIcon from '@mui/icons-material/Info';
 
 export default function P_Mahaller() {
 
-  const { isProject } = useContext(StoreContext)
+  const { isProject, setIsProject } = useContext(StoreContext)
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
+  const { selectedMahalBaslik, setSelectedMahalBaslik } = useContext(StoreContext)
   const { mahaller, setMahaller } = useContext(StoreContext)
   const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
@@ -85,10 +88,10 @@ export default function P_Mahaller() {
   //   { id: 4, sira: 4, referans: "name", goster: true, sabit: false, genislik: 20, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Fonksiyon", dataType: "date" },
   // ].sort((a, b) => a.sira - b.sira))
 
-  const [basliklar, setBasliklar] = useState(isProject.mahalBasliklari)
+  // const [basliklar, setBasliklar] = useState(isProject?.mahalBasliklari?.filter(item => item.goster))
 
 
-  let totalWidthSabit = basliklar.filter(item => item.sabit).reduce(
+  let totalWidthSabit = isProject?.mahalBasliklari?.filter(item => item.sabit).reduce(
     (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
     0
   )
@@ -96,7 +99,7 @@ export default function P_Mahaller() {
   // console.log("totalWidthSabit", totalWidthSabit)
 
 
-  let totalWidthDegisken = basliklar.filter(item => !item.sabit).reduce(
+  let totalWidthDegisken = isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).reduce(
     (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
     0
   )
@@ -104,7 +107,7 @@ export default function P_Mahaller() {
   // console.log("totalWidthDegisken", totalWidthDegisken)
 
 
-  let totalWidth = basliklar.reduce(
+  let totalWidth = isProject?.mahalBasliklari?.reduce(
     (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
     0
   )
@@ -112,15 +115,15 @@ export default function P_Mahaller() {
   // console.log("totalWidth", totalWidth)
 
 
-  let gridTemplateColumnsSabit = basliklar.filter(item => item.sabit).reduce(
-    (ilkString, oneBilgi, index) => index != basliklar.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
+  let gridTemplateColumnsSabit = isProject?.mahalBasliklari?.filter(item => item.sabit).reduce(
+    (ilkString, oneBilgi, index) => index != isProject?.mahalBasliklari?.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
     ""
   )
   // console.log("gridTemplateColumnsSabit", gridTemplateColumnsSabit)
 
 
-  let gridTemplateColumnsDegisken = basliklar.filter(item => !item.sabit).reduce(
-    (ilkString, oneBilgi, index) => index != basliklar.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
+  let gridTemplateColumnsDegisken = isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).reduce(
+    (ilkString, oneBilgi, index) => index != isProject?.mahalBasliklari?.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
     ""
   )
   // console.log("gridTemplateColumnsDegisken", gridTemplateColumnsDegisken)
@@ -153,13 +156,42 @@ export default function P_Mahaller() {
     // borderBottom: "solid black 1px"
   }));
 
+  const handle_selectBaslik = (oneBaslik) => {
+    setSelectedMahalBaslik(oneBaslik)
+    setSelectedMahal()
+    console.log("mahal baslık secildi")
+  }
+
+  const handle_editMahal = (event, oneBaslik, oneMahal) => {
+    setMahaller(mahaller => {
+      let mahaller_ = mahaller
+      let bilgi = { id: oneBaslik.id, bilgi: event.target.value }
+      if (!mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler) {
+        mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler = [bilgi]
+        return mahaller_
+      }
+      if (!mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.id == oneBaslik.id)) {
+        mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.push(bilgi)
+        return mahaller_
+      }
+      mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.id == oneBaslik.id).bilgi = event.target.value
+      return mahaller_
+    })
+  }
+
+  const [editMahal, setEditMahal] = useState(false)
+
+  // console.log("-Page_Mahaller--isProject?.mahaller", isProject?.mahalBasliklari)
+
+  // let deneme = mahaller?.find(item => item._lbsId.toString() == oneLbs.toString()).ilaveBilgiler?.reduce((accumulator, oneMahal) => accumulator + Number(oneMahal.bilgi), 0)
+
 
   return (
 
     <>
 
       <Grid item >
-        <MahalHeader setShow={setShow} />
+        <MahalHeader setShow={setShow} editMahal={editMahal} setEditMahal={setEditMahal} />
       </Grid>
 
       {show == "FormMahalCreate" &&
@@ -171,6 +203,12 @@ export default function P_Mahaller() {
       {show == "FormMahalBaslikCreate" &&
         <Grid item >
           <FormMahalBaslikCreate setShow={setShow} />
+        </Grid>
+      }
+
+      {show == "SettingsMahalBasliklar" &&
+        <Grid item >
+          <SettingsMahalBasliklar setShow={setShow} />
         </Grid>
       }
 
@@ -197,35 +235,66 @@ export default function P_Mahaller() {
           >
             {/* HAYALET */}
             <Box sx={{ display: "none" }}>
-              {count_ = basliklar.filter(item => item.sabit).length}
+              {count_ = isProject?.mahalBasliklari?.filter(item => item.sabit).length}
             </Box>
-            {basliklar.filter(item => item.sabit).map((oneBaslik, index) => {
+            {isProject?.mahalBasliklari?.filter(item => item.sabit).map((oneBaslik, index) => {
               return (
-                <Box key={index} sx={{ backgroundColor: "lightgrey", fontWeight: "bold", border: "solid black 1px", borderRight: index + 1 == count_ ? "solid black 1px" : "0px" }}>
+                <Box
+                  sx={{
+                    cursor: "pointer",
+                    backgroundColor: selectedMahalBaslik?.id == oneBaslik.id ? "rgba(120, 120, 120, 0.7)" : "rgb(120, 120, 120, 0.4)",
+                    fontWeight: "bold",
+                    border: "solid black 1px",
+                    borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
+                    width: "100%",
+                    display: "grid",
+                    justifyContent: oneBaslik.yatayHiza,
+                  }}
+                  onClick={() => handle_selectBaslik(oneBaslik)}
+                  key={index}
+                >
                   {oneBaslik.name}
                 </Box>
               )
             })}
-            <Bosluk >
 
+
+            <Bosluk>
             </Bosluk>
-            {/* HAYALET */}
+
+
+            {/* HAYALET KOMPONENT */}
             <Box sx={{ display: "none" }}>
-              {count_ = basliklar.filter(item => !item.sabit).length}
+              {count_ = isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).length}
             </Box>
-            {basliklar.filter(item => !item.sabit).map((oneBaslik, index) => {
+            {/* GÖZÜKEN KOMPONENT */}
+            {isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((oneBaslik, index) => {
               return (
-                <Box key={index} sx={{ backgroundColor: "lightgrey", fontWeight: "bold", border: "solid black 1px", borderRight: index + 1 == count_ ? "solid black 1px" : "0px" }}>
+                <Box
+                  sx={{
+                    cursor: "pointer",
+                    backgroundColor: selectedMahalBaslik?.id == oneBaslik.id ? "rgba(120, 120, 120, 0.7)" : "rgb(120, 120, 120, 0.4)",
+                    fontWeight: "bold",
+                    border: "solid black 1px",
+                    borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
+                    width: "100%",
+                    display: "grid",
+                    justifyContent: oneBaslik.yatayHiza
+                  }}
+                  onClick={() => handle_selectBaslik(oneBaslik)}
+                  key={index}
+                >
                   {oneBaslik.name}
                 </Box>
               )
             })}
+
           </Grid>
 
 
           {/* MAHAL BAŞLIKLARI ve MAHALLER */}
           {
-            isProject.lbs
+            isProject?.lbs
               .filter(item => item.openForMahal === true)
               .sort(function (a, b) {
                 var nums1 = a.code.split(".");
@@ -263,22 +332,22 @@ export default function P_Mahaller() {
 
                           if (index == 0 && cOunt == 1) {
                             lbsCode = codePart
-                            lbsName = isProject.lbs.find(item => item.code == lbsCode).name
+                            lbsName = isProject?.lbs.find(item => item.code == lbsCode).name
                           }
 
                           if (index == 0 && cOunt !== 1) {
                             lbsCode = codePart
-                            lbsName = isProject.lbs.find(item => item.code == lbsCode).codeName
+                            lbsName = isProject?.lbs.find(item => item.code == lbsCode).codeName
                           }
 
                           if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
                             lbsCode = lbsCode + "." + codePart
-                            lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).codeName
+                            lbsName = lbsName + " > " + isProject?.lbs.find(item => item.code == lbsCode).codeName
                           }
 
                           if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
                             lbsCode = lbsCode + "." + codePart
-                            lbsName = lbsName + " > " + isProject.lbs.find(item => item.code == lbsCode).name
+                            lbsName = lbsName + " > " + isProject?.lbs.find(item => item.code == lbsCode).name
                           }
 
                         })
@@ -290,7 +359,7 @@ export default function P_Mahaller() {
                         {cOunt = lbsName.split(">").length}
                       </Box>
 
-                      {/* bu seviyede tek görünür grid item bu --> lbs başlığının yazdığı yer */}
+                      {/* GÖZÜKEN KOMPONENET - sabit kısımda - lbs başlığının yazdığı yer */}
                       {lbsName.split(">").map((item, index) => (
 
                         <Typography key={index} component={"span"} >
@@ -307,10 +376,16 @@ export default function P_Mahaller() {
                     <Bosluk ></Bosluk>
 
                     {
-                      basliklar.filter(item => !item.sabit).map((item, index) => {
+                      isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((item, index) => {
                         return (
-                          <TableHeader key={index} index={index} count_={count_}>
-                            {oneLbs.code}
+                          <TableHeader key={index} index={index} count_={count_} sx={{ display: "grid", with: "100%", justifyContent: one }}>
+                            {/* {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).ilaveBilgiler?.reduce((accumulator, oneMahal) => accumulator + Number(oneMahal.bilgi), 0)} */}
+                            {/* {console.log("ESAS",mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((accumulator, oneMahal) => accumulator + Number(oneMahal.ilaveBilgiler.bilgi), 0))} */}
+                            {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).reduce((toplam, oneBilgi) => toplam + Number(oneBilgi.bilgi), 0)}
+                            {/* {console.log("oneLbs", oneLbs)} */}
+                            {/* // {console.log("mahaller", mahaller)} */}
+                            {/* // {console.log("oneLbsId", oneLbs._id.toString())} */}
+                            {/* // {console.log("lbsIdler", mahaller.map(item => item._lbsId.toString()))} */}
                           </TableHeader>
                         )
                       })
@@ -340,26 +415,79 @@ export default function P_Mahaller() {
                               gridTemplateColumns: gridTemplateColumns_,
                             }}
                           >
-
                             {
-                              basliklar.filter(item => item.sabit).map((item, index) => {
+                              isProject?.mahalBasliklari?.filter(item => item.sabit).map((oneBaslik, index) => {
                                 return (
-                                  <TableItem key={index} index={index} count_={count_}>
-                                    {oneMahal[item.referans]}
+                                  <TableItem
+                                    key={index}
+                                    index={index}
+                                    count_={count_}
+                                    // onDoubleClick={() => handle_selectMahal(oneBaslik, oneMahal)}
+                                    sx={{
+                                      // userSelect:"none",
+                                      cursor: "pointer",
+                                      display: "grid",
+                                      alignItems: "center",
+                                      justifyItems: oneBaslik.yatayHiza,
+                                      // backgroundColor: selectedMahal?._id.toString() == oneMahal._id.toString() ? "green" : null
+                                    }}
+                                  >
+                                    {oneMahal[oneBaslik.referans]}
                                   </TableItem>
                                 )
                               })
                             }
 
                             <Bosluk>
-
                             </Bosluk>
 
                             {
-                              basliklar.filter(item => !item.sabit).map((item, index) => {
+                              isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((oneBaslik, index) => {
                                 return (
-                                  <TableItem key={index} index={index} count_={count_}>
-                                    {oneMahal[item.referans]}
+                                  <TableItem
+                                    key={index}
+                                    index={index}
+                                    count_={count_}
+                                    onDoubleClick={() => setEditMahal(oneBaslik.id)}
+                                    sx={{
+                                      cursor: "text",
+                                      display: "grid",
+                                      alignItems: "center",
+                                      justifyItems: oneBaslik.yatayHiza,
+                                      backgroundColor: editMahal == oneBaslik.id ? "rgba(255, 255, 0, 0.5)" : null,
+                                    }}
+                                  >
+                                    {editMahal !== oneBaslik.id &&
+                                      <>
+                                        {oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.bilgi}
+                                      </>
+                                    }
+                                    {editMahal == oneBaslik.id &&
+                                      <Input autoFocus
+                                        disableUnderline={true}
+                                        size="small"
+                                        onChange={(event) => handle_editMahal(event, oneBaslik, oneMahal)}
+                                        sx={{
+                                          border: "none",
+                                          width: "100%",
+                                          display: "grid",
+                                          alignItems: "center",
+                                          justifyItems: oneBaslik.yatayHiza,
+                                        }}
+                                        defaultValue={oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.bilgi}
+                                        inputProps={{
+                                          style: {
+                                            height: "1rem",
+                                            fontSize: "0.95rem",
+                                            marginTop: "0.1rem",
+                                            paddingBottom: "0px",
+                                            marginbottom: "0px",
+                                            textAlign: oneBaslik.yatayHiza == "start" ? "left" : oneBaslik.yatayHiza == "end" ? "right" : "center"
+                                            // // textAlign: oneBaslik.yatayHiza == "center" ? "center" : null
+                                          },
+                                        }}
+                                      />
+                                    }
                                   </TableItem>
                                 )
                               })

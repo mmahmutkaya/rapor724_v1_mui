@@ -15,6 +15,7 @@ export default ({ children }) => {
   const [selectedWbs, setSelectedWbs] = useState()
   const [selectedPoz, setSelectedPoz] = useState()
   const [selectedMahal, setSelectedMahal] = useState()
+  const [selectedMahalBaslik, setSelectedMahalBaslik] = useState()
   const [isProject, setIsProject] = useState()
   const [pozlar, setPozlar] = useState()
   const [mahalMetrajlar, setMahalMetrajlar] = useState()
@@ -31,6 +32,7 @@ export default ({ children }) => {
     drawerWidth,
     selectedLbs, setSelectedLbs,
     selectedMahal, setSelectedMahal,
+    selectedMahalBaslik, setSelectedMahalBaslik,
     selectedWbs, setSelectedWbs,
     selectedPoz, setSelectedPoz,
     isProject, setIsProject,

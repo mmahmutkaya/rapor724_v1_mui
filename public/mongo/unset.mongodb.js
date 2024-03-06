@@ -19,20 +19,21 @@ use('rapor724_v2');
 // ]
 
 
-const mahalBasliklari = [
-  { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal kod", dataType: "metin" },
-  { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", dataType: "metin" },
-]
-
-const pozBasliklari = [
-  { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Poz No", dataType: "metin" },
-  { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Poz İsmi", dataType: "metin" },
-]
+// const mahalBasliklari = [
+//   { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "center", name: "Mahal kod", veriTuruId: "metin" },
+//   { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "center", name: "Mahal İsmi", veriTuruId: "metin" },
+// ]
 
 
-db.getCollection('projects').updateMany(
+// const pozBasliklari = [
+//   { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "center", name: "Poz No", veriTuruId: "metin" },
+//   { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "center", name: "Poz İsmi", veriTuruId: "metin" },
+// ]
+
+
+db.getCollection('mahaller').updateMany(
   {},
-  { $set: { mahalBasliklari, pozBasliklari } }
+  { $set: { ilaveBilgiler: [] } }
 );
 
 
