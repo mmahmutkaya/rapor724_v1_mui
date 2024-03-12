@@ -1,4 +1,4 @@
-exports = async function (newMahalBaslik) {
+exports = async function (newMahalBaslik, _projectId) {
 
 
   const user = context.user
@@ -29,7 +29,7 @@ exports = async function (newMahalBaslik) {
 
   // validation control - mahal başlık - projeId bilgisi
   // form alanına değil - direkt ekrana uyarı veren hata - (fonksiyon da durduruluyor)
-  if (typeof newMahalBaslik._projectId !== "object") {
+  if (typeof _projectId !== "object") {
     throw new Error("Mahal kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
   }
 
@@ -133,9 +133,9 @@ exports = async function (newMahalBaslik) {
     createdBy: _userId,
     createdAt: currentTime,
     isDeleted: false,
-    goster:false,
-    sabit:false,
-    genislik:20,
+    goster: false,
+    sabit: false,
+    genislik: 20,
     paddingInfo: "0px 1rem 0px 0px",
     yatayHiza: "end",
   }
@@ -147,10 +147,11 @@ exports = async function (newMahalBaslik) {
   //   { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", veriTuruId: "metin" },
   // ]
 
-
+  let newMahalBaslik2_ = { ...newMahalBaslik }
+  newMahalBaslik2_
   const result = await collection_Projects.updateOne(
-    { _id: newMahalBaslik._projectId },
-    { $push: { mahalBasliklari: newMahalBaslik } }
+    { _id: _projectId },
+    { $push: { mahalBasliklari: { newMahalBaslik } } }
   )
 
   return newMahalBaslik
