@@ -147,8 +147,6 @@ exports = async function (newMahalBaslik, _projectId) {
   //   { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", veriTuruId: "metin" },
   // ]
 
-  let newMahalBaslik2_ = { ...newMahalBaslik }
-  newMahalBaslik2_
   const result = await collection_Projects.updateOne(
     { _id: _projectId },
     { $push: { mahalBasliklari: { newMahalBaslik } } }
