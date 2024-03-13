@@ -9,7 +9,7 @@ exports = async function (newMahalBaslik, _projectId) {
 
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
 
-  let isProject = await collection_Projects.findOne({ _id: newMahalBaslik._projectId, members: _userId, isDeleted: false })
+  let isProject = await collection_Projects.findOne({ _id: _projectId, members: _userId, isDeleted: false })
   isProject = { ...isProject }
   if (!isProject) throw new Error("MONGO // createMahalBaslik // Mahal başlığı eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
