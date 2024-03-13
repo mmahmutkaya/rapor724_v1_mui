@@ -293,215 +293,209 @@ export default function P_Mahaller() {
 
 
           {/* MAHAL BAŞLIKLARI ve MAHALLER */}
-          {
-            isProject?.lbs
-              .filter(item => item.openForMahal === true)
-              .sort(function (a, b) {
-                var nums1 = a.code.split(".");
-                var nums2 = b.code.split(".");
+          {isProject?.lbs
+            .filter(item => item.openForMahal === true)
+            .sort(function (a, b) {
+              var nums1 = a.code.split(".");
+              var nums2 = b.code.split(".");
 
-                for (var i = 0; i < nums1.length; i++) {
-                  if (nums2[i]) { // assuming 5..2 is invalid
-                    if (nums1[i] !== nums2[i]) {
-                      return nums1[i] - nums2[i];
-                    } // else continue
-                  } else {
-                    return 1; // no second number in b
-                  }
+              for (var i = 0; i < nums1.length; i++) {
+                if (nums2[i]) { // assuming 5..2 is invalid
+                  if (nums1[i] !== nums2[i]) {
+                    return nums1[i] - nums2[i];
+                  } // else continue
+                } else {
+                  return 1; // no second number in b
                 }
-                return -1; // was missing case b.len > a.len
-              })
-              .map((oneLbs, index) => {
-                return (
-                  <Grid
-                    key={index}
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: totalWidthSabit + " 2rem " + gridTemplateColumnsDegisken,
-                    }}
-                  >
-                    <TableHeader>
+              }
+              return -1; // was missing case b.len > a.len
+            }).map((oneLbs, index) => {
+              return (
+                <Grid
+                  key={index}
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: totalWidthSabit + " 2rem " + gridTemplateColumnsDegisken,
+                  }}
+                >
+                  <TableHeader>
 
-                      {/* HAYALET */}
-                      <Box sx={{ display: "none" }}>
-                        {cOunt = oneLbs.code.split(".").length}
-                      </Box>
-
-                      {
-                        oneLbs.code.split(".").map((codePart, index) => {
-
-                          if (index == 0 && cOunt == 1) {
-                            lbsCode = codePart
-                            lbsName = isProject?.lbs.find(item => item.code == lbsCode).name
-                          }
-
-                          if (index == 0 && cOunt !== 1) {
-                            lbsCode = codePart
-                            lbsName = isProject?.lbs.find(item => item.code == lbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
-                            lbsCode = lbsCode + "." + codePart
-                            lbsName = lbsName + " > " + isProject?.lbs.find(item => item.code == lbsCode).codeName
-                          }
-
-                          if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
-                            lbsCode = lbsCode + "." + codePart
-                            lbsName = lbsName + " > " + isProject?.lbs.find(item => item.code == lbsCode).name
-                          }
-
-                        })
-                      }
-
-
-                      {/* HAYALET */}
-                      <Box sx={{ display: "none" }}>
-                        {cOunt = lbsName.split(">").length}
-                      </Box>
-
-                      {/* GÖZÜKEN KOMPONENET - sabit kısımda - lbs başlığının yazdığı yer */}
-                      {lbsName.split(">").map((item, index) => (
-
-                        <Typography key={index} component={"span"} >
-                          {item}
-                          {index + 1 !== cOunt &&
-                            <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
-                          }
-                        </Typography>
-
-                      ))}
-
-                    </TableHeader>
-
-                    <Bosluk ></Bosluk>
+                    {/* HAYALET */}
+                    <Box sx={{ display: "none" }}>
+                      {cOunt = oneLbs.code.split(".").length}
+                    </Box>
 
                     {
-                      isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((item, index) => {
-                        return (
-                          <TableHeader key={index} index={index} count_={count_} sx={{ display: "grid", with: "100%", justifyContent: one }}>
-                            {/* {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).ilaveBilgiler?.reduce((accumulator, oneMahal) => accumulator + Number(oneMahal.bilgi), 0)} */}
-                            {/* {console.log("ESAS",mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((accumulator, oneMahal) => accumulator + Number(oneMahal.ilaveBilgiler.bilgi), 0))} */}
-                            {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).reduce((toplam, oneBilgi) => toplam + Number(oneBilgi.bilgi), 0)}
-                            {/* {console.log("oneLbs", oneLbs)} */}
-                            {/* // {console.log("mahaller", mahaller)} */}
-                            {/* // {console.log("oneLbsId", oneLbs._id.toString())} */}
-                            {/* // {console.log("lbsIdler", mahaller.map(item => item._lbsId.toString()))} */}
-                          </TableHeader>
-                        )
+                      oneLbs.code.split(".").map((codePart, index) => {
+
+                        if (index == 0 && cOunt == 1) {
+                          lbsCode = codePart
+                          lbsName = isProject?.lbs.find(item => item.code == lbsCode).name
+                        }
+
+                        if (index == 0 && cOunt !== 1) {
+                          lbsCode = codePart
+                          lbsName = isProject?.lbs.find(item => item.code == lbsCode).codeName
+                        }
+
+                        if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
+                          lbsCode = lbsCode + "." + codePart
+                          lbsName = lbsName + " > " + isProject?.lbs.find(item => item.code == lbsCode).codeName
+                        }
+
+                        if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
+                          lbsCode = lbsCode + "." + codePart
+                          lbsName = lbsName + " > " + isProject?.lbs.find(item => item.code == lbsCode).name
+                        }
+
                       })
                     }
 
 
                     {/* HAYALET */}
-                    {<Box sx={{ display: "none" }}>
-                      {count_ = mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).length}
-                    </Box>}
+                    <Box sx={{ display: "none" }}>
+                      {cOunt = lbsName.split(">").length}
+                    </Box>
 
-                    <Grid
-                      key={index}
-                      sx={{
-                        display: "grid",
-                        gridTemplateColumns: totalWidth,
-                      }}
-                    >
+                    {/* GÖZÜKEN KOMPONENET - sabit kısımda - lbs başlığının yazdığı yer */}
+                    {lbsName.split(">").map((item, index) => (
 
-                      {/* MAHALLER */}
-                      {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).map((oneMahal, index) => {
-                        return (
-                          <Grid
-                            key={index}
-                            sx={{
-                              display: "grid",
-                              gridTemplateColumns: gridTemplateColumns_,
-                            }}
-                          >
-                            {
-                              isProject?.mahalBasliklari?.filter(item => item.sabit).map((oneBaslik, index) => {
-                                return (
-                                  <TableItem
-                                    key={index}
-                                    index={index}
-                                    count_={count_}
-                                    // onDoubleClick={() => handle_selectMahal(oneBaslik, oneMahal)}
-                                    sx={{
-                                      // userSelect:"none",
-                                      cursor: "pointer",
-                                      display: "grid",
-                                      alignItems: "center",
-                                      justifyItems: oneBaslik.yatayHiza,
-                                      // backgroundColor: selectedMahal?._id.toString() == oneMahal._id.toString() ? "green" : null
-                                    }}
-                                  >
-                                    {oneMahal[oneBaslik.referans]}
-                                  </TableItem>
-                                )
-                              })
-                            }
+                      <Typography key={index} component={"span"} >
+                        {item}
+                        {index + 1 !== cOunt &&
+                          <Typography component={"span"} sx={{ fontWeight: "600", color: "darkred" }}>{">"}</Typography>
+                        }
+                      </Typography>
 
-                            <Bosluk>
-                            </Bosluk>
+                    ))}
 
-                            {
-                              isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((oneBaslik, index) => {
-                                return (
-                                  <TableItem
-                                    key={index}
-                                    index={index}
-                                    count_={count_}
-                                    onDoubleClick={() => setEditMahal(oneBaslik.id)}
-                                    sx={{
-                                      cursor: "text",
-                                      display: "grid",
-                                      alignItems: "center",
-                                      justifyItems: oneBaslik.yatayHiza,
-                                      backgroundColor: editMahal == oneBaslik.id ? "rgba(255, 255, 0, 0.5)" : null,
-                                    }}
-                                  >
-                                    {editMahal !== oneBaslik.id &&
-                                      <>
-                                        {oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.bilgi}
-                                      </>
-                                    }
-                                    {editMahal == oneBaslik.id &&
-                                      <Input autoFocus
-                                        disableUnderline={true}
-                                        size="small"
-                                        onChange={(event) => handle_editMahal(event, oneBaslik, oneMahal)}
-                                        sx={{
-                                          border: "none",
-                                          width: "100%",
-                                          display: "grid",
-                                          alignItems: "center",
-                                          justifyItems: oneBaslik.yatayHiza,
-                                        }}
-                                        defaultValue={oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.bilgi}
-                                        inputProps={{
-                                          style: {
-                                            height: "1rem",
-                                            fontSize: "0.95rem",
-                                            marginTop: "0.1rem",
-                                            paddingBottom: "0px",
-                                            marginbottom: "0px",
-                                            textAlign: oneBaslik.yatayHiza == "start" ? "left" : oneBaslik.yatayHiza == "end" ? "right" : "center"
-                                            // // textAlign: oneBaslik.yatayHiza == "center" ? "center" : null
-                                          },
-                                        }}
-                                      />
-                                    }
-                                  </TableItem>
-                                )
-                              })
-                            }
-                          </Grid>
-                        )
-                      })}
-                    </Grid>
+                  </TableHeader>
 
+                  <Bosluk ></Bosluk>
+
+                  {/* burada sıralamaya güvenerek haraket ediliyor */}
+                  {
+                    isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((oneBaslik, index) => {
+                      return (
+                        <TableHeader key={index} index={index} count_={count_} sx={{ display: "grid", with: "100%", justifyContent: oneBaslik.yatayHiza }}>
+                          {oneBaslik.id == "sayi" &&
+                            mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).filter(item => item.id == oneBaslik.id).reduce((toplam, oneBilgi) => toplam + Number(oneBilgi.bilgi), 0)
+                          }
+                        </TableHeader>
+                      )
+                    })
+                  }
+
+
+                  {/* HAYALET */}
+                  {<Box sx={{ display: "none" }}>
+                    {count_ = mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).length}
+                  </Box>}
+
+                  <Grid
+                    key={index}
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: totalWidth,
+                    }}
+                  >
+
+                    {/* MAHALLER */}
+                    {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).map((oneMahal, index) => {
+                      return (
+                        <Grid
+                          key={index}
+                          sx={{
+                            display: "grid",
+                            gridTemplateColumns: gridTemplateColumns_,
+                          }}
+                        >
+                          {
+                            isProject?.mahalBasliklari?.filter(item => item.sabit).map((oneBaslik, index) => {
+                              return (
+                                <TableItem
+                                  key={index}
+                                  index={index}
+                                  count_={count_}
+                                  // onDoubleClick={() => handle_selectMahal(oneBaslik, oneMahal)}
+                                  sx={{
+                                    // userSelect:"none",
+                                    cursor: "pointer",
+                                    display: "grid",
+                                    alignItems: "center",
+                                    justifyItems: oneBaslik.yatayHiza,
+                                    // backgroundColor: selectedMahal?._id.toString() == oneMahal._id.toString() ? "green" : null
+                                  }}
+                                >
+                                  {oneMahal[oneBaslik.referans]}
+                                </TableItem>
+                              )
+                            })
+                          }
+
+                          <Bosluk>
+                          </Bosluk>
+
+                          {
+                            isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((oneBaslik, index) => {
+                              return (
+                                <TableItem
+                                  key={index}
+                                  index={index}
+                                  count_={count_}
+                                  onDoubleClick={() => setEditMahal(oneBaslik.id)}
+                                  sx={{
+                                    cursor: "text",
+                                    display: "grid",
+                                    alignItems: "center",
+                                    justifyItems: oneBaslik.yatayHiza,
+                                    backgroundColor: editMahal == oneBaslik.id ? "rgba(255, 255, 0, 0.5)" : null,
+                                  }}
+                                >
+                                  {editMahal !== oneBaslik.id &&
+                                    <>
+                                      {oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.bilgi}
+                                    </>
+                                  }
+                                  {editMahal == oneBaslik.id &&
+                                    <Input autoFocus
+                                      disableUnderline={true}
+                                      size="small"
+                                      onChange={(event) => handle_editMahal(event, oneBaslik, oneMahal)}
+                                      sx={{
+                                        border: "none",
+                                        width: "100%",
+                                        display: "grid",
+                                        alignItems: "center",
+                                        justifyItems: oneBaslik.yatayHiza,
+                                      }}
+                                      defaultValue={oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.bilgi}
+                                      inputProps={{
+                                        style: {
+                                          height: "1rem",
+                                          fontSize: "0.95rem",
+                                          marginTop: "0.1rem",
+                                          paddingBottom: "0px",
+                                          marginbottom: "0px",
+                                          textAlign: oneBaslik.yatayHiza == "start" ? "left" : oneBaslik.yatayHiza == "end" ? "right" : "center"
+                                          // // textAlign: oneBaslik.yatayHiza == "center" ? "center" : null
+                                        },
+                                      }}
+                                    />
+                                  }
+                                </TableItem>
+                              )
+                            })
+                          }
+                        </Grid>
+                      )
+                    })}
                   </Grid>
-                )
-              })}
 
-
+                </Grid>
+              )
+            })
+          }
 
         </Box>
 

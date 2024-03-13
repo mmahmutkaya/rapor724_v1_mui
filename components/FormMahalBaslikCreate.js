@@ -52,7 +52,7 @@ export default function FormMahalCreate({ setShow }) {
       const veriTuruId = deleteLastSpace(data.get('veriTuruId'))
       const birim = deleteLastSpace(data.get('birim'))
       const haneSayisiId = deleteLastSpace(data.get('haneSayisiId'))
-      const projectId = isProject?._id
+      const _projectId = isProject?._id
 
 
       // form validation - frontend
@@ -63,10 +63,10 @@ export default function FormMahalCreate({ setShow }) {
 
 
       // validation control - mahal başlık - projeId bilgisi
-      if (typeof projectId !== "object") {
+      if (typeof _projectId !== "object") {
         setDialogCase("error")
-        setShowDialog("Mahal başlığı kaydı için gerekli olan  'projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
-        console.log("kayıt için gerekli olan 'projectId' verisinde hata olduğu için bu satırın altında durduruldu")
+        setShowDialog("Mahal başlığı kaydı için gerekli olan  '_projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+        console.log("kayıt için gerekli olan '_projectId' verisinde hata olduğu için bu satırın altında durduruldu")
         return
       }
 
@@ -133,7 +133,6 @@ export default function FormMahalCreate({ setShow }) {
 
 
       const mahalBilgi = {
-        _projectId: isProject?._id,
         name: name,
         veriTuruId: veriTuruId,
         birim: birim,
@@ -146,7 +145,7 @@ export default function FormMahalCreate({ setShow }) {
 
 
       // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
-      const result = await RealmApp?.currentUser?.callFunction("createMahalBaslik", mahalBilgi);
+      const result = await RealmApp?.currentUser?.callFunction("createMahalBaslik", mahalBilgi, isProject?._id);
       console.log("result", result)
 
 
