@@ -159,17 +159,12 @@ export default function FormMahalCreate({ setShow }) {
       }
       console.log("form validation - hata yok - backend")
 
-      if (!result.mahalBilgi?._id) {
-        throw new Error("db den -mahalBilgi- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
-      }
 
-      if (!result.newProject?._id) {
-        throw new Error("db den -newProject- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
-      }
-
-
-      (oldMahaller => [...oldMahaller, result.mahalBilgi])
-      setIsProject(result.newProject)
+      setIsProject(isProject => {
+        let isProject_ = { ...isProject }
+        isProject_.mahalBasliklari.push(result)
+        return isProject_
+      })
       setShow("Main")
 
     } catch (err) {

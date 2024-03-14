@@ -51,12 +51,15 @@ export default function P_Mahaller() {
   }
 
 
+
+
   // aşağıda kullanılıyor
   let lbsCode = ""
   let lbsName = ""
   let cOunt = 0
   let count_
   let toplam = 0
+  let ilaveYasaklilar = ["-", "e", "E", "+", ".", ","]
   let mahalCount
 
   const _3_fixed_width_rem = "6rem 35rem 5rem"
@@ -162,28 +165,71 @@ export default function P_Mahaller() {
     console.log("mahal baslık secildi")
   }
 
-  const handle_editMahal = (event, oneBaslik, oneMahal) => {
+
+  const handle_editMahal = async (event, oneBaslik, oneMahal) => {
+
+    let oncesi = event.target.value.toString()
+    let sonTus = event.key
+    let yeni = oncesi.toString() + sonTus
+
+    let izinliTuslar = ["Backspace","Delete","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Escape","Enter","Tab","-"]
+
+    if(!isNumeric(yeni) && !izinliTuslar.includes(sonTus)) {
+      console.log("ilkinde takıldı")
+      return event.preventDefault()
+    }
+
+    if(oncesi.split("").length && sonTus == "-") {
+      console.log("- ikinci keze takıldı")
+      return event.preventDefault()
+    }
+
+
+    let newBilgi = { id: oneBaslik.id, veri: event.target.value.toString() + event.key.toString() }
+    // console.log("veri", newBilgi.veri)
+
+    // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
+    // const result = await RealmApp?.currentUser?.callFunction("updateMahalBilgi_", newBilgi, oneMahal._id);
+    // console.log("result", result)
+
+    // console.log("yazi mi", isNumeric(newBilgi.veri))
+
+
+    if (oneBaslik.veriTuruId == "sayi" && !isNumeric(newBilgi.veri)) return
+
+
     setMahaller(mahaller => {
       let mahaller_ = mahaller
-      let bilgi = { id: oneBaslik.id, bilgi: event.target.value }
       if (!mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler) {
-        mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler = [bilgi]
+        mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler = [newBilgi]
         return mahaller_
       }
       if (!mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.id == oneBaslik.id)) {
-        mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.push(bilgi)
+        mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.push(newBilgi)
         return mahaller_
       }
-      mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.id == oneBaslik.id).bilgi = event.target.value
+      mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.id == oneBaslik.id).veri = newBilgi.veri
       return mahaller_
     })
+
+
   }
 
   const [editMahal, setEditMahal] = useState(false)
 
   // console.log("-Page_Mahaller--isProject?.mahaller", isProject?.mahalBasliklari)
 
-  // let deneme = mahaller?.find(item => item._lbsId.toString() == oneLbs.toString()).ilaveBilgiler?.reduce((accumulator, oneMahal) => accumulator + Number(oneMahal.bilgi), 0)
+  // let deneme = mahaller?.find(item => item._lbsId.toString() == oneLbs.toString()).ilaveBilgiler?.reduce((accumulator, oneMahal) => accumulator + Number(oneMahal.veri), 0)
+
+
+
+  // bir string değerinin numerik olup olmadığının kontrolü
+  function isNumeric(str) {
+    // if (typeof str != "string") return false // we only process strings!
+    str.toString() //
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+      !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+  }
 
 
   return (
@@ -373,13 +419,13 @@ export default function P_Mahaller() {
 
                   <Bosluk ></Bosluk>
 
-                  {/* burada sıralamaya güvenerek haraket ediliyor */}
+                  {/* burada başlık sıralamasına göre güvenerek haraket ediliyor (tüm mahalBaşlıkları map'lerde) */}
                   {
                     isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((oneBaslik, index) => {
                       return (
                         <TableHeader key={index} index={index} count_={count_} sx={{ display: "grid", with: "100%", justifyContent: oneBaslik.yatayHiza }}>
-                          {oneBaslik.id == "sayi" &&
-                            mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).filter(item => item.id == oneBaslik.id).reduce((toplam, oneBilgi) => toplam + Number(oneBilgi.bilgi), 0)
+                          {oneBaslik.veriTuruId == "sayi" &&
+                            mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).filter(item => item.id == oneBaslik.id).reduce((toplam, oneBilgi) => toplam + Number(oneBilgi.veri), 0)
                           }
                         </TableHeader>
                       )
@@ -453,23 +499,34 @@ export default function P_Mahaller() {
                                   }}
                                 >
                                   {editMahal !== oneBaslik.id &&
-                                    <>
-                                      {oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.bilgi}
-                                    </>
+                                    <Box>
+                                      {oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.veri}
+                                    </Box>
                                   }
+
                                   {editMahal == oneBaslik.id &&
-                                    <Input autoFocus
+                                    <Input
+                                      // autoFocus
                                       disableUnderline={true}
                                       size="small"
-                                      onChange={(event) => handle_editMahal(event, oneBaslik, oneMahal)}
+                                      type='text'
+                                      // onKeyDown={(evt) => ilaveYasaklilar.some(elem => evt.target.value.includes(elem)) && ilaveYasaklilar.find(item => item == evt.key) && evt.preventDefault()}
+                                      onKeyDown={(event) => handle_editMahal(event, oneBaslik, oneMahal)}
+                                      // onChange={(event) => handle_editMahal(event.target.value, oneBaslik, oneMahal)}
                                       sx={{
                                         border: "none",
                                         width: "100%",
                                         display: "grid",
                                         alignItems: "center",
                                         justifyItems: oneBaslik.yatayHiza,
+                                        "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+                                          display: "none",
+                                        },
+                                        "& input[type=number]": {
+                                          MozAppearance: "textfield",
+                                        },
                                       }}
-                                      defaultValue={oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.bilgi}
+                                      defaultValue={oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.veri}
                                       inputProps={{
                                         style: {
                                           height: "1rem",
