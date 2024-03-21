@@ -21,23 +21,36 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     veri:mahalBilgiler_willBeSaved[0].veri
   }
   
-  let hasDoc = await collection_Mahaller.countDocuments({ _id: newBilgi.mahalId, "ilaveBilgiler.baslikId": newBilgi.baslikId });
-  
-  
-  let result
-  
-  // Document already exists OR not
-  if (hasDoc > 0) {
-    result = await collection_Mahaller.updateOne(
-      { _id: newBilgi.mahalId, "ilaveBilgiler.baslikId": newBilgi.baslikId },
-      { $set: { "ilaveBilgiler.$.veri": newBilgi.veri } }
-    );
-  } else {
-    result = await collection_Mahaller.updateOne(
-      { _id: newBilgi.mahalId },
-      { $push: { ilaveBilgiler: { baslikId: newBilgi.baslikId, veri: newBilgi.veri } } }
-    );
-  }
+
+
+  const result = collection_Mahaller.update(
+    { _id: newBilgi.mahalId },
+    [{
+      $set: {
+        ilaveBilgiler: {
+          $cond: [
+            { $in: [baslikId, "ilaveBilgiler.baslikId"] },
+            {
+              $map: {
+                input: "$ilaveBilgiler",
+                in: {
+                  $cond: [
+                    { $eq: ["$$this.baslikId", newBilgi.baslikId] },
+                    {
+                      baslikId: "$$this.baslikId",
+                      veri: { $add: ["$$this.veri", newBilgi.veri] }
+                    },
+                    "$$this"
+                  ]
+                }
+              }
+            },
+            { $concatArrays: ["$ilaveBilgiler", [{ baslikId: newBilgi.baslikId, veri: newBilgi.veri }]] }
+          ]
+        }
+      }
+    }]
+  )
   
   
   // const result = collection_Mahaller.updateOne(
