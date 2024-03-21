@@ -19,7 +19,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     const result = collection_Mahaller.updateOne(
       {_id:mahalBilgiler_willBeSaved[0].mahalId},
       { $set: { "ilaveBilgiler.$[oneBilgi].veri": mahalBilgiler_willBeSaved[0].veri } },
-      { arrayFilters: [{ "oneBilgi.baslik": mahalBilgiler_willBeSaved[0].baslikId }, ] }
+      { arrayFilters: [{ "oneBilgi.baslik": mahalBilgiler_willBeSaved[0].baslikId } ], upsert: true }
     );
     
     return result
