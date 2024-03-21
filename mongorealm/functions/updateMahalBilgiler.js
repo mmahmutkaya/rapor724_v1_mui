@@ -23,7 +23,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
   
 
 
-  const result = collection_Mahaller.update(
+  const result = collection_Mahaller.updateOne(
     { _id: newBilgi.mahalId },
     [{
       $set: {
