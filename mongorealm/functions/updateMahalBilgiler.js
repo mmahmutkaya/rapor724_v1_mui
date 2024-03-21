@@ -26,7 +26,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     // {_id:new BSON.ObjectId(mahalBilgiler_willBeSaved[0].mahalId.toString())},
     {_id:newBilgi.mahalId},
     { $set: { "ilaveBilgiler.$[oneBilgi].veri": newBilgi.veri } },
-    { arrayFilters: [{ "oneBilgi.baslik": newBilgi.baslikId } ], upsert: true }
+    { arrayFilters: [{ "oneBilgi.baslikId": newBilgi.baslikId } ], upsert: true }
   );
   
 
