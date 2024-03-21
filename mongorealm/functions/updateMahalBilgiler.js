@@ -1,7 +1,5 @@
 exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
 
-  _projectId = new BSON.ObjectId(_projectId)
-
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
   const mailTeyit = user.custom_data.mailTeyit
@@ -16,14 +14,21 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
 
   const collection_Mahaller = context.services.get("mongodb-atlas").db("rapor724_v2").collection("mahaller")
 
-    
-    const result = collection_Mahaller.updateOne(
-      {_id:mahalBilgiler_willBeSaved[0].mahalId},
-      { $set: { "ilaveBilgiler.$[oneBilgi].veri": mahalBilgiler_willBeSaved[0].veri } },
-      { arrayFilters: [{ "oneBilgi.baslik": mahalBilgiler_willBeSaved[0].baslikId } ], upsert: true }
-    );
-    
-    return result
+  
+  let newBilgi = {
+    mahalId:mahalBilgiler_willBeSaved[0].mahalId,
+    baslikId:mahalBilgiler_willBeSaved[0].baslikId,
+    veri:mahalBilgiler_willBeSaved[0].veri
+  }
+  
+  return newBilgi
+  
+  const result = collection_Mahaller.updateOne(
+    {_id:mahalBilgiler_willBeSaved[0].mahalId},
+    { $set: { "ilaveBilgiler.$[oneBilgi].veri": mahalBilgiler_willBeSaved[0].veri } },
+    { arrayFilters: [{ "oneBilgi.baslik": mahalBilgiler_willBeSaved[0].baslikId } ], upsert: true }
+  );
+  
 
 
 };
