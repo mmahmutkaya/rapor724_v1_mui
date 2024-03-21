@@ -22,36 +22,36 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
   }
   
   
-  let operations = mahalBilgiler_willBeSaved.map(newBilgi => {
+  let operations = mahalBilgiler_willBeSaved.map(oneBilgi => {
     return (
       
       { updateOne :
           {
              "filter": {
-               _id: newBilgi.mahalId
+               _id: oneBilgi.mahalId
              },
              "update": 
               [{
                 $set: {
                   ilaveBilgiler: {
                     $cond: [
-                      { $in: [newBilgi.baslikId, "$ilaveBilgiler.baslikId"] },
+                      { $in: [oneBilgi.baslikId, "$ilaveBilgiler.baslikId"] },
                       {
                         $map: {
                           input: "$ilaveBilgiler",
                           in: {
                             $cond: [
-                              { $eq: ["$$this.baslikId", newBilgi.baslikId] },
+                              { $eq: ["$$this.baslikId", oneBilgi.baslikId] },
                               {
                                 baslikId: "$$this.baslikId",
-                                veri:newBilgi.veri
+                                veri:oneBilgi.veri
                               },
                               "$$this"
                             ]
                           }
                         }
                       },
-                      { $concatArrays: ["$ilaveBilgiler", [{ baslikId: newBilgi.baslikId, veri: newBilgi.veri }]] }
+                      { $concatArrays: ["$ilaveBilgiler", [{ baslikId: oneBilgi.baslikId, veri: oneBilgi.veri }]] }
                     ]
                   }
                 }
@@ -61,7 +61,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     )
     });
   
-    const result = collection_Mahaller.bulkWrite(operations);  
+    const result = await collection_Mahaller.bulkWrite(operations);  
   
   
   
