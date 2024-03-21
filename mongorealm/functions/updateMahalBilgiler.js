@@ -1,5 +1,6 @@
 exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
 
+  _projectId = new BSON.ObjectId(_projectId)
 
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
