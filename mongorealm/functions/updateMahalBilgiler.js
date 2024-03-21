@@ -21,36 +21,78 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     veri:mahalBilgiler_willBeSaved[0].veri
   }
   
-
-
-  const result = collection_Mahaller.updateOne(
-    { _id: newBilgi.mahalId },
-    [{
-      $set: {
-        ilaveBilgiler: {
-          $cond: [
-            { $in: [newBilgi.baslikId, "$ilaveBilgiler.baslikId"] },
-            {
-              $map: {
-                input: "$ilaveBilgiler",
-                in: {
-                  $cond: [
-                    { $eq: ["$$this.baslikId", newBilgi.baslikId] },
-                    {
-                      baslikId: "$$this.baslikId",
-                      veri:newBilgi.veri
-                    },
-                    "$$this"
-                  ]
+  
+  let operations = mahalBilgiler_willBeSaved.map(newBilgi => {
+    return (
+      
+      { updateOne :
+          {
+             "filter": {
+               _id: newBilgi.mahalId
+             },
+             "update": 
+              [{
+                $set: {
+                  ilaveBilgiler: {
+                    $cond: [
+                      { $in: [newBilgi.baslikId, "$ilaveBilgiler.baslikId"] },
+                      {
+                        $map: {
+                          input: "$ilaveBilgiler",
+                          in: {
+                            $cond: [
+                              { $eq: ["$$this.baslikId", newBilgi.baslikId] },
+                              {
+                                baslikId: "$$this.baslikId",
+                                veri:newBilgi.veri
+                              },
+                              "$$this"
+                            ]
+                          }
+                        }
+                      },
+                      { $concatArrays: ["$ilaveBilgiler", [{ baslikId: newBilgi.baslikId, veri: newBilgi.veri }]] }
+                    ]
+                  }
                 }
-              }
-            },
-            { $concatArrays: ["$ilaveBilgiler", [{ baslikId: newBilgi.baslikId, veri: newBilgi.veri }]] }
-          ]
-        }
-      }
-    }]
-  )
+              }]               
+          }
+       }      
+    )
+    });
+  
+    collection_Mahaller.bulkWrite(operations);  
+  
+  
+  
+  // const result = collection_Mahaller.updateOne(
+  //   { _id: newBilgi.mahalId },
+  //   [{
+  //     $set: {
+  //       ilaveBilgiler: {
+  //         $cond: [
+  //           { $in: [newBilgi.baslikId, "$ilaveBilgiler.baslikId"] },
+  //           {
+  //             $map: {
+  //               input: "$ilaveBilgiler",
+  //               in: {
+  //                 $cond: [
+  //                   { $eq: ["$$this.baslikId", newBilgi.baslikId] },
+  //                   {
+  //                     baslikId: "$$this.baslikId",
+  //                     veri:newBilgi.veri
+  //                   },
+  //                   "$$this"
+  //                 ]
+  //               }
+  //             }
+  //           },
+  //           { $concatArrays: ["$ilaveBilgiler", [{ baslikId: newBilgi.baslikId, veri: newBilgi.veri }]] }
+  //         ]
+  //       }
+  //     }
+  //   }]
+  // )
   
   
   // const result = collection_Mahaller.updateOne(
