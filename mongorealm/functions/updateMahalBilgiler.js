@@ -21,20 +21,24 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     veri:mahalBilgiler_willBeSaved[0].veri
   }
   
+  let hasDoc = await collection_Mahaller.countDocuments({ _id: newBilgi.mahalId, "ilaveBilgiler.baslikId": newBilgi.baslikId });
   
-  const result = collection_Mahaller.updateOne(
-     {
-       _id: newBilgi.mahalId,
-       ilaveBilgiler: { $elemMatch: { baslikid: newBilgi.baslikId } }
-     },
-     {
-       $setOnInsert: { baslikId : newBilgi.baslikId, veri : newBilgi.veri },
-       $set: { "ilaveBilgiler.$.veri" : newBilgi.veri }
-     },
-     {
-       upsert:true
-     }
-  )
+  
+  let result
+  
+  // Document already exists OR not
+  if (hasDoc > 0) {
+    result = await collection_Mahaller.updateOne(
+      { _id: newBilgi.mahalId, "ilaveBilgiler.baslikId": newBilgi.baslikId },
+      { $set: { "ilaveBilgiler.$.veri": newBilgi.veri } }
+    );
+  } else {
+    result = await collection_Mahaller.updateOne(
+      { _id: newBilgi.mahalId },
+      { $push: { ilaveBilgiler: { baslikId: newBilgi.baslikId, veri: newBilgi.veri } } }
+    );
+  }
+  
   
   // const result = collection_Mahaller.updateOne(
   //   // {_id:new BSON.ObjectId(mahalBilgiler_willBeSaved[0].mahalId.toString())},
