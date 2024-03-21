@@ -18,15 +18,15 @@ exports = async function (_projectId, mahalBilgiler_willBeSaved) {
 
   mahalBilgiler_willBeSaved.map(item => {
     
-    collection_Mahaller.updateOne(
+    const mongoResult = collection_Mahaller.updateOne(
       {_id:item.mahalId},
-      { $set: { "ilaveBilgiler.$[elem].includesPoz": false } },
-      { arrayFilters: [{ "elem.baslikId": item.baslikId }, ] }
+      { $set: { "ilaveBilgiler.$[oneBilgi].veri": item.veri } },
+      { arrayFilters: [{ "oneBilgi.baslik": item.baslikId }, ] }
     );
     
   })
 
-  return ({ newMahal, newProject })
+  return (mongoResult)
 
 };
 
