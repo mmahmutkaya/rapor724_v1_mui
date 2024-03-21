@@ -23,11 +23,24 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
   
   
   const result = collection_Mahaller.updateOne(
-    // {_id:new BSON.ObjectId(mahalBilgiler_willBeSaved[0].mahalId.toString())},
-    {_id:newBilgi.mahalId},
-    { $set: { "ilaveBilgiler.$[oneBilgi].veri": newBilgi.veri } },
-    { arrayFilters: [{ "oneBilgi.baslikId": newBilgi.baslikId } ], upsert: true }
-  );
+     {
+       _id: newBilgi.mahalId,
+       ilaveBilgiler: { $elemMatch: { baslikid: newBilgi.baslikId } }
+     },
+     {
+       $set: { "ilaveBilgiler.$.veri" : newBilgi.veri }
+     },
+     {
+       upsert:true
+     }
+  )
+  
+  // const result = collection_Mahaller.updateOne(
+  //   // {_id:new BSON.ObjectId(mahalBilgiler_willBeSaved[0].mahalId.toString())},
+  //   {_id:newBilgi.mahalId},
+  //   { $set: { "ilaveBilgiler.$[oneBilgi].veri": newBilgi.veri } },
+  //   { arrayFilters: [{ "oneBilgi.baslikId": newBilgi.baslikId } ], upsert: true }
+  // );
   
 
   return result
