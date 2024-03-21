@@ -28,10 +28,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
        ilaveBilgiler: { $elemMatch: { baslikid: newBilgi.baslikId } }
      },
      {
-       $set: { "ilaveBilgiler.$.veri" : newBilgi.veri }
-     },
-     {
-       upsert:true
+       $setOnInsert: { "ilaveBilgiler.$.veri" : newBilgi.veri }
      }
   )
   
