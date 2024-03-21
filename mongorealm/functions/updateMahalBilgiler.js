@@ -1,4 +1,4 @@
-exports = async function (_projectId, mahalBilgiler_willBeSaved) {
+exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
 
 
   const user = context.user
