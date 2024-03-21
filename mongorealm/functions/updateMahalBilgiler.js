@@ -29,7 +29,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
   );
   
 
-  return result
+  return newBilgi
 
 };
 
