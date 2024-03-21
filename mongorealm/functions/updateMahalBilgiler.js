@@ -29,7 +29,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
       $set: {
         ilaveBilgiler: {
           $cond: [
-            { $in: [baslikId, "ilaveBilgiler.baslikId"] },
+            { $in: [newBilgi.baslikId, "ilaveBilgiler.baslikId"] },
             {
               $map: {
                 input: "$ilaveBilgiler",
