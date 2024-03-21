@@ -61,7 +61,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     )
     });
   
-    collection_Mahaller.bulkWrite(operations);  
+    const result = collection_Mahaller.bulkWrite(operations);  
   
   
   
