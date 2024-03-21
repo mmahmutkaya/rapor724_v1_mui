@@ -13,7 +13,7 @@ exports = async function (_projectId, mahalBilgiler_willBeSaved) {
   isProject = { ...isProject }
   if (!isProject) throw new Error("MONGO // updateMahalBilgiler // Mahal başlığı eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
-  return (mahalBilgiler_willBeSaved)
+  return ({mahalBilgiler_willBeSaved})
 
   const collection_Mahaller = context.services.get("mongodb-atlas").db("rapor724_v2").collection("mahaller")
 
