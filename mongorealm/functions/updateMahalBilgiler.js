@@ -6,6 +6,7 @@ exports = async function (_projectId, mahalBilgiler_willBeSaved) {
   const mailTeyit = user.custom_data.mailTeyit
   if (!mailTeyit) throw new Error("MONGO // updateMahalBilgiler --  Öncelikle üyeliğinize ait mail adresinin size ait olduğunu doğrulamalısınız, tekrar giriş yapmayı deneyiniz veya bizimle iletişime geçiniz.")
 
+  return mahalBilgiler_willBeSaved
 
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
 
@@ -25,6 +26,8 @@ exports = async function (_projectId, mahalBilgiler_willBeSaved) {
     );
     
   })
+  
+  
 
   return (mongoResult)
 
