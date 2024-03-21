@@ -15,19 +15,15 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
 
   const collection_Mahaller = context.services.get("mongodb-atlas").db("rapor724_v2").collection("mahaller")
 
-  mahalBilgiler_willBeSaved.map(item => {
     
-    const mongoResult = collection_Mahaller.updateOne(
-      {_id:item.mahalId},
-      { $set: { "ilaveBilgiler.$[oneBilgi].veri": item.veri } },
-      { arrayFilters: [{ "oneBilgi.baslik": item.baslikId }, ] }
+    const result = collection_Mahaller.updateOne(
+      {_id:mahalBilgiler_willBeSaved[0].mahalId},
+      { $set: { "ilaveBilgiler.$[oneBilgi].veri": mahalBilgiler_willBeSaved[0].veri } },
+      { arrayFilters: [{ "oneBilgi.baslik": mahalBilgiler_willBeSaved[0].baslikId }, ] }
     );
     
-  })
-  
-  
+    return result
 
-  return (mongoResult)
 
 };
 
