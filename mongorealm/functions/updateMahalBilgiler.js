@@ -21,7 +21,6 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     veri:mahalBilgiler_willBeSaved[0].veri
   }
   
-  return _projectId
   
   const result = collection_Mahaller.updateOne(
     {_id:new BSON.ObjectId(mahalBilgiler_willBeSaved[0].mahalId.toString())},
@@ -30,6 +29,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
   );
   
 
+  return result
 
 };
 
