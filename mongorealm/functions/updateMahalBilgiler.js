@@ -21,7 +21,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
     veri:mahalBilgiler_willBeSaved[0].veri
   }
   
-  return newBilgi
+  return _projectId
   
   const result = collection_Mahaller.updateOne(
     {_id:mahalBilgiler_willBeSaved[0].mahalId},
