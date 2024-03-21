@@ -38,7 +38,7 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
                     { $eq: ["$$this.baslikId", newBilgi.baslikId] },
                     {
                       baslikId: "$$this.baslikId",
-                      veri: { $add: ["$$this.veri", newBilgi.veri] }
+                      veri: { $set: ["$$this.veri", newBilgi.veri] }
                     },
                     "$$this"
                   ]
