@@ -269,5 +269,10 @@
         "name": "auth_ConfirmationMail",
         "private": false,
         "disable_arg_logs": true
+    },
+    {
+        "name": "updateProjectMahalBaslik",
+        "private": false,
+        "disable_arg_logs": true
     }
 ]
