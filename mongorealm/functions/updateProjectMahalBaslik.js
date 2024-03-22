@@ -22,9 +22,7 @@ exports = async function (_projectId, mahalBaslik) {
   }
 
 
-
-
-
+  return mahalBaslik
 
   const result = await collection_Projects.updateOne(
     { _id: _projectId },
