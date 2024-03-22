@@ -1,5 +1,4 @@
-exports = async function ({_projectId, mahalBaslik}) {
-
+exports = async function ({ _projectId, mahalBaslik }) {
 
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
@@ -25,8 +24,8 @@ exports = async function ({_projectId, mahalBaslik}) {
 
   const result = await collection_Projects.updateOne(
     { _id: _projectId },
-    { $set: { "mahalBasliklari.$[oneBaslik]": {...mahalBaslik} } },
-    { arrayFilters: [ { "oneBaslik.id": mahalBaslik.id } ], upsert: true }
+    { $set: { "mahalBasliklari.$[oneBaslik]": { ...mahalBaslik } } },
+    { arrayFilters: [{ "oneBaslik.id": mahalBaslik.id }], upsert: true }
   )
 
   return result
