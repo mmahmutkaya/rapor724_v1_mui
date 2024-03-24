@@ -57,9 +57,6 @@ exports = async function ({ _projectId, _mahalId, _pozId }) {
   const collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
   
   const pozMahal= collection_Metrajlar.find({_mahalId,_pozId})
-
-  return pozMahal
-  
   let result 
   
   if(pozMahal) {
