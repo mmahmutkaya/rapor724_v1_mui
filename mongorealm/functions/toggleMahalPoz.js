@@ -63,7 +63,7 @@ exports = async function ({ _projectId, _mahalId, _pozId, open }) {
     { _projectId, _mahalId, _pozId }, // Query for the user object of the logged in user
     {
       $set: {
-        open: !pozMahal.open,
+        open: open,
         createdBy: _userId,
         createdAt: currentTime,
       }
