@@ -1,4 +1,4 @@
-exports = async function ({ _projectId, _mahalId, _pozId }) {
+exports = async function ({ _projectId, _mahalId, _pozId, open }) {
 
   // gelen verileri ikiye ayırabiliriz, 1-form verisinden önceki ana veriler  2-form verileri
 
@@ -56,50 +56,28 @@ exports = async function ({ _projectId, _mahalId, _pozId }) {
 
   const collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
   
-  let result 
-  const pozMahal= await collection_Metrajlar.find({_mahalId,_pozId})
+
+  // const pozMahal= await collection_Metrajlar.find({_mahalId,_pozId})
   
-  if(pozMahal) {
+   let result = await collection_Metrajlar.updateOne(
+    { _projectId, _mahalId, _pozId }, // Query for the user object of the logged in user
+    {
+      $set: {
+        open: !pozMahal.open,
+        createdBy: _userId,
+        createdAt: currentTime,
+      }
+    },
+    { upsert: true }
+  );
     
-    result = await collection_Metrajlar.updateOne(
-      { _projectId, _mahalId, _pozId }, // Query for the user object of the logged in user
-      {
-        $set: {
-          open: !pozMahal.open,
-          createdBy: _userId,
-          createdAt: currentTime,
-        }
-      },
-      { upsert: true }
-    );
     
-    resultMahalPoz = {
-      _mahalId,
-      _pozId,
-      open: !pozMahal.open,
-    }
-  
-  } else {
-    
-    result = await collection_Metrajlar.updateOne(
-      { _projectId, _mahalId, _pozId }, // Query for the user object of the logged in user
-      {
-        $set: {
-          open: true,
-          createdBy: _userId,
-          createdAt: currentTime,
-        }
-      },
-      { upsert: true }
-    );
-    
-    resultMahalPoz = {
-      _mahalId,
-      _pozId,
-      open: true,
-    }
-  
+  resultMahalPoz = {
+    _mahalId,
+    _pozId,
+    open: open,
   }
+  
 
   return (resultMahalPoz)
 
