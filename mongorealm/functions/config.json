@@ -197,7 +197,7 @@
         "disable_arg_logs": true
     },
     {
-        "name": "openMetraj",
+        "name": "toggleMahalPoz",
         "private": false,
         "disable_arg_logs": true
     },

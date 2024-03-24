@@ -50,31 +50,60 @@ exports = async function ({ _projectId, _mahalId, _pozId }) {
   if (!mailTeyit) throw new Error("MONGO // openMetraj --  Öncelikle üyeliğinize ait mail adresinin size ait olduğunu doğrulamalısınız, tekrar giriş yapmayı deneyiniz veya bizimle iletişime geçiniz.")
 
 
+
   // poz create
   const currentTime = new Date()
 
   const collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
+  
+  const pozMahal= collection_Metrajlar.find({_mahalId,_pozId})
 
-  const result = await collection_Metrajlar.updateOne(
-    { _projectId, _mahalId, _pozId }, // Query for the user object of the logged in user
-    {
-      $set: {
-        open: true,
-        createdBy: _userId,
-        createdAt: currentTime,
-      }
-    },
-    { upsert: true }
-  );
 
-  let openedMetraj = {
-    _mahalId,
-    _pozId,
-    open: true,
+  let result
+  
+  if(pozMahal) {
+    
+    result = await collection_Metrajlar.updateOne(
+      { _projectId, _mahalId, _pozId }, // Query for the user object of the logged in user
+      {
+        $set: {
+          open: !pozMahal.open,
+          createdBy: _userId,
+          createdAt: currentTime,
+        }
+      },
+      { upsert: true }
+    );
+    
+    resultMahalPoz = {
+      _mahalId,
+      _pozId,
+      open: !pozMahal.open,
+    }
+  
+  } else {
+    
+    result = await collection_Metrajlar.updateOne(
+      { _projectId, _mahalId, _pozId }, // Query for the user object of the logged in user
+      {
+        $set: {
+          open: true,
+          createdBy: _userId,
+          createdAt: currentTime,
+        }
+      },
+      { upsert: true }
+    );
+    
+    resultMahalPoz = {
+      _mahalId,
+      _pozId,
+      open: true,
+    }
+  
   }
 
-
-  return (openedMetraj)
+  return (resultMahalPoz)
 
 };
 
