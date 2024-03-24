@@ -1,4 +1,4 @@
-exports = async function ({ projectId, mahalId, pozId }) {
+exports = async function ({ _projectId, _mahalId, _pozId }) {
 
   // gelen verileri ikiye ayırabiliriz, 1-form verisinden önceki ana veriler  2-form verileri
 
@@ -7,14 +7,10 @@ exports = async function ({ projectId, mahalId, pozId }) {
 
   // 2 - yukarıda açıklandı
 
-  if (!projectId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
-
-  let _projectId
+  if (!_projectId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
   try {
-    if (typeof projectId == "string") {
+    if (typeof _projectId == "string") {
       _projectId = new BSON.ObjectId(projectId)
-    } else {
-      _projectId = projectId
     }
   } catch (err) {
     throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --projectId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
@@ -23,14 +19,10 @@ exports = async function ({ projectId, mahalId, pozId }) {
 
 
 
-  if (!mahalId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
-
-  let _mahalId
+  if (!_mahalId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
   try {
     if (typeof mahalId == "string") {
       _mahalId = new BSON.ObjectId(mahalId)
-    } else {
-      _mahalId = mahalId
     }
   } catch (err) {
     throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --mahalId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
@@ -39,15 +31,11 @@ exports = async function ({ projectId, mahalId, pozId }) {
 
 
 
-  if (!pozId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
-
-  let _pozId
+  if (!_pozId) throw new Error("MONGO // openMetraj // Proje Id -- sorguya gönderilmemiş, lütfen Rapor7/24 ile irtibata geçiniz. ")
   try {
     if (typeof pozId == "string") {
       _pozId = new BSON.ObjectId(pozId)
-    } else {
-      _pozId = pozId
-    }
+    } 
   } catch (err) {
     throw new Error("MONGO // openMetraj --  " + "MONGO // openMetraj -- sorguya gönderilen --pozId-- türü doğru değil, lütfen Rapor7/24 ile irtibata geçiniz.")
   }
