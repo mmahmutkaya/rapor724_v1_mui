@@ -58,8 +58,9 @@ exports = async function ({ _projectId, _mahalId, _pozId }) {
   
   const pozMahal= collection_Metrajlar.find({_mahalId,_pozId})
 
-
-  let result
+  return pozMahal
+  
+  let result 
   
   if(pozMahal) {
     
