@@ -108,8 +108,8 @@ exports = async function({projectId, upLbsId, newLbsName, newLbsCodeName}){
     
     project.lbs.filter(item => !item.code.includes(".")).map(item => {
       
-      item.name === newLbsName && !errorFormObj.newLbsName ? errorFormObj.newLbsName = "En üst seviyede bu isim kullanılmış" : null
-      item.codeName === newLbsCodeName && !errorFormObj.newLbsCodeName ? errorFormObj.newLbsCodeName = "En üst seviyede bu kod isim kullanılmış" : null
+      item.name === newLbsName && !errorFormObj.newLbsName ? errorFormObj.newLbsName = "Aynı grup içinde kullanılmış" : null
+      item.codeName === newLbsCodeName && !errorFormObj.newLbsCodeName ? errorFormObj.newLbsCodeName = "Aynı grup içinde kullanılmış" : null
       
       
       number = parseInt(item.code)
@@ -181,8 +181,8 @@ exports = async function({projectId, upLbsId, newLbsName, newLbsCodeName}){
   
   project.lbs.filter(item => item.code.indexOf(text) == 0 && item.code.split(".").length - 1  == level).map(item => {
     
-      item.name === newLbsName && !errorFormObj.newLbsName ? errorFormObj.newLbsName = "En üst seviyede bu isim kullanılmış" : null
-      item.codeName === newLbsCodeName && !errorFormObj.newLbsCodeName ? errorFormObj.newLbsCodeName = "En üst seviyede bu kod isim kullanılmış" : null
+      item.name === newLbsName && !errorFormObj.newLbsName ? errorFormObj.newLbsName = "Aynı grup içinde kullanılmış" : null
+      item.codeName === newLbsCodeName && !errorFormObj.newLbsCodeName ? errorFormObj.newLbsCodeName = "Aynı grup içinde kullanılmış" : null
       
       // yeni eklenecek lbs son hane numarasını belirlemek için aynı seviyedeki diğer lbs son numaraları kontrol ediliyor
       number = parseInt(item.code.split(text)[1])

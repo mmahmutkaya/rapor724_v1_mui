@@ -111,8 +111,8 @@ exports = async function ({ projectId, upWbsId, newWbsName, newWbsCodeName }) {
 
     project.wbs.filter(item => !item.code.includes(".")).map(item => {
 
-      item.name === newWbsName && !errorFormObj.newWbsName ? errorFormObj.newWbsName = "En üst seviyede bu isim kullanılmış" : null
-      item.codeName === newWbsCodeName && !errorFormObj.newWbsCodeName ? errorFormObj.newWbsCodeName = "En üst seviyede bu kod isim kullanılmış" : null
+      item.name === newWbsName && !errorFormObj.newWbsName ? errorFormObj.newWbsName = "Aynı grup içinde kullanılmış" : null
+      item.codeName === newWbsCodeName && !errorFormObj.newWbsCodeName ? errorFormObj.newWbsCodeName = "Aynı grup içinde kullanılmış" : null
 
 
       number = parseInt(item.code)
@@ -184,8 +184,8 @@ exports = async function ({ projectId, upWbsId, newWbsName, newWbsCodeName }) {
 
   project.wbs.filter(item => item.code.indexOf(text) == 0 && item.code.split(".").length - 1 == level).map(item => {
 
-    item.name === newWbsName && !errorFormObj.newWbsName ? errorFormObj.newWbsName = "En üst seviyede bu isim kullanılmış" : null
-    item.codeName === newWbsCodeName && !errorFormObj.newWbsCodeName ? errorFormObj.newWbsCodeName = "En üst seviyede bu kod isim kullanılmış" : null
+    item.name === newWbsName && !errorFormObj.newWbsName ? errorFormObj.newWbsName = "Aynı grup içinde kullanılmış" : null
+    item.codeName === newWbsCodeName && !errorFormObj.newWbsCodeName ? errorFormObj.newWbsCodeName = "Aynı grup içinde kullanılmış" : null
 
     // yeni eklenecek wbs son hane numarasını belirlemek için aynı seviyedeki diğer wbs son numaraları kontrol ediliyor
     number = parseInt(item.code.split(text)[1])
