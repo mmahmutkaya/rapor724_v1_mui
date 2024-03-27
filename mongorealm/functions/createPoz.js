@@ -18,6 +18,23 @@ exports = async function (newPoz) {
     newPozError.wbsId = "Zorunlu"
   }
 
+  if (typeof newPoz.pozNo !== "string") {
+    newPozError.pozNo = "Zorunlu"
+  }
+
+  if (typeof newPoz.pozNo === "string") {
+    if (newPoz.pozNo.length === 0) {
+      newPozError.pozNo = "Zorunlu"
+    }
+  }
+
+  if (typeof newPoz.pozNo === "string") {
+    let minimumHaneSayisi = 1
+    if (newPoz.pozNo.length > 0 && newPoz.pozNo.length < minimumHaneSayisi) {
+      newPozError.pozNo = `${minimumHaneSayisi} haneden az olamaz`
+    }
+  }
+  
 
   if (typeof newPoz.pozName !== "string") {
     newPozError.pozName = "Zorunlu"
@@ -35,6 +52,7 @@ exports = async function (newPoz) {
       newPozError.pozName = `${minimumHaneSayisi} haneden az olamaz`
     }
   }
+
 
   if (typeof newPoz.pozBirimId !== "string") {
     newPozError.pozBirimId = "Zorunlu"
@@ -57,6 +75,15 @@ exports = async function (newPoz) {
   if (!project) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
 
+  const collection_Pozlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("pozlar")
+  let pozFinded = collection_Pozlar.findOne({$or: [{'pozNo': newPoz.pozNo}, {'name': newPoz.name}]})
+  if (pozFinded.name == newPoz.name) {
+    newPozError.pozName = `${pozFinded.name} isimli poz'da kullanılmış`
+  }
+  if (pozFinded.pozNo == newPoz.pozNo) {
+    newPozError.pozNo = `${pozFinded.name} isimli poz'da kullanılmış`
+  }
+      
   if (Object.keys(newPozError).length) return ({ newPozError })
 
 
@@ -73,6 +100,7 @@ exports = async function (newPoz) {
   newPoz = {
     _projectId: newPoz.projectId,
     _wbsId: newPoz.wbsId,
+    pozNo:newPoz.pozNo,
     name: newPoz.pozName,
     birimId: newPoz.pozBirimId,
     createdBy: _userId,
@@ -80,7 +108,6 @@ exports = async function (newPoz) {
     isDeleted: false
   }
 
-  const collection_Pozlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("pozlar")
   const result = await collection_Pozlar.insertOne(newPoz)
 
   newPoz._id = result.insertedId
