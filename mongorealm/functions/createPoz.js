@@ -1,10 +1,6 @@
 exports = async function (newPoz) {
 
 
-  // artık poz oluştururken seçmiyoruz bunu
-  newPoz.pozMetrajTipId = "standartMetrajSayfasi"
-
-
   const newPozError = {}
 
   // form validation - backend
@@ -40,10 +36,6 @@ exports = async function (newPoz) {
     }
   }
 
-  if (typeof newPoz.pozMetrajTipId !== "string") {
-    newPozError.pozMetrajTipId = "Zorunlu"
-  }
-
   if (typeof newPoz.pozBirimId !== "string") {
     newPozError.pozBirimId = "Zorunlu"
   }
@@ -65,13 +57,6 @@ exports = async function (newPoz) {
   if (!project) throw new Error("MONGO // createPoz // Poz eklemek istediğiniz proje sistemde bulunamadı, lütfen sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ileirtibata geçiniz.")
 
 
-  newPozError.pozMetrajTipId = "Geçerli Değil"
-  project.pozMetrajTipleri.map(oneMetrajTip => {
-    if (newPoz.pozMetrajTipId == oneMetrajTip.id) {
-      delete newPozError.pozMetrajTipId
-      return
-    }
-  })
   if (Object.keys(newPozError).length) return ({ newPozError })
 
 
@@ -89,7 +74,6 @@ exports = async function (newPoz) {
     _projectId: newPoz.projectId,
     _wbsId: newPoz.wbsId,
     name: newPoz.pozName,
-    metrajTipId: newPoz.pozMetrajTipId,
     birimId: newPoz.pozBirimId,
     createdBy: _userId,
     createdAt: currentTime,
