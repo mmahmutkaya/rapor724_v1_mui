@@ -1,7 +1,6 @@
 exports = async function ({ name }) {
 
   const user = context.user
-
   const _userId = new BSON.ObjectId(user.id)
 
   const mailTeyit = user.custom_data.mailTeyit
@@ -48,6 +47,7 @@ exports = async function ({ name }) {
     { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal Kod", dataType: "metin" },
     { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, paddingInfo: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", dataType: "metin" },
   ]
+  
 
   const mahalBirimleri = [
     { id: "mt", name: "mt" },
@@ -91,3 +91,4 @@ exports = async function ({ name }) {
   }
 
 };
+
