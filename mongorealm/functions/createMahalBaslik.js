@@ -135,9 +135,9 @@ exports = async function (newMahalBaslik, _projectId) {
     isDeleted: false,
     goster: false,
     sabit: false,
-    genislik: 20,
+    genislik: 10,
     paddingInfo: "0px 1rem 0px 0px",
-    yatayHiza: "end",
+    yatayHiza: newMahalBaslik.veriTuruId == "sayi" ? "end" : "center",
   }
 
 
