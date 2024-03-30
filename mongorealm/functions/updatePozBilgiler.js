@@ -1,4 +1,4 @@
-exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
+exports = async function ({_projectId, pozBilgiler_willBeSaved}) {
 
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
@@ -17,13 +17,13 @@ exports = async function ({_projectId, mahalBilgiler_willBeSaved}) {
   
 
   
-  let operations = mahalBilgiler_willBeSaved.map(oneBilgi => {
+  let operations = pozBilgiler_willBeSaved.map(oneBilgi => {
     return (
       
       { updateOne :
           {
              "filter": {
-               _id: oneBilgi.mahalId
+               _id: oneBilgi.pozId
              },
              "update": 
               [{
