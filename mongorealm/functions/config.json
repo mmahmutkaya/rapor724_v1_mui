@@ -279,5 +279,10 @@
         "name": "createPozBaslik",
         "private": false,
         "disable_arg_logs": true
+    },
+    {
+        "name": "updateProjectPozBaslik",
+        "private": false,
+        "disable_arg_logs": true
     }
 ]
