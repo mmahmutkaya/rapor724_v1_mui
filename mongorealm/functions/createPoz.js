@@ -105,6 +105,7 @@ exports = async function (newPoz) {
     birimId: newPoz.pozBirimId,
     createdBy: _userId,
     createdAt: currentTime,
+    ilaveBilgiler:[],
     isDeleted: false
   }
 
