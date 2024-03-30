@@ -159,13 +159,13 @@ export default function Sidebar({ setMobileOpen }) {
 
 
             <ListItemButton
-              onClick={() => router.push('/metrajlar')}
-              sx={{ backgroundColor: router?.asPath == "/metrajlar" ? "#f0f0f1" : null }}
+              onClick={() => router.push('/metraj')}
+              sx={{ backgroundColor: router?.asPath == "/metraj" ? "#f0f0f1" : null }}
             >
               <ListItemIcon>
                 <SendIcon />
               </ListItemIcon>
-              <ListItemText primary="Metrajlar" />
+              <ListItemText primary="Metraj" />
             </ListItemButton>
 
 
@@ -177,6 +177,16 @@ export default function Sidebar({ setMobileOpen }) {
                 <SendIcon />
               </ListItemIcon>
               <ListItemText primary="Raporlar" />
+            </ListItemButton>
+
+            <ListItemButton
+              onClick={() => router.push('/grid')}
+              sx={{ backgroundColor: router?.asPath == "/grid" ? "#f0f0f1" : null }}
+            >
+              <ListItemIcon>
+                <SendIcon />
+              </ListItemIcon>
+              <ListItemText primary="Grid" />
             </ListItemButton>
 
             {/* <ListItemButton>

@@ -31,7 +31,7 @@ use('rapor724_v2');
 // ]
 
 
-db.getCollection('mahaller').updateMany(
+db.getCollection('pozlar').updateMany(
   {},
   { $set: { ilaveBilgiler: [] } }
 );
@@ -40,7 +40,7 @@ db.getCollection('mahaller').updateMany(
 
 
 
-// db.getCollection('pozlar').deleteMany({});
+// db.getCollection('metrajlar').deleteMany({});
 
 // db.getCollection('projects').updateMany(
 //   {},

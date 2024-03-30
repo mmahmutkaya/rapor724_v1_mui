@@ -54,12 +54,13 @@ export default function FormPozCreate({ setShow }) {
       // formdan gelen text verilerini alma - (çoktan seçmeliler seçildiği anda useState() kısmında güncelleniyor)
       const data = new FormData(event.currentTarget);
       const pozName = deleteLastSpace(data.get('pozName'))
+      const pozNo = deleteLastSpace(data.get('pozNo'))
 
       const newPoz = {
         projectId: isProject?._id,
         wbsId,
         pozName,
-        // pozTipId,
+        pozNo,
         pozBirimId,
       }
 
@@ -110,10 +111,12 @@ export default function FormPozCreate({ setShow }) {
         }
       }
 
-      // if (typeof newPoz.pozTipId !== "string") {
-      //   setNewPozError(prev => ({ ...prev, pozTipId: "Zorunlu" }))
-      //   isFormError = true
-      // }
+      let pozFinded = pozlar.find(item => item.pozNo == newPoz.pozNo)
+      if (pozFinded) {
+        setNewPozError(prev => ({ ...prev, pozNo: `'${pozFinded.name}' isimli poz'da bu no kullanılmış` }))
+        isFormError = true
+      }
+      
 
       if (typeof newPoz.pozBirimId !== "string") {
         setNewPozError(prev => ({ ...prev, pozBirimId: "Zorunlu" }))
@@ -142,7 +145,7 @@ export default function FormPozCreate({ setShow }) {
       console.log("form validation - hata yok - backend")
 
       if (!result.newPoz?._id) {
-        console.log("result",result)
+        console.log("result", result)
         throw new Error("db den -newPoz- ve onun da -_id-  property dönmedi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz..")
       }
 
@@ -344,6 +347,43 @@ export default function FormPozCreate({ setShow }) {
 
 
 
+            {/* poz numarasının yazıldığı alan */}
+            {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
+            <Box
+              onClick={() => setNewPozError(prevData => {
+                const newData = { ...prevData }
+                delete newData["pozNo"]
+                return newData
+              })}
+              sx={{ minWidth: 120, marginBottom: "2rem" }}
+            >
+              <TextField
+                sx={{
+                  "& input:-webkit-autofill:focus": {
+                    transition: "background-color 600000s 0s, color 600000s 0s"
+                  },
+                  "& input:-webkit-autofill": {
+                    transition: "background-color 600000s 0s, color 600000s 0s"
+                  },
+                }}
+                variant="standard"
+                // InputProps={{ sx: { height:"2rem", fontSize: "1.5rem" } }}
+                margin="normal"
+                id="pozNo"
+                name="pozNo"
+                // autoFocus
+                error={newPozError.pozNo ? true : false}
+                helperText={newPozError.pozNo}
+                // margin="dense"
+                label="Poz No"
+                type="text"
+                fullWidth
+              />
+            </Box>
+
+
+
+
             {/* poz isminin yazıldığı alan */}
             {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
             <Box
@@ -483,29 +523,3 @@ export default function FormPozCreate({ setShow }) {
 
 
 }
-
-
-
-
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-    name: "ahmed"
-  },
-  {
-    value: 'EUR',
-    label: '€',
-    name: "mahmut"
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-    name: "muhammed"
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-    name: "mustafa"
-  },
-];

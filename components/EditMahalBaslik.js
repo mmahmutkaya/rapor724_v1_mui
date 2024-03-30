@@ -21,7 +21,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 
 // export default function FormMahalCreate({ setShow, isProject, refetch_mahaller }) {
-export default function FormMahalCreate({ setShow }) {
+export default function EditMahalBaslik({ setShow }) {
 
   const { isProject, setIsProject } = useContext(StoreContext)
 

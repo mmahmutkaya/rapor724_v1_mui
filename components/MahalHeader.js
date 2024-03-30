@@ -21,9 +21,10 @@ import AlignHorizontalLeftOutlinedIcon from '@mui/icons-material/AlignHorizontal
 import AlignHorizontalRightOutlinedIcon from '@mui/icons-material/AlignHorizontalRightOutlined';
 import AlignHorizontalCenterOutlinedIcon from '@mui/icons-material/AlignHorizontalCenterOutlined';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import EditIcon from '@mui/icons-material/Edit';
 
 
-export default function MahalHeader({ setShow, editMahal, setEditMahal }) {
+export default function MahalHeader({ setShow, editMahal, setEditMahal, saveMahal }) {
 
   const { drawerWidth, topBarHeight } = useContext(StoreContext)
 
@@ -34,6 +35,8 @@ export default function MahalHeader({ setShow, editMahal, setEditMahal }) {
 
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
   const { selectedMahalBaslik, setSelectedMahalBaslik } = useContext(StoreContext)
+
+  const [willBeUpdate_mahalBaslik, setWillBeUpdate_mahalBaslik] = useState(false)
 
   const [showDialog, setShowDialog] = useState(false)
   const [dialogCase, setDialogCase] = useState("")
@@ -154,24 +157,28 @@ export default function MahalHeader({ setShow, editMahal, setEditMahal }) {
 
 
 
-  async function handle_BaslikGenislet() {
+  const handle_BaslikGenislet = () => {
     setIsProject(isProject => {
       const isProject_ = { ...isProject }
       isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).genislik = isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).genislik + 0.5
       return isProject_
     })
+    setWillBeUpdate_mahalBaslik(true)
   }
 
-  async function handle_BaslikDaralt() {
+
+  const handle_BaslikDaralt = () => {
     setIsProject(isProject => {
       const isProject_ = { ...isProject }
       isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).genislik = isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).genislik - 0.5
       return isProject_
     })
+    setWillBeUpdate_mahalBaslik(true)
   }
 
 
-  async function handle_YatayHiza() {
+
+  const handle_YatayHiza = () => {
     setIsProject(isProject => {
       const isProject_ = { ...isProject }
       let guncelYatayHiza = isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).yatayHiza
@@ -180,6 +187,19 @@ export default function MahalHeader({ setShow, editMahal, setEditMahal }) {
       guncelYatayHiza == "end" ? isProject_.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id).yatayHiza = "start" : null
       return isProject_
     })
+    setWillBeUpdate_mahalBaslik(true)
+  }
+
+
+  const unSelectMahalBaslik = async () => {
+    if (willBeUpdate_mahalBaslik) {
+      let mahalBaslik = isProject.mahalBasliklari.find(item => item.id == selectedMahalBaslik.id)
+      console.log("mahalBaslik", mahalBaslik)
+      const result = await RealmApp?.currentUser.callFunction("updateProjectMahalBaslik", ({ _projectId: isProject._id, mahalBaslik }));
+      console.log("result", result)
+      setWillBeUpdate_mahalBaslik(false)
+    }
+    setSelectedMahalBaslik(false)
   }
 
 
@@ -238,113 +258,154 @@ export default function MahalHeader({ setShow, editMahal, setEditMahal }) {
           </Grid>
 
 
+
+
           {/* sağ kısım - (tuşlar)*/}
           <Grid item xs="auto">
             <Grid container spacing={1}>
 
 
-              {/* seçimleri temizle */}
               {selectedMahal &&
-                <Grid item >
-                  <IconButton onClick={() => setSelectedMahal()} aria-label="lbsUncliced">
-                    <ClearOutlined variant="contained"
-                      sx={{ color: "red" }} />
-                  </IconButton>
-                </Grid>}
-              {selectedMahalBaslik &&
-                <Grid item >
-                  <IconButton onClick={() => setSelectedMahalBaslik()} aria-label="lbsUncliced">
-                    <ClearOutlined variant="contained"
-                      sx={{ color: "green" }} />
-                  </IconButton>
-                </Grid>}
+                <>
+
+                  {/* seçimleri temizle */}
+
+                  <Grid item >
+                    <IconButton onClick={() => setSelectedMahal()} aria-label="lbsUncliced">
+                      <ClearOutlined variant="contained"
+                        sx={{ color: "red" }} />
+                    </IconButton>
+                  </Grid>
 
 
 
-              {/* ne seçili ise silme */}
-              {selectedMahal &&
-                <Grid item onClick={() => handleMahalDelete(selectedMahal)} sx={{ cursor: "pointer" }}>
-                  <IconButton aria-label="addMahal" disabled>
-                    <DeleteIcon
-                      // sx={{display: isProject_display}}
-                      variant="contained"
-                      sx={{ color: "red" }} />
-                  </IconButton>
-                </Grid>}
-              {selectedMahalBaslik &&
-                <Grid item onClick={() => handleMahalBaslikDelete(selectedMahalBaslik)} sx={{ cursor: "pointer" }}>
-                  <IconButton aria-label="addMahal" disabled>
-                    <DeleteIcon
-                      // sx={{display: isProject_display}}
-                      variant="contained"
-                      sx={{ color: "green" }} />
-                  </IconButton>
-                </Grid>}
+                  {/* ne seçili ise silme */}
 
-
-
-
-              {/* mahal başlık seçili ise gösterilen fonksiyon - genişletme/daraltma*/}
-              {selectedMahalBaslik &&
-                <Grid item onClick={() => handle_BaslikDaralt()} sx={{ cursor: "pointer" }}>
-                  <IconButton aria-label="addMahal" disabled>
-                    <UnfoldLessIcon
-                      variant="contained"
-                      sx={{ rotate: "90deg", fontSize: "1.4rem", mt: "0.1rem", color: "black" }} />
-                  </IconButton>
-                </Grid>}
-
-
-
-              {/* mahal başlık seçili ise gösterilen fonksiyon */}
-              {selectedMahalBaslik &&
-                <Grid item onClick={() => handle_BaslikGenislet()} sx={{ cursor: "pointer" }}>
-                  <IconButton aria-label="addMahal" disabled>
-                    <UnfoldMoreIcon
-                      variant="contained"
-                      sx={{ rotate: "90deg", fontSize: "1.6rem", color: "black" }} />
-                  </IconButton>
-                </Grid>}
-
-
-
-              {/* mahal başlık seçili ise gösterilen fonksiyon - yatay hiza*/}
-              {selectedMahalBaslik &&
-                <Grid item onClick={() => handle_YatayHiza()} sx={{ cursor: "pointer" }}>
-                  <IconButton aria-label="addMahal" disabled>
-                    {selectedMahalBaslik.yatayHiza == "start" &&
-                      <AlignHorizontalLeftOutlinedIcon
+                  <Grid item onClick={() => handleMahalDelete(selectedMahal)} sx={{ cursor: "pointer" }}>
+                    <IconButton aria-label="addMahal" disabled>
+                      <DeleteIcon
+                        // sx={{display: isProject_display}}
                         variant="contained"
-                        sx={{ color: "black" }} />
-                    }
-                    {selectedMahalBaslik.yatayHiza == "center" &&
-                      <AlignHorizontalCenterOutlinedIcon
+                        sx={{ color: "red" }} />
+                    </IconButton>
+                  </Grid>
+
+                </>
+              }
+
+
+
+
+              {selectedMahalBaslik && !editMahal &&
+                <>
+
+                  {/* başlığı düzenle*/}
+
+                  <Grid item >
+                    <IconButton onClick={() => unSelectMahalBaslik()} aria-label="lbsUncliced">
+                      <ClearOutlined variant="contained"
+                        sx={{ color: "red" }} />
+                    </IconButton>
+                  </Grid>
+
+                  <Grid item >
+                    <IconButton onClick={() => setEditMahal(selectedMahalBaslik.id)} aria-label="lbsUncliced">
+                      <EditIcon variant="contained"
+                        sx={{ color: "#3D4849" }} />
+                    </IconButton>
+                  </Grid>
+
+
+
+                  <Grid item onClick={() => handleMahalBaslikDelete(selectedMahalBaslik)} sx={{ cursor: "pointer" }}>
+                    <IconButton aria-label="addMahal" disabled>
+                      <DeleteIcon
+                        // sx={{display: isProject_display}}
                         variant="contained"
-                        sx={{ color: "black" }} />
-                    }
-                    {selectedMahalBaslik.yatayHiza == "end" &&
-                      <AlignHorizontalRightOutlinedIcon
+                        sx={{ color: "red" }} />
+                    </IconButton>
+                  </Grid>
+
+
+
+                  <Grid item onClick={() => handle_BaslikDaralt()} sx={{ cursor: "pointer" }}>
+                    <IconButton aria-label="addMahal" disabled>
+                      <UnfoldLessIcon
                         variant="contained"
-                        sx={{ color: "black" }} />
-                    }
-                  </IconButton>
-                </Grid>}
+                        sx={{ rotate: "90deg", fontSize: "1.4rem", mt: "0.1rem", color: "black" }} />
+                    </IconButton>
+                  </Grid>
 
 
 
-              {editMahal &&
-                <Grid item>
-                  <IconButton onClick={() => setEditMahal(false)} aria-label="addLbs">
-                    <FileDownloadDoneIcon variant="contained" sx={{ color: "black" }} />
-                  </IconButton>
-                </Grid>}
+                  <Grid item onClick={() => handle_BaslikGenislet()} sx={{ cursor: "pointer" }}>
+                    <IconButton aria-label="addMahal" disabled>
+                      <UnfoldMoreIcon
+                        variant="contained"
+                        sx={{ rotate: "90deg", fontSize: "1.6rem", color: "black" }} />
+                    </IconButton>
+                  </Grid>
+
+
+                  <Grid item onClick={() => handle_YatayHiza()} sx={{ cursor: "pointer" }}>
+                    <IconButton aria-label="addMahal" disabled>
+                      {selectedMahalBaslik.yatayHiza == "start" &&
+                        <AlignHorizontalLeftOutlinedIcon
+                          variant="contained"
+                          sx={{ color: "black" }} />
+                      }
+                      {selectedMahalBaslik.yatayHiza == "center" &&
+                        <AlignHorizontalCenterOutlinedIcon
+                          variant="contained"
+                          sx={{ color: "black" }} />
+                      }
+                      {selectedMahalBaslik.yatayHiza == "end" &&
+                        <AlignHorizontalRightOutlinedIcon
+                          variant="contained"
+                          sx={{ color: "black" }} />
+                      }
+                    </IconButton>
+                  </Grid>
+
+                </>
+
+              }
+
+
+
+
+              {selectedMahalBaslik && editMahal &&
+                <>
+                  <Grid item >
+                    <IconButton
+                      onClick={() => {
+                        setWillBeUpdate_mahalBaslik([])
+                        setSelectedMahalBaslik(false)
+                        setEditMahal(false)
+                      }}
+                      aria-label="lbsUncliced">
+                      <ClearOutlined variant="contained"
+                        sx={{ color: "red" }} />
+                    </IconButton>
+                  </Grid>
+                  <Grid item>
+                    <IconButton onClick={() => saveMahal()} aria-label="addLbs">
+                      <FileDownloadDoneIcon variant="contained" sx={{ color: "black" }} />
+                    </IconButton>
+                  </Grid>
+                </>
+              }
+
+
+
 
               {(!selectedMahalBaslik && !selectedMahal) &&
                 <Grid item>
-                  <IconButton onClick={() => setShow("SettingsMahalBasliklar")} aria-label="addLbs">
+                  <IconButton onClick={() => setShow("EditMahalBaslik")} aria-label="addLbs">
                     <VisibilityIcon variant="contained" sx={{ color: "black" }} />
                   </IconButton>
-                </Grid>}
+                </Grid>
+              }
 
 
               {(!selectedMahalBaslik && !selectedMahal) &&
@@ -352,7 +413,8 @@ export default function MahalHeader({ setShow, editMahal, setEditMahal }) {
                   <IconButton onClick={() => setShow("FormMahalBaslikCreate")} aria-label="addMahalBilgi" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
                     <AddCircleOutlineIcon variant="contained" sx={{ color: (isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? "lightgray" : "blue" }} />
                   </IconButton>
-                </Grid>}
+                </Grid>
+              }
 
 
               {(!selectedMahalBaslik && !selectedMahal) &&
@@ -360,7 +422,8 @@ export default function MahalHeader({ setShow, editMahal, setEditMahal }) {
                   <IconButton onClick={() => setShow("FormMahalCreate")} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
                     <AddCircleOutlineIcon variant="contained" color={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? " lightgray" : "success"} />
                   </IconButton>
-                </Grid>}
+                </Grid>
+              }
 
 
 

@@ -20,8 +20,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 
 
-// export default function FormMahalCreate({ setShow, isProject, refetch_mahaller }) {
-export default function FormMahalBaslikCreate({ setShow }) {
+export default function FormPozBaslikCreate({ setShow }) {
 
   const { isProject, setIsProject } = useContext(StoreContext)
 
@@ -32,9 +31,6 @@ export default function FormMahalBaslikCreate({ setShow }) {
 
   const [veriTuruId, setveriTuruId] = useState("metin")
   const [haneSayisiId, sethaneSayisiId] = useState("0,00")
-
-  // form ilk açıldığında önceden belirlenen birşeyin seçilmiş olması için alttaki satırdaki gibi yapılabiliyor
-  // const [mahalTipi, setMahalTipi] = useState(isProject ? isProject.mahalTipleri.find(item => item.id === "direktMahalListesi") : "");
 
   const RealmApp = useApp();
 
@@ -62,17 +58,17 @@ export default function FormMahalBaslikCreate({ setShow }) {
       let isFormError = false
 
 
-      // validation control - mahal başlık - projeId bilgisi
+      // validation control - poz başlık - projeId bilgisi
       if (typeof _projectId !== "object") {
         setDialogCase("error")
-        setShowDialog("Mahal başlığı kaydı için gerekli olan  '_projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+        setShowDialog("Poz başlığı kaydı için gerekli olan  '_projectId' verisinde hata tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
         console.log("kayıt için gerekli olan '_projectId' verisinde hata olduğu için bu satırın altında durduruldu")
         return
       }
 
 
 
-      // validation control - mahal başlık - isim
+      // validation control - poz başlık - isim
       if (typeof name !== "string") {
         setErrorObj(prev => ({ ...prev, name: "Zorunlu" }))
         isFormError = true
@@ -97,7 +93,7 @@ export default function FormMahalBaslikCreate({ setShow }) {
       }
 
       if (typeof name === "string") {
-        if (isProject.mahalBasliklari.find(item => item.name == name)) {
+        if (isProject.pozBasliklari.find(item => item.name == name)) {
           setErrorObj(prev => ({ ...prev, name: `Bu başlık kullanılmış` }))
           isFormError = true
           console.log(3)
@@ -106,10 +102,10 @@ export default function FormMahalBaslikCreate({ setShow }) {
 
 
 
-      // validation control - mahal başlık - birim
+      // validation control - poz başlık - birim
       if (typeof birim !== "string") {
         setDialogCase("error")
-        setShowDialog("Mahal başlığı kaydı için gerekli olan  'birim' verisinin metin olmadığı tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
+        setShowDialog("Poz başlığı kaydı için gerekli olan  'birim' verisinin metin olmadığı tespit edildi, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile irtibata geçiniz.")
         console.log("kayıt için gerekli olan 'birim' verisinde hata olduğu için fonksiyon bu satırın altında durduruldu")
         return
       }
@@ -132,20 +128,20 @@ export default function FormMahalBaslikCreate({ setShow }) {
       }
 
 
-      const mahalBilgi = {
+      const pozBilgi = {
         name: name,
         veriTuruId: veriTuruId,
         birim: birim,
         haneSayisiId: haneSayisiId,
       }
 
-      console.log("typeof mahalBilgi.birim", typeof mahalBilgi.birim)
-      console.log("mahalBilgi", mahalBilgi)
+      console.log("typeof pozBilgi.birim", typeof pozBilgi.birim)
+      console.log("pozBilgi", pozBilgi)
 
 
 
       // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
-      const result = await RealmApp?.currentUser?.callFunction("createMahalBaslik", mahalBilgi, isProject?._id);
+      const result = await RealmApp?.currentUser?.callFunction("createPozBaslik", pozBilgi, isProject?._id);
       console.log("result", result)
 
 
@@ -162,7 +158,7 @@ export default function FormMahalBaslikCreate({ setShow }) {
 
       setIsProject(isProject => {
         let isProject_ = { ...isProject }
-        isProject_.mahalBasliklari.push(result)
+        isProject_.pozBasliklari.push(result)
         return isProject_
       })
       setShow("Main")
@@ -172,10 +168,10 @@ export default function FormMahalBaslikCreate({ setShow }) {
       console.log(err)
       let hataMesaj_ = err?.message ? err.message : "Beklenmedik hata, Rapor7/24 ile irtibata geçiniz.."
 
-      // eğer çifte kayıt oluyorsa form içindeki mahal ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
+      // eğer çifte kayıt oluyorsa form içindeki poz ismi girilen yere aşağıdaki mesaj gönderilir, fonksiyon durdurulur
       if (hataMesaj_.includes("duplicate key error")) {
-        setErrorObj(prev => ({ ...prev, mahalBilgisiName: "Bu mahal bilgisi ismi kullanılmış" }))
-        console.log("Bu mahal ismi bu projede mevcut")
+        setErrorObj(prev => ({ ...prev, pozBilgisiName: "Bu poz bilgisi ismi kullanılmış" }))
+        console.log("Bu poz ismi bu projede mevcut")
         return
       }
 
@@ -218,12 +214,12 @@ export default function FormMahalBaslikCreate({ setShow }) {
 
             <DialogContentText sx={{ fontWeight: "bold", marginBottom: "2rem" }}>
               {/* <Typography sx> */}
-              Mahal Bilgisi Oluştur
+              Poz Bilgisi Oluştur
               {/* </Typography> */}
             </DialogContentText>
 
 
-            {/* mahal bilgisi isminin yazıldığı alan */}
+            {/* poz bilgisi isminin yazıldığı alan */}
             {/* tıklayınca setShowDialogError(false) çalışmasının sebebi -->  error vermişse yazmaya başlamak için tıklayınca error un silinmesi*/}
             <Box
               onClick={() => setErrorObj(prevData => {
@@ -250,7 +246,7 @@ export default function FormMahalBaslikCreate({ setShow }) {
                 autoComplete="off"
                 // autoFocus
                 error={errorObj.name ? true : false}
-                helperText={errorObj.name ? errorObj.name : 'Örn: "Mahal Tipi" veya "Zemin Alanı"'}
+                helperText={errorObj.name ? errorObj.name : 'Örn: "Poz Tipi" veya "Zemin Alanı"'}
                 // margin="dense"
                 label="Başlık"
                 type="text"
@@ -259,7 +255,7 @@ export default function FormMahalBaslikCreate({ setShow }) {
             </Box>
 
 
-            {/* mahal bilgi veri türü seçimi */}
+            {/* poz bilgi veri türü seçimi */}
             <Box
               onClick={() => setErrorObj(prevData => {
                 const errorObj = { ...prevData }
@@ -384,9 +380,6 @@ export default function FormMahalBaslikCreate({ setShow }) {
               </Select>
 
             </Box>
-
-
-
 
           </DialogContent>
 

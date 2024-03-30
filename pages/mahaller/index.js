@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import FormMahalCreate from '../../components/FormMahalCreate'
-import SettingsMahalBasliklar from '../../components/SettingsMahalBasliklar'
+import EditMahalBaslik from '../../components/EditMahalBaslik'
 import FormMahalBaslikCreate from '../../components/FormMahalBaslikCreate'
 import MahalHeader from '../../components/MahalHeader'
 
@@ -14,7 +14,7 @@ import Grid from '@mui/material/Grid';
 import Input from '@mui/material/Input';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import InfoIcon from '@mui/icons-material/Info';
 
@@ -29,6 +29,9 @@ export default function P_Mahaller() {
   const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
+  const [editMahal, setEditMahal] = useState(false)
+  const [mahalBilgiler_willBeSaved, setMahalBilgiler_willBeSaved] = useState([])
+  const [autoFocus, setAutoFocus] = useState({ baslikId: null, mahalId: null })
 
   const router = useRouter();
   // !isProject ? router.push('/projects') : null
@@ -48,9 +51,8 @@ export default function P_Mahaller() {
 
   const handleSelectMahal = (mahal) => {
     setSelectedMahal(mahal)
+    setSelectedMahalBaslik(false)
   }
-
-
 
 
   // aşağıda kullanılıyor
@@ -58,15 +60,14 @@ export default function P_Mahaller() {
   let lbsName = ""
   let cOunt = 0
   let count_
-  let toplam = 0
-  let ilaveYasaklilar = ["-", "e", "E", "+", ".", ","]
-  let mahalCount
+  let toplam
+  let g_altBaslik
+
 
   const _3_fixed_width_rem = "6rem 35rem 5rem"
-  toplam = 0
   _3_fixed_width_rem.split(" ").map(item => {
     let gecici = Number(item.replace("rem", ""))
-    toplam = toplam + gecici
+    toplam ? toplam = toplam + gecici : toplam = gecici
   })
   const total_fixed_width = toplam
 
@@ -159,6 +160,18 @@ export default function P_Mahaller() {
     // borderBottom: "solid black 1px"
   }));
 
+
+
+  // bir string değerinin numerik olup olmadığının kontrolü
+  function isNumeric(str) {
+    if (str) {
+      str.toString()
+    }
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+      !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+  }
+
+
   const handle_selectBaslik = (oneBaslik) => {
     setSelectedMahalBaslik(oneBaslik)
     setSelectedMahal()
@@ -166,70 +179,110 @@ export default function P_Mahaller() {
   }
 
 
-  const handle_editMahal = async (event, oneBaslik, oneMahal) => {
+
+
+  const handle_input_onKey = async (event, oneBaslik) => {
 
     let oncesi = event.target.value.toString()
     let sonTus = event.key
-    let yeni = oncesi.toString() + sonTus
+    let yeni = oncesi + sonTus
 
-    let izinliTuslar = ["Backspace","Delete","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Escape","Enter","Tab","-"]
+    // sayı 
+    if (oneBaslik.veriTuruId === "sayi") {
 
-    if(!isNumeric(yeni) && !izinliTuslar.includes(sonTus)) {
-      console.log("ilkinde takıldı")
-      return event.preventDefault()
+      if (sonTus.split(" ").length > 1) {
+        console.log("boşluk bulundu ve durdu")
+        return event.preventDefault()
+      }
+
+      let izinliTuslar = ["Backspace", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Escape", "Enter", "Tab", "-", "."]
+
+      if (!isNumeric(yeni) && !izinliTuslar.includes(sonTus)) {
+        console.log("izinsiz tuşlara bastı ve durdu")
+        return event.preventDefault()
+      }
+
+      if (sonTus == "-" && oncesi.split("").includes("-")) {
+        console.log("zaten varken '-' kullanımı ve durdu")
+        return event.preventDefault()
+      }
+
+
+      if (sonTus == "-" && yeni.split("")[0] !== ("-")) {
+        console.log("event", event)
+        console.log("başa gelmeyen '-' kullanımı ve durdu")
+        return event.preventDefault()
+      }
+
+
+      if (sonTus == "." && oncesi.split("").includes(".")) {
+        console.log("zaten varken '.' kullanımı ve durdu")
+        return event.preventDefault()
+      }
+
+      if (isNumeric(sonTus) && yeni.split("").includes(".") && yeni.substring(yeni.indexOf(".") + 1, yeni.length).length > 3) {
+        console.log("0 dan sonra 3 haneden fazla ve durdu")
+        return event.preventDefault()
+      }
+
     }
 
-    if(oncesi.split("").length && sonTus == "-") {
-      console.log("- ikinci keze takıldı")
-      return event.preventDefault()
+  }
+
+
+
+  const handle_input_onChange = (event, oneBaslik, oneMahal) => {
+
+    setAutoFocus({ baslikId: oneBaslik.id, mahalId: oneMahal._id.toString() })
+
+    // db ye kayıt yapılmışsa bu işlemi yapsın yoksa refresh yapsın
+    const newBilgi = { mahalId: oneMahal._id, baslikId: oneBaslik.id, veri: event.target.value }
+
+    if (oneBaslik.veriTuruId === "sayi" && !isNumeric(newBilgi.veri) && newBilgi.veri != "-" && newBilgi.veri.length != 0 && newBilgi.veri != ".") {
+      return
     }
-
-
-    let newBilgi = { id: oneBaslik.id, veri: event.target.value.toString() + event.key.toString() }
-    // console.log("veri", newBilgi.veri)
-
-    // form verileri kontrolden geçti - db ye göndermeyi deniyoruz
-    // const result = await RealmApp?.currentUser?.callFunction("updateMahalBilgi_", newBilgi, oneMahal._id);
-    // console.log("result", result)
-
-    // console.log("yazi mi", isNumeric(newBilgi.veri))
-
-
-    if (oneBaslik.veriTuruId == "sayi" && !isNumeric(newBilgi.veri)) return
 
 
     setMahaller(mahaller => {
-      let mahaller_ = mahaller
-      if (!mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler) {
-        mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler = [newBilgi]
-        return mahaller_
+      // if (!mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler) {
+      //   mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler = [newBilgi]
+      //   return mahaller
+      // }
+      if (!mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.baslikId == oneBaslik.id)) {
+        mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.push(newBilgi)
+        return mahaller
       }
-      if (!mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.id == oneBaslik.id)) {
-        mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.push(newBilgi)
-        return mahaller_
+      mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.baslikId == oneBaslik.id).veri = newBilgi.veri
+      return mahaller
+    })
+
+
+    setMahalBilgiler_willBeSaved(mahalBilgiler_willBeSaved => {
+      let mahalBilgiler_willBeSaved_ = [...mahalBilgiler_willBeSaved]
+      // console.log("mevcutBilgi",mahalBilgiler_willBeSaved.find(item => item.mahalId.toString() == oneMahal._id.toString() && item.baslikId == oneBaslik.id))
+      if (mahalBilgiler_willBeSaved_.find(item => item.mahalId == oneMahal._id.toString() && item.baslikId == oneBaslik.id)) {
+        mahalBilgiler_willBeSaved_.find(item => item.mahalId == oneMahal._id.toString() && item.baslikId == oneBaslik.id).veri = newBilgi.veri
+      } else {
+        mahalBilgiler_willBeSaved_ = [...mahalBilgiler_willBeSaved_, { ...newBilgi }]
       }
-      mahaller_.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.id == oneBaslik.id).veri = newBilgi.veri
-      return mahaller_
+      return mahalBilgiler_willBeSaved_
     })
 
 
   }
 
-  const [editMahal, setEditMahal] = useState(false)
+  const saveMahal = async () => {
+    console.log("mahalBilgiler_willBeSaved", mahalBilgiler_willBeSaved)
 
-  // console.log("-Page_Mahaller--isProject?.mahaller", isProject?.mahalBasliklari)
+    // setMahalBilgiler_willBeSaved([])
+    const result = await RealmApp?.currentUser.callFunction("updateMahalBilgiler", { _projectId: isProject?._id, mahalBilgiler_willBeSaved });
+    console.log("result", result)
 
-  // let deneme = mahaller?.find(item => item._lbsId.toString() == oneLbs.toString()).ilaveBilgiler?.reduce((accumulator, oneMahal) => accumulator + Number(oneMahal.veri), 0)
-
-
-
-  // bir string değerinin numerik olup olmadığının kontrolü
-  function isNumeric(str) {
-    // if (typeof str != "string") return false // we only process strings!
-    str.toString() //
-    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-      !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+    setEditMahal(false)
+    setMahalBilgiler_willBeSaved([])
+    setSelectedMahalBaslik(false)
   }
+
 
 
   return (
@@ -237,7 +290,7 @@ export default function P_Mahaller() {
     <>
 
       <Grid item >
-        <MahalHeader setShow={setShow} editMahal={editMahal} setEditMahal={setEditMahal} />
+        <MahalHeader setShow={setShow} editMahal={editMahal} setEditMahal={setEditMahal} saveMahal={saveMahal} />
       </Grid>
 
       {show == "FormMahalCreate" &&
@@ -252,9 +305,9 @@ export default function P_Mahaller() {
         </Grid>
       }
 
-      {show == "SettingsMahalBasliklar" &&
+      {show == "EditMahalBaslik" &&
         <Grid item >
-          <SettingsMahalBasliklar setShow={setShow} />
+          <EditMahalBaslik setShow={setShow} />
         </Grid>
       }
 
@@ -271,7 +324,7 @@ export default function P_Mahaller() {
 
         <Box sx={{ mt: subHeaderHeight, pt: "1rem", pl: "1rem", pr: "1rem" }}>
 
-          {/* EN ÜST BAŞLIK SATIRI */}
+          {/* EN ÜST BAŞLIK ÜST SATIRI */}
           <Grid
             sx={{
               pb: "1rem",
@@ -294,6 +347,7 @@ export default function P_Mahaller() {
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
                     width: "100%",
                     display: "grid",
+                    alignItems: "center",
                     justifyContent: oneBaslik.yatayHiza,
                   }}
                   onClick={() => handle_selectBaslik(oneBaslik)}
@@ -330,7 +384,27 @@ export default function P_Mahaller() {
                   onClick={() => handle_selectBaslik(oneBaslik)}
                   key={index}
                 >
-                  {oneBaslik.name}
+                  <Box sx={{ display: "grid", justifyContent: oneBaslik.yatayHiza }}>
+                    {oneBaslik.name}
+                  </Box>
+                  <Box sx={{ display: "grid", justifyContent: oneBaslik.yatayHiza }}>
+
+                    {/* HAYALET KOMPONENT */}
+                    <Box sx={{ display: "none" }}>
+                      {g_altBaslik = mahaller?.reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).filter(item => item.baslikId == oneBaslik.id).reduce((toplam, oneBilgi) => toplam + parseFloat(oneBilgi.veri), 0)}
+                    </Box>
+                    {/* GÖZÜKEN KOMPONENT */}
+                    {oneBaslik.veriTuruId == "sayi" && isNumeric(g_altBaslik) &&
+                      <Box>
+                        {g_altBaslik}
+                      </Box>
+                    }
+                    {oneBaslik.veriTuruId == "sayi" && !isNumeric(g_altBaslik) &&
+                      <Box sx={{ color: selectedMahalBaslik?.id == oneBaslik.id ? "rgba(120, 120, 120, 0.7)" : "rgb(120, 120, 120, 0.4)" }}>
+                        .
+                      </Box>
+                    }
+                  </Box>
                 </Box>
               )
             })}
@@ -424,8 +498,16 @@ export default function P_Mahaller() {
                     isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).map((oneBaslik, index) => {
                       return (
                         <TableHeader key={index} index={index} count_={count_} sx={{ display: "grid", with: "100%", justifyContent: oneBaslik.yatayHiza }}>
-                          {oneBaslik.veriTuruId == "sayi" &&
-                            mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).filter(item => item.id == oneBaslik.id).reduce((toplam, oneBilgi) => toplam + Number(oneBilgi.veri), 0)
+
+                          {/* HAYALET KOMPONENT */}
+                          <Box sx={{ display: "none" }}>
+                            {g_altBaslik = mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).filter(item => item.baslikId == oneBaslik.id).reduce((toplam, oneBilgi) => toplam + Number(oneBilgi.veri), 0)}
+                          </Box>
+                          {/* GÖZÜKEN */}
+                          {oneBaslik.veriTuruId == "sayi" && isNumeric(g_altBaslik) &&
+                            <Box>
+                              {g_altBaslik}
+                            </Box>
                           }
                         </TableHeader>
                       )
@@ -489,7 +571,7 @@ export default function P_Mahaller() {
                                   key={index}
                                   index={index}
                                   count_={count_}
-                                  onDoubleClick={() => setEditMahal(oneBaslik.id)}
+                                  // onDoubleClick={() => setEditMahal(oneBaslik.id)}
                                   sx={{
                                     cursor: "text",
                                     display: "grid",
@@ -500,19 +582,21 @@ export default function P_Mahaller() {
                                 >
                                   {editMahal !== oneBaslik.id &&
                                     <Box>
-                                      {oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.veri}
+                                      {oneMahal.ilaveBilgiler?.find(item => item.baslikId == oneBaslik.id)?.veri}
                                     </Box>
                                   }
 
                                   {editMahal == oneBaslik.id &&
                                     <Input
-                                      // autoFocus
+                                      // autoFocus={autoFocus.baslikId == oneBaslik.id && autoFocus.mahalId == oneMahal._id.toString()}
+                                      autoFocus={autoFocus.mahalId == oneMahal._id.toString()}
+                                      // autoFocus={true}
                                       disableUnderline={true}
                                       size="small"
                                       type='text'
                                       // onKeyDown={(evt) => ilaveYasaklilar.some(elem => evt.target.value.includes(elem)) && ilaveYasaklilar.find(item => item == evt.key) && evt.preventDefault()}
-                                      onKeyDown={(event) => handle_editMahal(event, oneBaslik, oneMahal)}
-                                      // onChange={(event) => handle_editMahal(event.target.value, oneBaslik, oneMahal)}
+                                      onKeyDown={(event) => handle_input_onKey(event, oneBaslik)}
+                                      onChange={(event) => handle_input_onChange(event, oneBaslik, oneMahal)}
                                       sx={{
                                         border: "none",
                                         width: "100%",
@@ -526,7 +610,7 @@ export default function P_Mahaller() {
                                           MozAppearance: "textfield",
                                         },
                                       }}
-                                      defaultValue={oneMahal.ilaveBilgiler?.find(item => item.id == oneBaslik.id)?.veri}
+                                      defaultValue={oneMahal.ilaveBilgiler?.find(item => item.baslikId == oneBaslik.id)?.veri}
                                       inputProps={{
                                         style: {
                                           height: "1rem",

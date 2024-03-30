@@ -5,7 +5,7 @@ import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import FormMahalCreate from '../../components/FormMahalCreate'
 import FormMahalBaslikCreate from '../../components/FormMahalBaslikCreate'
-import MahalListesiHeader from '../../components/MahalListesiHeader'
+import MetrajHeader from '../../components/MetrajHeader'
 
 
 import { styled } from '@mui/system';
@@ -19,7 +19,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 
 
-export default function P_MahalListesi() {
+export default function P_Metraj() {
 
   const { isProject, setIsProject } = useContext(StoreContext)
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
@@ -81,8 +81,8 @@ export default function P_MahalListesi() {
 
 
   // aşağıda kullanılıyor
-  let lbsCode = ""
-  let lbsName = ""
+  let wbsCode = ""
+  let wbsName = ""
   let nodeMahal
   let cOunt = 0
   let count_
@@ -121,18 +121,18 @@ export default function P_MahalListesi() {
   // const [basliklar, setBasliklar] = useState(isProject?.mahalBasliklari?.filter(item => item.goster))
 
 
-  let totalWidthSabit = isProject?.mahalBasliklari?.filter(item => item.sabit).reduce(
+  let totalWidthSabit = isProject?.pozBasliklari?.filter(item => item.sabit).reduce(
     (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
     0
   )
   totalWidthSabit = totalWidthSabit + 'rem'
-
-
+  
+  
   let totalWidthDegisken = pozlar?.length * 10
   totalWidthDegisken = totalWidthDegisken + 'rem'
 
 
-  let totalWidth = (parseFloat(totalWidthSabit) + 2 + parseFloat(totalWidthDegisken)) + 'rem'
+  let totalWidth = (parseFloat(totalWidthSabit) + 1 + parseFloat(totalWidthDegisken)) + 'rem'
 
 
   let gridTemplateColumnsSabit = isProject?.mahalBasliklari?.filter(item => item.sabit).reduce(
@@ -141,18 +141,17 @@ export default function P_MahalListesi() {
   )
 
 
-  let gridTemplateColumnsDegisken = pozlar?.reduce(
+  let gridTemplateColumnsDegisken2 = pozlar?.reduce(
     (ilkString, onePoz, index) => index != pozlar?.length ? ilkString + (10 + "rem ") : ilkString + (10 + "rem"),
     ""
   )
 
-  let gridTemplateColumnsDegisken2 = isProject?.mahalBasliklari?.filter(item => !item.sabit && item.goster).reduce(
-    (ilkString, oneBilgi, index) => index != isProject?.mahalBasliklari?.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
+  let gridTemplateColumnsDegisken = isProject?.metrajBasliklari?.filter(item => !item.sabit && item.goster).reduce(
+    (ilkString, item, index) => index != isProject?.mahalBasliklari?.length ? ilkString + (item.genislik + "rem ") : ilkString + (item.genislik + "rem"),
     ""
   )
 
-
-  let gridTemplateColumns_ = gridTemplateColumnsSabit + " 2rem " + gridTemplateColumnsDegisken
+  let gridTemplateColumns_ = gridTemplateColumnsSabit + " 1rem " + gridTemplateColumnsDegisken
 
 
   const TableHeader = styled('div')(({ index }) => ({
@@ -313,7 +312,7 @@ export default function P_MahalListesi() {
     <>
 
       <Grid item >
-        <MahalListesiHeader setShow={setShow} editMode_MahalListesi={editMode_MahalListesi} setEditMode_MahalListesi={setEditMode_MahalListesi} saveMahal={saveMahal} />
+        <MetrajHeader setShow={setShow} editMode_MahalListesi={editMode_MahalListesi} setEditMode_MahalListesi={setEditMode_MahalListesi} saveMahal={saveMahal} />
       </Grid>
 
       {show == "FormMahalCreate" &&
@@ -328,24 +327,24 @@ export default function P_MahalListesi() {
         </Grid>
       }
 
-      {show == "Main" && (isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) &&
+      {show == "Main" && (isProject?.wbs?.filter(item => item.openForPoz).length == 0 || !isProject?.wbs) &&
         <Stack sx={{ width: '100%', pl: "1rem", pr: "0.5rem", pt: "1rem", mt: subHeaderHeight }} spacing={2}>
           <Alert severity="info">
-            Henüz hiç bir mahal başlığını mahal eklemeye açmamış görünüyorsunumuz. "Mahal Başlıkları" menüsünden işlem yapabilirsiniz.
+            Henüz hiç bir poz başlığını poz eklemeye açmamış görünüyorsunumuz. "Poz Başlıkları" menüsünden işlem yapabilirsiniz.
           </Alert>
         </Stack>
       }
 
-      {show == "Main" && isProject?.lbs?.filter(item => item.openForMahal).length > 0 &&
+      {show == "Main" && isProject?.wbs?.filter(item => item.openForPoz).length > 0 &&
 
         <Box sx={{ mt: subHeaderHeight, pt: "1rem", pl: "1rem", pr: "1rem" }}>
 
           {/* EN ÜST BAŞLIK ÜST SATIRI */}
           <Grid
             sx={{
-              pb: "1rem",
+              // pb: "1rem",
               display: "grid",
-              gridTemplateColumns: gridTemplateColumns_,
+              gridTemplateColumns: gridTemplateColumns_
             }}
           >
             {/* SOL KISIM SABİT EN ÜST MAHAL BAŞLIKLARI */}
@@ -353,7 +352,7 @@ export default function P_MahalListesi() {
             <Box sx={{ display: "none" }}>
               {count_ = isProject?.mahalBasliklari?.filter(item => item.sabit).length}
             </Box>
-            {isProject?.mahalBasliklari?.filter(item => item.sabit).map((oneBaslik, index) => {
+            {isProject?.pozBasliklari?.filter(item => item.sabit).map((oneBaslik, index) => {
               return (
                 <Box
                   sx={{
@@ -367,6 +366,7 @@ export default function P_MahalListesi() {
                     display: "grid",
                     alignItems: "center",
                     justifyContent: oneBaslik.yatayHiza,
+                    minHeight:"2rem"
                   }}
                   onClick={() => handle_selectBaslik(oneBaslik)}
                   key={index}
@@ -387,7 +387,7 @@ export default function P_MahalListesi() {
               {count_ = pozlar?.length}
             </Box>
             {/* GÖZÜKEN KOMPONENT */}
-            {pozlar?.map((onePoz, index) => {
+            {isProject?.metrajBasliklari?.filter(item => !item.sabit && item.goster).map((oneBaslik, index) => {
               return (
                 <Box
                   sx={{
@@ -399,17 +399,18 @@ export default function P_MahalListesi() {
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
                     width: "100%",
                     display: "grid",
+                    alignItems: "center",
                     justifyContent: "center"
                   }}
-                  onClick={() => handle_selectBaslik(onePoz)}
+                  onClick={() => handle_selectBaslik(oneBaslik)}
                   key={index}
                 >
-                  <Box sx={{ display: "grid", justifyContent: "center" }}>
+                  {/* <Box sx={{ display: "grid", justifyContent: "center" }}>
                     {index}
-                  </Box>
+                  </Box> */}
 
                   <Box sx={{ display: "grid", justifyContent: "center" }}>
-                    {onePoz.name}
+                    {oneBaslik.name}
                   </Box>
 
                 </Box>
@@ -421,8 +422,8 @@ export default function P_MahalListesi() {
 
           {/* SOL KISIMDAKİ SABİT KISIMDAKİ MAHAL BAŞLIKLARI ve SAĞ DEĞİŞKEN KISIMDA DEVAM EDEN BOŞ BAŞLIK HÜCRELERİ */}
           {/* SOL KISIMDAKİ SABİT KISIMDAKİ MAHAL BAŞLIĞI ALTINDAKİ MAHALLER ve SAĞ DEĞİŞKEN KISIMDA DEVAM EDEN BOŞ BAŞLIK HÜCRELERİ ALTINDA POZ HÜCRELERİ*/}
-          {isProject?.lbs
-            .filter(item => item.openForMahal === true)
+          {isProject?.wbs
+            .filter(item => item.openForPoz === true)
             .sort(function (a, b) {
               var nums1 = a.code.split(".");
               var nums2 = b.code.split(".");
@@ -437,13 +438,13 @@ export default function P_MahalListesi() {
                 }
               }
               return -1; // was missing case b.len > a.len
-            }).map((oneLbs, index) => {
+            }).map((oneWbs, index) => {
               return (
                 <Grid
                   key={index}
                   sx={{
                     display: "grid",
-                    gridTemplateColumns: totalWidthSabit + " 2rem " + gridTemplateColumnsDegisken,
+                    gridTemplateColumns: totalWidthSabit + " 1rem " + gridTemplateColumnsDegisken,
                   }}
                 >
                   {/* SOL TARAF - SABİT MAHAL BAŞLIĞI */}
@@ -451,30 +452,30 @@ export default function P_MahalListesi() {
 
                     {/* HAYALET */}
                     <Box sx={{ display: "none" }}>
-                      {cOunt = oneLbs.code.split(".").length}
+                      {cOunt = oneWbs.code.split(".").length}
                     </Box>
 
                     {
-                      oneLbs.code.split(".").map((codePart, index) => {
+                      oneWbs.code.split(".").map((codePart, index) => {
 
                         if (index == 0 && cOunt == 1) {
-                          lbsCode = codePart
-                          lbsName = isProject?.lbs.find(item => item.code == lbsCode).name
+                          wbsCode = codePart
+                          wbsName = isProject?.wbs.find(item => item.code == wbsCode).name
                         }
 
                         if (index == 0 && cOunt !== 1) {
-                          lbsCode = codePart
-                          lbsName = isProject?.lbs.find(item => item.code == lbsCode).codeName
+                          wbsCode = codePart
+                          wbsName = isProject?.wbs.find(item => item.code == wbsCode).codeName
                         }
 
                         if (index !== 0 && index + 1 !== cOunt && cOunt !== 1) {
-                          lbsCode = lbsCode + "." + codePart
-                          lbsName = lbsName + " > " + isProject?.lbs.find(item => item.code == lbsCode).codeName
+                          wbsCode = wbsCode + "." + codePart
+                          wbsName = wbsName + " > " + isProject?.wbs.find(item => item.code == wbsCode).codeName
                         }
 
                         if (index !== 0 && index + 1 == cOunt && cOunt !== 1) {
-                          lbsCode = lbsCode + "." + codePart
-                          lbsName = lbsName + " > " + isProject?.lbs.find(item => item.code == lbsCode).name
+                          wbsCode = wbsCode + "." + codePart
+                          wbsName = wbsName + " > " + isProject?.wbs.find(item => item.code == wbsCode).name
                         }
 
                       })
@@ -483,11 +484,11 @@ export default function P_MahalListesi() {
 
                     {/* HAYALET */}
                     <Box sx={{ display: "none" }}>
-                      {cOunt = lbsName.split(">").length}
+                      {cOunt = wbsName.split(">").length}
                     </Box>
 
-                    {/* GÖZÜKEN KOMPONENET - sabit kısımda - lbs başlığının yazdığı yer */}
-                    {lbsName.split(">").map((item, index) => (
+                    {/* GÖZÜKEN KOMPONENET - sabit kısımda - wbs başlığının yazdığı yer */}
+                    {wbsName.split(">").map((item, index) => (
 
                       <Typography key={index} component={"span"} >
                         {item}
@@ -527,13 +528,13 @@ export default function P_MahalListesi() {
 
                   {/* HAYALET */}
                   {<Box sx={{ display: "none" }}>
-                    {count_ = mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).length}
+                    {count_ = pozlar?.filter(item => item._wbsId.toString() == oneWbs._id.toString()).length}
                   </Box>}
 
                   <Box>
 
-                    {/* MAHALLER */}
-                    {mahaller?.filter(item => item._lbsId.toString() == oneLbs._id.toString()).map((oneMahal, index) => {
+                    {/* POZLAR */}
+                    {pozlar?.filter(item => item._wbsId.toString() == oneWbs._id.toString()).map((oneMahal, index) => {
                       return (
                         <Grid
                           key={index}

@@ -8,6 +8,15 @@ export default ({ children }) => {
 
   // const [sharing, setSharing] = useState([])
   // const [help, setHelp] = useState([])
+
+  
+  const myTema_ = {
+    firstColor: "#3c4245",
+    secondColor: "#5f6769",
+    thirdColor:"#719192",
+    fouthColor:"#dfcdc3"
+  }
+  
   const topBarHeight = "3.5rem"
   const subHeaderHeight = "3.5rem"
   const drawerWidth = 240
@@ -16,12 +25,16 @@ export default ({ children }) => {
   const [selectedPoz, setSelectedPoz] = useState()
   const [selectedMahal, setSelectedMahal] = useState()
   const [selectedMahalBaslik, setSelectedMahalBaslik] = useState()
+  const [selectedPozBaslik, setSelectedPozBaslik] = useState()
   const [isProject, setIsProject] = useState()
   const [pozlar, setPozlar] = useState()
   const [mahalMetrajlar, setMahalMetrajlar] = useState()
   const [mahaller, setMahaller] = useState()
   const [mahalListesi, setMahalListesi] = useState()
   const [isContext] = useState(true)
+  const [myTema, setMyTema] = useState(myTema_)
+  
+
 
   const store = {
     // sharing, setSharing,
@@ -33,6 +46,7 @@ export default ({ children }) => {
     selectedLbs, setSelectedLbs,
     selectedMahal, setSelectedMahal,
     selectedMahalBaslik, setSelectedMahalBaslik,
+    selectedPozBaslik, setSelectedPozBaslik,
     selectedWbs, setSelectedWbs,
     selectedPoz, setSelectedPoz,
     isProject, setIsProject,
@@ -40,7 +54,8 @@ export default ({ children }) => {
     mahaller, setMahaller,
     mahalMetrajlar, setMahalMetrajlar,
     mahalListesi, setMahalListesi,
-    isContext
+    isContext,
+    myTema, setMyTema
   }
 
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
