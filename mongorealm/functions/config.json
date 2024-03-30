@@ -284,5 +284,10 @@
         "name": "updateProjectPozBaslik",
         "private": false,
         "disable_arg_logs": true
+    },
+    {
+        "name": "updatePozBilgiler",
+        "private": false,
+        "disable_arg_logs": true
     }
 ]
