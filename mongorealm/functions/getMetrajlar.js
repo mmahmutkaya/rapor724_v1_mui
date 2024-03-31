@@ -12,7 +12,7 @@ exports = async function(_projectId){
 
   let project2 = JSON.parse(JSON.stringify(project))
   
-  return projects2
+  return project2
   
 }
   
