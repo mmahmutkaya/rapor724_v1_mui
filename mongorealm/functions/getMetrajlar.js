@@ -6,8 +6,6 @@ exports = async function(_projectId){
   const mailTeyit = user.custom_data.mailTeyit
   if(!mailTeyit) throw new Error("MONGO // getMetrajlar // Öncelikle üyeliğinize ait mail adresinin size ait olduğunu doğrulamalısınız, tekrar giriş yapmayı deneyiniz veya bizimle iletişime geçiniz.")
 
-  return _projectId
-  
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
   const project = await collection_Projects.findOne({_id:_projectId, members:_userId, isDeleted:false}).toArray()
 
