@@ -8,13 +8,14 @@ exports = async function({_projectId}){
 
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
   const project = await collection_Projects.findOne({_id:_projectId, members:_userId, isDeleted:false})
+  if(!project) throw new Error("MONGO // getMetrajlar // Proje sistemde bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile iletişime geçiniz.")
 
   if(project){
     return project
   }  else {
     return "olmadı"
   }
-  // let project2 = JSON.parse(JSON.stringify(project))
+  
   
 }
   
