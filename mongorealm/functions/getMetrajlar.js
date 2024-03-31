@@ -1,4 +1,4 @@
-exports = async function(_projectId){
+exports = async function({_projectId}){
   
   const user = context.user
   const _userId = new BSON.ObjectId(user.id)
