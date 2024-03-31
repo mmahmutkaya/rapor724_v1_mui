@@ -9,7 +9,7 @@ exports = async function(_projectId){
   return _projectId
   
   const collection_Projects = context.services.get("mongodb-atlas").db("rapor724_v2").collection("projects")
-  const project = await collection_Projects.find({_id:_projectId, members:_userId, isDeleted:false}).toArray()
+  const project = await collection_Projects.findOne({_id:_projectId, members:_userId, isDeleted:false}).toArray()
 
   let project2 = JSON.parse(JSON.stringify(project))
   
