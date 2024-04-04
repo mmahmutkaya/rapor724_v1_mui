@@ -10,11 +10,13 @@ exports = async function({_projectId}){
   const project = await collection_Projects.findOne({_id:_projectId, members:_userId, isDeleted:false})
   if(!project) throw new Error("MONGO // getMetrajlar // Proje sistemde bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile iletişime geçiniz.")
 
-  if(project){
-    return project
-  }  else {
-    return "olmadı"
-  }
+  collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
+  collection_Metrajlar.aggregate([
+    { $match: { _projectId} },
+    { $group: { _pozId, total: {$sum: "$metraj" }}} 
+  ])
+  
+  
   
   
 }
