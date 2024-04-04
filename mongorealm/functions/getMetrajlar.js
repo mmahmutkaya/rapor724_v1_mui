@@ -12,8 +12,20 @@ exports = async function({_projectId}){
 
   collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
   const result = collection_Metrajlar.aggregate([
-    { $match: { _projectId} },
-    { $group: { _pozId, total: {$sum: "$metraj" }}} 
+    
+    {
+      $match: {
+        _projectId
+      } 
+    },
+    
+    {
+      $group: {
+        _pozId,
+        metraj: {$sum: "$metraj"}
+      }
+    }
+    
   ])
   
   return result
