@@ -11,6 +11,7 @@ exports = async function({_projectId}){
   if(!project) throw new Error("MONGO // getMetrajlar // Proje sistemde bulunamadı, sayfayı yenileyiniz, sorun devam ederse Rapor7/24 ile iletişime geçiniz.")
 
   collection_Metrajlar = context.services.get("mongodb-atlas").db("rapor724_v2").collection("metrajlar")
+  
   const result = collection_Metrajlar.aggregate([
     
     {
@@ -19,12 +20,12 @@ exports = async function({_projectId}){
       } 
     },
     
-    // {
-    //   $group: {
-    //     _pozId,
-    //     metraj: {$sum: "$metraj"}
-    //   }
-    // }
+    {
+      $group: {
+        _pozId:null,
+        metraj: {$sum: "$metraj"}
+      }
+    }
     
   ])
   
