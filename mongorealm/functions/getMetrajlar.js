@@ -19,12 +19,12 @@ exports = async function({_projectId}){
       } 
     },
     
-    {
-      $group: {
-        _pozId,
-        metraj: {$sum: "$metraj"}
-      }
-    }
+    // {
+    //   $group: {
+    //     _pozId,
+    //     metraj: {$sum: "$metraj"}
+    //   }
+    // }
     
   ])
   
