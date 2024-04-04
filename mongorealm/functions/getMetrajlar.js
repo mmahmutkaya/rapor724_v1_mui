@@ -22,7 +22,7 @@ exports = async function({_projectId}){
     
     {
       $group: {
-        _pozId:null,
+        _pozId:"$_pozId",
         metraj: {$sum: "$metraj"}
       }
     }
