@@ -291,7 +291,7 @@
         "private": true
     },
     {
-        "name": "getMetrajlar",
+        "name": "getPozMetrajlar",
         "private": false,
         "disable_arg_logs": true
     },
