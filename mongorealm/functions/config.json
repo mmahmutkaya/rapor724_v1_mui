@@ -299,5 +299,10 @@
         "name": "updateMetraj",
         "private": false,
         "disable_arg_logs": true
+    },
+    {
+        "name": "getPozMetraj",
+        "private": false,
+        "disable_arg_logs": true
     }
 ]
