@@ -24,9 +24,10 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import EditIcon from '@mui/icons-material/Edit';
 
 
-export default function P_Metraj({ setShow, editMode_MahalListesi, setEditMode_MahalListesi, saveMahal }) {
+export default function P_Metraj({ show, setShow, editMode_Metraj, setEditMode_Metraj, saveMahal }) {
 
   const { drawerWidth, topBarHeight } = useContext(StoreContext)
+  const { custom, setCustom } = useContext(StoreContext)
 
   const { isProject, setIsProject } = useContext(StoreContext)
   const { setMahaller } = useContext(StoreContext)
@@ -203,7 +204,7 @@ export default function P_Metraj({ setShow, editMode_MahalListesi, setEditMode_M
   }
 
 
-  let header = "Mahaller"
+  let header = "Metraj"
   // isProject?.name ? header = isProject?.name : null
 
 
@@ -215,6 +216,10 @@ export default function P_Metraj({ setShow, editMode_MahalListesi, setEditMode_M
   //   textAlign: 'center',
   //   color: theme.palette.text.secondary,
   // }));
+
+  // let basliklar = [
+  //   {id:1, sira:1, name:""}
+  // ]
 
 
 
@@ -265,20 +270,39 @@ export default function P_Metraj({ setShow, editMode_MahalListesi, setEditMode_M
             <Grid container spacing={1}>
 
 
-              {!editMode_MahalListesi &&
+              {!editMode_Metraj &&
                 <Grid item>
-                  <IconButton onClick={() => setEditMode_MahalListesi(true)} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
+                  <IconButton onClick={() => setCustom(custom => ({ ...custom, pageMetraj_baslik: !custom?.pageMetraj_baslik }))} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
+                    <VisibilityIcon variant="contained" />
+                  </IconButton>
+                </Grid>
+              }
+
+              {!editMode_Metraj &&
+                <Grid item>
+                  <IconButton onClick={() => setEditMode_Metraj(true)} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
                     <EditIcon variant="contained" color={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? " lightgray" : "success"} />
                   </IconButton>
                 </Grid>
               }
 
-              {editMode_MahalListesi &&
+              {editMode_Metraj && show !== "FormMetrajUpdate" &&
+                <Grid item>
+                  <IconButton onClick={() => setEditMode_Metraj(false)} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
+                    <FileDownloadDoneIcon variant="contained" color={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? " lightgray" : "success"} />
+                  </IconButton>
+                </Grid>
+              }
+
+
+              {/* updateMetraj({ _pozId: onePoz._id } */}
+
+              {show == "FormMetrajUpdate" &&
                 <Grid item>
                   <IconButton
                     onClick={
                       () => {
-                        setEditMode_MahalListesi(false)
+                        setShow("Main")
                       }
                     }
                     aria-label="addLbs"

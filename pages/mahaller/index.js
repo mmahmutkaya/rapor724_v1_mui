@@ -379,6 +379,7 @@ export default function P_Mahaller() {
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
                     width: "100%",
                     display: "grid",
+                    alignItems: "center",
                     justifyContent: oneBaslik.yatayHiza
                   }}
                   onClick={() => handle_selectBaslik(oneBaslik)}

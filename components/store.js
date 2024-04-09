@@ -1,8 +1,11 @@
 import { createContext, useState } from 'react'
+import { useApp } from "./useApp.js";
 
 export const StoreContext = createContext(null)
 
 export default ({ children }) => {
+  
+  const RealmApp = useApp();
 
   // const teamMembersNames = ['John', 'Mary', 'Jason', 'David']
 
@@ -20,6 +23,7 @@ export default ({ children }) => {
   const topBarHeight = "3.5rem"
   const subHeaderHeight = "3.5rem"
   const drawerWidth = 240
+  const [custom, setCustom] = useState()
   const [selectedLbs, setSelectedLbs] = useState()
   const [selectedWbs, setSelectedWbs] = useState()
   const [selectedPoz, setSelectedPoz] = useState()
@@ -29,11 +33,12 @@ export default ({ children }) => {
   const [isProject, setIsProject] = useState()
   const [pozlar, setPozlar] = useState()
   const [mahalMetrajlar, setMahalMetrajlar] = useState()
+  const [pozMahalMetrajlar, setPozMahalMetrajlar] = useState()
   const [mahaller, setMahaller] = useState()
   const [mahalListesi, setMahalListesi] = useState()
   const [isContext] = useState(true)
   const [myTema, setMyTema] = useState(myTema_)
-  
+
 
 
   const store = {
@@ -53,8 +58,10 @@ export default ({ children }) => {
     pozlar, setPozlar,
     mahaller, setMahaller,
     mahalMetrajlar, setMahalMetrajlar,
+    pozMahalMetrajlar, setPozMahalMetrajlar,
     mahalListesi, setMahalListesi,
     isContext,
+    custom, setCustom,
     myTema, setMyTema
   }
 

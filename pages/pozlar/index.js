@@ -346,6 +346,7 @@ export default function P_Pozlar() {
                     border: "solid black 1px",
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
                     width: "100%",
+                    height: "100%",
                     display: "grid",
                     alignItems: "center",
                     justifyContent: oneBaslik.yatayHiza,
@@ -378,6 +379,7 @@ export default function P_Pozlar() {
                     border: "solid black 1px",
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
                     width: "100%",
+                    height: "100%",
                     display: "grid",
                     alignItems: "center",
                     justifyContent: oneBaslik.yatayHiza
@@ -388,24 +390,23 @@ export default function P_Pozlar() {
                   <Box sx={{ display: "grid", justifyContent: oneBaslik.yatayHiza }}>
                     {oneBaslik.name}
                   </Box>
-                  <Box sx={{ display: "grid", justifyContent: oneBaslik.yatayHiza }}>
 
-                    {/* HAYALET KOMPONENT */}
-                    <Box sx={{ display: "none" }}>
-                      {g_altBaslik = pozlar?.reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).filter(item => item.baslikId == oneBaslik.id).reduce((toplam, oneBilgi) => toplam + parseFloat(oneBilgi.veri), 0)}
+                  {oneBaslik.veriTuruId == "sayi" &&
+                    <Box sx={{ display: "grid", justifyContent: oneBaslik.yatayHiza }}>
+
+                      {/* HAYALET KOMPONENT */}
+                      <Box sx={{ display: "none" }}>
+                        {g_altBaslik = pozlar?.reduce((mergeArray, { ilaveBilgiler }) => [...mergeArray, ...ilaveBilgiler], []).filter(item => item.baslikId == oneBaslik.id).reduce((toplam, oneBilgi) => toplam + parseFloat(oneBilgi.veri), 0)}
+                      </Box>
+                      {/* GÖZÜKEN KOMPONENT */}
+                      {isNumeric(g_altBaslik) &&
+                        <Box>
+                          {g_altBaslik}
+                        </Box>
+                      }
                     </Box>
-                    {/* GÖZÜKEN KOMPONENT */}
-                    {oneBaslik.veriTuruId == "sayi" && isNumeric(g_altBaslik) &&
-                      <Box>
-                        {g_altBaslik}
-                      </Box>
-                    }
-                    {oneBaslik.veriTuruId == "sayi" && !isNumeric(g_altBaslik) &&
-                      <Box sx={{ color: selectedPozBaslik?.id == oneBaslik.id ? "rgba(120, 120, 120, 0.7)" : "rgb(120, 120, 120, 0.4)" }}>
-                        .
-                      </Box>
-                    }
-                  </Box>
+                  }
+
                 </Box>
               )
             })}

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { StoreContext } from '../../components/store'
 import { useApp } from "../../components/useApp";
 import FormMahalCreate from '../../components/FormMahalCreate'
-import FormMahalBaslikCreate from '../../components/FormMahalBaslikCreate'
+import FormMetrajUpdate from '../../components/FormMetrajUpdate'
 import MetrajHeader from '../../components/MetrajHeader'
 
 
@@ -22,6 +22,7 @@ import InfoIcon from '@mui/icons-material/Info';
 export default function P_Metraj() {
 
   const { isProject, setIsProject } = useContext(StoreContext)
+  const { custom, setCustom } = useContext(StoreContext)
   const { selectedMahal, setSelectedMahal } = useContext(StoreContext)
   const { myTema, setMyTema } = useContext(StoreContext)
   const { selectedMahalBaslik, setSelectedMahalBaslik } = useContext(StoreContext)
@@ -31,7 +32,8 @@ export default function P_Metraj() {
   const { drawerWidth, topBarHeight, subHeaderHeight } = useContext(StoreContext)
 
   const [show, setShow] = useState("Main")
-  const [editMode_MahalListesi, setEditMode_MahalListesi] = useState(false)
+  const [editMode_Metraj, setEditMode_Metraj] = useState(false)
+  const [_pozId, set_pozId] = useState()
   const [mahalBilgiler_willBeSaved, setMahalBilgiler_willBeSaved] = useState([])
   const [autoFocus, setAutoFocus] = useState({ baslikId: null, mahalId: null })
 
@@ -40,20 +42,11 @@ export default function P_Metraj() {
   // https://palettes.shecodes.io/palettes/1312#palette
 
 
-
   const router = useRouter();
   // !isProject ? router.push('/projects') : null
   !isProject ? window.location.href = "/projects" : null
 
   const RealmApp = useApp();
-
-  const mahaller_fecth = async () => {
-    if (!mahaller) {
-      const result = await RealmApp?.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id }));
-      setMahaller(result)
-    }
-  }
-  mahaller_fecth()
 
   const pozlar_fecth = async () => {
     if (!pozlar) {
@@ -62,6 +55,7 @@ export default function P_Metraj() {
     }
   }
   pozlar_fecth()
+
 
 
   const mahalListesi_fecth = async () => {
@@ -73,6 +67,14 @@ export default function P_Metraj() {
   mahalListesi_fecth()
 
 
+  const mahaller_fecth = async () => {
+    if (!mahaller) {
+      const result = await RealmApp?.currentUser.callFunction("getProjectMahaller", ({ projectId: isProject?._id }));
+      setMahaller(result)
+    }
+  }
+  mahaller_fecth()
+
 
   const handleSelectMahal = (mahal) => {
     setSelectedMahal(mahal)
@@ -83,82 +85,45 @@ export default function P_Metraj() {
   // aşağıda kullanılıyor
   let wbsCode = ""
   let wbsName = ""
-  let nodeMahal
+  let mahal
+  let oneMetraj_
   let cOunt = 0
   let count_
   let toplam
   let g_altBaslik
 
 
-  const _3_fixed_width_rem = "6rem 35rem 5rem"
-  _3_fixed_width_rem.split(" ").map(item => {
-    let gecici = Number(item.replace("rem", ""))
-    toplam ? toplam = toplam + gecici : toplam = gecici
-  })
-  const total_fixed_width = toplam
-
-  const one_bosluk_width = 2
-
-  const one_mahal_width = 10
-
-
-  // let basliklar = [
-  //   { id: 1, isim: "No" },
-  //   { id: 2, isim: "İsim" },
-  //   { id: 3, isim: "bosluk" },
-  //   { id: 3, isim: "Tarif" },
-  //   { id: 4, isim: "Ölçü" },
-  // ]
-
-  /* padding - top | right | bottom | left */
-  // const [basliklar, setBasliklar] = useState([
-  //   { id: 1, sira: 1, referans: "kod", goster: true, sabit: true, genislik: 7, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal No", dataType: "number" },
-  //   { id: 2, sira: 2, referans: "name", goster: true, sabit: true, genislik: 20, padding_M: "0px 1rem 0px 0px", yatayHiza: "end", name: "Mahal İsmi", dataType: "string" },
-  //   { id: 3, sira: 3, referans: "name", goster: true, sabit: false, genislik: 15, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Zemin Alan", dataType: "date" },
-  //   { id: 4, sira: 4, referans: "name", goster: true, sabit: false, genislik: 20, padding_M: "0px 0rem 0px 0px", yatayHiza: "center", name: "Fonksiyon", dataType: "date" },
-  // ].sort((a, b) => a.sira - b.sira))
-
-  // const [basliklar, setBasliklar] = useState(isProject?.mahalBasliklari?.filter(item => item.goster))
-
-
   let totalWidthSabit = isProject?.pozBasliklari?.filter(item => item.sabit).reduce(
     (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
     0
-  )
-  totalWidthSabit = totalWidthSabit + 'rem'
-  
-  
-  let totalWidthDegisken = pozlar?.length * 10
-  totalWidthDegisken = totalWidthDegisken + 'rem'
+  ) + 'rem'
 
 
-  let totalWidth = (parseFloat(totalWidthSabit) + 1 + parseFloat(totalWidthDegisken)) + 'rem'
-
-
-  let gridTemplateColumnsSabit = isProject?.mahalBasliklari?.filter(item => item.sabit).reduce(
+  let gridTemplateColumnsSabit = isProject?.pozBasliklari?.filter(item => item.sabit).reduce(
     (ilkString, oneBilgi, index) => index != isProject?.mahalBasliklari?.length ? ilkString + (oneBilgi.genislik + "rem ") : ilkString + (oneBilgi.genislik + "rem"),
     ""
   )
 
-
-  let gridTemplateColumnsDegisken2 = pozlar?.reduce(
-    (ilkString, onePoz, index) => index != pozlar?.length ? ilkString + (10 + "rem ") : ilkString + (10 + "rem"),
-    ""
-  )
+  let totalWidthDegisken = isProject?.metrajBasliklari?.filter(item => !item.sabit && item.goster).reduce(
+    (accumulator, oneBilgi) => accumulator + oneBilgi.genislik,
+    0
+  ) + 'rem'
 
   let gridTemplateColumnsDegisken = isProject?.metrajBasliklari?.filter(item => !item.sabit && item.goster).reduce(
     (ilkString, item, index) => index != isProject?.mahalBasliklari?.length ? ilkString + (item.genislik + "rem ") : ilkString + (item.genislik + "rem"),
     ""
   )
 
+  let totalWidth = (parseFloat(totalWidthSabit) + 1 + parseFloat(totalWidthDegisken)) + 'rem'
   let gridTemplateColumns_ = gridTemplateColumnsSabit + " 1rem " + gridTemplateColumnsDegisken
+
 
 
   const TableHeader = styled('div')(({ index }) => ({
     marginTop: "1rem",
     // backgroundColor: "rgba(242, 203, 150, 1)",
     // backgroundColor: "rgba(150, 236, 242 , 0.8 )",
-    backgroundColor: "rgba( 56,56,56 , 0.3 )",
+    backgroundColor: "rgba( 56,56,56 , 0.4 )",
     borderLeft: (index && index !== 0) ? null : "solid black 1px",
     borderRight: "solid black 1px",
     borderTop: "solid black 1px",
@@ -166,6 +131,14 @@ export default function P_Metraj() {
   }));
 
   const TableItem = styled('div')(({ index }) => ({
+    backgroundColor: "rgba( 56,56,56 , 0.15 )",
+    borderLeft: index == 0 ? "solid black 1px" : null,
+    borderRight: "solid black 1px",
+    borderBottom: "solid black 1px"
+  }));
+
+  const TableItem2 = styled('div')(({ index }) => ({
+    backgroundColor: "rgba( 255,255,0, 0.15 )",
     borderLeft: index == 0 ? "solid black 1px" : null,
     borderRight: "solid black 1px",
     borderBottom: "solid black 1px"
@@ -198,112 +171,28 @@ export default function P_Metraj() {
 
 
 
-  const handle_input_onKey = async (event, oneBaslik) => {
-
-    let oncesi = event.target.value.toString()
-    let sonTus = event.key
-    let yeni = oncesi + sonTus
-
-    // sayı 
-    if (oneBaslik.veriTuruId === "sayi") {
-
-      if (sonTus.split(" ").length > 1) {
-        console.log("boşluk bulundu ve durdu")
-        return event.preventDefault()
-      }
-
-      let izinliTuslar = ["Backspace", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Escape", "Enter", "Tab", "-", "."]
-
-      if (!isNumeric(yeni) && !izinliTuslar.includes(sonTus)) {
-        console.log("izinsiz tuşlara bastı ve durdu")
-        return event.preventDefault()
-      }
-
-      if (sonTus == "-" && oncesi.split("").includes("-")) {
-        console.log("zaten varken '-' kullanımı ve durdu")
-        return event.preventDefault()
-      }
-
-
-      if (sonTus == "-" && yeni.split("")[0] !== ("-")) {
-        console.log("event", event)
-        console.log("başa gelmeyen '-' kullanımı ve durdu")
-        return event.preventDefault()
-      }
-
-
-      if (sonTus == "." && oncesi.split("").includes(".")) {
-        console.log("zaten varken '.' kullanımı ve durdu")
-        return event.preventDefault()
-      }
-
-      if (isNumeric(sonTus) && yeni.split("").includes(".") && yeni.substring(yeni.indexOf(".") + 1, yeni.length).length > 3) {
-        console.log("0 dan sonra 3 haneden fazla ve durdu")
-        return event.preventDefault()
-      }
-
-    }
-
-  }
-
-
-
-  const handle_input_onChange = (event, oneBaslik, oneMahal) => {
-
-    setAutoFocus({ baslikId: oneBaslik.id, mahalId: oneMahal._id.toString() })
-
-    // db ye kayıt yapılmışsa bu işlemi yapsın yoksa refresh yapsın
-    const newBilgi = { mahalId: oneMahal._id, baslikId: oneBaslik.id, veri: event.target.value }
-
-    if (oneBaslik.veriTuruId === "sayi" && !isNumeric(newBilgi.veri) && newBilgi.veri != "-" && newBilgi.veri.length != 0 && newBilgi.veri != ".") {
-      return
-    }
-
-
-    setMahaller(mahaller => {
-      // if (!mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler) {
-      //   mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler = [newBilgi]
-      //   return mahaller
-      // }
-      if (!mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.baslikId == oneBaslik.id)) {
-        mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.push(newBilgi)
-        return mahaller
-      }
-      mahaller.find(item => item._id.toString() == oneMahal._id.toString()).ilaveBilgiler.find(item => item.baslikId == oneBaslik.id).veri = newBilgi.veri
-      return mahaller
-    })
-
-
-    setMahalBilgiler_willBeSaved(mahalBilgiler_willBeSaved => {
-      let mahalBilgiler_willBeSaved_ = [...mahalBilgiler_willBeSaved]
-      if (mahalBilgiler_willBeSaved_.find(item => item.mahalId == oneMahal._id.toString() && item.baslikId == oneBaslik.id)) {
-        mahalBilgiler_willBeSaved_.find(item => item.mahalId == oneMahal._id.toString() && item.baslikId == oneBaslik.id).veri = newBilgi.veri
-      } else {
-        mahalBilgiler_willBeSaved_ = [...mahalBilgiler_willBeSaved_, { ...newBilgi }]
-      }
-      return mahalBilgiler_willBeSaved_
-    })
-
-  }
-
-
-  const toggleMahalPoz = async ({ _mahalId, _pozId, open }) => {
-
-    const resultMahalPoz = await RealmApp?.currentUser.callFunction("toggleMahalPoz", ({ _projectId: isProject?._id, _mahalId, _pozId, open }));
-    setMahalListesi(mahalListesi => {
-      mahalListesi = mahalListesi.filter(item => !(item._mahalId.toString() == _mahalId.toString() && item._pozId == _pozId.toString()))
-      mahalListesi = [...mahalListesi, { ...resultMahalPoz }]
-      return mahalListesi
-    })
-  }
-
-
-
   const saveMahal = async () => {
     // setMahalBilgiler_willBeSaved([])
     const result = await RealmApp?.currentUser.callFunction("updateMahalBilgiler", { _projectId: isProject?._id, mahalBilgiler_willBeSaved });
-    setEditMode_MahalListesi(false)
     setSelectedMahalBaslik(false)
+  }
+
+  const data = {
+    type: "current",
+    row1: {
+      desc1: "KISA",
+      desc2: "UZUN"
+    }
+  }
+
+
+
+  const updateMetraj = async ({ _pozId }) => {
+
+    const result = await RealmApp?.currentUser.callFunction("updateMetraj", { _projectId: isProject?._id, _pozId });
+    return (
+      console.log("result", { _projectId: isProject?._id, _pozId, data })
+    )
   }
 
 
@@ -312,7 +201,7 @@ export default function P_Metraj() {
     <>
 
       <Grid item >
-        <MetrajHeader setShow={setShow} editMode_MahalListesi={editMode_MahalListesi} setEditMode_MahalListesi={setEditMode_MahalListesi} saveMahal={saveMahal} />
+        <MetrajHeader show={show} setShow={setShow} editMode_Metraj={editMode_Metraj} setEditMode_Metraj={setEditMode_Metraj} saveMahal={saveMahal} />
       </Grid>
 
       {show == "FormMahalCreate" &&
@@ -321,10 +210,10 @@ export default function P_Metraj() {
         </Grid>
       }
 
-      {show == "FormMahalBaslikCreate" &&
-        <Grid item >
-          <FormMahalBaslikCreate setShow={setShow} />
-        </Grid>
+      {show == "FormMetrajUpdate" &&
+        <Box sx={{ mt: subHeaderHeight }} >
+          <FormMetrajUpdate setShow={setShow} _pozId={_pozId} />
+        </Box>
       }
 
       {show == "Main" && (isProject?.wbs?.filter(item => item.openForPoz).length == 0 || !isProject?.wbs) &&
@@ -344,7 +233,7 @@ export default function P_Metraj() {
             sx={{
               // pb: "1rem",
               display: "grid",
-              gridTemplateColumns: gridTemplateColumns_
+              gridTemplateColumns: gridTemplateColumns_,
             }}
           >
             {/* SOL KISIM SABİT EN ÜST MAHAL BAŞLIKLARI */}
@@ -358,7 +247,7 @@ export default function P_Metraj() {
                   sx={{
                     cursor: "pointer",
                     backgroundColor: "rgba( 56,56,56 , 0.9 )",
-                    color:"white",
+                    color: "white",
                     fontWeight: "bold",
                     border: "solid black 1px",
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
@@ -366,7 +255,7 @@ export default function P_Metraj() {
                     display: "grid",
                     alignItems: "center",
                     justifyContent: oneBaslik.yatayHiza,
-                    minHeight:"2rem"
+                    minHeight: "2rem"
                   }}
                   onClick={() => handle_selectBaslik(oneBaslik)}
                   key={index}
@@ -392,8 +281,9 @@ export default function P_Metraj() {
                 <Box
                   sx={{
                     cursor: "pointer",
-                    backgroundColor: editMode_MahalListesi ? "rgb( 110, 16, 16 , 1)" : "rgba( 56,56,56 , 0.9 )",
-                    color:"white",
+                    // backgroundColor: editMode_Metraj ? "rgb( 110, 16, 16 , 1)" : "rgba( 56,56,56 , 0.9 )",
+                    backgroundColor: "rgba( 56,56,56 , 0.9 )",
+                    color: "white",
                     fontWeight: "bold",
                     border: "solid black 1px",
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
@@ -448,7 +338,7 @@ export default function P_Metraj() {
                   }}
                 >
                   {/* SOL TARAF - SABİT MAHAL BAŞLIĞI */}
-                  <TableHeader>
+                  <TableHeader sx={{ display: custom?.pageMetraj_baslik ? null : "none" }}>
 
                     {/* HAYALET */}
                     <Box sx={{ display: "none" }}>
@@ -502,29 +392,17 @@ export default function P_Metraj() {
                   </TableHeader>
 
 
-                  <Bosluk ></Bosluk>
+                  <Bosluk sx={{ display: custom?.pageMetraj_baslik ? null : "none" }} ></Bosluk>
 
 
                   {/* SAĞ TARAF - DEĞİŞKEN MAHAL BAŞLIĞI - BOŞ */}
-                  {/* burada başlık sıralamasına göre güvenerek haraket ediliyor (tüm mahalBaşlıkları map'lerde) */}
-                  {
-                    pozlar?.map((onePoz, index) => {
-                      return (
-                        <TableHeader key={index} index={index} count_={count_} sx={{ display: "grid", with: "100%", justifyContent: onePoz.yatayHiza }}>
-
-                          {onePoz.veriTuruId == "sayi" && isNumeric(g_altBaslik) &&
-                            <Box>
-
-                            </Box>
-                          }
-                        </TableHeader>
-                      )
-                    })
-                  }
+                  <TableHeader sx={{ display: custom?.pageMetraj_baslik ? null : "none" }} index={0}></TableHeader>
+                  <TableHeader sx={{ display: custom?.pageMetraj_baslik ? null : "none" }} index={1}></TableHeader>
 
 
 
-                  {/* 1 SIRA MAHAL BAŞLIKLARI BİTİNCE  ALTINDAKİ MAHAL SATIRLARI - ONU DA YUKARIDAKİNE UYDURAN BİR GRİD ÖLÇÜLERİ İLE BAĞIMSIZ OLARAK YÖNETİYORUZ*/}
+
+                  {/* 1 SIRA POZ BAŞLIKLARI BİTİNCE  ALTINDAKİ POZ SATIRLARI - BURADA VERDİĞİMİZ GRİD BOYUTLARI YUKARIDAKİ BAŞLIK İLE UYUMLU OLURSA TABLO OLUŞUR YOKSA SATURLAR ŞAŞIRIR*/}
 
                   {/* HAYALET */}
                   {<Box sx={{ display: "none" }}>
@@ -534,7 +412,10 @@ export default function P_Metraj() {
                   <Box>
 
                     {/* POZLAR */}
-                    {pozlar?.filter(item => item._wbsId.toString() == oneWbs._id.toString()).map((oneMahal, index) => {
+                    {pozlar?.filter(item => item._wbsId.toString() == oneWbs._id.toString()).map((onePoz, index) => {
+
+                      onePoz.birimName = isProject.pozBirimleri.find(item => item.id == onePoz.birimId).name
+
                       return (
                         <Grid
                           key={index}
@@ -544,23 +425,21 @@ export default function P_Metraj() {
                           }}
                         >
                           {
-                            isProject?.mahalBasliklari?.filter(item => item.sabit).map((oneBaslik, index) => {
+                            isProject?.pozBasliklari?.filter(item => item.sabit).map((oneBaslik, index) => {
                               return (
                                 <TableItem
                                   key={index}
                                   index={index}
                                   count_={count_}
-                                  // onDoubleClick={() => handle_selectMahal(oneBaslik, oneMahal)}
                                   sx={{
                                     // userSelect:"none",
                                     cursor: "pointer",
                                     display: "grid",
                                     alignItems: "center",
                                     justifyItems: oneBaslik.yatayHiza,
-                                    // backgroundColor: selectedMahal?._id.toString() == oneMahal._id.toString() ? "green" : null
                                   }}
                                 >
-                                  {oneMahal[oneBaslik.referans]}
+                                  {onePoz[oneBaslik.referans]}
                                 </TableItem>
                               )
                             })
@@ -569,47 +448,76 @@ export default function P_Metraj() {
                           <Bosluk>
                           </Bosluk>
 
-                          {pozlar?.map((onePoz, index) => {
-                            { nodeMahal = mahalListesi?.find((item) => item._mahalId.toString() == oneMahal._id.toString() && item._pozId.toString() == onePoz._id.toString()) }
+                          <TableItem
+                            index={0}
+                            sx={{ backgroundColor: editMode_Metraj ? "yellow" : null, cursor: editMode_Metraj ? "pointer" : null, display: "grid", justifyContent: "end", pr: "0.4rem" }}
+                            // onClick={editMode_Metraj ? () => setShow("FormMetrajUpdate") : null}>
+                            onClick={editMode_Metraj ? () => {
+                              set_pozId(onePoz._id)
+                              setShow("FormMetrajUpdate")
+                            } : null}
+                          >
+                            {mahalListesi?.filter(item => item._pozId.toString() == onePoz._id.toString()).reduce((accumulator, oneNode) => (isNaN(parseFloat(oneNode.metraj)) ? accumulator + 0 : accumulator + parseFloat(oneNode.metraj)), 0)}
+                            {/* {console.log("mahalListesi", mahalListesi?.filter(item => item._pozId.toString() == onePoz._id.toString() && item.open))?.reduce((accumulator, oneNode) => (accumulator + parseFloat(oneNode.metraj)), 0)} */}
+                          </TableItem>
 
-                            return nodeMahal?.open ?
+                          <TableItem
+                            index={1}
+                            sx={{ display: "grid", justifyContent: "center" }}
+                          >
+                            {onePoz.birimName}
+                          </TableItem>
 
-                              <TableItem
-                                key={index}
-                                index={index}
-                                count_={count_}
-                                onClick={editMode_MahalListesi ? () => toggleMahalPoz({ _mahalId: oneMahal._id, _pozId: onePoz._id, open: false }) : null}
-                                sx={{
-                                  cursor: editMode_MahalListesi ? "pointer" : null,
-                                  display: "grid",
-                                  alignItems: "center",
-                                  justifyItems: onePoz.yatayHiza,
-                                  // backgroundColor: "rgba(150, 236, 242 ,0.4 )",
-                                  backgroundColor: "rgba( 234, 193, 0 , 0.4 )",
 
-                                }}
-                              >
-                                {/* {"0"} */}
-                              </TableItem>
+                          {/* AYRAÇ - POZ ALTINDAKİ MAHALLER*/}
 
-                              :
+                          <Box sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_ }}>
+                            {mahalListesi?.filter(item => item._pozId.toString() == onePoz._id.toString()).map((oneNode, index) => {
 
-                              <TableItem
-                                key={index}
-                                index={index}
-                                count_={count_}
-                                onClick={editMode_MahalListesi ? () => toggleMahalPoz({ _mahalId: oneMahal._id, _pozId: onePoz._id, open: true }) : null}
-                                sx={{
-                                  cursor: editMode_MahalListesi ? "pointer" : null,
-                                  display: "grid",
-                                  alignItems: "center",
-                                  justifyItems: onePoz.yatayHiza,
-                                }}
-                              >
-                                {/* {"0"} */}
-                              </TableItem>
+                              { mahal = mahaller?.find(item => item._id.toString() == oneNode._mahalId.toString()) }
 
-                          })}
+                              return (
+                                < >
+                                  <TableItem2
+                                    index={0}
+                                    sx={{ display: "grid", justifyContent: "center" }}
+                                  >
+                                    {mahal.kod}
+                                  </TableItem2>
+
+
+                                  <TableItem2
+                                    index={1}
+                                    sx={{ display: "grid", justifyContent: "center" }}
+                                  >
+                                    {mahal.name}
+                                  </TableItem2>
+
+
+                                  <Bosluk>
+                                  </Bosluk>
+
+                                  <TableItem2
+                                    index={0}
+                                    sx={{ display: "grid", justifyContent: "end", pr:"0.5rem" }}
+                                  >
+                                    {oneNode.metraj}
+                                  </TableItem2>
+
+
+                                  <TableItem2
+                                    index={1}
+                                    sx={{ display: "grid", justifyContent: "center" }}
+                                  >
+                                    {onePoz.birimName}
+                                  </TableItem2>
+
+                                </>
+
+                              )
+
+                            })}
+                          </Box>
 
                         </Grid>
                       )

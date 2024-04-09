@@ -68,6 +68,7 @@ export default function P_MahalListesi() {
     if (!mahalListesi) {
       const result = await RealmApp?.currentUser.callFunction("getMahalListesi", ({ projectId: isProject?._id }));
       setMahalListesi(result)
+      console.log("result_mahalListesi", result)
     }
   }
   mahalListesi_fecth()
@@ -159,7 +160,7 @@ export default function P_MahalListesi() {
     marginTop: "1rem",
     // backgroundColor: "rgba(242, 203, 150, 1)",
     // backgroundColor: "rgba(150, 236, 242 , 0.8 )",
-    backgroundColor: "rgba( 56,56,56 , 0.3 )",
+    backgroundColor: "rgba( 56,56,56 , 0.15 )",
     borderLeft: (index && index !== 0) ? null : "solid black 1px",
     borderRight: "solid black 1px",
     borderTop: "solid black 1px",
@@ -293,8 +294,11 @@ export default function P_MahalListesi() {
     const resultMahalPoz = await RealmApp?.currentUser.callFunction("toggleMahalPoz", ({ _projectId: isProject?._id, _mahalId, _pozId, open }));
     setMahalListesi(mahalListesi => {
       mahalListesi = mahalListesi.filter(item => !(item._mahalId.toString() == _mahalId.toString() && item._pozId == _pozId.toString()))
-      mahalListesi = [...mahalListesi, { ...resultMahalPoz }]
-      return mahalListesi
+      if (open) {
+        mahalListesi = [...mahalListesi, { ...resultMahalPoz }]
+      } else {
+        return mahalListesi
+      }
     })
   }
 
@@ -359,7 +363,7 @@ export default function P_MahalListesi() {
                   sx={{
                     cursor: "pointer",
                     backgroundColor: "rgba( 56,56,56 , 0.9 )",
-                    color:"white",
+                    color: "white",
                     fontWeight: "bold",
                     border: "solid black 1px",
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",
@@ -393,7 +397,7 @@ export default function P_MahalListesi() {
                   sx={{
                     cursor: "pointer",
                     backgroundColor: editMode_MahalListesi ? "rgb( 110, 16, 16 , 1)" : "rgba( 56,56,56 , 0.9 )",
-                    color:"white",
+                    color: "white",
                     fontWeight: "bold",
                     border: "solid black 1px",
                     borderRight: index + 1 == count_ ? "solid black 1px" : "0px",

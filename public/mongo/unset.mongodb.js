@@ -31,16 +31,16 @@ use('rapor724_v2');
 // ]
 
 
-db.getCollection('pozlar').updateMany(
-  {},
-  { $set: { ilaveBilgiler: [] } }
-);
+// db.getCollection('pozlar').updateMany(
+//   {},
+//   { $set: { ilaveBilgiler: [] } }
+// );
 
 
 
 
 
-// db.getCollection('metrajlar').deleteMany({});
+db.getCollection('metrajlar').deleteMany({});
 
 // db.getCollection('projects').updateMany(
 //   {},
