@@ -132,6 +132,7 @@ export default function P_Metraj() {
 
   const TableItem = styled('div')(({ index }) => ({
     backgroundColor: "rgba( 56,56,56 , 0.15 )",
+    borderTop: !custom?.pageMetraj_baslik ? "solid black 1px" : null,
     borderLeft: index == 0 ? "solid black 1px" : null,
     borderRight: "solid black 1px",
     borderBottom: "solid black 1px"
@@ -422,6 +423,7 @@ export default function P_Metraj() {
                           sx={{
                             display: "grid",
                             gridTemplateColumns: gridTemplateColumns_,
+                            // mt: !custom.pageMetraj_baslik && editMode_Metraj ? "1rem" : null
                           }}
                         >
                           {
@@ -450,7 +452,7 @@ export default function P_Metraj() {
 
                           <TableItem
                             index={0}
-                            sx={{ backgroundColor: editMode_Metraj ? "yellow" : null, cursor: editMode_Metraj ? "pointer" : null, display: "grid", justifyContent: "end", pr: "0.4rem" }}
+                            sx={{ cursor: editMode_Metraj ? "pointer" : null, display: "grid", justifyContent: "end", pr: "0.4rem" }}
                             // onClick={editMode_Metraj ? () => setShow("FormMetrajUpdate") : null}>
                             onClick={editMode_Metraj ? () => {
                               set_pozId(onePoz._id)
@@ -471,18 +473,18 @@ export default function P_Metraj() {
 
                           {/* AYRAÇ - POZ ALTINDAKİ MAHALLER*/}
 
-                          <Box sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_ }}>
+                          <Box sx={{ display: editMode_Metraj ? null : "none" }}>
                             {mahalListesi?.filter(item => item._pozId.toString() == onePoz._id.toString()).map((oneNode, index) => {
 
                               { mahal = mahaller?.find(item => item._id.toString() == oneNode._mahalId.toString()) }
 
                               return (
-                                < >
+                                < Box key={index} sx={{ display: "grid", gridTemplateColumns: gridTemplateColumns_ }}>
                                   <TableItem2
                                     index={0}
                                     sx={{ display: "grid", justifyContent: "center" }}
                                   >
-                                    {mahal.kod}
+                                    {mahal?.kod}
                                   </TableItem2>
 
 
@@ -490,7 +492,7 @@ export default function P_Metraj() {
                                     index={1}
                                     sx={{ display: "grid", justifyContent: "center" }}
                                   >
-                                    {mahal.name}
+                                    {mahal?.name}
                                   </TableItem2>
 
 
@@ -499,7 +501,7 @@ export default function P_Metraj() {
 
                                   <TableItem2
                                     index={0}
-                                    sx={{ display: "grid", justifyContent: "end", pr:"0.5rem" }}
+                                    sx={{ display: "grid", justifyContent: "end", pr: "0.5rem" }}
                                   >
                                     {oneNode.metraj}
                                   </TableItem2>
@@ -512,7 +514,7 @@ export default function P_Metraj() {
                                     {onePoz.birimName}
                                   </TableItem2>
 
-                                </>
+                                </Box>
 
                               )
 

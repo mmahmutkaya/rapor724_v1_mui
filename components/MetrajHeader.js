@@ -270,13 +270,11 @@ export default function P_Metraj({ show, setShow, editMode_Metraj, setEditMode_M
             <Grid container spacing={1}>
 
 
-              {!editMode_Metraj &&
-                <Grid item>
-                  <IconButton onClick={() => setCustom(custom => ({ ...custom, pageMetraj_baslik: !custom?.pageMetraj_baslik }))} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
-                    <VisibilityIcon variant="contained" />
-                  </IconButton>
-                </Grid>
-              }
+              <Grid item>
+                <IconButton onClick={() => setCustom(custom => ({ ...custom, pageMetraj_baslik: !custom?.pageMetraj_baslik }))} aria-label="addLbs" disabled={(isProject?.lbs?.filter(item => item.openForMahal).length == 0 || !isProject?.lbs) ? true : false}>
+                  <VisibilityIcon variant="contained" />
+                </IconButton>
+              </Grid>
 
               {!editMode_Metraj &&
                 <Grid item>
